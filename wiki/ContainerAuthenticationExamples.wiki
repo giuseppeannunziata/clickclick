@@ -2,9 +2,9 @@
 
 = Setting up web authentication for Click Template =
 
-== Tomcat 5 & 6 ==
+== Tomcat 5 - 6 ==
 
-To setup authentication for Tomcat replace the contents of the file <TOMCAT_INSTALL_DIR>/conf/tomcat-users.xml with the snippet below:
+To setup authentication for Tomcat 5 - 6 replace or amend the contents of the file <TOMCAT_INSTALL_DIR>/conf/tomcat-users.xml with the snippet below:
 
 {{{
 <?xml version='1.0' encoding='utf-8'?>
@@ -18,19 +18,60 @@ To setup authentication for Tomcat replace the contents of the file <TOMCAT_INST
 
 Before applying this change you might want to backup your current <TOMCAT_INSTALL_DIR>/conf/tomcat-users.xml.
 
-== Jetty 5 & 6 ==
-
-To setup authentication for Tomcat replace the contents of the file <TOMCAT_INSTALL_DIR>/conf/tomcat-users.xml with the snippet below:
+You also need to specify a context so tomcat knows which authentication mechanism to use. Create the file <YOUR_APPLICATION>/web/META-INF/context.xml:
 
 {{{
-/**
- * Test page
- */
-class MyPage extends Page {
-    private String name;
+<!-- 
+Tomcat specific application context information 
+-->
+<Context
+   path="/template-context" 
+   reloadable="true"
+   antiJARLocking="true">
 
-    public void onInit() { 
-    
-    }
-}
+   <!-- 
+   User logins are authenticated/authorized using $TOMCAT/conf/tomcat-users.xml
+   -->
+   <ResourceLink
+      name="users"
+      global="UserDatabase"
+      type="org.apache.catalina.UserDatabase"/>
+</Context>
+}}}
+
+== Jetty 6 ==
+
+From the document: [http://docs.codehaus.org/display/JETTY/Realms Jetty Realms]
+
+To setup authentication for Jetty 6 replace or amend the contents of the file <JETTY_INSTALL_DIR>/etc/realm.properties with the snippet below:
+
+{{{
+user: password,user
+admin: password,user,admin
+}}}
+
+Create a context file for your web application under 'contexts/click-template.xml'
+
+Here is an example:
+{{{
+<?xml version="1.0"  encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+
+  <Set name="contextPath">/click-template</Set>
+  <Set name="war"><SystemProperty name="jetty.home" default="."/>/webapps/click-template</Set>
+
+  <Get name="securityHandler">
+    <Set name="userRealm">
+      <New class="org.mortbay.jetty.security.HashUserRealm">
+	    <Set name="name">Click Template Realm</Set>
+	    <Set name="config"><SystemProperty name="jetty.home" default="."/>/etc/realm.properties</Set>
+      </New>
+    </Set>
+    <Set name="checkWelcomeFiles">true</Set>
+  </Get>
+
+</Configure>
+
 }}}
