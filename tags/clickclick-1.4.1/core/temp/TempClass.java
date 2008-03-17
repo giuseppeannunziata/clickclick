@@ -10,5 +10,8 @@ package temp;
  * @author Bob Schellink
  */
 public class TempClass {
+     public static void main(String[] args) {
+
+    }
 
 }
