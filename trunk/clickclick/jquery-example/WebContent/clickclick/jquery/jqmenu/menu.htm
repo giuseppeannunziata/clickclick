@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <link rel="stylesheet" href="horizontal-superfish.css" type="text/css"/>
+        <!--<link rel="stylesheet" type="text/css" href="vertical-superfish.css" media="screen">-->
+        <!--<link rel="stylesheet" href="vertical-superfish.css" type="text/css"/>-->
+        <script src="../../clickclick/jquery/jquery-1.2.6.js"></script>
+        <script src="bgIframe.js"></script>
+        <script src="superfish.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("ul.nav")
+                .superfish({
+                    animation : { opacity:"show", height:"show" },
+                    speed: "fast"
+                })
+                .find(">li:has(ul)")
+                .mouseover(function(){
+                    $("ul", this).bgIframe({opacity:false});
+                })
+                .find("a")
+                .focus(function(){
+                    $("ul", $(".nav>li:has(ul)")).bgIframe({opacity:false});
+                });
+            });
+        </script>
+        
+    </head>
+    
+    <body>
+        <div style="width:400px">
+            <ul class="nav">
+                <li>
+                    <a class="downbullet" href="#">menu item &#8594;</a>
+                    <ul>
+                        <li>
+                            <a class="bullet" href="#">menu item &#8594;</a>
+                            <ul>
+                                <li><a href="#">menu item</a></li>
+                                <li><a href="#">menu item</a></li>
+                                <li><a href="#">menu item</a></li>
+                                <li><a href="#">menu item</a></li>
+                                <li><a href="#">menu item</a></li>
+                            </ul>
+                        </li>
+                        
+                    </ul>
+                </li>
+            </ul>
+            <select style="float:right"></select>
+        </div>  
+    </body>
+</html>
