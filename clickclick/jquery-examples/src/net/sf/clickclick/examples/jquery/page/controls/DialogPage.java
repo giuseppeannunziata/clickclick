@@ -3,6 +3,7 @@ package net.sf.clickclick.examples.jquery.page.controls;
 import java.util.HashMap;
 import java.util.Map;
 import net.sf.click.control.Button;
+import net.sf.click.control.CssInclude;
 import net.sf.click.control.JavascriptInclude;
 import net.sf.click.util.PageImports;
 
@@ -22,10 +23,12 @@ public class DialogPage extends BorderPage {
 
     public void onHtmlImports(PageImports pageImports) {
         Map model = new HashMap();
-        JavascriptInclude jsInclude = new JavascriptInclude();
-        String javascript = getContext().renderTemplate("/net/sf/clickclick/examples/jquery/page/controls/DialogPageImports.js", model);
-        jsInclude.append(javascript);
+        String javascript = getContext().renderTemplate("controls/dialog.js", model);
+        JavascriptInclude jsInclude = new JavascriptInclude(javascript);
         pageImports.add(jsInclude);
-        super.onHtmlImports(pageImports);
+
+        String css = getContext().renderTemplate("controls/dialog.css", model);
+        CssInclude cssInclude = new CssInclude(css);
+        pageImports.add(cssInclude);
     }
 }
