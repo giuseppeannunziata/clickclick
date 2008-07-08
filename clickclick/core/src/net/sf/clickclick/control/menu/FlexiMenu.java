@@ -124,7 +124,7 @@ public class FlexiMenu extends Menu {
         buffer.appendAttribute("id", getOrientation() + "Menu");
         buffer.closeTag();
         buffer.append("\n");
-        renderMenu(buffer, this, 0);
+        renderMenu(buffer, this);
         buffer.elementEnd("ul");
     }
 
@@ -134,31 +134,29 @@ public class FlexiMenu extends Menu {
         return buffer.toString();
     }
 
-    protected void renderMenu(HtmlStringBuffer buffer, Menu menu,
-        int indentationLevel) {
-        indentationLevel++;
+    protected void renderMenu(HtmlStringBuffer buffer, Menu menu) {
         Iterator it = menu.getChildren().iterator();
         while (it.hasNext()) {
             Menu child = (Menu) it.next();
             if (child.isUserInRoles()) {
                 buffer.elementStart("li");
-                StringBuffer sb = new StringBuffer("menuItem");
+                HtmlStringBuffer sb = new HtmlStringBuffer().append("menuItem");
                 if (child.getChildren().size() == 0) {
                     buffer.appendAttribute("class", sb.toString());
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenuItem(buffer, child, indentationLevel);
+                    renderMenuItem(buffer, child);
                 } else {
                     sb.append(" ").append("menuItemBullet");
                     buffer.appendAttribute("class", sb.toString());
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenuItem(buffer, child, indentationLevel);
+                    renderMenuItem(buffer, child);
                     buffer.elementStart("ul");
                     buffer.appendAttribute("class", "submenu");
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenu(buffer, child, indentationLevel);
+                    renderMenu(buffer, child);
                     buffer.elementEnd("ul");
                     buffer.append("\n");
                 }
@@ -168,8 +166,7 @@ public class FlexiMenu extends Menu {
         }
     }
 
-    protected void renderMenuItem(HtmlStringBuffer buffer, Menu menu,
-        int indentation) {
+    protected void renderMenuItem(HtmlStringBuffer buffer, Menu menu) {
 
         buffer.elementStart("a");
 
