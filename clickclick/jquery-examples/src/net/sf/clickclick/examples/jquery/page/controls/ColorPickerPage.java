@@ -7,6 +7,8 @@ import net.sf.clickclick.jquery.colorpicker.JQColorPicker;
 
 public class ColorPickerPage extends BorderPage {
 
+    public String title = "Color Picker Demo";
+
     private Form form = new Form("form");
 
     public void onInit() {

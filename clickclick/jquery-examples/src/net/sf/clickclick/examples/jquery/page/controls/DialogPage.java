@@ -12,6 +12,8 @@ import net.sf.clickclick.examples.jquery.page.BorderPage;
 
 public class DialogPage extends BorderPage {
 
+    public String title = "UI Dialog Demo";
+
     public void onInit() {
         JQDialog dialog = new JQDialog("dialog");
         dialog.setStyle("display", "none");
