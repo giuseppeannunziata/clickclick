@@ -1,6 +1,5 @@
 package net.sf.clickclick.jquery.dialog;
 
-import net.sf.click.MockContext;
 import net.sf.click.control.CssImport;
 import net.sf.click.control.JavascriptImport;
 import net.sf.click.util.PageImports;
@@ -12,8 +11,6 @@ import net.sf.clickclick.control.html.Div;
  */
 public class JQDialog extends Div {
 
-    private String options;
-    
     public JQDialog() {
         this(null);
     }
@@ -38,18 +35,5 @@ public class JQDialog extends Div {
 
         jsImport = new JavascriptImport(contextPath + "/clickclick/jquery/jquery.ui.all.js");
         pageImports.add(jsImport);
-    }
-
-    public String getOptions() {
-        return options;
-    }
-
-    public void setOptions(String options) {
-        this.options = options;
-    }
-
-    public static void main(String[] args) {        
-        MockContext.initContext();
-        JQDialog dialog = new JQDialog();
     }
 }
