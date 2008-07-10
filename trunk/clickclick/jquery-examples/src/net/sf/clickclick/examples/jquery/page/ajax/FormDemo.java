@@ -78,10 +78,6 @@ public class FormDemo extends BorderPage {
         pageImports.appendToGlobalScript(context.renderTemplate(jsTemplate, model));
     }
 
-    public String getTemplate() {
-        return "/ajax/border-template.htm";
-    }
-
     /**
      * Returns a formatted date String.
      */

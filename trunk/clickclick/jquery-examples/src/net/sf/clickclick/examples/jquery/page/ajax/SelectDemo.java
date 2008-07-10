@@ -40,10 +40,6 @@ public class SelectDemo extends BorderPage {
         form.add(citySelect);
     }
 
-    public String getTemplate() {
-        return "/ajax/border-template.htm";
-    }
-
     public void onHtmlImports(PageImports pageImports) {
         Context context = getContext();
         Map model = new HashMap();
