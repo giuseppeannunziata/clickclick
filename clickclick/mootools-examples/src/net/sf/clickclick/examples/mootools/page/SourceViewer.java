@@ -21,14 +21,6 @@ import org.apache.commons.lang.StringUtils;
  */
 public class SourceViewer extends BorderPage {
 
-    private static final String[] JAVA_KEYWORDS = { "package", "import",
-            "class", "public", "protected", "private", "extends", "implements",
-            "return", "if", "while", "for", "do", "else", "try", "new", "void",
-            "catch", "throws", "throw", "static", "final", "break", "continue",
-            "super", "finally", "true", "false", "true;", "false;", "null",
-            "boolean", "int", "char", "long", "float", "double", "short",
-            "this," };
-
     private static final String[] HTML_KEYWORDS = { "html", "head", "style",
             "script", "title", "link", "body", "h1", "h2", "h3", "h4", "h5",
             "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a", "b",
@@ -140,22 +132,18 @@ public class SourceViewer extends BorderPage {
             line = reader.readLine();
         }
 
-        addModel("source", buffer.toString());
+        if (isHtml) {
+            addModel("templateSource", buffer.toString());
+        } else {
+            addModel("source", buffer.toString());
+        }
 
         addModel("name", name);
     }
 
     private String getEncodedLine(String line) {
 
-        if (isJava) {
-            line = ClickUtils.escapeHtml(line);
-
-            for (int i = 0; i < JAVA_KEYWORDS.length; i++) {
-                String keyword = JAVA_KEYWORDS[i];
-                line = renderJavaKeywords(line, keyword);
-            }
-
-        } else if (isHtml) {
+        if (isHtml) {
             line = ClickUtils.escapeHtml(line);
 
             for (int i = 0; i < HTML_KEYWORDS.length; i++) {
@@ -182,24 +170,6 @@ public class SourceViewer extends BorderPage {
 
         } else {
             line = ClickUtils.escapeHtml(line);
-        }
-
-        return line;
-    }
-
-    private String renderJavaKeywords(String line, String token) {
-        String markupToken = renderJavaToken(token);
-
-        line = StringUtils.replace
-            (line, " " + token + " ", " " + markupToken + " ");
-
-        if (line.startsWith(token)) {
-            line = markupToken + line.substring(token.length());
-        }
-
-        if (line.endsWith(token)) {
-            line = line.substring(0, line.length() - token.length())
-                    + markupToken;
         }
 
         return line;
@@ -276,8 +246,5 @@ public class SourceViewer extends BorderPage {
     private String renderVelocityToken(String token) {
         return "<font color=\"red\">" + token + "</font>";
     }
-
-    private String renderJavaToken(String token) {
-        return "<font color=\"#7f0055\"><b>" + token + "</b></font>";
-    }
+    
 }
