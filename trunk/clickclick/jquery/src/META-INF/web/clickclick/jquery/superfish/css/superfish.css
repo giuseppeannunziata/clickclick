@@ -121,3 +121,14 @@ li.sfHover > a > .sf-sub-indicator {
 .sf-menu ul li.sfHover > a > .sf-sub-indicator {
 	background-position: -10px 0; /* arrow hovers for modern browsers*/
 }
+
+/*** shadows for all but IE6 and 7 ***/
+.sf-shadow ul {
+	background:	url(../images/shadow.png) no-repeat bottom right;
+	padding: 0 4px 5px 0;
+	-moz-border-radius-bottomleft: 10px;
+	-moz-border-radius-topright: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+}
+
