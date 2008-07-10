@@ -9,7 +9,8 @@
         <menu label="Color Picker" path="controls/color-picker.htm"/>
     </menu>
     <menu label="Ajax" path="#">
-        <menu label="Form" path="ajax/form.htm"/>
-        <menu label="Select" path="ajax/select.htm"/>
+        <menu label="Ajax" path="ajax/ajax-demo.htm"/>
+        <menu label="Form" path="ajax/form-demo.htm"/>
+        <menu label="Select" path="ajax/select-demo.htm"/>
     </menu>
 </menu>
