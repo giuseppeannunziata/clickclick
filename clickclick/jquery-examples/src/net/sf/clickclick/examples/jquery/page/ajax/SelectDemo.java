@@ -18,9 +18,9 @@ public class SelectDemo extends BorderPage {
 
     public String title = "Select Demo";
 
-    private Select provinceSelect = new JQSelect("provinceSelect", "Select Province:");
+    private Select provinceSelect = new JQSelect("provinceSelect", "Select a Province:");
 
-    private Select citySelect = new Select("citySelect", "Select City:");
+    private Select citySelect = new Select("citySelect", "Select a City:");
 
     public Form form = new Form("form");
 
