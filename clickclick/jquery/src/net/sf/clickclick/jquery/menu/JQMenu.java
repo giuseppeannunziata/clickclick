@@ -11,11 +11,14 @@ import net.sf.click.util.PageImports;
 import net.sf.clickclick.control.menu.FlexiMenu;
 
 /**
+ * Based on the JQuery plugin, Superfish -> http://users.tpg.com.au/j_birch/plugins/superfish/
  *
  * @author Bob Schellink
  */
 public class JQMenu extends FlexiMenu {
 
+    private String options = "animation : { opacity:'show', height:'show' }, speed: 'fast'";
+    
     public JQMenu() {        
     }
     
@@ -23,6 +26,21 @@ public class JQMenu extends FlexiMenu {
         super(name);
     }
     
+    public String getOptions() {
+        return options;
+    }
+
+    /**
+     * Please see the following link on how to set the menu Options:
+     *
+     * http://users.tpg.com.au/j_birch/plugins/superfish/#options
+     * 
+     * @param options
+     */
+    public void setOptions(String options) {
+        this.options = options;
+    }
+
     public String getHtmlImports() {
         return null;
     }
@@ -58,10 +76,7 @@ public class JQMenu extends FlexiMenu {
 
         String include = "$(document).ready(function(){" 
             + "$('ul.sf-menu')"
-            + ".superfish({"
-            + "  animation : { opacity:'show', height:'show' },"
-            + "  speed: 'fast'" 
-            + "})" 
+            + ".superfish({" + getOptions() + "})" 
             + ".find('>li:has(ul)')"
             + ".mouseover(function(){" 
             + "  $('ul', this).bgIframe({opacity:false});" 
