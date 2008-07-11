@@ -5,7 +5,6 @@
     <menu label="Controls" path="#">
         <menu label="Dialog" path="controls/dialog-demo.htm"/>
         <menu label="Menu" path="controls/menu.htm"/>
-        <menu label="Accordion" path="controls/accordion.htm"/>
         <menu label="Color Picker" path="controls/color-picker.htm"/>
     </menu>
     <menu label="Ajax" path="#">
