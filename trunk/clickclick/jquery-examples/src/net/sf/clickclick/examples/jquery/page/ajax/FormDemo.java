@@ -59,6 +59,7 @@ public class FormDemo extends BorderPage {
 
             private void actionPerformed(Control source) {
                 // Perform submit action e.g. saving the Form to database
+                System.out.println("Form saved to database");
             }
         });
         form.add(submit);
