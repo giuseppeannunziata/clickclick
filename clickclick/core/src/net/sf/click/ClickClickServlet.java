@@ -25,7 +25,7 @@ package net.sf.click;
  *
  * @author Bob Schellink
  */
-public class ClickServlet2 extends ClickServlet {
+public class ClickClickServlet extends ClickServlet {
 
     // ------------------------------------------------------ Protected Methods
 

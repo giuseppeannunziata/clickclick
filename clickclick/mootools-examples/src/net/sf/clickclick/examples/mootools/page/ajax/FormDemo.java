@@ -58,6 +58,7 @@ public class FormDemo extends BorderPage {
         form.setActionListener(new AjaxAdapter() {
 
             public Partial onAjaxAction(Control source) {
+                System.out.println("Form saved to database");
                 // Return a Partial response
                 return createPartial();
             }
