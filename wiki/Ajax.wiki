@@ -2,7 +2,7 @@ The Click Framework does not provide direct support for Ajax components. As Ajax
 
 == Activate Ajax Support ==
 
-To active Ajax support you need to add the clickclick.jar to your project. Then replace ClickServlet with ClickClickServlet in your web.xml. For example:
+To active Ajax support you need to add the clickclick.jar to your project. Then replace !ClickServlet with !ClickClickServlet in your web.xml. For example:
 {{{
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
