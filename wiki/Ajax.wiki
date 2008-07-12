@@ -1,4 +1,7 @@
-#summary The Click Framework does not provide direct support for Ajax components. As Ajax is very useful for certain use cases, !ClickClick provides out-of-the-box server side Ajax support through [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/core/src/net/sf/click/ClickClickServlet.java ClickClickServlet].
+#summary Outlines Ajax support provided by ClickClick
+
+=== Ajax ===
+The Click Framework does not provide direct support for Ajax components. As Ajax is very useful for certain use cases, !ClickClick provides out-of-the-box server side Ajax support through [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/core/src/net/sf/click/ClickClickServlet.java ClickClickServlet].
 
 == Activate Ajax Support ==
 
