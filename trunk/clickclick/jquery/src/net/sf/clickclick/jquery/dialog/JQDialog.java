@@ -1,9 +1,9 @@
 package net.sf.clickclick.jquery.dialog;
 
-import net.sf.click.control.CssImport;
-import net.sf.click.control.JavascriptImport;
-import net.sf.click.util.PageImports;
+import net.sf.clickclick.control.CssImport;
+import net.sf.clickclick.control.JavascriptImport;
 import net.sf.clickclick.control.html.Div;
+import net.sf.click.util.AdvancedPageImports;
 
 /**
  *
@@ -20,7 +20,8 @@ public class JQDialog extends Div {
         setAttribute("class", "flora");
     }
 
-    public void onHtmlImports(PageImports pageImports) {
+    public String getHtmlImports() {
+        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
         String contextPath = getContext().getRequest().getContextPath();
         CssImport cssImport = new CssImport(contextPath 
             + "/clickclick/jquery/ui/flora.dialog.css");
@@ -51,5 +52,6 @@ public class JQDialog extends Div {
         jsImport = new JavascriptImport(contextPath
             + "/clickclick/jquery/ui/ui.dialog.js");
         pageImports.add(jsImport);
+        return null;
     }
 }

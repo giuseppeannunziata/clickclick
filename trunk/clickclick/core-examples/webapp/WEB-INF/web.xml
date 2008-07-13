@@ -3,7 +3,7 @@
     <display-name>Click Examples</display-name>
     <context-param>
         <param-name>config-service-class</param-name>
-        <param-value>net.sf.click.service.ReloadConfigService</param-value>
+        <param-value>net.sf.click.service.ClickClickConfigService</param-value>
     </context-param>
     <filter>
         <filter-name>reload-filter</filter-name>

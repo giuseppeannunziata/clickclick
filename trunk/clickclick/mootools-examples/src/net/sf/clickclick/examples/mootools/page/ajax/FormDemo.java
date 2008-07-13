@@ -12,10 +12,10 @@ import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import net.sf.click.extras.control.EmailField;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.PageImports;
 import net.sf.click.util.Partial;
 import net.sf.clickclick.examples.mootools.page.BorderPage;
 import net.sf.clickclick.mootools.controls.MTAjaxForm;
+import net.sf.click.util.AdvancedPageImports;
 
 public class FormDemo extends BorderPage {
 
@@ -65,7 +65,9 @@ public class FormDemo extends BorderPage {
         });
     }
 
-    public void onHtmlImports(PageImports pageImports) {
+    public String getHtmlImports() {
+        AdvancedPageImports pageImports = (AdvancedPageImports) getPageImports();
+
         Map model = new HashMap();
         Context context = getContext();
         String contextPath = context.getRequest().getContextPath();
@@ -77,6 +79,8 @@ public class FormDemo extends BorderPage {
 
         String jsTemplate = "/ajax/form-demo.js";
         pageImports.appendToGlobalScript(context.renderTemplate(jsTemplate, model));
+        
+        return null;
     }
 
     /**

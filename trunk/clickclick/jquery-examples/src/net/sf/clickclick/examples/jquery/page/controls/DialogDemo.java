@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import net.sf.click.control.Button;
 import net.sf.click.control.Checkbox;
-import net.sf.click.control.CssInclude;
-import net.sf.click.control.JavascriptInclude;
 import net.sf.click.control.Label;
-import net.sf.click.util.PageImports;
 
+import net.sf.clickclick.control.CssInclude;
+import net.sf.clickclick.control.JavascriptInclude;
 import net.sf.clickclick.control.Text;
 import net.sf.clickclick.control.grid.Grid;
 import net.sf.clickclick.control.html.table.Cell;
@@ -17,6 +16,7 @@ import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
 import net.sf.clickclick.jquery.dialog.JQDialog;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
+import net.sf.click.util.AdvancedPageImports;
 
 public class DialogDemo extends BorderPage {
 
@@ -27,7 +27,9 @@ public class DialogDemo extends BorderPage {
         addControl(buildDialog());
     }
 
-    public void onHtmlImports(PageImports pageImports) {
+    public String getHtmlImports() {
+        AdvancedPageImports pageImports = (AdvancedPageImports) getPageImports();
+
         Map model = new HashMap();
         String javascript = getContext().renderTemplate("controls/dialog-demo.js", model);
         JavascriptInclude jsInclude = new JavascriptInclude(javascript);
@@ -36,6 +38,8 @@ public class DialogDemo extends BorderPage {
         String css = getContext().renderTemplate("controls/dialog-demo.css", model);
         CssInclude cssInclude = new CssInclude(css);
         pageImports.add(cssInclude);
+        
+        return null;
     }
 
     // -------------------------------------------------------- Private Methods
