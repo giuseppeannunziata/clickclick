@@ -7,12 +7,12 @@ import net.sf.click.AjaxControlRegistry;
 import net.sf.click.Control;
 import net.sf.click.control.AbstractContainer;
 import net.sf.click.control.ActionLink;
-import net.sf.click.control.JavascriptImport;
-import net.sf.click.control.JavascriptInclude;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.PageImports;
+import net.sf.clickclick.control.JavascriptImport;
+import net.sf.clickclick.control.JavascriptInclude;
 import net.sf.click.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
+import net.sf.click.util.AdvancedPageImports;
 
 /**
  * A JQuery based Ajax Demo containing a link <a> and div <div>. When the link
@@ -106,7 +106,8 @@ public class AjaxDemo extends BorderPage {
         /**
          * Generates the JQuery
          */
-        public void onHtmlImports(PageImports pageImports) {
+        public String getHtmlImports() {
+            AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
             String url = getContext().getRequest().getContextPath() + getContext().
                 getResourcePath();
 
@@ -137,6 +138,8 @@ public class AjaxDemo extends BorderPage {
             // Include reference to the JQuery library
             pageImports.add(new JavascriptImport(getContext().getRequest().
                 getContextPath() + "/clickclick/jquery/jquery-1.2.6.js"));
+
+            return null;
         }
 
         public JavascriptInclude getJavascriptInclude() {

@@ -15,31 +15,28 @@
  */
 package net.sf.clickclick.jquery.controls;
 
-import net.sf.click.AjaxControlRegistry;
-import net.sf.click.control.Form;
-import net.sf.click.control.HiddenField;
-import net.sf.click.control.JavascriptImport;
-import net.sf.click.util.PageImports;
+import net.sf.clickclick.control.JavascriptImport;
+import net.sf.clickclick.control.ajax.AjaxForm;
+import net.sf.click.util.AdvancedPageImports;
 
 /**
  *
  * @author Bob Schellink
  */
-public class JQForm extends Form {
+public class JQForm extends AjaxForm {
+
+    public JQForm() {
+    }
 
     public JQForm(String name) {
         super(name);
     }
 
-    public void onInit() {
-        super.onInit();
-        add(new HiddenField(name, getId()));
-        AjaxControlRegistry.registerAjaxControl(this);
-    }
-    
-    public void onHtmlImports(PageImports pageImports) {
+    public String getHtmlImports() {
+        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
         String contextPath = getContext().getRequest().getContextPath();
         pageImports.add(new JavascriptImport(contextPath + "/clickclick/jquery/jquery-1.2.6.js"));
         pageImports.add(new JavascriptImport(contextPath + "/clickclick/jquery/form/jquery.form.js"));
+        return null;
     }
 }

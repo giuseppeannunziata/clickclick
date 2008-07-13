@@ -2,13 +2,13 @@ package net.sf.clickclick.jquery.menu;
 
 import java.util.Iterator;
 import net.sf.click.Context;
-import net.sf.click.control.CssImport;
-import net.sf.click.control.JavascriptImport;
-import net.sf.click.control.JavascriptInclude;
 import net.sf.click.extras.control.Menu;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.PageImports;
+import net.sf.clickclick.control.CssImport;
+import net.sf.clickclick.control.JavascriptImport;
+import net.sf.clickclick.control.JavascriptInclude;
 import net.sf.clickclick.control.menu.FlexiMenu;
+import net.sf.click.util.AdvancedPageImports;
 
 /**
  * Based on the JQuery plugin, Superfish -> http://users.tpg.com.au/j_birch/plugins/superfish/
@@ -42,10 +42,7 @@ public class JQMenu extends FlexiMenu {
     }
 
     public String getHtmlImports() {
-        return null;
-    }
-
-    public void onHtmlImports(PageImports pageImports) {
+        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
         Context context = getContext();
         String contextPath = context.getRequest().getContextPath();
 
@@ -89,6 +86,7 @@ public class JQMenu extends FlexiMenu {
         JavascriptInclude jsInclude = new JavascriptInclude(include);
         jsInclude.setUnique(true);
         pageImports.add(jsInclude);
+        return null;
     }
 
     public void render(HtmlStringBuffer buffer) {

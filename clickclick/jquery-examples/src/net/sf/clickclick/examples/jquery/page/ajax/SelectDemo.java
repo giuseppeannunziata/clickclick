@@ -9,10 +9,10 @@ import net.sf.click.control.Form;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.PageImports;
 import net.sf.click.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.controls.JQSelect;
+import net.sf.click.util.AdvancedPageImports;
 
 public class SelectDemo extends BorderPage {
 
@@ -40,7 +40,9 @@ public class SelectDemo extends BorderPage {
         form.add(citySelect);
     }
 
-    public void onHtmlImports(PageImports pageImports) {
+    public String getHtmlImports() {
+        AdvancedPageImports pageImports = (AdvancedPageImports) getPageImports();
+
         Context context = getContext();
         Map model = new HashMap();
         String contextPath = context.getRequest().getContextPath();
@@ -51,6 +53,8 @@ public class SelectDemo extends BorderPage {
 
         String jsTemplate = "/ajax/select-demo.js";
         pageImports.appendToGlobalScript(context.renderTemplate(jsTemplate, model));
+        
+        return null;
     }
     
     // -------------------------------------------------------- Private Methods

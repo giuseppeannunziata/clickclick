@@ -1,14 +1,14 @@
 package net.sf.clickclick.jquery.colorpicker;
 
 import net.sf.click.Context;
-import net.sf.click.control.CssImport;
-import net.sf.click.control.CssInclude;
-import net.sf.click.control.JavascriptImport;
-import net.sf.click.control.JavascriptInclude;
 import net.sf.click.control.TextField;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.PageImports;
+import net.sf.clickclick.control.CssImport;
+import net.sf.clickclick.control.CssInclude;
+import net.sf.clickclick.control.JavascriptImport;
+import net.sf.clickclick.control.JavascriptInclude;
 import net.sf.clickclick.control.html.Div;
+import net.sf.click.util.AdvancedPageImports;
 
 /**
  *
@@ -30,7 +30,8 @@ public class JQColorPicker extends TextField {
         image.setAttribute("class", "colorPickerImage");
     }
 
-    public void onHtmlImports(PageImports pageImports) {
+    public String getHtmlImports() {
+        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
         Context context = getContext();
         String contextPath = context.getRequest().getContextPath();
 
@@ -91,6 +92,7 @@ public class JQColorPicker extends TextField {
         
         CssInclude cssInclude = new CssInclude(style);
         pageImports.add(cssInclude);
+        return null;
     }
 
     public void render(HtmlStringBuffer buffer) {
