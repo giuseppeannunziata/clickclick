@@ -4,6 +4,6 @@ The Click Framework does not provide direct support for Ajax components. As Ajax
 
 See GettingStarted on how to setup the !ClickClickServlet.
 
-== How does it work ==
+=== How does it work ===
 
 === Example ===
