@@ -22,5 +22,28 @@ import net.sf.click.control.ActionLink;
  * @author Bob Schellink
  */
 public class AjaxActionLink extends ActionLink {
-    
+
+    public AjaxActionLink(String name) {
+        super(name);
+    }
+
+    public AjaxActionLink(String name, String label) {
+        super(name, label);
+    }
+
+    public AjaxActionLink(Object listener, String method) {
+        super(listener, method);
+    }
+
+    public AjaxActionLink(String name, Object listener, String method) {
+        super(name, listener, method);
+    }
+
+    public AjaxActionLink(String name, String label, Object listener,
+            String method) {
+        super(name, label, listener, method);
+    }
+
+    public AjaxActionLink() {
+    }
 }
