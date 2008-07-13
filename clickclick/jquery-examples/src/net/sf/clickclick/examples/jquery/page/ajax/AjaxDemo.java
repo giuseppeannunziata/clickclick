@@ -2,7 +2,7 @@ package net.sf.clickclick.examples.jquery.page.ajax;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import net.sf.click.AjaxAdapter;
+import net.sf.click.util.AjaxAdapter;
 import net.sf.click.AjaxControlRegistry;
 import net.sf.click.Control;
 import net.sf.click.control.AbstractContainer;

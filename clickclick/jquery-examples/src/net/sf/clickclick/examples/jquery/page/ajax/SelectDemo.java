@@ -2,7 +2,7 @@ package net.sf.clickclick.examples.jquery.page.ajax;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.sf.click.AjaxAdapter;
+import net.sf.click.util.AjaxAdapter;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.control.Form;
