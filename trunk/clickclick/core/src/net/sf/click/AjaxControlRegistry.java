@@ -15,6 +15,7 @@
  */
 package net.sf.click;
 
+import net.sf.click.AjaxListener;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;

@@ -15,6 +15,9 @@
  */
 package net.sf.click;
 
+import net.sf.click.util.PageImports;
+import net.sf.click.util.AdvancedPageImports;
+
 /**
  * Provides extra functionality not available in ClickServlet.
  * <p/>
@@ -36,6 +39,16 @@ public class ClickClickServlet extends ClickServlet {
      */
     protected ControlRegistry createControlRegistry() {
         return new AjaxControlRegistry();
+    }
+
+    /**
+     * @see ClickServlet#createPageImports(net.sf.click.Page)
+     *
+     * @param page
+     * @return
+     */
+    protected PageImports createPageImports(Page page) {
+        return new AdvancedPageImports(page);
     }
 
     // ------------------------------------------------ Package Private Methods

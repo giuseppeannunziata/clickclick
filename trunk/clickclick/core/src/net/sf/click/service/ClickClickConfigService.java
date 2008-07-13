@@ -32,7 +32,7 @@ import org.w3c.dom.Element;
  *
  * @author Bob Schellink
  */
-public class ReloadConfigService extends XmlConfigService {
+public class ClickClickConfigService extends XmlConfigService {
 
     private Map manualPageByPathMap = new HashMap();
 
@@ -40,106 +40,7 @@ public class ReloadConfigService extends XmlConfigService {
 
     private static final Object PAGE_LOAD_LOCK = new Object();
 
-    public void buildManualPageMapping(Element pagesElm) throws ClassNotFoundException {
-        if (isProductionMode() || isProfileMode()) {
-            super.buildManualPageMapping(pagesElm);
-            return;
-        }
-
-        List pageList = ClickUtils.getChildren(pagesElm, "page");
-
-        if (!pageList.isEmpty() && getLogService().isDebugEnabled()) {
-            getLogService().debug("click.xml pages:");
-        }
-
-        for (int i = 0; i < pageList.size(); i++) {
-            Element pageElm = (Element) pageList.get(i);
-
-            PageMetaData page = new PageMetaData(pageElm, pagesPackage,
-                commonHeaders);
-            manualPageByPathMap.put(page.getPath(), page);
-        }
-    }
-
-    void buildAutoPageMapping(Element pagesElm) throws ClassNotFoundException {
-
-        if(isProductionMode() || isProfileMode()) {
-            //Build and cache in production modes.
-            super.buildAutoPageMapping(pagesElm);
-            return;
-        }
-
-        // Build list of automap path page class overrides
-        excludesList.clear();
-        for (Iterator i = ClickUtils.getChildren(pagesElm, "excludes").iterator();
-             i.hasNext();) {
-
-            excludesList.add(new XmlConfigService.ExcludesElm((Element) i.next()));
-        }
-    }
-
-    public void buildClassMap() {
-        if (isProductionMode() || isProfileMode()) {
-            super.buildClassMap();
-            return;
-        }
-
-        //Build pages by class map.  The difference between this method and ClickApps method
-        //is that the key is a string not the actual class. Also only manually mapped
-        //pages will be stored here. The automapped pages are looked up dynamically.
-
-        // Build pages by className map
-        for (Iterator i = pageByPathMap.values().iterator(); i.hasNext();) {
-            PageMetaData page = (PageMetaData) i.next();
-
-            Object value = manualPageByClassNameMap.get(page.pageClassName);
-
-            if (value == null) {
-                manualPageByClassNameMap.put(page.pageClassName, page);
-
-            } else if (value instanceof List) {
-                ((List) value).add(value);
-
-            } else if (value instanceof PageMetaData) {
-                List list = new ArrayList();
-                list.add(value);
-                list.add(page);
-                manualPageByClassNameMap.put(page.pageClassName, list);
-
-            } else {
-                // should never occur
-                throw new IllegalStateException();
-            }
-        }
-    }
-
-    private PageMetaData lookupManuallyStoredMetaData(String path) {
-        //Try and load the manually mapped page
-        PageMetaData page = (PageMetaData) manualPageByPathMap.get(path);
-        if (page == null) {
-            String jspPath = StringUtils.replace(path, ".htm", ".jsp");
-            page = (PageMetaData) manualPageByPathMap.get(jspPath);
-        }
-        return page;
-    }
-
-    private PageMetaData lookupManuallyStoredMetaData(Class pageClass) {
-        //Try and load the manually mapped page
-        PageMetaData page = null;
-        Object object = (PageMetaData) manualPageByClassNameMap.get(pageClass);
-        if (object instanceof PageMetaData) {
-            page = (PageMetaData) object;
-            return page;
-
-        } else if (object instanceof List) {
-            String msg =
-                "Page class resolves to multiple paths: " + pageClass.getName();
-            throw new IllegalArgumentException(msg);
-
-        }
-
-        return page;
-    }
+    // --------------------------------------------------------- Public Methods
 
     /**
      * @see ConfigService#getPageClass(String)
@@ -239,6 +140,111 @@ public class ReloadConfigService extends XmlConfigService {
         }
         return fields;
     }
+
+    // ------------------------------------------------ Package Private Methods
+
+    void buildManualPageMapping(Element pagesElm) throws ClassNotFoundException {
+        if (isProductionMode() || isProfileMode()) {
+            super.buildManualPageMapping(pagesElm);
+            return;
+        }
+
+        List pageList = ClickUtils.getChildren(pagesElm, "page");
+
+        if (!pageList.isEmpty() && getLogService().isDebugEnabled()) {
+            getLogService().debug("click.xml pages:");
+        }
+
+        for (int i = 0; i < pageList.size(); i++) {
+            Element pageElm = (Element) pageList.get(i);
+
+            PageMetaData page = new PageMetaData(pageElm, pagesPackage,
+                commonHeaders);
+            manualPageByPathMap.put(page.getPath(), page);
+        }
+    }
+
+    void buildAutoPageMapping(Element pagesElm) throws ClassNotFoundException {
+
+        if(isProductionMode() || isProfileMode()) {
+            //Build and cache in production modes.
+            super.buildAutoPageMapping(pagesElm);
+            return;
+        }
+
+        // Build list of automap path page class overrides
+        excludesList.clear();
+        for (Iterator i = ClickUtils.getChildren(pagesElm, "excludes").iterator();
+             i.hasNext();) {
+
+            excludesList.add(new XmlConfigService.ExcludesElm((Element) i.next()));
+        }
+    }
+
+    void buildClassMap() {
+        if (isProductionMode() || isProfileMode()) {
+            super.buildClassMap();
+            return;
+        }
+
+        //Build pages by class map.  The difference between this method and ClickApps method
+        //is that the key is a string not the actual class. Also only manually mapped
+        //pages will be stored here. The automapped pages are looked up dynamically.
+
+        // Build pages by className map
+        for (Iterator i = pageByPathMap.values().iterator(); i.hasNext();) {
+            PageMetaData page = (PageMetaData) i.next();
+
+            Object value = manualPageByClassNameMap.get(page.pageClassName);
+
+            if (value == null) {
+                manualPageByClassNameMap.put(page.pageClassName, page);
+
+            } else if (value instanceof List) {
+                ((List) value).add(value);
+
+            } else if (value instanceof PageMetaData) {
+                List list = new ArrayList();
+                list.add(value);
+                list.add(page);
+                manualPageByClassNameMap.put(page.pageClassName, list);
+
+            } else {
+                // should never occur
+                throw new IllegalStateException();
+            }
+        }
+    }
+
+    private PageMetaData lookupManuallyStoredMetaData(String path) {
+        //Try and load the manually mapped page
+        PageMetaData page = (PageMetaData) manualPageByPathMap.get(path);
+        if (page == null) {
+            String jspPath = StringUtils.replace(path, ".htm", ".jsp");
+            page = (PageMetaData) manualPageByPathMap.get(jspPath);
+        }
+        return page;
+    }
+
+    private PageMetaData lookupManuallyStoredMetaData(Class pageClass) {
+        //Try and load the manually mapped page
+        PageMetaData page = null;
+        Object object = (PageMetaData) manualPageByClassNameMap.get(pageClass);
+        if (object instanceof PageMetaData) {
+            page = (PageMetaData) object;
+            return page;
+
+        } else if (object instanceof List) {
+            String msg =
+                "Page class resolves to multiple paths: " + pageClass.getName();
+            throw new IllegalArgumentException(msg);
+
+        }
+
+        return page;
+    }
+
+    // ---------------------------------------------------------- Inner Classes
 
     static class PageMetaData {
 
