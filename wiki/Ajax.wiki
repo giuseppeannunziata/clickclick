@@ -2,30 +2,8 @@ The Click Framework does not provide direct support for Ajax components. As Ajax
 
 == Activate Ajax Support ==
 
-To active Ajax support you need to add the clickclick.jar to your project. Then replace !ClickServlet with !ClickClickServlet in your web.xml. For example:
-{{{
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-    version="2.4">
+See GettingStarted on how to setup the !ClickClickServlet.
 
-  <servlet>
-    <servlet-name>ClickServlet</servlet-name>
-    <servlet-class>net.sf.click.ClickClickServlet</servlet-class>
-    <load-on-startup>0</load-on-startup>
-  </servlet>
+== How does it work ==
 
-  <servlet-mapping>
-    <servlet-name>ClickServlet</servlet-name>
-    <url-pattern>*.htm</url-pattern>
-  </servlet-mapping>
-</web-app>
-}}}
-
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Example ==
