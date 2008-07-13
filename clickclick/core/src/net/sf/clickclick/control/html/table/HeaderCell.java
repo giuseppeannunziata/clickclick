@@ -7,7 +7,6 @@ package net.sf.clickclick.control.html.table;
 public class HeaderCell extends Cell {
 
     public HeaderCell() {
-        
     }
     
     public HeaderCell(String name) {
