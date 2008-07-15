@@ -2,7 +2,7 @@ package net.sf.clickclick.examples.jquery.page.controls;
 
 import net.sf.clickclick.control.menu.FlexiMenu;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.menu.JQMenu;
+import net.sf.clickclick.jquery.controls.JQMenu;
 
 public class MenuPage extends BorderPage {
 
