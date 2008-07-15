@@ -14,7 +14,7 @@ import net.sf.clickclick.control.html.table.Cell;
 import net.sf.clickclick.control.html.table.HeaderCell;
 import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
-import net.sf.clickclick.jquery.dialog.JQDialog;
+import net.sf.clickclick.jquery.controls.JQDialog;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.click.util.AdvancedPageImports;
 

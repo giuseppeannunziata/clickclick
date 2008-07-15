@@ -15,6 +15,8 @@
  */
 package net.sf.clickclick.control.ajax;
 
+import net.sf.click.AjaxControlRegistry;
+import net.sf.click.AjaxListener;
 import net.sf.click.control.ActionLink;
 
 /**
@@ -31,19 +33,38 @@ public class AjaxActionLink extends ActionLink {
         super(name, label);
     }
 
-    public AjaxActionLink(Object listener, String method) {
-        super(listener, method);
+    public AjaxActionLink(AjaxListener ajaxListener) {
+        setActionListener(ajaxListener);
     }
 
-    public AjaxActionLink(String name, Object listener, String method) {
-        super(name, listener, method);
+    public AjaxActionLink(String name, AjaxListener ajaxListener) {
+        super(name);
+        setActionListener(ajaxListener);
     }
 
-    public AjaxActionLink(String name, String label, Object listener,
-            String method) {
-        super(name, label, listener, method);
+    public AjaxActionLink(String name, String label, AjaxListener ajaxListener) {
+        super(name, label);
+        setActionListener(ajaxListener);
     }
 
     public AjaxActionLink() {
+    }
+
+    // ------------------------------------------------------ Public Attributes
+
+    public String getId() {
+        String id = super.getId();
+        if (id == null) {
+            return getName() + "_id";
+        } else {
+            return id;
+        }
+    }
+
+    public void onInit() {
+        super.onInit();
+        // Add id parameter to trigger onProcess event
+        setParameter(getId(), "1");
+        AjaxControlRegistry.registerAjaxControl(this);
     }
 }

@@ -3,7 +3,7 @@ package net.sf.clickclick.examples.jquery.page.controls;
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.colorpicker.JQColorPicker;
+import net.sf.clickclick.jquery.controls.JQColorPicker;
 
 public class ColorPickerPage extends BorderPage {
 
