@@ -1,0 +1,316 @@
+<project name="click" default="help" basedir=".">
+
+   <!-- 
+    Project Properties 
+    -->
+    
+   <property file="./build.properties"/>
+   <xmlproperty file="./javascript-syntax-highlighter.xml"/>
+
+   <property name="name" value="clickclick-examples"/>
+   <property name="jar.click" value="click-1.5-M2.jar"/>
+   <property name="jar.click-extras" value="click-extras-1.5-M2.jar"/>
+   <property name="jar.click-mock" value="click-mock-1.5-M2.jar"/>
+   <property name="jar.clickclick" value="clickclick-0.1.jar"/>
+   <property name="jar.lang" value="commons-lang-2.4.jar"/>
+   <property name="jar.servlet" value="servlet-api-2.3.jar"/>
+   <property name="jar.junit" value="junit-3.8.1.jar"/>
+   <property name="javac.source" value="1.4"/>
+   <property name="repository" value="http://repo1.maven.org"/>
+
+   <property name="dir.deploy" value="dist"/>
+   <property name="dir.webapp" value="webapp"/>
+   <property name="dir.weblib" value="${dir.webapp}/WEB-INF/lib"/>
+   
+    <!--
+     Macro Definitions
+     -->
+    
+    <macrodef name="downloadMacro">
+        <attribute name="name"/>
+        <attribute name="path"/>
+        <sequential>
+            <get src="${repository}/maven/@{path}/jars/@{name}" 
+                 dest="${dir.weblib}/@{name}"
+                 verbose="true"
+                 usetimestamp="true"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="digestMacro">
+        <attribute name="file"/>
+        <sequential>
+            <!--
+            Calculating checksum currently not very useful
+            -->
+            <!--
+            <checksum file="@{file}" forceOverwrite="true" />
+            <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" />
+            -->
+        </sequential>
+    </macrodef>
+
+
+   <!--
+    Path Definitions
+    -->
+
+   <path id="classpath">
+      <pathelement location="${dir.webapp}/classes"/>
+      <pathelement location="lib/${jar.click}"/>
+      <pathelement location="lib/${jar.click-extras}"/>
+      <pathelement location="lib/${jar.click-mock}"/>
+      <pathelement location="lib/${jar.lang}"/>
+      <pathelement location="lib/${jar.servlet}"/>
+      <fileset dir="${dir.weblib}">
+        <include name="*.jar"/>
+      </fileset>
+   </path>
+
+   <path id="classpath.test">
+      <pathelement location="lib/${jar.junit}"/>
+      <pathelement location="lib/${jar.click-mock}"/>
+   </path>
+
+   <!-- 
+    Target Definitions 
+    -->
+   
+   <target name="build-distribution" 
+           depends="clean, build, javadoc" 
+           description="build distribution ZIP file">
+      <!-- create distribution zip file -->
+      <delete dir="clickclick-examples-${version}" quiet="false"/>
+      <mkdir dir="clickclick-examples-${version}"/>
+      <copy todir="clickclick-examples-${version}">
+         <fileset dir="." casesensitive="yes">
+            <exclude name=".**"/> 
+            <exclude name=".**/**"/> 
+            <exclude name="clickclick-examples-${version}"/> 
+            <exclude name="TODO.txt"/>   
+            <exclude name="bin/**"/>
+            <exclude name="design/**"/>
+            <exclude name="dist/*-src.zip"/>
+            <exclude name="lib/${jar.click}"/>
+            <exclude name="lib/${jar.click-extras}"/>
+            <exclude name="lib/${jar.click-mock}"/>
+            <exclude name="lib/${jar.junit}"/>
+            <exclude name="lib/${jar.lang}"/>
+            <exclude name="lib/${jar.servlet}"/>
+            <exclude name="**/Thumbs.db"/>
+            <exclude name="**/classes/**"/>
+            <exclude name="**/WEB-INF/lib/**"/>
+            <exclude name="${dir.webapp}/javadoc/**"/>
+         </fileset>
+      </copy>
+      <delete file="../clickclick-examples-${version}.zip"/>
+      <zip basedir="."
+           destfile="../clickclick-examples-${version}.zip"
+           includes="clickclick-examples-${version}/**"/>
+      <delete dir="clickclick-examples-${version}" quiet="false"/>
+   </target>
+
+   <target name="build" description="build framework JAR file">
+      <mkdir dir="dist"/>
+      <available file="${dir.weblib}/${jar.click}" property="isJarAvail"/>
+      <fail message="Download JAR dependencies first with 'get-deps'">
+         <condition>
+  	        <or><isfalse value="${isJarAvail}"/></or>
+  	     </condition>
+      </fail>
+      <!-- Clean webapp -->
+      <delete dir="${dir.webapp}/click"/>
+      <delete dir="${dir.webapp}/clickclick"/>
+      
+      <!-- Compile -->
+      <delete file="dist/clickclick-examples-${version}.jar" quiet="false"/>
+      <delete dir="${dir.webapp}/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="${dir.webapp}/WEB-INF/classes"/>
+      <copy todir="${dir.webapp}/WEB-INF/classes">
+         <fileset dir="src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="src" 
+             destdir="${dir.webapp}/WEB-INF/classes" 
+             debug="true"
+             encoding="ISO-8859-1"
+             source="${javac.source}">
+         <classpath refid="classpath"/>
+      </javac>
+
+      <!-- build WAR -->
+      <copy file="documentation/javadoc-stylesheet.css"  
+      	    overwrite="true"
+      	    tofile="${dir.webapp}/javadoc/stylesheet.css"/>
+      <delete file="${dir.deploy}/${name}.war"/>
+      <mkdir dir="${dir.deploy}"/>
+      <war destfile="${dir.deploy}/${name}.war"
+           webxml="${dir.webapp}/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="ClickClick-Examples-Version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="${dir.webapp}">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+
+   </target>
+
+   
+   <target name="build-sources"
+           description="build source ZIP files for use with IDEs">
+      <property name="dir.source" value="src"/>
+      <!-- zip the framework with dependencies:-->
+      <!-- this is not ready since the sources for the used jars are not available -->
+      <zip destfile="dist/clickclick-examples-${version}-src.zip">
+         <fileset dir="${dir.source}">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </zip>
+   </target>
+
+   <target name="clean"> 
+      <delete dir="dist" quiet="false"/>
+      <mkdir dir="dist"/>
+      <delete>
+        <fileset dir="test" includes="TEST-*.txt"/>
+      </delete>
+   </target>
+
+   <target name="get-deps" description="download JAR dependencies">
+      <mkdir dir="${dir.weblib}"/>
+      <downloadMacro name="${jar.click}" path="net.sf.click"/>
+      <downloadMacro name="${jar.click-extras}" path="net.sf.click"/>
+      <downloadMacro name="${jar.click-mock}" path="net.sf.click"/>
+      <downloadMacro name="${jar.lang}" path="commons-lang"/>
+      <downloadMacro name="${jar.junit}" path="junit"/>
+      <downloadMacro name="${jar.servlet}" path="javax.servlet"/>
+   </target>
+
+   
+   <target name="get-deps-proxy" description="download JAR dependencies">
+      <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
+      <antcall target="get-deps"/>
+   </target>
+
+
+   <target name="help" description="display the Help message">
+      <echo>ClickClick Examples ${version}
+===================================
+
+Main targets:
+
+	build-distribution    build distribution ZIP file
+	build                 build ClickClick Examples JAR file
+	build-sources         build source ZIP files for use with IDEs
+	get-deps              download JAR dependencies
+	get-deps-proxy        download JAR dependencies via proxy
+	help                  display the Help message
+	javadoc               create Javadoc HTML files
+
+Environment:
+
+	java.home = ${java.home}
+	ant.home  = ${ant.home}
+
+Please ensure you have configured build.properties</echo>
+   </target> 
+	
+   <target name="javadoc" description="create Javadoc HTML files">
+      <delete quiet="true" failonerror="false">
+         <fileset dir="${dir.webapp}/javadoc" includes="**/*"/>
+      </delete>
+      <javadocMacro src="src"
+                    destdir="${dir.webapp}/javadoc"
+                    windowtitle="ClickClick Examples"
+                    doctitle="ClickClick Examples API"
+                    classpath="classpath"
+      	            overview="documentation/overview.html"/>
+
+      <copy file="documentation/javadoc-stylesheet.css"
+      	    overwrite="true"
+      	    tofile="documentation/clickclick-examples-api/stylesheet.css"/>
+   </target>
+
+   <target name="test-framework">
+      <copy todir="classes">
+         <fileset dir="src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <copy todir="classes">
+         <fileset dir="test">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="src;test" 
+             destdir="classes" 
+             debug="true"
+             encoding="ISO-8859-1"
+             source="${javac.source}">
+         <classpath refid="classpath"/>
+         <classpath refid="classpath.test"/>
+      </javac>
+      <junit haltonfailure="yes" showoutput="true">
+         <classpath refid="classpath"/>
+         <classpath refid="classpath.test"/>
+         <formatter type="plain"/>
+         <batchtest fork="yes" todir="test">
+            <fileset dir="test">
+               <include name="**/*Test.java"/>
+            </fileset>
+         </batchtest>
+      </junit>
+      <delete>
+        <fileset dir="test" includes="TEST-*.txt"/>
+      </delete>
+   </target>
+
+
+   <target name="test-all" depends="test-framework"/>
+
+
+   <macrodef name="javadocMacro">
+      <attribute name="src"/>
+      <attribute name="destdir"/>
+      <attribute name="windowtitle"/>
+      <attribute name="doctitle"/>
+      <attribute name="classpath"/>
+      <attribute name="overview"/>
+      <sequential>
+         <javadoc sourcepath="@{src}"
+               destdir="@{destdir}"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="@{windowtitle}"
+      	       packagenames="net.*"
+         	     overview="@{overview}"
+               doctitle="@{doctitle}">
+            <classpath refid="@{classpath}"/>
+            <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+            <link href="http://click.sourceforge.net/docs/click-api/"/>
+            <bottom>${root.properties.highlighter}</bottom>
+         </javadoc>
+      
+         <!-- Add IE Mark of the Web to each javadoc page -->
+         <replace dir="@{destdir}" value="&lt;!-- saved from url=(0014)about:internet --&gt;">
+            <include name="**/*.html"/>
+            <replacetoken>&lt;!--NewPage--&gt;</replacetoken>
+         </replace>
+         <!-- 
+         IE throws exception when trying to access parent frame and Mark of the Web is active.
+         Disable setting of window title, which needs to access the parent frame.
+         -->
+         <replace dir="@{destdir}" value="">
+            <include name="**/*.html"/>
+            <replacetoken> onload="windowTitle();"</replacetoken>
+         </replace>
+
+      </sequential>
+   </macrodef>
+
+</project>
