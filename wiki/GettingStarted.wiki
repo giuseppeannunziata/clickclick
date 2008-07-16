@@ -4,6 +4,7 @@ Some features provided by !ClickClickServlet incldues:
 
   * Ajax Support
   * Advanced Javascript and CSS includes
+  * Dynamic class reloading (see changes to Pages without restarting your application)
 
 To use !ClickClickServlet simply include clickclick.jar on your classpath and replace 'net.sf.click.!ClickServlet' with 'net.sf.click.!ClickClickServlet' in your web.xml. See the example below:
 
