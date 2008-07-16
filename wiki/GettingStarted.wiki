@@ -5,7 +5,7 @@ Some features provided by !ClickClickServlet incldues:
   * Ajax Support
   * Advanced Javascript and CSS includes
 
-To use !ClickClickServlet simply include clickclick.jar on your classpath and replace _net.sf.click.!ClickServlet_ with _net.sf.click.!ClickClickServlet_ in your web.xml. See the example below:
+To use !ClickClickServlet simply include clickclick.jar on your classpath and replace _net.sf.click.!ClickServlet_ with _net.sf.click._!ClickClickServlet_ in your web.xml. See the example below:
 
 {{{
 <?xml version="1.0" encoding="ISO-8859-1"?>
