@@ -24,3 +24,4 @@ Dependencies:
   - clickclick-core-0.1.jar
   - servlet-api-2.3.jar
   - log4j-1.2.14.jar
+  - commons-lang-2.4.jar
