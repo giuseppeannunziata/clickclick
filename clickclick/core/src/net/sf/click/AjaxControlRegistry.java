@@ -18,6 +18,7 @@ package net.sf.click;
 import net.sf.click.AjaxListener;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import net.sf.click.util.Partial;
 import org.apache.commons.lang.Validate;
@@ -123,9 +124,10 @@ public class AjaxControlRegistry extends ControlRegistry {
             return true;
         }
 
+        List eventSourceList = getEventSourceList();
         for (int i = 0, size = eventSourceList.size(); i < size; i++) {
             Control source = (Control) eventSourceList.get(i);
-            ActionListener listener = (ActionListener) eventListenerList.get(i);
+            ActionListener listener = (ActionListener) getEventListenerList().get(i);
 
             if (context.isAjaxRequest() && listener instanceof AjaxListener) {
 
