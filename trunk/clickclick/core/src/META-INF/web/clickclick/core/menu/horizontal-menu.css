@@ -10,7 +10,7 @@ ul#horizontalMenu {
   margin: 0;
   border: 0 none;
   padding: 0;
-  width: 1000px; /* For KHTML.*/
+  width: 500px; /* For KHTML.*/
   list-style: none;
   height: 24px;
 }
@@ -24,14 +24,14 @@ ul#horizontalMenu li {
    margin: 0;
    padding: 0;
    position: relative;
-   width: 160px
+   width: 190px
 }
 
 ul#horizontalMenu ul {
   margin: 0;
   border: 0 none;
   padding: 0;
-  width: 160px;
+  width: 190px;
   list-style: none;
   display: none;
   position: absolute;
@@ -50,14 +50,14 @@ ul#horizontalMenu ul li {
 
 ul#horizontalMenu a {
   border: 1px solid #FFF;
-  border-right-color: #CCC;
-  border-bottom-color: #CCC;
+  border-right-color: #FF6600;
+  border-bottom-color: #FF6600;
   padding: 0 6px;
   float: none !important; /*For Opera*/
   /* float: left; *//*For IE*/ /*This broke IE 7 for me, but might be needed by IE 5.5??? IE 6 is still working with float:left commented.*/
   display: block;
-  background: #EEE;
-  color: #666;
+  background: #FF9933;
+  color: #333;
   font: bold 10px Verdana, Arial, Helvetica, sans-serif;
   line-height: 24px;
   min-height: 24px;
@@ -70,7 +70,7 @@ ul#horizontalMenu a {
 ul#horizontalMenu a:hover,
 ul#horizontalMenu li:hover a,
 ul#horizontalMenu li.iehover a {
-  background: #CCC;
+  background: #FF6600;
   color: #FFF;
 }
 
@@ -78,8 +78,8 @@ ul#horizontalMenu li.iehover a {
 ul#horizontalMenu li:hover li a,
 ul#horizontalMenu li.iehover li a {
   float: none;
-  background: #EEE;
-  color: #666;
+  background: #FF9933;
+  color: #333;
 }
 
 /* 2nd Menu Hover Persistence */
@@ -87,15 +87,15 @@ ul#horizontalMenu li:hover li a:hover,
 ul#horizontalMenu li:hover li:hover a,
 ul#horizontalMenu li.iehover li a:hover,
 ul#horizontalMenu li.iehover li.iehover a {
-  background: #CCC;
+  background: #FF6600;
   color: #FFF;
 }
 
 /* 3rd Menu */
 ul#horizontalMenu li:hover li:hover li a,
 ul#horizontalMenu li.iehover li.iehover li a {
-  background: #EEE;
-  color: #666;
+  background: #FF9933;
+  color: #333;
 }
 
 /* 3rd Menu Hover Persistence */
@@ -103,21 +103,21 @@ ul#horizontalMenu li:hover li:hover li a:hover,
 ul#horizontalMenu li:hover li:hover li:hover a,
 ul#horizontalMenu li.iehover li.iehover li a:hover,
 ul#horizontalMenu li.iehover li.iehover li.iehover a {
-  background: #CCC;
+  background: #FF6600;
   color: #FFF;
 }
 
 /* 4th Menu */
 ul#horizontalMenu li:hover li:hover li:hover li a,
 ul#horizontalMenu li.iehover li.iehover li.iehover li a {
-  background: #EEE;
-  color: #666;
+  background: #FF9933;
+  color: #333;
 }
 
 /* 4th Menu Hover */
 ul#horizontalMenu li:hover li:hover li:hover li a:hover,
 ul#horizontalMenu li.iehover li.iehover li.iehover li a:hover {
-  background: #CCC;
+  background: #FF6600;
   color: #FFF;
 }
 
@@ -127,7 +127,7 @@ ul#horizontalMenu ul ul ul {
   display: none;
   position: absolute;
   top: 0;
-  left: 160px;
+  left: 190px;
 }
 
 /* Do Not Move - Must Come Before display:block for Gecko */
@@ -156,24 +156,20 @@ ul#horizontalMenu ul ul li.iehover ul {
 
 
 ul#horizontalMenu li:hover.menuItemBullet > a {
-    background: #CCC url('arrow_down.png') no-repeat 145px;
-    /*background: #CCC url('menu_indicators.png') no-repeat -570px 50%;*/
+    background: #FF6600 url('menu_indicators.png') no-repeat -1514px 50%;
 }
 
 ul#horizontalMenu li:hover.menuItemBullet > ul li:hover.menuItemBullet > a {
-    background: #CCC url('arrow_right.png') no-repeat 145px;
-    /*background: #CCC url('menu_indicators.png') no-repeat -340px 50%;*/
+    background: #FF6600 url('menu_indicators.png') no-repeat -1284px 50%;
 }
 
 ul#horizontalMenu .menuItemBullet a {
-    background: #EEE url('arrow_down.png') no-repeat 145px;
-    /*background: #EEE url('menu_indicators.png') no-repeat -570px 50%;*/
+    background: #FF9933 url('menu_indicators.png') no-repeat -570px 50%;
 }
 
 ul#horizontalMenu .menuItemBullet ul .menuItemBullet a,
 ul#horizontalMenu .menuItemBullet ul .menuItemBullet .menuItemBullet a {
-    background: #EEE url('arrow_right.png') no-repeat 145px;
-    /*background: #EEE url('menu_indicators.png') no-repeat -340px 50%;*/
+    background: #FF9933 url('menu_indicators.png') no-repeat -340px 50%;
 }
 
 /*IE 6 Specific start*/
@@ -183,15 +179,13 @@ ul#horizontalMenu .menuItemBullet ul .menuItemBullet .menuItemBullet a {
   I do not have IE 5.5 anymore so perhaps this applies to 5.5 as well.*/
 ul#horizontalMenu .menuItemBullet a:hover,
 ul#horizontalMenu li.iehover a {
-    background: #CCC url('arrow_down.png') no-repeat 145px;
-    /*background: #CCC url('menu_indicators.png') no-repeat -570px 50%;*/
+    background: #FF6600 url('menu_indicators.png') no-repeat -570px 50%;
 }
 
 ul#horizontalMenu .menuItemBullet .menuItemBullet a:hover,
 ul#horizontalMenu li.iehover li.iehover a,
 ul#horizontalMenu .menuItemBullet .menuItemBullet .menuItemBullet a:hover,
 ul#horizontalMenu li.iehover li.iehover li.iehover a {
-    background: #CCC url('arrow_right.png') no-repeat 145px;
-    /*background: #CCC url('menu_indicators.png') no-repeat -340px 50%;*/
+    background: #FF6600 url('menu_indicators.png') no-repeat -340px 50%;
 }
 /*IE 6 Specific end*/
