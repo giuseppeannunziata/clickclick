@@ -7,10 +7,6 @@
 
   <mode value="trace"/>
 
-  <controls>
-    <control classname="net.sf.clickclick.control.menu.FlexiMenu"/>
-  </controls>
-
   <file-upload-service classname="net.sf.click.service.CommonsFileUploadService">
   	<property name="sizeMax" value="1024"/>
   	<property name="fileSizeMax" value="1024"/>
