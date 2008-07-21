@@ -3,7 +3,7 @@
 function initMenu() {
     var isIE6 = false /*@cc_on || @_jscript_version < 5.7 @*/;
     //var isIE = window.ActiveXObject ? true : false; // ActiveX is only used in Internet Explorer
-    if (!isIE)
+    if (!isIE6)
         return;
     
     //Get all LI elements, having 'verticalMenu' as one of their parent elements id        

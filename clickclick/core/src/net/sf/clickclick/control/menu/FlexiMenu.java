@@ -2,7 +2,6 @@ package net.sf.clickclick.control.menu;
 
 import java.text.MessageFormat;
 import java.util.Iterator;
-import javax.servlet.ServletContext;
 import net.sf.click.extras.control.Menu;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -19,22 +18,10 @@ public class FlexiMenu extends Menu {
 
     private String orientation = VERTICAL;
 
-    /** The Menu resource file names. */
-    static final String[] MENU_RESOURCES = {
-        "/net/sf/clickclick/control/menu/arrow_down.png",
-        "/net/sf/clickclick/control/menu/arrow_up.png",
-        "/net/sf/clickclick/control/menu/arrow_left.png",
-        "/net/sf/clickclick/control/menu/arrow_right.png",
-        "/net/sf/clickclick/control/menu/horizontal-menu.css",
-        "/net/sf/clickclick/control/menu/vertical-menu.css",
-        "/net/sf/clickclick/control/menu/menu.js",
-        "/net/sf/clickclick/control/menu/vertical-menu2.css"
-    };
-
     protected static final String MENU_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu/{2}-menu.css\"></link>\n" +
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/clickclick/core/menu/{2}-menu.css\"></link>\n" +
         "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n" +
-        "<script type=\"text/javascript\" src=\"{0}/click/menu/menu.js\"></script>\n" +
+        "<script type=\"text/javascript\" src=\"{0}/clickclick/core/menu/menu.js\"></script>\n" +
         "<script type=\"text/javascript\">addLoadEvent( function() '{ initMenu() '} );</script>\n";
 
     /**
@@ -102,10 +89,6 @@ public class FlexiMenu extends Menu {
             return true;
         }
         return super.isUserInRoles();
-    }
-
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFiles(servletContext, MENU_RESOURCES, "click/menu");
     }
 
     public String getHtmlImports() {

@@ -28,8 +28,8 @@ ul#verticalMenu li {
 /* Root Menu */
 ul#verticalMenu a {
   border: 1px solid #FFF;
-  border-right-color: #CCC;
-  border-bottom-color: #CCC;
+  border-right-color: #000099;
+  border-bottom-color: #000099;
   padding: 0 6px;  
   background: #EEE;
   display: block;
@@ -46,7 +46,7 @@ ul#verticalMenu a {
 ul#verticalMenu a:hover,
 ul#verticalMenu li:hover a,
 ul#verticalMenu li.iehover a {
-  background: #CCC;
+  background: #000099;
   color: #FFF;  
 }
 
@@ -62,7 +62,7 @@ ul#verticalMenu li:hover li a:hover,
 ul#verticalMenu li:hover li:hover a,
 ul#verticalMenu li.iehover li a:hover,
 ul#verticalMenu li.iehover li.iehover a {
-  background: #CCC;
+  background: #000099;
   color: #FFF;
 }
 
@@ -78,7 +78,7 @@ ul#verticalMenu li:hover li:hover li a:hover,
 ul#verticalMenu li:hover li:hover li:hover a,
 ul#verticalMenu li.iehover li.iehover li a:hover,
 ul#verticalMenu li.iehover li.iehover li.iehover a {
-  background: #CCC;
+  background: #000099;
   color: #FFF;
 }
 
@@ -92,7 +92,7 @@ ul#verticalMenu li.iehover li.iehover li.iehover li a {
 /* 4th Menu Hover */
 ul#verticalMenu li:hover li:hover li:hover li a:hover,
 ul#verticalMenu li.iehover li.iehover li.iehover li a:hover {
-  background: #CCC;
+  background: #000099;
   color: #FFF;
 }
 
@@ -129,15 +129,13 @@ ul#verticalMenu ul ul li.iehover ul {
 
 ul#verticalMenu li:hover.menuItemBullet>a,
 ul#verticalMenu li:hover.menuItemBullet>ul li:hover.menuItemBullet>a {
-    background: #CCC url('arrow_right.png') no-repeat 145px;
-    /*background: #CCC url('menu_indicators.png') no-repeat -1314px 50%;*/
+    background: #000099 url('menu_indicators.png') no-repeat -1314px 50%;
 }
 
 ul#verticalMenu .menuItemBullet  a,
 ul#verticalMenu .menuItemBullet ul .menuItemBullet a,
 ul#verticalMenu .menuItemBullet ul .menuItemBullet .menuItemBullet a {
-    background: #EEE url('arrow_right.png') no-repeat 145px;
-    /*background: #EEE url('menu_indicators.png') no-repeat -370px 50%;*/
+    background: #EEE url('menu_indicators.png') no-repeat -370px 50%;
 }
 
 /*IE 6 Specific start*/
@@ -152,7 +150,6 @@ ul#verticalMenu .menuItemBullet .menuItemBullet a:hover,
 ul#verticalMenu li.iehover li.iehover a,
 ul#verticalMenu .menuItemBullet .menuItemBullet .menuItemBullet a:hover,
 ul#verticalMenu li.iehover li.iehover li.iehover a {
-    background: #CCC url('arrow_right.png') no-repeat 145px;
-    /*background: #CCC url('menu_indicators.png') no-repeat -370px 50%;*/
+    background: #000099 url('menu_indicators.png') no-repeat -370px 50%;
 }
 /*IE 6 Specific end*/
