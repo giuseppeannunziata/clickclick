@@ -307,39 +307,11 @@ public class AdvancedPageImports extends PageImports {
             for (int i = 0; i < page.getControls().size(); i++) {
                 Control control = (Control) page.getControls().get(i);
 
-                processControl(control);
+                processLine(control.getHtmlImports());
             }
         }
 
         processLine(page.getHtmlImports());
-    }
-
-    /**
-     * Process the given control HTML imports.
-     *
-     * @param control the control to process
-     */
-    protected void processControl(Control control) {
-        processLine(control.getHtmlImports());
-
-        if (control instanceof Container) {
-            Container container = (Container) control;
-            if (container.hasControls()) {
-                List controls = container.getControls();
-                for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i));
-                }
-            }
-
-        } else if (control instanceof Table) {
-            Table table = (Table) control;
-            if (table.hasControls()) {
-                List controls = table.getControls();
-                for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i));
-                }
-            }
-        }
     }
 
     /**
