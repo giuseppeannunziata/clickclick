@@ -41,11 +41,11 @@ import java.util.List;
  * </ul>
  */
 
-public class DynamicClassLoader extends URLClassLoader {
+public class ReloadableClassLoader extends URLClassLoader {
 
     private List includedPackages = new ArrayList();
     
-    public DynamicClassLoader(URL[] classpath, ClassLoader parent) {
+    public ReloadableClassLoader(URL[] classpath, ClassLoader parent) {
         super(classpath, parent);
     }
 

@@ -41,6 +41,9 @@ public class MenuBuilder {
         subMenu = createMenu("Grid", "layout/grid-layout-demo.htm");
         menu.getChildren().add(subMenu);
 
+        menu = createMenu("Reload", "reload/resource-bundle.htm");
+        rootMenu.add(menu);
+
         Context context = Context.getThreadLocalContext();
         Class pageClass = context.getPageClass(context.getResourcePath());
 
