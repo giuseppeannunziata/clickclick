@@ -5,14 +5,14 @@
     this is to place these two files in the classpath before the regular click-core classes.
     
 
-2) DynamicClassLoader currently excludes all classes by default. To enable dynamic
+2) ReloadableClassLoader currently excludes all classes by default. To enable dynamic
     replacement of classes you can programmatically call
-    'DynamicClassLoader.addPackageToInclude(String package)'.
+    'ReloadableClassLoader.addPackageToInclude(String package)'.
 
     If you use the ReloadClassFilter, you can specify a comma seperated list of 
     packages to be loaded at initialization time. By specifying the 
     initialization parameter 'included-packages', you can provide a list of packages 
-    that will be added to the DynamicClassLoader, for example:
+    that will be added to the ReloadableClassLoader, for example:
 
     <filter>
         <filter-name>reload-filter</filter-name>
@@ -42,14 +42,14 @@
     </context-param>
 
     The snippet above will add the packages 'net.sf.click.tests.reload' and
-    'com.mycorp.test' to the DynamicClassLoader's list of packages to load.
+    'com.mycorp.test' to the ReloadableClassLoader's list of packages to load.
 
     You may also need to specify the directory for where the compiled classes
     can be found on the file system. By default the ReloadClassFilter will 
     add all the locations that is found in the current thread's classpath
-    to the DynamicClassLoader. Because DynamicClassLoader extends URLClassLoader,
+    to the ReloadableClassLoader. Because ReloadableClassLoader extends URLClassLoader,
     if you need to add different locations you can programmatically call 
-    'DynamicClassLoader.addURL(URL url)'.
+    'ReloadableClassLoader.addURL(URL url)'.
 
     By specifying the initializaiton parameter 'classpath', you can provide
     a comma seperated list of directories to be included at initialization 

@@ -14,12 +14,15 @@
 package net.sf.clickclick.reload;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -35,11 +38,23 @@ import net.sf.click.service.ConfigService;
 import net.sf.click.util.ClickUtils;
 
 /**
+ * This Filter allows changes to class and resource bundles to be picked up
+ * without restarting the web application.
+ * <p/>
+ * <b>Please note:</b> this filter is only enabled in the following modes:
+ * <ul>
+ * <li>Development</li>
+ * <li>Debug</li>
+ * <li>Trace</li>
+ * </ul>
+ * 
+ * This feature is made possible by replacing the context class loader 
+ * with an instance of {@link ReloadableClassLoader} for each incoming request.
  *
  * Bob Schellink
  */
 public class ReloadClassFilter implements Filter {
-    
+
     // -------------------------------------------------------- Constants
 
     private static final String INCLUDED_PACKAGES = "included-packages";
@@ -51,12 +66,12 @@ public class ReloadClassFilter implements Filter {
     /** The application configuration service. */
     protected ClickClickConfigService clickClickConfigService;
 
-    private ClassLoader dynamicClassLoader = null;
-    
+    private ClassLoader reloadableClassLoader = null;
+
     private URL[] classpath = null;
-    
+
     private List includedPackagesList = new ArrayList();
-    
+
     private List initialClasspath = new ArrayList();
 
     /** The filter has been configured flag. */
@@ -70,29 +85,20 @@ public class ReloadClassFilter implements Filter {
 
     // --------------------------------------------------------- Public Methods
 
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response,
+        FilterChain chain) throws IOException, ServletException {
         if (!configured) {
             loadConfiguration();
         }
 
-        // TODO should createDynamicClassLoader be synchronized
-        //synchronized (lock) {
-        //    if(dynamicClassLoader == null) {
-        dynamicClassLoader = createDynamicClassLoader();
-       //     }
-        //}
-        
-        ClassLoader orig = Thread.currentThread().getContextClassLoader();
-        try {
-            Thread.currentThread().setContextClassLoader(dynamicClassLoader);
+        if (clickClickConfigService.isProductionMode() ||
+            clickClickConfigService.isProfileMode()) {
+
+            // In production modes skip processing
             chain.doFilter(request, response);
-        } catch(Throwable t) {
-            while (t instanceof ServletException) {
-                t = ((ServletException) t).getRootCause();
-            }
-            t.printStackTrace();
-        } finally {
-            Thread.currentThread().setContextClassLoader(orig);
+        } else {
+            // In developments modes use custom request handler
+            handleRequest(request, response, chain);
         }
     }
 
@@ -114,19 +120,22 @@ public class ReloadClassFilter implements Filter {
      */
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
-        String includedPackages = filterConfig.getInitParameter(INCLUDED_PACKAGES);
-        if(includedPackages != null) {
-            StringTokenizer tokens = new StringTokenizer(includedPackages, ", \n\t");
-            while(tokens.hasMoreTokens()) {
+        String includedPackages = filterConfig.getInitParameter(
+            INCLUDED_PACKAGES);
+        if (includedPackages != null) {
+            StringTokenizer tokens = new StringTokenizer(includedPackages,
+                ", \n\t");
+            while (tokens.hasMoreTokens()) {
                 String token = tokens.nextToken();
                 includedPackagesList.add(token);
             }
         }
-        
+
         String classpathParams = filterConfig.getInitParameter(CLASSPATH);
-        if(classpathParams != null) {
-            StringTokenizer tokens = new StringTokenizer(classpathParams, ", \n\t");
-            while(tokens.hasMoreTokens()) {
+        if (classpathParams != null) {
+            StringTokenizer tokens = new StringTokenizer(classpathParams,
+                ", \n\t");
+            while (tokens.hasMoreTokens()) {
                 String token = tokens.nextToken();
                 initialClasspath.add(token);
             }
@@ -161,7 +170,8 @@ public class ReloadClassFilter implements Filter {
         ServletContext servletContext = getFilterConfig().getServletContext();
         ConfigService configService = ClickUtils.getConfigService(servletContext);
         if (!(configService instanceof ClickClickConfigService)) {
-            throw new IllegalStateException("ReloadClassFilter can only be used " +
+            throw new IllegalStateException(
+                "ReloadClassFilter can only be used " +
                 "in conjuction with ClickClickConfigService. Please see the " +
                 "ReloadClassFilter JavaDoc on how to setup the ClickClickConfigService.");
         }
@@ -171,11 +181,49 @@ public class ReloadClassFilter implements Filter {
         includedPackagesList.add(clickClickConfigService.getPagesPackage());
     }
 
-    protected DynamicClassLoader createDynamicClassLoader() {
+    /**
+     * Handles the request in development modes.
+     * <p/>
+     * This method uses the ReloadableClassLoader as returned by
+     * {@link #createReloadClassLoader()}.
+     * 
+     * @param request
+     * @param response
+     * @param chain
+     */
+    protected void handleRequest(ServletRequest request, ServletResponse response,
+        FilterChain chain) {
+
+        // TODO should createReloadClassLoader be synchronized
+        //synchronized (lock) {
+        //    if(reloadableClassLoader == null) {
+        reloadableClassLoader = createReloadClassLoader();
+        //     }
+        //}
+
+        // Grab hold of the current context class loader
+        ClassLoader orig = Thread.currentThread().getContextClassLoader();
+        try {
+            // Set the new context class loader
+            Thread.currentThread().setContextClassLoader(reloadableClassLoader);
+            chain.doFilter(request, response);
+        } catch (Throwable t) {
+            while (t instanceof ServletException) {
+                t = ((ServletException) t).getRootCause();
+            }
+            clickClickConfigService.getLogService().error(
+                "Could not handle request", t);
+        } finally {
+            // Restore the context class loader
+            Thread.currentThread().setContextClassLoader(orig);
+        }
+    }
+
+    protected ReloadableClassLoader createReloadClassLoader() {
         ClassLoader parent = Thread.currentThread().getContextClassLoader();
         classpath = getClasspath();
-        DynamicClassLoader loader = new DynamicClassLoader(classpath, parent);
-        for(Iterator it = includedPackagesList.iterator(); it.hasNext(); ) {
+        ReloadableClassLoader loader = new ReloadableClassLoader(classpath, parent);
+        for (Iterator it = includedPackagesList.iterator(); it.hasNext();) {
             String packageName = (String) it.next();
             loader.addPackageToInclude(packageName);
         }
@@ -185,14 +233,15 @@ public class ReloadClassFilter implements Filter {
     protected void addToClasspath(String path, Set classpath) {
         try {
             File f = new File(path);
-            if(f.exists()) {
+            if (f.exists()) {
                 classpath.add(f.getCanonicalFile().toURL());
             } else if (path.endsWith(".jar")) {
                 // Check for jar under the WEB-INF/lib dir
                 if (!path.startsWith("/")) {
                     path = "/" + path;
                 }
-                URL url = filterConfig.getServletContext().getResource("/WEB-INF/lib" + path);
+                URL url = filterConfig.getServletContext().getResource("/WEB-INF/lib" +
+                    path);
                 if (url != null) {
                     classpath.add(url);
                 }
@@ -202,22 +251,23 @@ public class ReloadClassFilter implements Filter {
     }
 
     // -------------------------------------------------------- Private Methods
-    
+
     private URL[] getClasspath() {
         Set classpathSet = new LinkedHashSet();
-        for(Iterator it = initialClasspath.iterator(); it.hasNext(); ) {
+        for (Iterator it = initialClasspath.iterator(); it.hasNext();) {
             String path = (String) it.next();
             addToClasspath(path, classpathSet);
         }
-        classpathSet.addAll(extractUrlList(Thread.currentThread().getContextClassLoader()));
-        return (URL[]) classpathSet.toArray(new URL[] {null});
+        classpathSet.addAll(extractUrlList(Thread.currentThread().
+            getContextClassLoader()));
+        return (URL[]) classpathSet.toArray(new URL[]{null});
     }
 
     private List extractUrlList(ClassLoader cl) {
         List urlList = new ArrayList();
         try {
             Enumeration en = cl.getResources("");
-            while(en.hasMoreElements()) {
+            while (en.hasMoreElements()) {
                 Object url = en.nextElement();
                 urlList.add(url);
             }
@@ -226,5 +276,4 @@ public class ReloadClassFilter implements Filter {
         }
         return urlList;
     }
-    
 }
