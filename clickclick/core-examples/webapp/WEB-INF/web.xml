@@ -33,5 +33,4 @@
     <welcome-file-list>
         <welcome-file>home.htm</welcome-file>
     </welcome-file-list>
-
-    </web-app>
+</web-app>

@@ -42,6 +42,10 @@ public class ClickClickConfigService extends XmlConfigService {
 
     // --------------------------------------------------------- Public Methods
 
+    public String getPagesPackage() {
+        return pagesPackage;
+    }
+
     /**
      * @see ConfigService#getPageClass(String)
      *
