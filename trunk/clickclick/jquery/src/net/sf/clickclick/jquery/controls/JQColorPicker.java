@@ -1,5 +1,7 @@
 package net.sf.clickclick.jquery.controls;
 
+import java.util.HashMap;
+import java.util.Map;
 import net.sf.click.Context;
 import net.sf.click.control.TextField;
 import net.sf.click.util.HtmlStringBuffer;
@@ -44,52 +46,16 @@ public class JQColorPicker extends TextField {
         resource = contextPath + "/clickclick/jquery/colorpicker/js/colorpicker.js";
         pageImports.add(new JavascriptImport(resource));
         
-        String fieldId = getId();
-        String imageId = image.getId();
-        String include =  "$(document).ready(function(){\n"
-                + "$('#" + imageId + "').click(function() {\n"
-                + "  $('#" + fieldId + "').click();\n"
-                + "})\n"
-                + "$('#" + fieldId + "').ColorPicker({\n"
-                + "  onSubmit: function(hsb, hex, rgb) {\n"
-                + "    $('#" + fieldId + "').val(hex);\n"
-                + "    $('#" + imageId + " div div').css('backgroundColor', '#' + hex);\n"
-                + "  },\n"
-                + "  onBeforeShow: function () {\n"
-                + "    $(this).ColorPickerSetColor(this.value);\n"
-                + " }\n"
-                + "})\n"
-                + ".bind('keyup', function(){\n"
-                + "  $(this).ColorPickerSetColor(this.value);\n"
-                + "});\n"
-                + "})\n";
+        Map model = new HashMap();
+        model.put("fieldId", getId());
+        model.put("imageId", image.getId());
+        model.put("context", contextPath);
 
+        String include = getContext().renderTemplate("/clickclick/jquery/colorpicker/jq-color-picker.js", model);
         JavascriptInclude jsInclude = new JavascriptInclude(include);
         pageImports.add(jsInclude);
-        
-        String style = ".colorPickerSelector {\n"
-                + "  position: absolute;\n"
-                + "  top: 0;\n"
-                + "  left: 0;\n"
-                + "  width: 21px;\n"
-                + "  height: 21px;\n"
-                + "  background: url(" + contextPath + "/clickclick/jquery/colorpicker/images/select21.png);\n"
-                + "}\n"
-                + ".colorPickerSelector div {\n"
-                + "  position: absolute;\n"
-                + "  top: 3px;\n"
-                + "  left: 3px;\n"
-                + "  width: 15px;\n"
-                + "  height: 15px;\n"
-                + "  background: url(" + contextPath + "/clickclick/jquery/colorpicker/images/select21.png) center;\n"
-                + "}\n"
-                + ".colorPickerImage {\n"
-                + "  display: inline;\n"
-                + "  position: relative;\n"
-                + "  height: 21px;\n"
-                + "  width: 21px;\n"
-                + "}";
-        
+
+        String style = getContext().renderTemplate("/clickclick/jquery/colorpicker/jq-color-picker.css", model);
         CssInclude cssInclude = new CssInclude(style);
         pageImports.add(cssInclude);
         return null;

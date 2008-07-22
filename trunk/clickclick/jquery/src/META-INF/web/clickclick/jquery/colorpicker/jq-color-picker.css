@@ -1,0 +1,22 @@
+.colorPickerSelector {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 21px;
+    height: 21px;
+    background: url($context/clickclick/jquery/colorpicker/images/select21.png);
+}
+.colorPickerSelector div {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 15px;
+    height: 15px;
+    background: url($context/clickclick/jquery/colorpicker/images/select21.png) center;
+}
+.colorPickerImage {
+    display: inline;
+    position: relative;
+    height: 21px;
+    width: 21px;
+}

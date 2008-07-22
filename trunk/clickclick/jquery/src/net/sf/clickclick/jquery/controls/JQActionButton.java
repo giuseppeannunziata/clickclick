@@ -95,14 +95,15 @@ public class JQActionButton extends AjaxActionButton {
         model.put("errorMessage", getErrorMessage());
         model.put("showBusyIndicator", Boolean.valueOf(isShowBusyIndicator()));
         model.put("busyIndicatorMessage", getBusyMessage());
+
+        String include = getContext().renderTemplate("/clickclick/jquery/action/jq-action-button.js", model);
+        JavascriptInclude jsInclude = new JavascriptInclude(include);
+        pageImports.add(jsInclude);
+
         if (isShowBusyIndicator()) {
             jsImport = new JavascriptImport(contextPath + "/clickclick/jquery/blockui/jquery.blockUI.js");
             pageImports.add(jsImport);
         }
- 
-        String include = getContext().renderTemplate("/clickclick/jquery/action/jq-action-button.js", model);
-        JavascriptInclude jsInclude = new JavascriptInclude(include);
-        pageImports.add(jsInclude);
         return null;
     }
 

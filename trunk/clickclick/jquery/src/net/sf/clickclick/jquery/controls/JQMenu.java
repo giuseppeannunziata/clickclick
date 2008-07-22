@@ -1,6 +1,8 @@
 package net.sf.clickclick.jquery.controls;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import net.sf.click.Context;
 import net.sf.click.extras.control.Menu;
 import net.sf.click.util.HtmlStringBuffer;
@@ -71,19 +73,14 @@ public class JQMenu extends FlexiMenu {
             "/clickclick/jquery/superfish/js/superfish.js";
         pageImports.add(new JavascriptImport(resource));
 
-        String include = "$(document).ready(function(){" 
-            + "$('ul.sf-menu')"
-            + ".superfish({" + getOptions() + "})" 
-            + ".find('>li:has(ul)')"
-            + ".mouseover(function(){" 
-            + "  $('ul', this).bgIframe({opacity:false});" 
-            + "})"
-            + ".find('a')"
-            + ".focus(function(){" 
-            + "  $('ul', $('.nav>li:has(ul)')).bgIframe({opacity:false});" 
-            + "});"
-            + "});";
+        Map model = new HashMap();
+        model.put("options", getOptions());
+
+        String include = getContext().renderTemplate("/clickclick/jquery/superfish/jq-menu.js", model);
         JavascriptInclude jsInclude = new JavascriptInclude(include);
+
+        // Script must be unique as multiple menus can be included on Page
+        // using the same script. No need to include the script twice.
         jsInclude.setUnique(true);
         pageImports.add(jsInclude);
         return null;

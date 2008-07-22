@@ -95,14 +95,15 @@ public class JQActionLink extends AjaxActionLink {
         model.put("errorMessage", getErrorMessage());
         model.put("showBusyIndicator", Boolean.valueOf(isShowBusyIndicator()));
         model.put("busyIndicatorMessage", getBusyMessage());
-        if (isShowBusyIndicator()) {
-            jsImport = new JavascriptImport(contextPath + "/clickclick/jquery/blockui/jquery.blockUI.js");
-            pageImports.add(jsImport);
-        }
  
         String include = getContext().renderTemplate("/clickclick/jquery/action/jq-action-link.js", model);
         JavascriptInclude jsInclude = new JavascriptInclude(include);
         pageImports.add(jsInclude);
+
+        if (isShowBusyIndicator()) {
+            jsImport = new JavascriptImport(contextPath + "/clickclick/jquery/blockui/jquery.blockUI.js");
+            pageImports.add(jsImport);
+        }
         return null;
     }
 
