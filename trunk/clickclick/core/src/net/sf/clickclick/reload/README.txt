@@ -5,8 +5,10 @@
     this is to place these two files in the classpath before the regular click-core classes.
     
 
-2) ReloadableClassLoader currently excludes all classes by default. To enable dynamic
-    replacement of classes you can programmatically call
+2) By default ReloadableClassLoader only reloads classes inside the package 
+    specified by the Page package in click.xml.
+
+    To enable dynamic replacement of classes you can programmatically call
     'ReloadableClassLoader.addPackageToInclude(String package)'.
 
     If you use the ReloadClassFilter, you can specify a comma seperated list of 
