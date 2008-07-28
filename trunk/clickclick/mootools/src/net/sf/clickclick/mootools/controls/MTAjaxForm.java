@@ -1,8 +1,8 @@
 package net.sf.clickclick.mootools.controls;
 
-import net.sf.clickclick.control.JavascriptImport;
 import net.sf.clickclick.control.ajax.AjaxForm;
-import net.sf.click.util.AdvancedPageImports;
+import net.sf.clickclick.util.AdvancedPageImports;
+import net.sf.clickclick.util.JavascriptImport;
 
 /**
  *

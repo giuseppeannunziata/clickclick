@@ -2,12 +2,8 @@ package net.sf.clickclick.examples.jquery.page.ajax;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import net.sf.click.Control;
 import net.sf.click.AjaxListener;
-import net.sf.click.Context;
-import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import net.sf.click.extras.control.EmailField;
@@ -15,25 +11,36 @@ import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.controls.JQForm;
-import net.sf.click.util.AdvancedPageImports;
+import net.sf.clickclick.control.html.Div;
 
 public class FormDemo extends BorderPage {
 
     public String title = "Form Demo";
 
-    private Form form = new JQForm("form");
+    private JQForm form = new JQForm("form");
+
+    private Div target = new Div("target");
 
     /**
      * Build form and fields
      */
     public void onInit() {
         super.onInit();
+
+        // Setup Ajax
+        form.setDataType(JQForm.HTML);
+        form.setClearTarget(true);
+        form.setTargetId(target.getId());
+
+        // Setup fields
         TextField textField = new TextField("firstName");
         textField.setValue("Steve");
+        textField.setRequired(true);
         form.add(textField);
         
         textField = new TextField("lastName");
         textField.setValue("Masters");
+        textField.setRequired(true);
         form.add(textField);
 
         EmailField emailField = new EmailField("email", "E-Mail");
@@ -52,9 +59,13 @@ public class FormDemo extends BorderPage {
             }
 
             public Partial onAjaxAction(Control source) {
-                actionPerformed(source);
-                // Return a Partial response
-                return createPartial();
+                if (form.isValid()) {
+                    actionPerformed(source);
+                    // Return a Partial response
+                    return createSuccessPartial();
+                } else {
+                    return createErrorPartial();
+                }
             }
 
             private void actionPerformed(Control source) {
@@ -65,22 +76,9 @@ public class FormDemo extends BorderPage {
         form.add(submit);
 
         addControl(form);
-    }
 
-    /**
-     * Add JavaScript and CSS imports.
-     */
-    public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPageImports();
-
-        Context context = getContext();
-        String contextPath = context.getRequest().getContextPath();
-        Map model = new HashMap();
-
-        String jsTemplate = "/ajax/form-demo.js";
-        pageImports.appendToGlobalScript(context.renderTemplate(jsTemplate, model));
-        
-        return null;
+        // Add ajax target
+        addControl(target);
     }
 
     /**
@@ -90,17 +88,49 @@ public class FormDemo extends BorderPage {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss:S");
         return format.format(new Date());
     }
-    
+
     /**
      * Create a Partial response
      */
-    private Partial createPartial() {
+    private Partial createSuccessPartial() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
         buffer.append("<pre>Map {\n");
         buffer.append("    [firstName] => ").append(form.getFieldValue("firstName")).append("\n");
         buffer.append("    [lastName] => ").append(form.getFieldValue("lastName")).append("\n");
         buffer.append("    [email] => ").append(form.getFieldValue("email")).append("\n");
         buffer.append("}</pre>");
-        return new Partial(buffer.toString());
+
+        JQAjaxPartial partial = new JQAjaxPartial();
+        
+        // Set the partial content
+        partial.setContent(buffer.toString());
+
+        // Set the target Control that will have its html replaced by the
+        // Partial content
+        partial.setTargetId(target.getId());
+
+        return partial;
+    }
+
+    /**
+     * Create a Partial response
+     */
+    private Partial createErrorPartial() {
+        JQAjaxPartial partial = new JQAjaxPartial();
+
+        // Set the partial content, in this case the form because it is invalid
+        // and we need to display its error messages
+        partial.setContent(form);
+
+        // Set partial to replace the target itself, not just its content
+        partial.setReplaceTarget(true);
+
+        // Set the form as the target Control that will have its html replaced by the
+        // Partial content
+        partial.setTargetId(form.getId());
+
+        partial.setFocusId(form.getFocusField().getId());
+
+        return partial;
     }
 }

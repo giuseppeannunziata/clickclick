@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2008 Bob Schellink
+ * Copyright 2008 Bob Schellink
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.clickclick.control;
+package net.sf.clickclick.util;
 
-import net.sf.click.control.AbstractControl;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
  *
  * @author Bob Schellink
  */
-public class JavascriptImport extends AbstractControl {
+public class JavascriptImport extends AbstractResource {
 
     public static final int HEAD = 0;
     public static final int BODY = 1;
@@ -38,8 +37,24 @@ public class JavascriptImport extends AbstractControl {
     }
 
     public JavascriptImport(String source, int position) {
+        this(source, position, false);
+    }
+
+    public JavascriptImport(String source, boolean prefixWithContextPath) {
+        this(source, BODY, false);
+    }
+
+    public JavascriptImport(String source, int position, boolean prefixWithContextPath) {
         if (source != null) {
-            setSource(source);
+            if (prefixWithContextPath) {
+                HtmlStringBuffer sourceBuffer = new HtmlStringBuffer(source.length());
+                // Append the context path
+                sourceBuffer.append(getContext().getRequest().getContextPath());
+                sourceBuffer.append(source);
+                setSource(sourceBuffer.toString());
+            } else {
+                setSource(source);
+            }
         }
         this.position = position;
         setAttribute("type", "text/javascript");

@@ -1,4 +1,6 @@
 /*
+ * Copyright 2008 Bob Schellink
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,15 +16,12 @@
 package net.sf.clickclick.reload;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -57,7 +56,9 @@ public class ReloadClassFilter implements Filter {
 
     // -------------------------------------------------------- Constants
 
-    private static final String INCLUDED_PACKAGES = "included-packages";
+    private static final String INCLUDES = "includes";
+    
+    private static final String EXCLUDES = "excludes";
 
     private static final String CLASSPATH = "classpath";
 
@@ -70,7 +71,9 @@ public class ReloadClassFilter implements Filter {
 
     private URL[] classpath = null;
 
-    private List includedPackagesList = new ArrayList();
+    private List includeList = new ArrayList();
+
+    private List excludeList = new ArrayList();
 
     private List initialClasspath = new ArrayList();
 
@@ -120,21 +123,31 @@ public class ReloadClassFilter implements Filter {
      */
     public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
-        String includedPackages = filterConfig.getInitParameter(
-            INCLUDED_PACKAGES);
-        if (includedPackages != null) {
-            StringTokenizer tokens = new StringTokenizer(includedPackages,
-                ", \n\t");
+
+        // Extract specified includedList
+        String includes = filterConfig.getInitParameter(INCLUDES);
+        if (includes != null) {
+            StringTokenizer tokens = new StringTokenizer(includes, ", \n\t");
             while (tokens.hasMoreTokens()) {
                 String token = tokens.nextToken();
-                includedPackagesList.add(token);
+                includeList.add(token);
             }
         }
 
+        // Extract specified excludes
+        String excludes = filterConfig.getInitParameter(EXCLUDES);
+        if (excludes != null) {
+            StringTokenizer tokens = new StringTokenizer(excludes, ", \n\t");
+            while (tokens.hasMoreTokens()) {
+                String token = tokens.nextToken();
+                excludeList.add(token);
+            }
+        }
+
+        // Extract specified classpaths
         String classpathParams = filterConfig.getInitParameter(CLASSPATH);
         if (classpathParams != null) {
-            StringTokenizer tokens = new StringTokenizer(classpathParams,
-                ", \n\t");
+            StringTokenizer tokens = new StringTokenizer(classpathParams, ", \n\t");
             while (tokens.hasMoreTokens()) {
                 String token = tokens.nextToken();
                 initialClasspath.add(token);
@@ -178,7 +191,7 @@ public class ReloadClassFilter implements Filter {
         clickClickConfigService = (ClickClickConfigService) configService;
 
         // Add default package to the package list
-        includedPackagesList.add(clickClickConfigService.getPagesPackage());
+        includeList.add(clickClickConfigService.getPagesPackage());
     }
 
     /**
@@ -223,9 +236,17 @@ public class ReloadClassFilter implements Filter {
         ClassLoader parent = Thread.currentThread().getContextClassLoader();
         classpath = getClasspath();
         ReloadableClassLoader loader = new ReloadableClassLoader(classpath, parent);
-        for (Iterator it = includedPackagesList.iterator(); it.hasNext();) {
-            String packageName = (String) it.next();
-            loader.addPackageToInclude(packageName);
+
+        // Add includes to class loader
+        for (Iterator it = includeList.iterator(); it.hasNext();) {
+            String include = (String) it.next();
+            loader.addInclude(include);
+        }
+
+        // Add excludes to class loader
+        for (Iterator it = excludeList.iterator(); it.hasNext();) {
+            String exclude = (String) it.next();
+            loader.addExclude(exclude);
         }
         return loader;
     }

@@ -12,7 +12,7 @@ import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.controls.JQSelect;
-import net.sf.click.util.AdvancedPageImports;
+import net.sf.clickclick.util.AdvancedPageImports;
 
 public class SelectDemo extends BorderPage {
 
@@ -41,7 +41,7 @@ public class SelectDemo extends BorderPage {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPageImports();
+        AdvancedPageImports pageImports = getAdvancedPageImports();
 
         Context context = getContext();
         Map model = new HashMap();

@@ -1,9 +1,9 @@
 package net.sf.clickclick.jquery.controls;
 
-import net.sf.clickclick.control.CssImport;
-import net.sf.clickclick.control.JavascriptImport;
 import net.sf.clickclick.control.html.Div;
-import net.sf.click.util.AdvancedPageImports;
+import net.sf.clickclick.util.AdvancedPageImports;
+import net.sf.clickclick.util.CssImport;
+import net.sf.clickclick.util.JavascriptImport;
 
 /**
  *

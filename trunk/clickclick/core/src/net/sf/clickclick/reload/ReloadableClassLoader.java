@@ -23,58 +23,79 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This class loader reverses the search order for classes.  It checks this classloader
- * before it checks its parent. In addition it can be configured with includes and excludes.
- *
- * @author Bob Schellink
- *
- * NOTE: This class was adapted and modified from the Apache Cocoon<br>
+ * ClassLoader which enables specified classes to be reloaded without restarting
+ * the web application.
+ * <p/>
+ * It does this by reversing the lookup order for classes.  First it checks for
+ * classes locally before checking its parent loader.
+ * <p/>
+ * In addition it can be configured to include and exclude specific classes
+ * and packages.
+ * <p/>
+ * <b>NOTE:</b> This class was adapted and modified from the Apache Cocoon<br>
  * implementation https://svn.apache.org/repos/asf/cocoon/tags/cocoon-2.2/cocoon-bootstrap/cocoon-bootstrap-1.0.0-M1/src/main/java/org/apache/cocoon/classloader/DefaultClassLoader.java
- *
  * <p>
- * Other articles of interest :
+ * Articles of interest :
  * </p>
  * <ul>
  *      <li>http://tech.puredanger.com/2006/11/09/classloader/</li>
  *      <li>http://www.javaworld.com/javaworld/javaqa/2003-06/01-qa-0606-load.html</li>
  *      <li>http://www.javalobby.org/java/forums/t18345.html</li>
  * </ul>
+ *
+ * @author Bob Schellink
  */
-
 public class ReloadableClassLoader extends URLClassLoader {
 
-    private List includedPackages = new ArrayList();
+    private List includes = new ArrayList();
+
+    private List excludes = new ArrayList();
     
     public ReloadableClassLoader(URL[] classpath, ClassLoader parent) {
         super(classpath, parent);
     }
 
-    public void addPackageToInclude(String packageName) {
-        includedPackages.add(packageName);
+    public void addInclude(String include) {
+        includes.add(include);
+    }
+
+    public void addExclude(String exclude) {
+        excludes.add(exclude);
     }
     
     public void addURL(URL url) {
         super.addURL(url);
     }
-    
+
     protected boolean shouldLoadClass(String name) {
         if(name == null || name.length() == 0) {
             return false;
         }
-        
+
+        // Automatically exclude these common classes
         if (name.startsWith("java.") || name.startsWith("javax.servlet")) {
             return false;
         }
-        for(Iterator it = includedPackages.iterator(); it.hasNext(); ) {
+
+        // First check if class is excluded
+        for(Iterator it = excludes.iterator(); it.hasNext(); ) {
+            String packageName = (String) it.next();
+            if(name.startsWith(packageName)) {
+                return false;
+            }
+        }
+
+        // Next check if class is included
+        for(Iterator it = includes.iterator(); it.hasNext(); ) {
             String packageName = (String) it.next();
             if(name.startsWith(packageName)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
         //First, check if the class has already been loaded
         Class c = findLoadedClass(name);

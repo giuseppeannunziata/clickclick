@@ -15,7 +15,7 @@ import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.Partial;
 import net.sf.clickclick.examples.mootools.page.BorderPage;
 import net.sf.clickclick.mootools.controls.MTAjaxForm;
-import net.sf.click.util.AdvancedPageImports;
+import net.sf.clickclick.util.AdvancedPageImports;
 
 public class FormDemo extends BorderPage {
 
@@ -66,7 +66,7 @@ public class FormDemo extends BorderPage {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPageImports();
+        AdvancedPageImports pageImports = getAdvancedPageImports();
 
         Map model = new HashMap();
         Context context = getContext();
