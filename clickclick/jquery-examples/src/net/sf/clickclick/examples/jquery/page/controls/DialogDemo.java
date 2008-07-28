@@ -6,8 +6,6 @@ import net.sf.click.control.Button;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.Label;
 
-import net.sf.clickclick.control.CssInclude;
-import net.sf.clickclick.control.JavascriptInclude;
 import net.sf.clickclick.control.Text;
 import net.sf.clickclick.control.grid.Grid;
 import net.sf.clickclick.control.html.table.Cell;
@@ -16,7 +14,9 @@ import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
 import net.sf.clickclick.jquery.controls.JQDialog;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.click.util.AdvancedPageImports;
+import net.sf.clickclick.util.AdvancedPageImports;
+import net.sf.clickclick.util.CssInclude;
+import net.sf.clickclick.util.JavascriptInclude;
 
 public class DialogDemo extends BorderPage {
 
@@ -28,7 +28,7 @@ public class DialogDemo extends BorderPage {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPageImports();
+        AdvancedPageImports pageImports = getAdvancedPageImports();
 
         Map model = new HashMap();
         String javascript = getContext().renderTemplate("controls/dialog-demo.js", model);

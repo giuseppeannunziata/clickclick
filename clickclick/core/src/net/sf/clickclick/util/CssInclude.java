@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2008 Bob Schellink
+ * Copyright 2008 Bob Schellink
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,44 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.clickclick.control;
+package net.sf.clickclick.util;
 
-import net.sf.click.control.AbstractControl;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
  *
  * @author Bob Schellink
  */
-public class CssImport extends AbstractControl {
+public class CssInclude extends AbstractResource {
 
-    public CssImport() {
+    private HtmlStringBuffer include = new HtmlStringBuffer();
+    
+    /** Indicates if the resource must be unique to the page. */
+    private boolean unique;
+
+    public CssInclude() {
         this(null);
     }
 
-    public CssImport(String source) {
-        if (source != null) {
-            setHref(source);
+    public CssInclude(String include) {
+        if (include != null) {
+            this.include.append(include);
         }
         setAttribute("type", "text/css");
         setAttribute("rel", "stylesheet");
     }
 
     public String getTag() {
-        return "link";
+        return "style";
     }
 
-    public void setHref(String href) {
-        setAttribute("href", href);
+    public boolean isUnique() {
+        return unique;
     }
 
-    public String getHref() {
-        return getAttribute("href");
+    public void setUnique(boolean unique) {
+        this.unique = unique;
+    }
+
+    public void append(String include) {
+        this.include.append(include);
+    }
+
+    public HtmlStringBuffer getInclude() {
+        return include;
     }
 
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
         appendAttributes(buffer);
-        buffer.elementEnd();
+        buffer.closeTag();
+        buffer.append(getInclude());
+        buffer.elementEnd(getTag());
     }
 }

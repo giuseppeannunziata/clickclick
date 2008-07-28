@@ -6,11 +6,11 @@ import java.util.Map;
 import net.sf.click.Context;
 import net.sf.click.extras.control.Menu;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.clickclick.control.CssImport;
-import net.sf.clickclick.control.JavascriptImport;
-import net.sf.clickclick.control.JavascriptInclude;
 import net.sf.clickclick.control.menu.FlexiMenu;
-import net.sf.click.util.AdvancedPageImports;
+import net.sf.clickclick.util.AdvancedPageImports;
+import net.sf.clickclick.util.CssImport;
+import net.sf.clickclick.util.JavascriptImport;
+import net.sf.clickclick.util.JavascriptInclude;
 
 /**
  * Based on the JQuery plugin, Superfish -> http://users.tpg.com.au/j_birch/plugins/superfish/

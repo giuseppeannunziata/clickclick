@@ -5,12 +5,12 @@ import java.util.Map;
 import net.sf.click.Context;
 import net.sf.click.control.TextField;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.clickclick.control.CssImport;
-import net.sf.clickclick.control.CssInclude;
-import net.sf.clickclick.control.JavascriptImport;
-import net.sf.clickclick.control.JavascriptInclude;
 import net.sf.clickclick.control.html.Div;
-import net.sf.click.util.AdvancedPageImports;
+import net.sf.clickclick.util.AdvancedPageImports;
+import net.sf.clickclick.util.CssImport;
+import net.sf.clickclick.util.CssInclude;
+import net.sf.clickclick.util.JavascriptImport;
+import net.sf.clickclick.util.JavascriptInclude;
 
 /**
  *

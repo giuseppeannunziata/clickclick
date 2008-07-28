@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2008 Bob Schellink
+ * Copyright 2008 Bob Schellink
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,58 +13,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.clickclick.control;
+package net.sf.clickclick.util;
 
-import net.sf.click.control.AbstractControl;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
  *
  * @author Bob Schellink
  */
-public class CssInclude extends AbstractControl {
+public class CssImport extends AbstractResource {
 
-    private HtmlStringBuffer include = new HtmlStringBuffer();
-    
-    private boolean unique;
-    
-    public CssInclude() {
+    public CssImport() {
         this(null);
     }
 
-    public CssInclude(String include) {
-        if (include != null) {
-            this.include.append(include);
+    public CssImport(String source) {
+        this(source, false);
+    }
+
+    public CssImport(String source, boolean prefixWithContextPath) {
+        if (source != null) {
+            if (prefixWithContextPath) {
+                HtmlStringBuffer sourceBuffer = new HtmlStringBuffer(source.length());
+                // Append the context path
+                sourceBuffer.append(getContext().getRequest().getContextPath());
+                sourceBuffer.append(source);
+                setHref(sourceBuffer.toString());
+            } else {
+                setHref(source);
+            }
         }
         setAttribute("type", "text/css");
         setAttribute("rel", "stylesheet");
     }
 
     public String getTag() {
-        return "style";
+        return "link";
     }
 
-    public boolean isUnique() {
-        return unique;
+    public void setHref(String href) {
+        setAttribute("href", href);
     }
 
-    public void setUnique(boolean unique) {
-        this.unique = unique;
-    }
-
-    public void append(String include) {
-        this.include.append(include);
-    }
-
-    public HtmlStringBuffer getInclude() {
-        return include;
+    public String getHref() {
+        return getAttribute("href");
     }
 
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
         appendAttributes(buffer);
-        buffer.closeTag();
-        buffer.append(getInclude());
-        buffer.elementEnd(getTag());
+        buffer.elementEnd();
     }
 }

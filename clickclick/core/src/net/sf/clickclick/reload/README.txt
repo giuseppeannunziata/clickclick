@@ -12,19 +12,33 @@
     'ReloadableClassLoader.addPackageToInclude(String package)'.
 
     If you use the ReloadClassFilter, you can specify a comma seperated list of 
-    packages to be loaded at initialization time. By specifying the 
-    initialization parameter 'included-packages', you can provide a list of packages 
-    that will be added to the ReloadableClassLoader, for example:
+    packages and classes to be loaded at initialization time. By specifying the 
+    initialization parameter 'includes', you can provide a list of packages
+    and classes that will be added to the ReloadableClassLoader. In the same vain
+    you can specify packages and classes to be excluded.
+
+    Please note that excludes will override includes, so if you both exclude 
+    and include the class com.mycorp.page.MyPage, it will be excluded.
+
+    Below is an example web.xml snippet:
 
     <filter>
         <filter-name>reload-filter</filter-name>
         <filter-class>net.sf.click.extras.devel.ReloadClassFilter</filter-class>
         <init-param>
             <param-name> 
-                included-packages
+                includes
             </param-name>
             <param-value>
-                net.sf.click.tests.reload, com.mycorp.test
+                com.mycorp.page, com.mycorp.controls.MyForm
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name> 
+                excludes
+            </param-name>
+            <param-value>
+                com.mycorp.page.account, com.mycorp.page.ProductPage
             </param-value>
         </init-param>
     </filter>
@@ -62,10 +76,10 @@
         <filter-class>net.sf.click.extras.devel.ReloadClassFilter</filter-class>
         <init-param>
             <param-name> 
-                included-packages
+                includes
             </param-name>
             <param-value>
-                net.sf.click.tests.reload, com.mycorp.test
+                com.mycorp.page, com.mycorp.controls.MyForm
             </param-value>
         </init-param>
         <init-param>
@@ -85,16 +99,13 @@
     servlet container will restart the entire application.
 
     For Tomcat you can disable this feature by adding the attribute 
-    'reloadable="false"' to your Context.xml file for example:
+    'reloadable="false"' to your context.xml file for example:
 
     <Context
         path="/click-test" 
         reloadable="false"
         antiJARLocking="true"/>
-    
-    
-    Jetty (at least 6.1) does not seem to support this feature.
 
-    Some IDE's like Netbeans will also reload the entire web application when you 
+    IDE's such as Netbeans will also reload the entire web application when you 
     click the "Run" button. So instead of hitting "Run" just refresh the browser
     to reload classes.

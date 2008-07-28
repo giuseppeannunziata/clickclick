@@ -20,10 +20,10 @@ import java.util.Map;
 import net.sf.click.AjaxListener;
 import net.sf.click.Context;
 import net.sf.click.Page;
-import net.sf.click.util.AdvancedPageImports;
-import net.sf.clickclick.control.JavascriptImport;
-import net.sf.clickclick.control.JavascriptInclude;
 import net.sf.clickclick.control.ajax.AjaxActionButton;
+import net.sf.clickclick.util.AdvancedPageImports;
+import net.sf.clickclick.util.JavascriptImport;
+import net.sf.clickclick.util.JavascriptInclude;
 
 /**
  *

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.click.util;
+package net.sf.clickclick.util;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,18 +25,11 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import net.sf.click.Control;
 import net.sf.click.Page;
-import net.sf.click.control.AbstractControl;
-import net.sf.click.control.Container;
-import net.sf.click.control.Table;
 import net.sf.click.service.LogService;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PageImports;
-import net.sf.clickclick.control.CssImport;
-import net.sf.clickclick.control.CssInclude;
-import net.sf.clickclick.control.JavascriptImport;
-import net.sf.clickclick.control.JavascriptInclude;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -651,7 +644,7 @@ public class AdvancedPageImports extends PageImports {
      * @param line
      * @return
      */
-    private void setAttributes(AbstractControl control, String line) {
+    private void setAttributes(AbstractResource control, String line) {
         // Find index where attributes start -> first space char
         int start = line.indexOf(' ');
         if (start == -1) {

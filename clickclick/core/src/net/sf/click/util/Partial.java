@@ -168,6 +168,16 @@ public class Partial {
         this.contentType = TEXT;
     }
 
+    /**
+     * Construct a new empty Partial. The
+     * <tt>{@link javax.servlet.http.HttpServletResponse#setContentType(java.lang.String) response content type}</tt>
+     * will default to {@link #TEXT}.
+     *
+     */
+    public Partial() {
+        this.contentType = TEXT;
+    }
+
     // ---------------------------------------------------------- Public Methds
 
     /**
@@ -217,6 +227,68 @@ public class Partial {
             return new HashMap();
         }
         return headers;
+    }
+
+    /**
+     * Set the content to stream back to the client.
+     *
+     * @param content the content to stream back to the client
+     */
+    public void setContent(Object content) {
+        this.content = content;
+    }
+
+    /**
+     * Return the content to stream back to the client.
+     *
+     * @return the content to stream back to the client
+     */
+    public Object getContent() {
+        return content;
+    }
+
+    /**
+     * Set the content to stream back to the client.
+     *
+     * @param inputStream the inputStream to stream back to the client
+     */
+    public void setInputStream(InputStream inputStream) {
+        this.inputStream = inputStream;
+    }
+
+    /**
+     * Return the inputStream to stream back to the client.
+     *
+     * @return the inputStream to stream back to the client
+     */
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    /**
+     * Set the reader which characters are streamed back to the client.
+     *
+     * @param reader the reader which characters are streamed back to the client.
+     */
+    public void setReader(Reader reader) {
+        this.reader = reader;
+    }
+
+    /**
+     * Return the reader which characters are streamed back to the client.
+     *
+     * @return the reader which characters are streamed back to the client.
+     */
+    public Reader getReader() {
+        return reader;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getContentType() {
+        return contentType;
     }
 
     /**

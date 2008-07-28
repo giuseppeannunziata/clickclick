@@ -2,6 +2,7 @@ package net.sf.clickclick.examples.jquery.page;
 
 import net.sf.click.extras.control.Menu;
 import net.sf.click.util.ClickUtils;
+import net.sf.clickclick.util.AdvancedPageImports;
 
 public class BorderPage extends BasePage {
 
@@ -16,6 +17,10 @@ public class BorderPage extends BasePage {
 
         String srcPath = className.replace('.', '/') + ".java";
         addModel("srcPath", srcPath);
+    }
+
+    public AdvancedPageImports getAdvancedPageImports() {
+        return (AdvancedPageImports) getPageImports();
     }
 
     /**

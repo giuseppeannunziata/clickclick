@@ -16,7 +16,7 @@
 package net.sf.click;
 
 import net.sf.click.util.PageImports;
-import net.sf.click.util.AdvancedPageImports;
+import net.sf.clickclick.util.AdvancedPageImports;
 
 /**
  * Provides extra functionality not available in ClickServlet.
