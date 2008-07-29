@@ -5,16 +5,16 @@
     this is to place these two files in the classpath before the regular click-core classes.
     
 
-2) By default ReloadableClassLoader only reloads classes inside the package 
+2) By default ReloadClassLoader only reloads classes inside the package 
     specified by the Page package in click.xml.
 
     To enable dynamic replacement of classes you can programmatically call
-    'ReloadableClassLoader.addPackageToInclude(String package)'.
+    'ReloadClassLoader.addPackageToInclude(String package)'.
 
     If you use the ReloadClassFilter, you can specify a comma seperated list of 
     packages and classes to be loaded at initialization time. By specifying the 
     initialization parameter 'includes', you can provide a list of packages
-    and classes that will be added to the ReloadableClassLoader. In the same vain
+    and classes that will be added to the ReloadClassLoader. In the same vain
     you can specify packages and classes to be excluded.
 
     Please note that excludes will override includes, so if you both exclude 
@@ -58,14 +58,14 @@
     </context-param>
 
     The snippet above will add the packages 'net.sf.click.tests.reload' and
-    'com.mycorp.test' to the ReloadableClassLoader's list of packages to load.
+    'com.mycorp.test' to the ReloadClassLoader's list of packages to load.
 
     You may also need to specify the directory for where the compiled classes
     can be found on the file system. By default the ReloadClassFilter will 
     add all the locations that is found in the current thread's classpath
-    to the ReloadableClassLoader. Because ReloadableClassLoader extends URLClassLoader,
+    to the ReloadClassLoader. Because ReloadClassLoader extends URLClassLoader,
     if you need to add different locations you can programmatically call 
-    'ReloadableClassLoader.addURL(URL url)'.
+    'ReloadClassLoader.addURL(URL url)'.
 
     By specifying the initializaiton parameter 'classpath', you can provide
     a comma seperated list of directories to be included at initialization 
