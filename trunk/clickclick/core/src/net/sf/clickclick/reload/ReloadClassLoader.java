@@ -45,13 +45,13 @@ import java.util.List;
  *
  * @author Bob Schellink
  */
-public class ReloadableClassLoader extends URLClassLoader {
+public class ReloadClassLoader extends URLClassLoader {
 
     private List includes = new ArrayList();
 
     private List excludes = new ArrayList();
     
-    public ReloadableClassLoader(URL[] classpath, ClassLoader parent) {
+    public ReloadClassLoader(URL[] classpath, ClassLoader parent) {
         super(classpath, parent);
     }
 

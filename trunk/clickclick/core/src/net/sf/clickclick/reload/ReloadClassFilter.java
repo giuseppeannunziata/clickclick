@@ -48,7 +48,7 @@ import net.sf.click.util.ClickUtils;
  * </ul>
  * 
  * This feature is made possible by replacing the context class loader 
- * with an instance of {@link ReloadableClassLoader} for each incoming request.
+ * with an instance of {@link ReloadClassLoader} for each incoming request.
  *
  * Bob Schellink
  */
@@ -67,7 +67,7 @@ public class ReloadClassFilter implements Filter {
     /** The application configuration service. */
     protected ClickClickConfigService clickClickConfigService;
 
-    private ClassLoader reloadableClassLoader = null;
+    private ClassLoader reloadClassLoader = null;
 
     private URL[] classpath = null;
 
@@ -197,7 +197,7 @@ public class ReloadClassFilter implements Filter {
     /**
      * Handles the request in development modes.
      * <p/>
-     * This method uses the ReloadableClassLoader as returned by
+     * This method uses the ReloadClassLoader as returned by
      * {@link #createReloadClassLoader()}.
      * 
      * @param request
@@ -209,8 +209,8 @@ public class ReloadClassFilter implements Filter {
 
         // TODO should createReloadClassLoader be synchronized
         //synchronized (lock) {
-        //    if(reloadableClassLoader == null) {
-        reloadableClassLoader = createReloadClassLoader();
+        //    if(reloadClassLoader == null) {
+        reloadClassLoader = createReloadClassLoader();
         //     }
         //}
 
@@ -218,7 +218,7 @@ public class ReloadClassFilter implements Filter {
         ClassLoader orig = Thread.currentThread().getContextClassLoader();
         try {
             // Set the new context class loader
-            Thread.currentThread().setContextClassLoader(reloadableClassLoader);
+            Thread.currentThread().setContextClassLoader(reloadClassLoader);
             chain.doFilter(request, response);
         } catch (Throwable t) {
             while (t instanceof ServletException) {
@@ -232,10 +232,10 @@ public class ReloadClassFilter implements Filter {
         }
     }
 
-    protected ReloadableClassLoader createReloadClassLoader() {
+    protected ReloadClassLoader createReloadClassLoader() {
         ClassLoader parent = Thread.currentThread().getContextClassLoader();
         classpath = getClasspath();
-        ReloadableClassLoader loader = new ReloadableClassLoader(classpath, parent);
+        ReloadClassLoader loader = new ReloadClassLoader(classpath, parent);
 
         // Add includes to class loader
         for (Iterator it = includeList.iterator(); it.hasNext();) {
