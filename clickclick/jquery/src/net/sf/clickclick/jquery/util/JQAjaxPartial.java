@@ -1,7 +1,8 @@
-package net.sf.clickclick.examples.jquery.page.ajax;
+package net.sf.clickclick.jquery.util;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.click.Context;
 import net.sf.click.util.Partial;
 
 /**
@@ -17,6 +18,8 @@ public class JQAjaxPartial extends Partial {
     private String targetId;
 
     private String focusId;
+
+    private String redirect;
 
     // ----------------------------------------------------------- Constructors
 
@@ -87,6 +90,49 @@ public class JQAjaxPartial extends Partial {
         return noConflict;
     }
 
+    public String getRedirect() {
+        return redirect;
+    }
+
+    /**
+     * Set the location to redirect the request to.
+     * <p/>
+     * If the {@link #redirect} property is not null it will be used to redirect
+     * the request in preference to {@link #forward} or {@link #path} properties.
+     * The request is redirected to using the HttpServletResponse.setRedirect()
+     * method.
+     * <p/>
+     * If the redirect location begins with a <tt class="wr">"/"</tt>
+     * character the redirect location will be prefixed with the web applications
+     * context path. Also if the location has a <tt>.jsp</tt> extension it will
+     * be changed to <tt>.htm</tt>.
+     * <p/>
+     * For example if an application is deployed to the context
+     * <tt class="wr">"mycorp"</tt> calling
+     * <tt>setRedirect(<span class="navy">"/customer/details.htm"</span>)</tt>
+     * will redirect the request to:
+     * <tt class="wr">"/mycorp/customer/details.htm"</tt>
+     * <p/>
+     * See also {@link #setForward(String)}, {@link #setPath(String)}
+     *
+     * @param location the path to redirect the request to
+     */
+    public void setRedirect(String location) {
+        redirect = location;
+    }
+
+    /**
+     * Set the request to redirect to the give page class.
+     *
+     * @param pageClass the class of the Page to redirect the request to
+     * @throws IllegalArgumentException if the Page Class is not configured
+     * with a unique path
+     */
+    public void setRedirect(Class pageClass) {
+        String target = Context.getThreadLocalContext().getPagePath(pageClass);
+        setRedirect(target);
+    }
+
     /**
      * Render the partial to the specified response.
      *
@@ -97,6 +143,28 @@ public class JQAjaxPartial extends Partial {
         response.setHeader("Click.replace", isReplaceTarget() ? "true" : "false");
         response.setHeader("Click.ajaxTargetId", getTargetId());
         response.setHeader("Click.focusId", getFocusId());
+        if (getRedirect() != null && getRedirect().trim().length() > 0) {
+            response.setHeader("Click.redirectUrl", createValidRedirect(getRedirect()));
+        }
         super.render(request, response);
+    }
+
+    private String createValidRedirect(String url) {
+        Context context = Context.getThreadLocalContext();
+        String contextPath = context.getRequest().getContextPath();
+        if (url.charAt(0) == '/') {
+            url = contextPath + url;
+
+            // Check for two scenarios, one without parameters and one with:
+            // #1. /context/my-page.jsp
+            // #2. /context/my-page.jsp?param1=value&param2=other-page.jsp
+            if (url.endsWith(".jsp")) {
+                url = url.replaceFirst(".jsp", ".htm");
+            } else if (url.indexOf(".jsp?") >= 0) {
+                url = url.replaceFirst(".jsp?", ".htm?");
+            }
+        }
+
+        return context.getResponse().encodeRedirectURL(url);
     }
 }
