@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import net.sf.click.Control;
 import net.sf.click.AjaxListener;
+import net.sf.click.control.Checkbox;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import net.sf.click.extras.control.EmailField;
@@ -12,6 +13,8 @@ import net.sf.click.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.controls.JQForm;
 import net.sf.clickclick.control.html.Div;
+import net.sf.clickclick.examples.jquery.page.HomePage;
+import net.sf.clickclick.jquery.util.JQAjaxPartial;
 
 public class FormDemo extends BorderPage {
 
@@ -48,6 +51,9 @@ public class FormDemo extends BorderPage {
         emailField.setValue("steve@test.com");
         form.add(emailField);
 
+        final Checkbox redirect = new Checkbox("redirect", "Redirect after submit?");
+        form.add(redirect);
+
         Submit submit = new Submit("submit");        
 
         // Set AjaxListener on Submit that will be invoked when submit is performed
@@ -62,7 +68,8 @@ public class FormDemo extends BorderPage {
                 if (form.isValid()) {
                     actionPerformed(source);
                     // Return a Partial response
-                    return createSuccessPartial();
+                    boolean shouldRedirect = redirect.isChecked();
+                    return createSuccessPartial(shouldRedirect);
                 } else {
                     return createErrorPartial();
                 }
@@ -92,7 +99,14 @@ public class FormDemo extends BorderPage {
     /**
      * Create a Partial response
      */
-    private Partial createSuccessPartial() {
+    private Partial createSuccessPartial(boolean shouldRedirect) {
+        JQAjaxPartial partial = new JQAjaxPartial();
+        // For redirect, set redirectUrl and return the partial
+        if (shouldRedirect) {
+            partial.setRedirect(HomePage.class);
+            return partial;
+        }
+
         HtmlStringBuffer buffer = new HtmlStringBuffer();
         buffer.append("<pre>Map {\n");
         buffer.append("    [firstName] => ").append(form.getFieldValue("firstName")).append("\n");
@@ -100,8 +114,6 @@ public class FormDemo extends BorderPage {
         buffer.append("    [email] => ").append(form.getFieldValue("email")).append("\n");
         buffer.append("}</pre>");
 
-        JQAjaxPartial partial = new JQAjaxPartial();
-        
         // Set the partial content
         partial.setContent(buffer.toString());
 

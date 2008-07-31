@@ -45,6 +45,7 @@ function preSubmit(formData, jqForm, options) {
 }
 
 function postSubmit(xhr, statusText) {
+    jQuery.unblockUI();
     if (statusText == "success") {
         var data = xhr.responseText;
         // TODO should we support xml? What to do with result?
@@ -62,30 +63,37 @@ function postSubmit(xhr, statusText) {
 }
 
 function onSuccess(responseData, statusText, xhr) {
-    jQuery.unblockUI();
-    cleanup();
     var ajaxTargetId = xhr.getResponseHeader("Click.ajaxTargetId");
     var replace = xhr.getResponseHeader("Click.replace");
     var focusId = xhr.getResponseHeader("Click.focusId");
+    var redirectUrl = xhr.getResponseHeader("Click.redirectUrl");
 
-    if (!ajaxTargetId) {
-        // Default ajaxTargetId to targetId if targetId was set
-        if ($targetId) {
-            ajaxTargetId = $targetId;
+    // Check for redirect
+    if (typeof(redirectUrl) != "undefined" && redirectUrl != null && redirectUrl != "") {
+        alert(redirectUrl)
+        window.location = redirectUrl;
+    } else {
+        cleanup();
+        // Otherwise a normal Ajax response
+        if (!ajaxTargetId) {
+            // Default ajaxTargetId to targetId if targetId was set
+            if ($targetId) {
+                ajaxTargetId = $targetId;
+            }
         }
-    }
-
-    // Execute if target was set
-    if (ajaxTargetId) {
-        if (replace == "true") {
-            jQuery(ajaxTargetId).replaceWith(responseData);
-        } else {
-            jQuery("#"+ajaxTargetId).html(responseData);
+        
+        // Execute if target was set
+        if (ajaxTargetId) {
+            if (replace == "true") {
+                jQuery(ajaxTargetId).replaceWith(responseData);
+            } else {
+                jQuery("#"+ajaxTargetId).html(responseData);
+            }
         }
-    }
-
-    if (focusId) {
-        jQuery("#"+focusId).focus();
+        
+        if (focusId) {
+            jQuery("#"+focusId).focus();
+        }
     }
 
     jQuery('#$formId').ajaxForm(formOptions);
