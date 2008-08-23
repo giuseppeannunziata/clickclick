@@ -284,35 +284,12 @@ public class AdvancedPageImports extends PageImports {
         return cssGlobalInclude;
     }
 
-    // ------------------------------------------------------ Protected Methods
-
-    /**
-     * Process the Page's set of control HTML head imports.
-     */
-    protected void processPageControls() {
-        if (initialize) {
-            return;
-        }
-
-        initialize = true;
-
-        if (page.hasControls()) {
-            for (int i = 0; i < page.getControls().size(); i++) {
-                Control control = (Control) page.getControls().get(i);
-
-                processLine(control.getHtmlImports());
-            }
-        }
-
-        processLine(page.getHtmlImports());
-    }
-
     /**
      * Process the given control HTML import line.
      *
      * @param value the HTML import line to process
      */
-    protected void processLine(String value) {
+    public void addImport(String value) {
         if (value == null || value.length() == 0) {
             return;
         }
@@ -347,28 +324,7 @@ public class AdvancedPageImports extends PageImports {
         }
     }
 
-    /**
-     * Add the given string item to the list if it is not already present.
-     *
-     * @param item the line item to add
-     * @param list the list to add the item to
-     */
-    protected void addToList(String item, List list) {
-        item = item.trim();
-
-        boolean found = false;
-
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).equals(item)) {
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            list.add(item);
-        }
-    }
+    // ------------------------------------------------------ Protected Methods
 
     /**
      * Return a HTML string of all the page's HTML imports, including:

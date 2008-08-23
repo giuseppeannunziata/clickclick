@@ -44,8 +44,8 @@ public class ClickClickConfigService extends XmlConfigService {
 
     // --------------------------------------------------------- Public Methods
 
-    public String getPagesPackage() {
-        return pagesPackage;
+    public List getPagesPackage() {
+        return pagePackages;
     }
 
     /**
@@ -64,32 +64,35 @@ public class ClickClickConfigService extends XmlConfigService {
             // Else in development, debug or trace mode
             synchronized (PAGE_LOAD_LOCK) {
 
-                //Try and load the manually mapped page first
+                // Try and load the manually mapped page first
                 PageMetaData page = lookupManuallyStoredMetaData(path);
 
                 if (page != null) {
                     try {
                         return ClickUtils.classForName(page.getPageClassName());
                     } catch (ClassNotFoundException ex) {
-                    //ignore, this class is not available, so try and load it
-                    //from the classpath
+                        // ignore, this class is not available, so try and load
+                        // it from the classpath
                     }
                 }
 
                 Class pageClass = null;
 
                 try {
-                    //Set resourcePaths = servletContext.getResourcePaths(path);
                     URL resource = getServletContext().getResource(path);
 
                     if (resource != null) {
-                        pageClass = getPageClass(path, pagesPackage);
+                        for (int i = 0; i < pagePackages.size(); i++) {
+                            String pagesPackage = pagePackages.get(i).toString();
+
+                            pageClass = getPageClass(path, pagesPackage);
+                        }
                     } else {
-                    //No caching of this class or fields are done here.
+                        // No caching of this class or fields are done here.
                     }
 
                 } catch (MalformedURLException ex) {
-                //ignore, will return null
+                    // ignore, will return null
                 }
 
                 return pageClass;
@@ -98,24 +101,24 @@ public class ClickClickConfigService extends XmlConfigService {
     }
 
     public String getPagePath(Class pageClass) {
-        //Try to lookup path from manually mapped pages first
+        // Try to lookup path from manually mapped pages first
         PageMetaData page = lookupManuallyStoredMetaData(pageClass);
         if (page != null) {
             return page.getPath();
         }
 
-        //If not found we do a reverse algorithm lookup for the path
+        // If not found we do a reverse algorithm lookup for the path
         return new PathLookupAlgorithm().getPagePath(pageClass);
     }
 
     public Map getPageHeaders(String path) {
-        //Try and load the manually mapped page first
+        // Try and load the manually mapped page first
         PageMetaData page = lookupManuallyStoredMetaData(path);
 
         if (page != null) {
             return page.getHeaders();
         } else {
-            //If path was not found in the manually loaded pages, return common headers
+            // If path was not found in the manually loaded pages, return common headers
             return Collections.unmodifiableMap(commonHeaders);
         }
     }
@@ -149,9 +152,9 @@ public class ClickClickConfigService extends XmlConfigService {
 
     // ------------------------------------------------ Package Private Methods
 
-    void buildManualPageMapping(Element pagesElm) throws ClassNotFoundException {
+    void buildManualPageMapping(Element pagesElm, String pagesPackage) throws ClassNotFoundException {
         if (isProductionMode() || isProfileMode()) {
-            super.buildManualPageMapping(pagesElm);
+            super.buildManualPageMapping(pagesElm, pagesPackage);
             return;
         }
 
@@ -170,11 +173,11 @@ public class ClickClickConfigService extends XmlConfigService {
         }
     }
 
-    void buildAutoPageMapping(Element pagesElm) throws ClassNotFoundException {
+    void buildAutoPageMapping(Element pagesElm, String pagesPackage, List templates) throws ClassNotFoundException {
 
         if(isProductionMode() || isProfileMode()) {
             //Build and cache in production modes.
-            super.buildAutoPageMapping(pagesElm);
+            super.buildAutoPageMapping(pagesElm, pagesPackage, templates);
             return;
         }
 
@@ -345,46 +348,62 @@ public class ClickClickConfigService extends XmlConfigService {
             int indexOfClassName = clazz.getName().lastIndexOf('.');
             String pageDir = "/";
 
-            //If the clazz does not have a package return the root path
+            // If the clazz does not have a package return the root path
             if (indexOfClassName < 0) {
                 return pageDir;
             }
 
-            //Note the addition of the '.' after the package name below. This
-            //ensures to check for a legal package instead of a false positive
-            //like 'com.mycorp.con' which would also have qualified if the
-            //package name was 'com.mycorp.contacts'.
+            // Note the addition of the '.' after the package name below. This
+            // ensures to check for a legal package instead of a false positive
+            // like 'com.mycorp.con' which would also have qualified if the
+            // package name was 'com.mycorp.contacts'.
 
-            //The '+ 1' in the substring argument ensures the packageName
-            //ends with '.' ie 'com.mycorp.'
+            // The '+ 1' in the substring argument ensures the packageName
+            // ends with '.' ie 'com.mycorp.'
             final String packageName = clazz.getName().substring(0,
                 indexOfClassName + 1);
 
-            //If the pagesPackage is not specified return the converted packageName
-            if (getPagesPackage() == null || getPagesPackage().length() == 0) {
+            // If the pagePackages is not specified return the converted packageName
+            if (getPagePackages().isEmpty()) {
                 return convertToAbsoluteDir(packageName);
             }
 
-            //Also append a '.' at the end of the pagesPackage
-            final String pagesPackage = getPagesPackage() + ".";
+            boolean matchFound = false;
 
-            //Check that pagesPackage is a substring of packageName
-            if (packageName.startsWith(getPagesPackage())) {
+            for (int i = 0; i < getPagePackages().size(); i++) {
+                String pagesPackage = pagePackages.get(i).toString();
 
-                //Check that the pagesPackage and packageName is not equal
-                if (packageName.length() != getPagesPackage().length()) {
+                // Also append a '.' at the end of the pagesPackage
+                // final String pagesPackage = getPagesPackage() + ".";
 
-                    //Subtract the pagesPackage from the specified class package
-                    pageDir = packageName.substring(getPagesPackage().length() + 1);
+                // Check that pagesPackage is a substring of packageName
+                if (packageName.startsWith(pagesPackage)) {
+
+                    matchFound = true;
+
+                    // Check that the pagesPackage and packageName is not equal
+                    if (packageName.length() != pagesPackage.length()) {
+
+                        // Subtract the pagesPackage from the specified class package
+                        pageDir = packageName.substring(pagesPackage.length() +
+                            1);
+                        break;
+                    }
                 }
-            } else {
-                pageDir = packageName;
             }
-            return convertToAbsoluteDir(pageDir);
+
+            // If page directory was matched, return the pageDir
+            if (matchFound) {
+                return convertToAbsoluteDir(pageDir);
+            } else {
+                // If the page directory was not matched, return the packageName
+                // as the path
+                return convertToAbsoluteDir(packageName);
+            }
         }
 
-        public String getPagesPackage() {
-            return pagesPackage;
+        public List getPagePackages() {
+            return pagePackages;
         }
         
         /**
