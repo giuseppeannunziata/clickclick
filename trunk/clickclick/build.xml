@@ -292,7 +292,7 @@
 
     </target>
 
-    <target name="build-all" depends="clean, javadoc, build, build-examples"
+    <target name="build-all" depends="clean, build, build-examples, javadoc"
             description="build all JARs and examples"/>
 
     <target name="build-sources"
