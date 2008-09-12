@@ -3,16 +3,16 @@ package net.sf.clickclick.examples.page.layout;
 import net.sf.click.ActionListener;
 import net.sf.click.Control;
 import net.sf.click.MockContext;
-import net.sf.click.control.BasicForm;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
+import net.sf.click.extras.control.HtmlForm;
 import net.sf.clickclick.control.grid.Grid;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.examples.page.BorderPage;
 
 public class GridLayoutDemo extends BorderPage {
 
-    private BasicForm form;
+    private HtmlForm form;
 
     public void onInit() {
         createLayoutDemo();
@@ -53,7 +53,7 @@ public class GridLayoutDemo extends BorderPage {
      * Demo 2
      */      
     private void createLayoutWithForm() {
-        form = new BasicForm("form");
+        form = new HtmlForm("form");
         addControl(form);
 
         Grid grid = new Grid("grid");
