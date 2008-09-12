@@ -1,10 +1,10 @@
 package net.sf.clickclick.examples.page.layout;
 
 import net.sf.click.control.AbstractControl;
-import net.sf.click.control.BasicForm;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.Field;
 import net.sf.click.control.TextField;
+import net.sf.click.extras.control.HtmlForm;
 import net.sf.click.extras.control.IntegerField;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.FieldLabel;
@@ -15,7 +15,7 @@ import net.sf.clickclick.examples.page.BorderPage;
 
 public class VerticalPanelDemo extends BorderPage {
 
-    private BasicForm form = new BasicForm("form");
+    private HtmlForm form = new HtmlForm("form");
 
     public void onInit() {
         createLayoutDemo();
