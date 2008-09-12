@@ -187,10 +187,9 @@
     </target>
 
     <target name="get-deps" description="download JAR dependencies">
-        <!-- todo: get these only when ${click.jar.available}=true-->
-        <!--<downloadMacro name="${jar.click}" path="net.sf.click"/>-->
-        <!--<downloadMacro name="${jar.click-extras}" path="net.sf.click"/>-->
-        <!--<downloadMacro name="${jar.click-mock}" path="net.sf.click"/>-->
+        <downloadMacro name="${jar.click}" path="net.sf.click"/>
+        <downloadMacro name="${jar.click-extras}" path="net.sf.click"/>
+        <downloadMacro name="${jar.click-mock}" path="net.sf.click"/>
         <downloadMacro name="${jar.lang}" path="commons-lang"/>
         <downloadMacro name="${jar.log4j}" path="log4j"/>
         <downloadMacro name="${jar.junit}" path="junit"/>
