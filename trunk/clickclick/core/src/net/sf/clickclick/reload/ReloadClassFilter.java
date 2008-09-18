@@ -191,7 +191,7 @@ public class ReloadClassFilter implements Filter {
         clickClickConfigService = (ClickClickConfigService) configService;
 
         // Add default package to the package list
-        includeList.add(clickClickConfigService.getPagesPackage());
+        includeList.addAll(clickClickConfigService.getPagesPackage());
     }
 
     /**
