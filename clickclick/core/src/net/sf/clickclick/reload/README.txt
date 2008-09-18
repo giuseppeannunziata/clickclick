@@ -1,27 +1,34 @@
 #Setup automatic class reloading
 
-1) For automatic class reloading to work you must replace ClickApp and ClickServlet that 
-    is included in the click-core with the same named files in this package. An easy way to do
-    this is to place these two files in the classpath before the regular click-core classes.
-    
+1) By default ReloadClassLoader only reloads classes inside the packages 
+    specified by the Page packages in click.xml.
 
-2) By default ReloadClassLoader only reloads classes inside the package 
-    specified by the Page package in click.xml.
-
-    To enable dynamic replacement of classes you can programmatically call
-    'ReloadClassLoader.addPackageToInclude(String package)'.
-
-    If you use the ReloadClassFilter, you can specify a comma seperated list of 
-    packages and classes to be loaded at initialization time. By specifying the 
-    initialization parameter 'includes', you can provide a list of packages
-    and classes that will be added to the ReloadClassLoader. In the same vain
-    you can specify packages and classes to be excluded.
+    You can specify a comma seperated list of packages and classes to be loaded 
+    at initialization time. By specifying the initialization parameter 'includes',
+    you can provide a list of packages and classes that will be added to the 
+    ReloadClassLoader. In the same vain you can specify packages and classes to
+    be excluded.
 
     Please note that excludes will override includes, so if you both exclude 
     and include the class com.mycorp.page.MyPage, it will be excluded.
 
     Below is an example web.xml snippet:
+    
+    <!--
+    Here we tell Click to use ClickClickConfigService instead of the default
+    XmlConfigService. ClickClickConfigService is needed because XmlConfigService
+    cache Page classes even in development mode while ClickClickConfigService 
+    only caches in production modes.
+    -->
+    <context-param>
+        <param-name>config-service-class</param-name>
+        <param-value>net.sf.click.service.ClickClickConfigService</param-value>
+    </context-param>
 
+    <!--
+    Setup the reload class filter. This filter will only reload classes
+    in development modes.
+    -->
     <filter>
         <filter-name>reload-filter</filter-name>
         <filter-class>net.sf.click.extras.devel.ReloadClassFilter</filter-class>
@@ -38,61 +45,23 @@
                 excludes
             </param-name>
             <param-value>
-                com.mycorp.page.account, com.mycorp.page.ProductPage
+                com.mycorp.page.account, com.mycorp.page.MyStatefulPage
             </param-value>
         </init-param>
     </filter>
   
-    Add the mapping:
-
     <filter-mapping>
         <filter-name>reload-filter</filter-name>
         <servlet-name>click-servlet</servlet-name>
     </filter-mapping>
+  
+    The snippet above will setup the filter to reload classes containing the package
+    'com.mycorp.page'. The filter will also reload the control 'com.mycorp.controls.MyForm'.
+ 
+    The filter will *not* reload class containing the package 'com.mycorp.page.account'.
+    The page 'com.mycorp.page.MyStatefulPage' is also excluded from reloading.
 
-    Lastly you need to use the following config service:
-
-    <context-param>
-        <param-name>config-service-class</param-name>
-        <param-value>net.sf.click.service.ReloadConfigService</param-value>
-    </context-param>
-
-    The snippet above will add the packages 'net.sf.click.tests.reload' and
-    'com.mycorp.test' to the ReloadClassLoader's list of packages to load.
-
-    You may also need to specify the directory for where the compiled classes
-    can be found on the file system. By default the ReloadClassFilter will 
-    add all the locations that is found in the current thread's classpath
-    to the ReloadClassLoader. Because ReloadClassLoader extends URLClassLoader,
-    if you need to add different locations you can programmatically call 
-    'ReloadClassLoader.addURL(URL url)'.
-
-    By specifying the initializaiton parameter 'classpath', you can provide
-    a comma seperated list of directories to be included at initialization 
-    time. Continuing with the above example results in:
-
-    <filter>
-        <filter-name>reload-filter</filter-name>
-        <filter-class>net.sf.click.extras.devel.ReloadClassFilter</filter-class>
-        <init-param>
-            <param-name> 
-                includes
-            </param-name>
-            <param-value>
-                com.mycorp.page, com.mycorp.controls.MyForm
-            </param-value>
-        </init-param>
-        <init-param>
-            <param-name> 
-                classpath
-            </param-name>
-            <param-value>
-                c:/myproject/build/classes c:/anotherproject/build/classes
-            </param-value>
-        </init-param>
-    </filter>
-
-3) Certain servlet containers have the ability to track changes to classes 
+2) Certain servlet containers have the ability to track changes to classes 
     and jars, and reload the entire web application when changes occur. You should 
     probably disable this feature in your container if you want automatic class 
     reloading to work. Otherwise instead of only reloading the changed class, the 
