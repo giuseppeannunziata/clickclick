@@ -25,6 +25,8 @@ import net.sf.click.util.HtmlStringBuffer;
 import net.sf.clickclick.util.CssImport;
 
 /**
+ * Paginator implementation based on the article:
+ * http://woork.blogspot.com/2008/03/perfect-pagination-style-using-css.html
  *
  * @author Bob Schellink
  */
