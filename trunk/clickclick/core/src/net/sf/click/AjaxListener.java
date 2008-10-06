@@ -15,7 +15,6 @@
  */
 package net.sf.click;
 
-import net.sf.click.*;
 import net.sf.click.util.Partial;
 
 /**
