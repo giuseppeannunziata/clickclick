@@ -97,6 +97,11 @@ public class AjaxActionButton extends ActionButton {
 
     // ------------------------------------------------------ Public Attributes
 
+    public void setName(String name) {
+        super.setName(name);
+        setParameter(getId(), "1");
+    }
+
     public String getId() {
         String id = super.getId();
         if (id == null) {
@@ -108,7 +113,6 @@ public class AjaxActionButton extends ActionButton {
 
     public void onInit() {
         super.onInit();
-        setParameter(getId(), "1");
         AjaxControlRegistry.registerAjaxControl(this);
     }
 
