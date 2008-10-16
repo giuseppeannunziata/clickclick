@@ -20,24 +20,20 @@ public class Row extends AbstractContainer {
         if (!(control instanceof Cell)) {
             throw new IllegalArgumentException("Only cells can be inserted.");
         }
-        return insert((Cell) control, column + 1);
+        return insert((Cell) control, column);
     }
 
     public Cell insert(Cell cell, int column) {
-        if (column <= 0) {
-            throw new IndexOutOfBoundsException("column must be > 0");
+        if (column > getColumnCount()) {
+            expandCells(column);
         }
-        if (column - 1 > getColumnCount()) {
-            expandCells(column - 1);
-            //return getCell(column);
-        }
-        super.insert(cell, column - 1);
+        super.insert(cell, column);
         return cell;
     }
 
     public Cell insertCell(int column) {
-        if (column <= 0) {
-            throw new IndexOutOfBoundsException("column must be > 0");
+        if (column < 0) {
+            throw new IndexOutOfBoundsException("column must be >= 0");
         }
         if (column > getColumnCount()) {
             expandCells(column);
@@ -66,8 +62,7 @@ public class Row extends AbstractContainer {
     public Cell getCell(final int column) {
         if (hasControls()) {
             if (getControls().size() >= column) {
-                int realColumn = column - 1;
-                return (Cell) getControls().get(realColumn);
+                return (Cell) getControls().get(column);
             }
         }
         return null;
@@ -103,22 +98,6 @@ public class Row extends AbstractContainer {
         Row row = new Row();
         row.insert(new Cell("one"),3);
         row.insert(new Cell("three"), 5);
-        //row.insertCell(1);
-        //row.add(new Cell("two"));
-        //row.insertCell(1);
         System.out.println(row);
     }
-
-    /*
-    public static void main(String[] args) {
-        Row row = new Row();
-        row.add(new Cell("one"));
-        row.add(new Cell("two"));
-        row.add(new Cell("three"));
-        row.add(new Cell("four"));
-        System.out.println(row);
-
-        row.removeCell(1);
-        System.out.println(row);
-    }*/
 }

@@ -22,12 +22,12 @@ import net.sf.click.control.AbstractContainer;
  * @author Bob Schellink
  */
 public class Div extends AbstractContainer {
-    
+
     public Div() {
     }
-    
+
     public Div(String name) {
-        if(name != null) {
+        if (name != null) {
             setName(name);
         }
     }
@@ -36,8 +36,29 @@ public class Div extends AbstractContainer {
         this(name);
         setAttribute("id", id);
     }
-    
-     public final String getTag() {
+
+    public final String getTag() {
         return "div";
+    }
+    
+    public String getHeight() {
+        return getStyle("height");
+    }
+    
+    public void setHeight(String height) {
+        setStyle("height", height);
+    }
+    
+    public String getWidth() {
+        return getStyle("width");
+    }
+    
+    public void setWidth(String width) {
+        setStyle("width", width);
+    }
+    
+    public void setSize(String width, String height) {
+        setWidth(width);
+        setHeight(height);
     }
 }

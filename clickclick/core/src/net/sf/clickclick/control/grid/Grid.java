@@ -1,3 +1,18 @@
+/*
+ * Copyright 2008 Bob Schellink
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.clickclick.control.grid;
 
 import java.util.List;
@@ -87,10 +102,53 @@ public class Grid extends HtmlTable {
         int rowCount = getRowCount();
         Row newRow = null;
         while (rowCount < row) {
-            newRow = new Row();
+            newRow = new OneBasedRow();
             super.insert(newRow, getControls().size());
             rowCount++;
             newRow.expandCells(numColumns);
+        }
+    }
+
+    // ---------------------------------------------------------- Inner classes
+
+    /**
+     * This row ensures its index is one based instead of zero based.
+     */
+    class OneBasedRow extends Row {
+        public Control insert(Control control, int column) {
+            return super.insert(control, column + 1);
+        }
+        
+        public Cell insert(Cell cell, int column) {
+            if (column <= 0) {
+                throw new IndexOutOfBoundsException("For Grids the column must be > 0");
+            }
+            super.insert(cell, column - 1);
+            return cell;
+        }
+        
+        public Cell getCell(final int column) {
+            if (hasControls()) {
+                if (getControls().size() >= column) {
+                    int realColumn = column - 1;
+                    return (Cell) getControls().get(realColumn);
+                }
+            }
+            return null;
+        }
+
+        public Cell insertCell(int column) {
+            if (column <= 0) {
+                throw new IndexOutOfBoundsException("For Grids the column must be > 0");
+            }
+            if (column > getColumnCount()) {
+                expandCells(column);
+                return getCell(column);
+            } else {
+                Cell newCell = new Cell();
+                insert(newCell, column);
+                return newCell;
+            }
         }
     }
 
@@ -155,8 +213,6 @@ public class Grid extends HtmlTable {
         }
         return null;
     }
-
-    // -------------------------------------------------------- Protected Methods
 
     public static void main(String[] args) {
         Grid grid = new Grid("mygrid");
