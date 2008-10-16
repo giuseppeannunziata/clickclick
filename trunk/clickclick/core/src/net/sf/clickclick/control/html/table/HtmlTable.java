@@ -1,3 +1,18 @@
+/*
+ * Copyright 2008 Bob Schellink
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.clickclick.control.html.table;
 
 import net.sf.click.MockContext;
@@ -5,6 +20,7 @@ import net.sf.click.control.AbstractContainer;
 import net.sf.click.control.Container;
 import net.sf.click.control.HiddenField;
 import net.sf.clickclick.control.Html;
+import org.apache.commons.lang.math.NumberUtils;
 
 /**
  *
@@ -21,6 +37,18 @@ public class HtmlTable extends AbstractContainer {
 
     public String getTag() {
         return "table";
+    }
+    
+    public int getCellspacing() {
+        String cellspacing = getAttribute("cellspacing");
+        if (NumberUtils.isNumber(cellspacing)) {
+            return NumberUtils.toInt(cellspacing);
+        }
+        return 0;
+    }
+
+    public void setCellspacing(int cellspacing) {
+        setAttribute("cellspacing", Integer.toString(cellspacing));
     }
 
     public static void main(String[] args) {
