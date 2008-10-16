@@ -61,10 +61,14 @@ public class AjaxActionLink extends ActionLink {
         }
     }
 
+    public void setName(String name) {
+        super.setName(name);
+        setParameter(getId(), "1");
+    }
+
     public void onInit() {
         super.onInit();
         // Add id parameter to trigger onProcess event
-        setParameter(getId(), "1");
         AjaxControlRegistry.registerAjaxControl(this);
     }
 }
