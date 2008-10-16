@@ -37,10 +37,10 @@ import net.sf.click.service.ConfigService;
 import net.sf.click.util.ClickUtils;
 
 /**
- * This Filter allows changes to class and resource bundles to be picked up
+ * ReloadClassFilter allows changes to class and resource bundles to be picked up
  * without restarting the web application.
  * <p/>
- * <b>Please note:</b> this filter is only enabled in the following modes:
+ * <b>Please note:</b> this filter is only applied to the following modes:
  * <ul>
  * <li>Development</li>
  * <li>Debug</li>
@@ -49,8 +49,102 @@ import net.sf.click.util.ClickUtils;
  * 
  * This feature is made possible by replacing the context class loader 
  * with an instance of {@link ReloadClassLoader} for each incoming request.
+ * <p/>
+ * <h3>Configuration</h3>
+ * By default ReloadClassLoader only reloads classes inside packages specified
+ * by the Page packages in click.xml.
+ * <p/>
+ * You can include extra packages by specifying a comma separated list of
+ * packages and classes to be loaded at initialization time.
+ * <p/>
+ * By specifying the initialization parameter 'includes', you can provide a list
+ * of packages and classes that will be added to the ReloadClassLoader.
+ * <p/>
+ * You can also specify packages and classes to be excluded using the
+ * initialization parameter 'excludes'.
+ * <p/>
+ * <b>Please note</b> that excludes will override includes, so if you both
+ * exclude and include the class com.mycorp.page.MyPage, it will be excluded.
+ * <p/>
+ * Here is an example web.xml showing how to configure the filter:
+ * <pre class="prettyprint">
+ * &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+ * &lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt;
+ * &lt;!--
+ * ReloadClassFilter depends on ClickClickConfigService instead of the default
+ * XmlConfigService. The reason for this is that XmlConfigService cache Page
+ * classes even in development mode while ClickClickConfigService only caches
+ * in production modes. By not caching the classes allows ReloadClassFilter
+ * to reload them.
+ * --&gt;
+ *     &lt;context-param&gt;
+ *         &lt;param-name&gt;config-service-class&lt;/param-name&gt;
+ *         &lt;param-value&gt;net.sf.click.service.ClickClickConfigService&lt;/param-value&gt;
+ *     &lt;/context-param&gt;
  *
- * Bob Schellink
+ * &lt;!--
+ * Setup the reload class filter. This filter will only reload classes
+ * in development modes.
+ * --&gt;
+ *   &lt;filter&gt;
+ *       &lt;filter-name&gt;reload-filter&lt;/filter-name&gt;
+ *       &lt;filter-class&gt;net.sf.click.extras.devel.ReloadClassFilter&lt;/filter-class&gt;
+ *       &lt;init-param&gt;
+ *           &lt;param-name&gt; 
+ *               includes
+ *            &lt;/param-name&gt;
+ *           &lt;param-value&gt;
+ *               com.mycorp.page, com.mycorp.controls.MyForm
+ *           &lt;/param-value&gt;
+ *       &lt;/init-param&gt;
+ *       &lt;init-param&gt;
+ *           &lt;param-name&gt; 
+ *               excludes
+ *           &lt;/param-name&gt;
+ *           &lt;param-value&gt;
+ *               com.mycorp.page.account, com.mycorp.page.MyStatefulPage
+ *           &lt;/param-value&gt;
+ *       &lt;/init-param&gt;
+ *     &lt;/filter&gt;
+ *
+ *     &lt;filter-mapping&gt;
+ *       &lt;filter-name&gt;reload-filter&lt;/filter-name&gt;
+ *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+ *     &lt;/filter-mapping&gt;
+ *
+ *     ....
+ *
+ * &lt;/web-app&gt;
+ * </pre>
+ *
+ * The snippet above will setup the filter to reload classes containing the
+ * package 'com.mycorp.page'. The filter will also reload the class
+ * 'com.mycorp.controls.MyForm'.
+ * <p/>
+ * The filter will <b>not</b> reload class contained in the package
+ * 'com.mycorp.page.account'. The class 'com.mycorp.page.MyStatefulPage' will
+ * also excluded from reloading.
+ *
+ * <h3>Integration</h3>
+ * Certain servlet containers have the ability to track changes to classes
+ * and jars, and reload the entire web application when changes occur. You
+ * should probably disable this feature in your container if you want automatic
+ * class reloading to work. Otherwise instead of only reloading the changed
+ * class, the servlet container will restart the entire application.
+ * <p/>
+ * For Tomcat you can disable this feature by adding the attribute
+ * <tt>reloadable="false"</tt> to your context.xml file for example:
+ * <pre class="prettyprint">
+ * &lt;Context path="/click-test" reloadable="false" antiJARLocking="true"/&gt;
+ * </pre>
+ * IDE's such as Netbeans will also reload the entire web application when you
+ * click the "Run" button. So instead of hitting "Run" just refresh the browser
+ * to reload classes.
+ *
+ * <h3>Caveats</h3>
+ * TODO
+ *
+ * @author Bob Schellink
  */
 public class ReloadClassFilter implements Filter {
 
@@ -192,6 +286,7 @@ public class ReloadClassFilter implements Filter {
 
         // Add default package to the package list
         includeList.addAll(clickClickConfigService.getPagesPackage());
+        configured = true;
     }
 
     /**
