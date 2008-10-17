@@ -20,6 +20,7 @@ import net.sf.click.Context;
 import net.sf.click.control.Panel;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.ClassUtils;
 
 /**
  * A panel with fallback render functionality which allows the panel controls
@@ -77,6 +78,9 @@ public class SimplePanel extends Panel {
             if (hasTemplate) {
                 super.render(buffer);
             } else {
+                    ClickUtils.getLogService().info("No template was found for"
+                    + " panel " + ClassUtils.getShortClassName(getClass())
+                    + ". Rendering controls in the order they were added.");
                 renderContainer(buffer);
             }
         }
