@@ -30,7 +30,7 @@ import net.sf.clickclick.util.CssImport;
  *
  * @author Bob Schellink
  */
-public class ManualPaginator extends AbstractControl implements Renderable {
+public class SimplePaginator extends AbstractControl implements Renderable {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,7 +50,7 @@ public class ManualPaginator extends AbstractControl implements Renderable {
 
     // ----------------------------------------------------------- Constructors
 
-    public ManualPaginator(String name) {
+    public SimplePaginator(String name) {
         setName(name);
     }
 
@@ -131,7 +131,7 @@ public class ManualPaginator extends AbstractControl implements Renderable {
     }
 
     public String getHtmlImports() {
-        CssImport cssImport = new CssImport("/clickclick/core/paginator/ManualPaginator.css", true);
+        CssImport cssImport = new CssImport("/clickclick/core/paginator/SimplePaginator.css", true);
         return cssImport.toString();
     }
 
@@ -332,7 +332,7 @@ public class ManualPaginator extends AbstractControl implements Renderable {
         final int pageSize = 10;
         final int rowCount = 3000;
         MockContext.initContext();
-        ManualPaginator paginator = new ManualPaginator("my-paginator");
+        SimplePaginator paginator = new SimplePaginator("my-paginator");
         paginator.setCurrentPage(currentPage);
         paginator.calcPageTotal(pageSize, rowCount);
         HtmlStringBuffer buffer = new HtmlStringBuffer();
