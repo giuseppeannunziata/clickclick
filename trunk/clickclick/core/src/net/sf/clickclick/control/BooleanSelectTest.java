@@ -6,59 +6,42 @@ import net.sf.click.servlet.MockRequest;
 
 public class BooleanSelectTest extends TestCase {
 
-    public void testSetGetValue() {
+    /**
+     * should never break, illegal data == false
+     */
+    public void testGetBoolean() {
         BooleanSelect bsField = new BooleanSelect("bs");
 
         bsField.setValue("true");
-        assertEquals(Boolean.TRUE.toString(), bsField.getValue());
+        assertEquals(Boolean.TRUE, bsField.getBoolean());
         bsField.setValue("false");
-        assertEquals(Boolean.FALSE.toString(), bsField.getValue());
+        assertEquals(Boolean.FALSE, bsField.getBoolean());
         bsField.setValue("trUe");
-        assertEquals(Boolean.TRUE.toString(), bsField.getValue());
+        assertEquals(Boolean.TRUE, bsField.getBoolean());
         bsField.setValue("fAlsE");
-        assertEquals(Boolean.FALSE.toString(), bsField.getValue());
+        assertEquals(Boolean.FALSE, bsField.getBoolean());
         bsField.setValue("");
-        assertTrue(bsField.getValue().isEmpty());
+        assertNull(bsField.getBoolean());
         bsField.setValue(null);
-        assertTrue(bsField.getValue().isEmpty());
-        try {
-            bsField.setValue("Something else");
-            fail("should not be allowed");
-        } catch (Exception e) {
-        }
-        try {
-            bsField.setValue("1");
-            fail("should not be allowed");
-        } catch (Exception e) {
-        }
+        assertNull(bsField.getBoolean());
+        bsField.setValue("some illegal value");
+        assertEquals(Boolean.FALSE, bsField.getBoolean());
     }
 
-    public void testSetValueObject() {
+    /**
+     * Should be of the Boolean persuasion or null
+     */
+    public void testGetValueObject() {
         BooleanSelect bsField = new BooleanSelect("bs");
 
-        bsField.setValueObject(Boolean.TRUE);
-        assertEquals(Boolean.TRUE.toString(), bsField.getValue());
-        bsField.setValueObject(Boolean.FALSE);
-        assertEquals(Boolean.FALSE.toString(), bsField.getValue());
         bsField.setValueObject("true");
-        assertEquals(Boolean.TRUE.toString(), bsField.getValue());
+        assertTrue(bsField.getValueObject() instanceof Boolean);
         bsField.setValueObject("false");
-        assertEquals(Boolean.FALSE.toString(), bsField.getValue());
+        assertTrue(bsField.getValueObject() instanceof Boolean);
         bsField.setValueObject("");
-        assertTrue(bsField.getValue().isEmpty());
-        bsField.setValueObject(null);
-        assertTrue(bsField.getValue().isEmpty());
-
-        try {
-            bsField.setValueObject("Something else");
-            fail("should not be allowed");
-        } catch (Exception e) {
-        }
-        try {
-            bsField.setValueObject(this);
-            fail("should not be allowed");
-        } catch (Exception e) {
-        }
+        assertNull(bsField.getValueObject());
+        bsField.setValueObject(this);
+        assertTrue(bsField.getValueObject() instanceof Boolean);
     }
 
     public void testOnProcess() {
@@ -66,13 +49,14 @@ public class BooleanSelectTest extends TestCase {
         MockRequest request = mockContext.getMockRequest();
 
         BooleanSelect bsField = new BooleanSelect("bs");
+        bsField.onInit();
         assertEquals("bs", bsField.getName());
 
         // -- bad value - somebody tampered with the formdata
         request.getParameterMap().put("bs", "bad bad");
         assertTrue(bsField.onProcess());
         assertTrue(bsField.isValid());
-        assertTrue(bsField.getValue().isEmpty());
+        assertEquals(Boolean.FALSE, bsField.getBoolean());
 
         // -- true
         request.getParameterMap().put("bs", "true");
@@ -91,5 +75,6 @@ public class BooleanSelectTest extends TestCase {
         request.getParameterMap().remove("bs");
         assertTrue(bsField.onProcess());
         assertFalse(bsField.isValid());
+        assertNull(bsField.getBoolean());
     }
 }
