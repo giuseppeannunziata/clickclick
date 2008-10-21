@@ -1,10 +1,8 @@
 package net.sf.clickclick.control;
 
-import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.IntegerField;
-import net.sf.click.util.ClickUtils;
 
 /**
  * Extends the {@link Select} control.
@@ -149,11 +147,14 @@ public class BooleanSelect extends Select {
 
     // ------------------------------------------------------------------
 
+    /**
+     * Options are added to the Select control. Make sure you call super.onInit() if you override this method
+     */
     public void onInit() {
         if (getOptionList().size() > 0) getOptionList().clear(); // being called more than once? We could keep the existing options, but they might have changed
-        if (tristate) add(new Option("", getOptionLabelUnset()));
-        add(new Option(Boolean.TRUE.toString(), getOptionLabelTrue()));
-        add(new Option(Boolean.FALSE.toString(), getOptionLabelFalse()));
+        if (tristate) add(new StyledOption("", "unset", getOptionLabelUnset()));
+        add(new StyledOption(Boolean.TRUE.toString(), "true", getOptionLabelTrue()));
+        add(new StyledOption(Boolean.FALSE.toString(), "false", getOptionLabelFalse()));
         super.onInit();
     }
 
@@ -161,20 +162,9 @@ public class BooleanSelect extends Select {
      * @return <code>True</code> or <code>False</code> if value was set, <code>null</code> otherwise
      */
     public Boolean getBoolean() {
-        // sadly we need this extra check as Select fills the value directly and does not use setValue(), so our overridden method is not used
-        // herefore we need to recheck the value for bad content, as a html.post() could contain illegal data
-        if (value == null || value.isEmpty())
-            return null;
-        else if (Boolean.TRUE.toString().equalsIgnoreCase(value))
-            return Boolean.TRUE;
-        else if (Boolean.FALSE.toString().equalsIgnoreCase(value))
-            return Boolean.FALSE;
-        else {
-            // we could throw an exception but in the case of a html.post() this is not really what we want.
-            // the user might not get what he expects though, so some logging might be in order here
-            ClickUtils.getLogService().debug("BooleanSelect is set to an unexpected value: [" + value + "]");
-            return null;
-        }
+        String value = getValue();
+        if (value == null || value.isEmpty()) return null; // we need this extra check as Boolean.valueOf does not return null but false on illegal values.
+        return Boolean.valueOf(getValue());
     }
 
     /**
@@ -184,35 +174,11 @@ public class BooleanSelect extends Select {
         this.value = ((value == null) ? "" : value.toString());
     }
 
-    public String getValue() {
-        Boolean b = getBoolean();
-        if (b == null)
-            return "";
-        else
-            return b.toString();
-    }
-
-    public void setValue(String value) {
-        // null & empty == unset
-        if (value == null || value.isEmpty())
-            this.value = "";
-        else if (Boolean.TRUE.toString().equalsIgnoreCase(value))
-            this.value = Boolean.TRUE.toString();
-        else if (Boolean.FALSE.toString().equalsIgnoreCase(value))
-            this.value = Boolean.FALSE.toString();
-        else
-            throw new IllegalArgumentException("Not a boolean value.");
-    }
-
     public void setValueObject(Object object) {
         if (object == null)
-            value = "";
-        else if (object instanceof String)
-            setValue((String) object);
-        else if (object instanceof Boolean)
-            value = ((Boolean) object).toString();
+            setValue("");
         else
-            throw new IllegalArgumentException("Only boolean values allowed");
+            setValue(object.toString());
     }
 
     public Object getValueObject() {
