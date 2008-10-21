@@ -1,41 +1,5 @@
-<!--  Icons were made by myself using ArtWeaver and the Windows Webdings font -->
-<style type="text/css">
-.trueOption {
-	background-color: #66FF66;
-}
-
-.falseOption {
-	background-color: #FF6262;
-}
-
-.custom {
-	background-repeat: no-repeat;
-	background-position: center left;
-	vertical-align: middle; /* doesn't seem to work? */
-}
-</style>
-$locForm #if(!$result.isEmpty())
+$locForm 
+#if(!$result.isEmpty())
 <br />
-<div
-	style="text-align: center; font-weight: bold; color: Green; background: Honeydew;">$result</div>
+<div style="text-align: center; font-weight: bold; color: Green; background: Honeydew;">$result</div>
 #end $form
-<script>
-function changeStyle(element){
-	// we must ignore other browsers as Opera doesn't take too well to this script
-	if (navigator.userAgent.indexOf("Firefox") != -1) {
-		if (element.type != 'select-one')  {
-			alert("function 'changeStyle()' only works with 'select-one' elements (not: " + element.type + ")");
-		} else {
-			var  itemIndex = element.selectedIndex;
-			if(itemIndex < 0) itemIndex = 0; // nothing selected, take value of first option
-			var child = element.options[itemIndex];
-			element.style.backgroundImage = child.style.backgroundImage;
-			element.style.paddingLeft = child.style.paddingLeft;
-			element.style.height = child.style.height;
-		}
-	} else {
-		// <!-- Imaged options only work with Firefox -->
-	}
-}
-changeStyle(document.getElementById("form_sCust")); // setting initial value
-</script>
