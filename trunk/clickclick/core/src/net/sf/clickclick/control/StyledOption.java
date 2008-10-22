@@ -5,6 +5,7 @@ import java.util.List;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * The StyledOption class adds the <code>id</code> attribute to the html option element thus allowing you to add specific css makeup to individual html instances
@@ -32,7 +33,7 @@ public class StyledOption extends Option {
      */
     public StyledOption(String value) {
         super(value);
-        if (value == null || value.isEmpty()) throw new IllegalArgumentException("Value cannot be null if it is also to be used as Name.");
+        if (StringUtils.isEmpty(value)) throw new IllegalArgumentException("Value cannot be null if it is also to be used as Name.");
         name = value;
     }
 
@@ -43,7 +44,7 @@ public class StyledOption extends Option {
      */
     public StyledOption(Object value, String name) {
         super(value, name);
-        if (name == null || name.isEmpty()) throw new IllegalArgumentException("Please provide a name for this option.");
+        if (StringUtils.isEmpty(name)) throw new IllegalArgumentException("Please provide a name for this option.");
         this.name = name;
     }
 
@@ -55,7 +56,7 @@ public class StyledOption extends Option {
      */
     public StyledOption(Object value, String name, String label) {
         super(value, label);
-        if (name == null || name.isEmpty()) throw new IllegalArgumentException("Please provide a name for this option.");
+        if (StringUtils.isEmpty(name)) throw new IllegalArgumentException("Please provide a name for this option.");
         this.name = name;
     }
 
@@ -127,13 +128,13 @@ public class StyledOption extends Option {
      * @return
      */
     String getIdAttr(Select select) {
-        if (id == null || id.isEmpty()) {
+        if (StringUtils.isEmpty(id)) {
             String result = null;
             if (select != null) result = select.getId();
-            if (result != null && !result.isEmpty())
-                result += "_";
-            else
+            if (StringUtils.isEmpty(result))
                 result = "";
+            else
+                result += "_";
             return result + name;
         } else {
             return id;

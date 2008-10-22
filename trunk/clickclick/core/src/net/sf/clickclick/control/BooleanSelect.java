@@ -3,6 +3,7 @@ package net.sf.clickclick.control;
 import net.sf.click.control.Select;
 import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.IntegerField;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Extends the {@link Select} control.
@@ -163,7 +164,7 @@ public class BooleanSelect extends Select {
      */
     public Boolean getBoolean() {
         String value = getValue();
-        if (value == null || value.isEmpty()) return null; // we need this extra check as Boolean.valueOf does not return null but false on illegal values.
+        if (StringUtils.isEmpty(value)) return null; // we need this extra check as Boolean.valueOf does not return null but false on illegal values.
         return Boolean.valueOf(getValue());
     }
 
@@ -246,7 +247,7 @@ public class BooleanSelect extends Select {
      */
     public void setNotation(String notation) {
         // TODO caveat: this method is not very robust as you can add an illegal argument, it does allow you to add custom values to the i18n resource bundle without recompiling though
-        if (notation == null || notation.isEmpty()) throw new IllegalArgumentException("" + notation + " is not a valid option for notation. (Where are those enums when you need them?!");
+        if (StringUtils.isEmpty(notation)) throw new IllegalArgumentException("" + notation + " is not a valid option for notation. (Where are those enums when you need them?!");
         this.notation = notation;
     }
 
@@ -284,7 +285,7 @@ public class BooleanSelect extends Select {
      * @param optionLabel
      */
     public void setOptionLabelTrue(String optionLabel) {
-        if (optionLabel == null || optionLabel.isEmpty()) throw new IllegalArgumentException("You must provide a value for the TrueOptionLabel");
+        if (StringUtils.isEmpty(optionLabel)) throw new IllegalArgumentException("You must provide a value for the TrueOptionLabel");
         this.customTrue = optionLabel;
     }
 
@@ -309,7 +310,7 @@ public class BooleanSelect extends Select {
      * @param optionLabel
      */
     public void setOptionLabelFalse(String optionLabel) {
-        if (optionLabel == null || optionLabel.isEmpty()) throw new IllegalArgumentException("You must provide a value for the FalseOptionLabel");
+        if (StringUtils.isEmpty(optionLabel)) throw new IllegalArgumentException("You must provide a value for the FalseOptionLabel");
         this.customFalse = optionLabel;
     }
 
