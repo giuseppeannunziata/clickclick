@@ -46,6 +46,7 @@ public abstract class AbstractTablePanel extends SimplePanel {
 
     public AbstractTablePanel(String name) {
         super(name);
+        table.setName(name);
         init();
     }
 
