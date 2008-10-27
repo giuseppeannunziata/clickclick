@@ -70,7 +70,6 @@ function onSuccess(responseData, statusText, xhr) {
 
     // Check for redirect
     if (typeof(redirectUrl) != "undefined" && redirectUrl != null && redirectUrl != "") {
-        alert(redirectUrl)
         window.location = redirectUrl;
     } else {
         cleanup();

@@ -51,7 +51,7 @@ public class FormDemo extends BorderPage {
         emailField.setValue("steve@test.com");
         form.add(emailField);
 
-        final Checkbox redirect = new Checkbox("redirect", "Redirect after submit?");
+        final Checkbox redirect = new Checkbox("redirect", "Redirect to Home after submit?");
         form.add(redirect);
 
         Submit submit = new Submit("submit");        
