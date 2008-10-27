@@ -271,6 +271,15 @@ public class ReloadClassFilter implements Filter {
     // -------------------------------------------------------- Protected Methods
 
     /**
+     * Return the application configuration service.
+     *
+     * @return the application configuration service
+     */
+    protected ClickClickConfigService getConfigService() {
+        return clickClickConfigService;
+    }
+
+    /**
      * Load the filters configuration and set the configured flat to true.
      */
     protected void loadConfiguration() {
@@ -279,7 +288,7 @@ public class ReloadClassFilter implements Filter {
         if (!(configService instanceof ClickClickConfigService)) {
             throw new IllegalStateException(
                 "ReloadClassFilter can only be used " +
-                "in conjuction with ClickClickConfigService. Please see the " +
+                "in conjuction with ClickClickConfigService. Please see " +
                 "ReloadClassFilter JavaDoc on how to setup the ClickClickConfigService.");
         }
         clickClickConfigService = (ClickClickConfigService) configService;
@@ -287,6 +296,11 @@ public class ReloadClassFilter implements Filter {
         // Add default package to the package list
         includeList.addAll(clickClickConfigService.getPagesPackage());
         configured = true;
+
+        String message = "ReloadClassFilter initialized with: includes="
+            + includeList + " and excludes=" + excludeList;
+
+        getConfigService().getLogService().info(message);
     }
 
     /**
@@ -330,7 +344,7 @@ public class ReloadClassFilter implements Filter {
     protected ReloadClassLoader createReloadClassLoader() {
         ClassLoader parent = Thread.currentThread().getContextClassLoader();
         classpath = getClasspath();
-        ReloadClassLoader loader = new ReloadClassLoader(classpath, parent);
+        ReloadClassLoader loader = new ReloadClassLoader(classpath, parent, clickClickConfigService);
 
         // Add includes to class loader
         for (Iterator it = includeList.iterator(); it.hasNext();) {

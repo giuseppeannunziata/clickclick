@@ -21,6 +21,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import net.sf.click.service.ConfigService;
+import net.sf.click.util.ClickUtils;
 
 /**
  * ClassLoader which enables specified classes to be reloaded without restarting
@@ -51,8 +53,12 @@ public class ReloadClassLoader extends URLClassLoader {
 
     private List excludes = new ArrayList();
     
-    public ReloadClassLoader(URL[] classpath, ClassLoader parent) {
+    private ConfigService configService;
+
+    public ReloadClassLoader(URL[] classpath, ClassLoader parent,
+        ConfigService configService) {
         super(classpath, parent);
+        this.configService = configService;
     }
 
     public void addInclude(String include) {
@@ -96,30 +102,32 @@ public class ReloadClassLoader extends URLClassLoader {
         return false;
     }
 
-    protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
+    protected Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
         //First, check if the class has already been loaded
         Class c = findLoadedClass(name);
-        
+
         if (c == null) {
-            
+
             //If not loaded yet, check if this class's package is included in the list
             //of allowed packages
             if(shouldLoadClass(name)) {
                 try {
                     c = findClass(name);
+                    configService.getLogService().trace("   Reloaded class '"
+                        + name + "'");
                 } catch (ClassNotFoundException ex) {
                     if(getParent() == null) {
                         throw ex;
                     }
                 }
             }
-            
+
             if(c == null) {
 
                 if(getParent() == null) {
                     throw new ClassNotFoundException(name);
                 } else {
-                    
+
                     //The class was not loaded so delegate to parent class loader
                     c = getParent().loadClass(name);
                 }
