@@ -46,8 +46,16 @@ public abstract class AbstractTablePanel extends SimplePanel {
 
     public AbstractTablePanel(String name) {
         super(name);
-        table.setName(name);
         init();
+    }
+
+    /**
+     * Returns the panel html tag as a &lt;div&gt;.
+     *
+     * @return the panel html tag as a &lt;div&gt;.
+     */
+    public String getTag() {
+        return "div";
     }
 
     public abstract Control add(Control control);
