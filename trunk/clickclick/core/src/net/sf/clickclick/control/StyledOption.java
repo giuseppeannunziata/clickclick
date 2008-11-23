@@ -71,7 +71,7 @@ public class StyledOption extends Option {
 
     /**
      * return the custom id set for this option
-     * @return
+     * @return the HTML id attribute
      */
     public String getId() {
         return id;
@@ -80,7 +80,7 @@ public class StyledOption extends Option {
     /**
      * the id of this option, leave empty to let StyledOption generate the default id (formName-selectName-optionName)
      *
-     * @param id
+     * @param id the HTML id attribute
      */
     public void setId(String id) {
         this.id = id;
