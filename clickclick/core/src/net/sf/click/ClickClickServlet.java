@@ -45,7 +45,7 @@ public class ClickClickServlet extends ClickServlet {
      * @see ClickServlet#createPageImports(net.sf.click.Page)
      *
      * @param page
-     * @return
+     * @return the new PageImports instance
      */
     protected PageImports createPageImports(Page page) {
         return new AdvancedPageImports(page);

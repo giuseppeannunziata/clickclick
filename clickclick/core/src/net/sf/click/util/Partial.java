@@ -15,7 +15,6 @@
  */
 package net.sf.click.util;
 
-import net.sf.click.util.*;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -38,7 +37,7 @@ import net.sf.click.Context;
  * bytes for example jpg, gif, png, pdf, excel spreadsheets etc.
  *
  * <h3>Ajax</h3>
- * {@link net.sf.click.control.AjaxListener#onAjaxAction(net.sf.click.Control)}
+ * {@link net.sf.click.AjaxListener#onAjaxAction(net.sf.click.Control)}
  * returns a Partial instance which represents the listener response to the
  * Ajax request.
  *
