@@ -224,7 +224,7 @@ public class BooleanSelect extends Select {
 
     /**
      * returns the notation used for the optionlabels
-     * @return
+     * @return the notation for the BooleanSelect
      */
     public String getNotation() {
         return notation;
