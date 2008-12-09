@@ -4,37 +4,31 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import net.sf.click.util.AjaxAdapter;
 import net.sf.click.Control;
-import net.sf.click.control.ActionLink;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.Partial;
+import net.sf.clickclick.control.ajax.AjaxActionLink;
 import net.sf.clickclick.examples.page.BorderPage;
 
 public class AjaxDemo extends BorderPage {
 
     public void onInit() {
         super.onInit();
-        ActionLink link = new ActionLink("link", "Click here make Ajax request");
+        // As explained in RawAjaxDemo there are a number of steps to be taken
+        // in order to Ajaxify a Click Control. However these steps can easily
+        // be hidden by custom controls making Ajax integration much smoother.
+        AjaxActionLink link = new AjaxActionLink("link", "Click here make Ajax request");
 
-        // Set the id html attribute
-        link.setId("link-id");
+        // Here we set the unique HTML id attribute so Click can check if an
+        // Ajax request targets this link or not
+        link.setId("link_id");
 
-        // Create the request parameters to send to server -> link-id=1&actionLink=link.
-        // There are two key/value pairs send to the server.
-        // #1. The link-id=1 key/value pair informs Click which Control is the target of the Ajax call, in this case the ActionLink.
-        //     The value of the id does not really matter. As long as the id parameter is present Click will
-        //     know the target Control.
-        // #2. The actionLink=link key/value pair is the normal parameters sent when clicking on an ActionLink.
-        //     The actionLink parameter informs Click of the name of the Link the was clicked and will fire the Control Listener.
-        HtmlStringBuffer params = new HtmlStringBuffer();
-        params.append(link.getId()).append("=1&");
-        params.append(link.ACTION_LINK).append("=").append(link.getName());
-
-        // Create the url to call -> /click-examples/ajax/partial-support-demo.htm
-        String url = getContext().getRequest().getContextPath() + getContext().getResourcePath();
+        // Create the url to call -> /examples/ajax/ajax-demo.htm
+        String url = link.getHref();
 
         // Set the onclick attribute to invoke the ajax() function with the specified
-        // url, parameters and callback function
-        link.setAttribute("onclick", "ajax('" + url + "','" + params + "',updateLog); return false;");
+        // url, parameters and callback function. The callback function in this example is
+        // updateLog
+        link.setAttribute("onclick", "ajax('" + url + "','',updateLog); return false;");
 
         // Set an AjaxListener 
         link.setActionListener(new AjaxAdapter() {
