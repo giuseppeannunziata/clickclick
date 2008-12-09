@@ -1,9 +1,9 @@
 <p>
-    Demonstration of Click's <a href="http://openrico.org/">Ajax</a> support.
+    Demonstration of Click's Ajax support.
 </p>
 <p>
     Note this demo uses the bare essentials to show how Ajax is supported. No Ajax library such as
-    (Prototype, JQuery, Mootools, YUI) is used.
+    Prototype, JQuery, Mootools, YUI is used.
     
 </p>
 
@@ -22,6 +22,8 @@
         request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 
         request.onreadystatechange = function() {
+            // request.readystate of 4 means the Ajax request is complete and we can retrieve the result
+            // request.status of 200 means the request was successful
             if (request.readyState == 4 && request.status == 200) {
                 if (request.responseText) {
                     callbackFunction(request.responseText);
@@ -39,8 +41,9 @@
 </script>
 
 $link
+
 <p>
     <div id="log">
-        
+
     </div>
 </p>    
