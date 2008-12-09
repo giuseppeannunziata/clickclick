@@ -23,10 +23,22 @@ public class MenuBuilder {
         menu = createMenu("Controls");
         rootMenu.add(menu);
 
-        FlexiMenu subMenu = createMenu("Basics", "controls/html-basics.htm");
+        FlexiMenu subMenu = createMenu("Basics", "control/html-basics.htm");
         menu.add(subMenu);
 
-        subMenu = createMenu("Menu", "controls/menu.htm");
+        FlexiMenu booleanSelectMenu = createMenu("Boolean Select");
+        menu.add(booleanSelectMenu);
+
+        subMenu = createMenu("Boolean Select Demo", "control/boolean-select.htm");
+        booleanSelectMenu.add(subMenu);
+
+        subMenu = createMenu("Styled Option Demo", "control/styled-option.htm");
+        booleanSelectMenu.add(subMenu);
+
+        subMenu = createMenu("Menu", "control/menu.htm");
+        menu.add(subMenu);
+
+        subMenu = createMenu("Rich Editor", "control/email-form.htm");
         menu.add(subMenu);
 
         menu = createMenu("Layout");
@@ -40,6 +52,15 @@ public class MenuBuilder {
 
         subMenu = createMenu("Grid", "layout/grid-layout-demo.htm");
         menu.getChildren().add(subMenu);
+
+        menu = createMenu("Ajax");
+        rootMenu.add(menu);
+
+        subMenu = createMenu("Basic Ajax Demo", "ajax/ajax-demo.htm");
+        menu.add(subMenu);
+
+        subMenu = createMenu("Raw Ajax Demo", "ajax/raw-ajax-demo.htm");
+        menu.add(subMenu);
 
         menu = createMenu("Reload", "reload/resource-bundle.htm");
         rootMenu.add(menu);
@@ -75,22 +96,6 @@ public class MenuBuilder {
         menu.setLabel(label);
         menu.setPath(path);
         menu.setTitle(label);
-        return menu;
-    }
-
-    private static FlexiMenu createNamelessMenu(String label, String path, String title) {
-        FlexiMenu menu = new FlexiMenu();
-        menu.setLabel(label);
-        menu.setTitle(title);
-        menu.setPath(path);
-        return menu;
-    }
-
-    private static FlexiMenu createMenu(String name, String label, String path, String title) {
-        FlexiMenu menu = new FlexiMenu(name);
-        menu.setLabel(label);
-        menu.setTitle(title);
-        menu.setPath(path);
         return menu;
     }
 }
