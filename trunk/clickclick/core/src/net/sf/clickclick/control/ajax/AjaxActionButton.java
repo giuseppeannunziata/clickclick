@@ -129,7 +129,7 @@ public class AjaxActionButton extends ActionButton {
         buffer.append(getName());
 
         if (value != null) {
-            buffer.append("&");
+            buffer.append("&amp;");
             buffer.append(VALUE);
             buffer.append("=");
             buffer.append(ClickUtils.encodeUrl(value, getContext()));
@@ -143,7 +143,7 @@ public class AjaxActionButton extends ActionButton {
                     Object paramValue = getParameters().get(name);
                     String encodedValue
                         = ClickUtils.encodeUrl(paramValue, getContext());
-                    buffer.append("&");
+                    buffer.append("&amp;");
                     buffer.append(name);
                     buffer.append("=");
                     buffer.append(encodedValue);
