@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/examples" reloadable="false" antiJARLocking="true"/>
+<Context antiJARLocking="true" path="/clickclick-examples" reloadable="false"/>
