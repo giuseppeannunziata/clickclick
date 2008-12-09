@@ -1,4 +1,4 @@
-package net.sf.clickclick.examples.page.controls;
+package net.sf.clickclick.examples.page.control;
 
 import java.util.ArrayList;
 import java.util.List;

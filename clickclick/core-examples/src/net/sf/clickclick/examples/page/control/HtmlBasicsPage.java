@@ -1,4 +1,4 @@
-package net.sf.clickclick.examples.page.controls;
+package net.sf.clickclick.examples.page.control;
 
 import net.sf.click.MockContext;
 import net.sf.clickclick.control.Text;
