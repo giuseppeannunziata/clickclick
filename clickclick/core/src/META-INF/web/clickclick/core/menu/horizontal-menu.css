@@ -66,6 +66,10 @@ ul#horizontalMenu a {
   height: 1%; /*For IE*/
 }
 
+ul#horizontalMenu:hover {
+    z-index: 999;
+}
+
 /* Root Menu Hover Persistence */
 ul#horizontalMenu a:hover,
 ul#horizontalMenu li:hover a,
