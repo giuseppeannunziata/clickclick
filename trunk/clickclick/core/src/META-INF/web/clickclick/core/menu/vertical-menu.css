@@ -42,6 +42,10 @@ ul#verticalMenu a {
   height: 1%; /*For IE*/
 }
 
+ul#verticalMenu :hover {
+    z-index: 999;
+}
+
 /* Root Menu Hover Persistence */
 ul#verticalMenu a:hover,
 ul#verticalMenu li:hover a,
