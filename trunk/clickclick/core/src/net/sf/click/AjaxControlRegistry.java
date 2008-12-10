@@ -15,11 +15,12 @@
  */
 package net.sf.click;
 
-import net.sf.click.AjaxListener;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import net.sf.click.control.ActionButton;
+import net.sf.click.control.ActionLink;
 import net.sf.click.util.Partial;
 import org.apache.commons.lang.Validate;
 
@@ -102,8 +103,24 @@ public class AjaxControlRegistry extends ControlRegistry {
             Control control = (Control) it.next();
 
             // Check if control is targeted by this request
-            if (context.getRequestParameter(control.getId()) != null) {
+            String id = control.getId();
+            if (id != null && context.getRequestParameter(id) != null) {
                 control.onProcess();
+            } else {
+                // Handle edge cases for ActionLink and ActionButton where ID
+                // might not be defined
+                String name = control.getName();
+                if (name != null) {
+                    boolean clicked = name.equals(context.getRequestParameter(
+                        ActionLink.ACTION_LINK));
+                    if (!clicked) {
+                        clicked = name.equals(context.getRequestParameter(
+                            ActionButton.ACTION_BUTTON));
+                    }
+                    if (clicked) {
+                        control.onProcess();
+                    }
+                }
             }
         }
 
