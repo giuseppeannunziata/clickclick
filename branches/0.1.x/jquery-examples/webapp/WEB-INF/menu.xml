@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<menu>
+    <menu label=" Home" path="home.htm" imageSrc="/assets/images/home.png"/>
+    <menu label="Basic" path="basic/basic.htm"/>
+    <menu label="Controls" path="#">
+        <menu label="Dialog" path="controls/dialog-demo.htm"/>
+        <menu label="Menu" path="controls/menu.htm"/>
+        <menu label="Color Picker" path="controls/color-picker.htm"/>
+    </menu>
+    <menu label="Ajax" path="#">
+        <menu label="Action Demo" path="ajax/action-demo.htm"/>
+        <menu label="Form" path="ajax/form-demo.htm"/>
+        <menu label="Select" path="ajax/select-demo.htm"/>
+    </menu>
+</menu>

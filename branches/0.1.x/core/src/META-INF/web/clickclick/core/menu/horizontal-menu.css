@@ -1,0 +1,195 @@
+/*
+    This menu css was described here : http://solardreamstudios.com/learn/css/cssmenus/
+
+    The css menu is 4 levels deep. If more menus are needed one can easily add more levels. Just have 
+    a look at the code below to see how the 2nd, 3rd and 4th levels are done.
+*/
+
+/* Root = Horizontal, Secondary = Vertical */
+ul#horizontalMenu {
+  margin: 0;
+  border: 0 none;
+  padding: 0;
+  width: 500px; /* For KHTML.*/
+  list-style: none;
+  height: 24px;
+}
+
+ul#horizontalMenu li {
+   /*For Gecko*/
+  display: inline;
+   border: 0 none;
+   float: left;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+   position: relative;
+   width: 190px
+}
+
+ul#horizontalMenu ul {
+  margin: 0;
+  border: 0 none;
+  padding: 0;
+  width: 190px;
+  list-style: none;
+  display: none;
+  position: absolute;
+  /*top: 24px;*/
+  left: 0;
+}
+
+ul#horizontalMenu ul li {
+   /*For Gecko*/
+  display: block !important;
+   display: inline;
+   float: none
+}
+
+/* Root Menu */
+
+ul#horizontalMenu a {
+  border: 1px solid #FFF;
+  border-right-color: #FF6600;
+  border-bottom-color: #FF6600;
+  padding: 0 6px;
+  float: none !important; /*For Opera*/
+  /* float: left; *//*For IE*/ /*This broke IE 7 for me, but might be needed by IE 5.5??? IE 6 is still working with float:left commented.*/
+  display: block;
+  background: #FF9933;
+  color: #333;
+  font: bold 10px Verdana, Arial, Helvetica, sans-serif;
+  line-height: 24px;
+  min-height: 24px;
+  text-decoration: none;
+  height: auto !important;
+  height: 1%; /*For IE*/
+}
+
+ul#horizontalMenu :hover {
+    z-index: 999;
+}
+
+/* Root Menu Hover Persistence */
+ul#horizontalMenu a:hover,
+ul#horizontalMenu li:hover a,
+ul#horizontalMenu li.iehover a {
+  background: #FF6600;
+  color: #FFF;
+}
+
+/* 2nd Menu */
+ul#horizontalMenu li:hover li a,
+ul#horizontalMenu li.iehover li a {
+  float: none;
+  background: #FF9933;
+  color: #333;
+}
+
+/* 2nd Menu Hover Persistence */
+ul#horizontalMenu li:hover li a:hover,
+ul#horizontalMenu li:hover li:hover a,
+ul#horizontalMenu li.iehover li a:hover,
+ul#horizontalMenu li.iehover li.iehover a {
+  background: #FF6600;
+  color: #FFF;
+}
+
+/* 3rd Menu */
+ul#horizontalMenu li:hover li:hover li a,
+ul#horizontalMenu li.iehover li.iehover li a {
+  background: #FF9933;
+  color: #333;
+}
+
+/* 3rd Menu Hover Persistence */
+ul#horizontalMenu li:hover li:hover li a:hover,
+ul#horizontalMenu li:hover li:hover li:hover a,
+ul#horizontalMenu li.iehover li.iehover li a:hover,
+ul#horizontalMenu li.iehover li.iehover li.iehover a {
+  background: #FF6600;
+  color: #FFF;
+}
+
+/* 4th Menu */
+ul#horizontalMenu li:hover li:hover li:hover li a,
+ul#horizontalMenu li.iehover li.iehover li.iehover li a {
+  background: #FF9933;
+  color: #333;
+}
+
+/* 4th Menu Hover */
+ul#horizontalMenu li:hover li:hover li:hover li a:hover,
+ul#horizontalMenu li.iehover li.iehover li.iehover li a:hover {
+  background: #FF6600;
+  color: #FFF;
+}
+
+/* Applies to all ul elements. Note the display:none which will hide the <ul> */
+ul#horizontalMenu ul ul,
+ul#horizontalMenu ul ul ul {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 190px;
+}
+
+/* Do Not Move - Must Come Before display:block for Gecko */
+ul#horizontalMenu li:hover ul ul,
+ul#horizontalMenu li:hover ul ul ul,
+ul#horizontalMenu li.iehover ul ul,
+ul#horizontalMenu li.iehover ul ul ul {
+  display: none;
+}
+
+/*
+ The following will enable the displaying of the <ul> elements as the user
+ navigates the menu.
+*/
+ul#horizontalMenu li:hover ul,
+ul#horizontalMenu ul li:hover ul,
+ul#horizontalMenu ul ul li:hover ul,
+ul#horizontalMenu li.iehover ul,
+ul#horizontalMenu ul li.iehover ul,
+ul#horizontalMenu ul ul li.iehover ul {
+  display: block;
+}
+
+
+/*Add bullets to the menus*/
+
+
+ul#horizontalMenu li:hover.menuItemBullet > a {
+    background: #FF6600 url('menu_indicators.png') no-repeat -1514px 50%;
+}
+
+ul#horizontalMenu li:hover.menuItemBullet > ul li:hover.menuItemBullet > a {
+    background: #FF6600 url('menu_indicators.png') no-repeat -1284px 50%;
+}
+
+ul#horizontalMenu .menuItemBullet a {
+    background: #FF9933 url('menu_indicators.png') no-repeat -570px 50%;
+}
+
+ul#horizontalMenu .menuItemBullet ul .menuItemBullet a,
+ul#horizontalMenu .menuItemBullet ul .menuItemBullet .menuItemBullet a {
+    background: #FF9933 url('menu_indicators.png') no-repeat -340px 50%;
+}
+
+/*IE 6 Specific start*/
+/* The arrow icons must stay visible when navigating the menus. 
+  Only IE browsers will have the 'iehover' class injected
+  on the LI elements. 'iehover' is added as a class in the menu.js script
+  I do not have IE 5.5 anymore so perhaps this applies to 5.5 as well.*/
+ul#horizontalMenu .menuItemBullet a:hover,
+ul#horizontalMenu li.iehover a {
+    background: #FF6600 url('menu_indicators.png') no-repeat -570px 50%;
+}
+
+ul#horizontalMenu .menuItemBullet .menuItemBullet a:hover,
+ul#horizontalMenu li.iehover li.iehover a,
+ul#horizontalMenu .menuItemBullet .menuItemBullet .menuItemBullet a:hover,
+ul#horizontalMenu li.iehover li.iehover li.iehover a {
+    background: #FF6600 url('menu_indicators.png') no-repeat -340px 50%;
+}
+/*IE 6 Specific end*/
