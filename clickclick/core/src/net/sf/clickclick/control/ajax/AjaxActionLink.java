@@ -18,6 +18,7 @@ package net.sf.clickclick.control.ajax;
 import net.sf.click.AjaxControlRegistry;
 import net.sf.click.AjaxListener;
 import net.sf.click.control.ActionLink;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  *
@@ -61,14 +62,14 @@ public class AjaxActionLink extends ActionLink {
         }
     }
 
-    public void setName(String name) {
-        super.setName(name);
-        setParameter(getId(), "1");
-    }
-
     public void onInit() {
         super.onInit();
         // Add id parameter to trigger onProcess event
         AjaxControlRegistry.registerAjaxControl(this);
+    }
+
+    public void render(HtmlStringBuffer buffer) {
+        setParameter(getId(), "1");
+        super.render(buffer);
     }
 }
