@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 2.08 (06/11/2008)
+ * Version 2.10 (10/22/2008)
  * @requires jQuery v1.2.3 or later
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -41,7 +41,7 @@ $.fn.unblock = function(opts) {
     });
 };
 
-$.blockUI.version = 2.08; // 2nd generation blocking at no extra cost!
+$.blockUI.version = 2.09; // 2nd generation blocking at no extra cost!
 
 // override these in your code to change the default behavior and style
 $.blockUI.defaults = {
@@ -98,7 +98,10 @@ $.blockUI.defaults = {
     // passed the element that has been unblocked (which is the window object for page
     // blocks) and the options that were passed to the unblock call:
     //     onUnblock(element, options)
-    onUnblock: null
+    onUnblock: null,
+    
+    // don't ask (if you really must know: http://groups.google.com/group/jquery-en/browse_thread/thread/36640a8730503595/2f6a79a77a78e493#2f6a79a77a78e493)
+    quirksmodeOffsetHack: 4
 };
 
 // private data and functions follow...
@@ -142,7 +145,7 @@ function install(el, opts) {
     
     var lyr1 = ($.browser.msie) ? $('<iframe class="blockUI" style="z-index:'+ z++ +';border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="javascript:false;"></iframe>')
                                 : $('<div class="blockUI" style="display:none"></div>');
-    var lyr2 = $('<div class="blockUI" style="z-index:'+ z++ +';cursor:wait;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
+    var lyr2 = $('<div class="blockUI blockOverlay" style="z-index:'+ z++ +';cursor:wait;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
     var lyr3 = full ? $('<div class="blockUI blockMsg blockPage" style="z-index:'+z+';position:fixed"></div>')
                     : $('<div class="blockUI blockMsg blockElement" style="z-index:'+z+';display:none;position:absolute"></div>');
 
@@ -180,7 +183,7 @@ function install(el, opts) {
             var s = o[0].style;
             s.position = 'absolute';
             if (i < 2) {
-                full ? s.setExpression('height','document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + "px"')
+                full ? s.setExpression('height','Math.max(document.body.scrollHeight, document.body.offsetHeight) - (jQuery.boxModel?0:'+opts.quirksmodeOffsetHack+') + "px"')
                      : s.setExpression('height','this.parentNode.offsetHeight + "px"');
                 full ? s.setExpression('width','jQuery.boxModel && document.documentElement.clientWidth || document.body.clientWidth + "px"')
                      : s.setExpression('width','this.parentNode.offsetWidth + "px"');
