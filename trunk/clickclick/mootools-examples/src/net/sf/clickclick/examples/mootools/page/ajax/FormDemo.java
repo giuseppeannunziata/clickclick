@@ -3,19 +3,21 @@ package net.sf.clickclick.examples.mootools.page.ajax;
 import java.util.HashMap;
 import java.util.Map;
 import net.sf.click.util.AjaxAdapter;
-import net.sf.click.Context;
-import net.sf.click.Control;
-import net.sf.click.control.Checkbox;
-import net.sf.click.control.Option;
-import net.sf.click.control.Select;
-import net.sf.click.control.Submit;
-import net.sf.click.control.TextField;
-import net.sf.click.extras.control.EmailField;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.Context;
+import org.apache.click.Control;
+import org.apache.click.control.Checkbox;
+import org.apache.click.control.Option;
+import org.apache.click.control.Select;
+import org.apache.click.control.Submit;
+import org.apache.click.control.TextField;
+import org.apache.click.extras.control.EmailField;
+import org.apache.click.util.HtmlStringBuffer;
 import net.sf.click.util.Partial;
 import net.sf.clickclick.examples.mootools.page.BorderPage;
 import net.sf.clickclick.mootools.controls.MTAjaxForm;
 import net.sf.clickclick.util.AdvancedPageImports;
+import net.sf.clickclick.util.Css;
+import net.sf.clickclick.util.Javascript;
 
 public class FormDemo extends BorderPage {
 
@@ -74,11 +76,10 @@ public class FormDemo extends BorderPage {
         model.put("context", contextPath);
         
         String cssTemplate = "/ajax/form-demo.css";
-
-        pageImports.appendToGlobalStyle(context.renderTemplate(cssTemplate, model));
+        pageImports.add(new Css(context.renderTemplate(cssTemplate, model)));
 
         String jsTemplate = "/ajax/form-demo.js";
-        pageImports.appendToGlobalScript(context.renderTemplate(jsTemplate, model));
+        pageImports.add(new Javascript(context.renderTemplate(jsTemplate, model)));
         
         return null;
     }

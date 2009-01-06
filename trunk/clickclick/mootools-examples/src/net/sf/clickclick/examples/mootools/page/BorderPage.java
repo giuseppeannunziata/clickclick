@@ -1,7 +1,7 @@
 package net.sf.clickclick.examples.mootools.page;
 
-import net.sf.click.extras.control.Menu;
-import net.sf.click.util.ClickUtils;
+import org.apache.click.extras.control.Menu;
+import org.apache.click.util.ClickUtils;
 import net.sf.clickclick.util.AdvancedPageImports;
 
 public class BorderPage extends BasePage {
