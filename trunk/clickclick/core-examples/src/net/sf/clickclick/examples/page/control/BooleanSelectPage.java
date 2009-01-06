@@ -2,12 +2,12 @@ package net.sf.clickclick.examples.page.control;
 
 import java.util.Locale;
 
-import net.sf.click.control.FieldSet;
-import net.sf.click.control.Form;
-import net.sf.click.control.Label;
-import net.sf.click.control.Select;
-import net.sf.click.control.Submit;
-import net.sf.click.extras.control.PageSubmit;
+import org.apache.click.control.FieldSet;
+import org.apache.click.control.Form;
+import org.apache.click.control.Label;
+import org.apache.click.control.Select;
+import org.apache.click.control.Submit;
+import org.apache.click.extras.control.PageSubmit;
 import net.sf.clickclick.control.BooleanSelect;
 import net.sf.clickclick.examples.page.BorderPage;
 

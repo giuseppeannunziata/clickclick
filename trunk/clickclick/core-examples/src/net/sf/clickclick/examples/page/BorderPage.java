@@ -1,8 +1,8 @@
 package net.sf.clickclick.examples.page;
 
-import net.sf.click.Page;
-import net.sf.click.extras.control.Menu;
-import net.sf.click.util.ClickUtils;
+import org.apache.click.Page;
+import org.apache.click.extras.control.Menu;
+import org.apache.click.util.ClickUtils;
 import net.sf.clickclick.control.breadcrumb.Breadcrumb;
 import net.sf.clickclick.examples.nav.MenuBuilder;
 

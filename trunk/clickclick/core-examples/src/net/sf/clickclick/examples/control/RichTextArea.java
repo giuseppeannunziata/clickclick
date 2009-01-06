@@ -4,8 +4,8 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.click.control.TextArea;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.control.TextArea;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a HTML Rich TextArea editor control using the

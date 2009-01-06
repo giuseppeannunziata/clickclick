@@ -1,10 +1,10 @@
 package net.sf.clickclick.examples.page.control;
 
-import net.sf.click.control.Form;
-import net.sf.click.control.Submit;
-import net.sf.click.control.TextField;
-import net.sf.click.extras.control.EmailField;
-import net.sf.click.extras.control.PageSubmit;
+import org.apache.click.control.Form;
+import org.apache.click.control.Submit;
+import org.apache.click.control.TextField;
+import org.apache.click.extras.control.EmailField;
+import org.apache.click.extras.control.PageSubmit;
 import net.sf.clickclick.examples.control.RichTextArea;
 import net.sf.clickclick.examples.page.BorderPage;
 import net.sf.clickclick.examples.page.HomePage;

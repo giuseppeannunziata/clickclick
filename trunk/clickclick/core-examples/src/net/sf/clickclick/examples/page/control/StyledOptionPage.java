@@ -3,11 +3,11 @@ package net.sf.clickclick.examples.page.control;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.click.control.Checkbox;
-import net.sf.click.control.Form;
-import net.sf.click.control.Label;
-import net.sf.click.control.Reset;
-import net.sf.click.control.Select;
+import org.apache.click.control.Checkbox;
+import org.apache.click.control.Form;
+import org.apache.click.control.Label;
+import org.apache.click.control.Reset;
+import org.apache.click.control.Select;
 import net.sf.clickclick.control.FieldLabel;
 import net.sf.clickclick.control.StyledOption;
 import net.sf.clickclick.control.grid.Grid;

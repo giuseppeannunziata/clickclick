@@ -1,11 +1,11 @@
 package net.sf.clickclick.examples.page.layout;
 
-import net.sf.click.ActionListener;
-import net.sf.click.Control;
-import net.sf.click.MockContext;
-import net.sf.click.control.Submit;
-import net.sf.click.control.TextField;
-import net.sf.click.extras.control.HtmlForm;
+import org.apache.click.ActionListener;
+import org.apache.click.Control;
+import org.apache.click.MockContext;
+import org.apache.click.control.Submit;
+import org.apache.click.control.TextField;
+import org.apache.click.extras.control.HtmlForm;
 import net.sf.clickclick.control.grid.Grid;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.examples.page.BorderPage;
