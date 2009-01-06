@@ -1,7 +1,7 @@
 package net.sf.clickclick.examples.jquery.page.controls;
 
-import net.sf.click.control.Form;
-import net.sf.click.control.Submit;
+import org.apache.click.control.Form;
+import org.apache.click.control.Submit;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.controls.JQColorPicker;
 

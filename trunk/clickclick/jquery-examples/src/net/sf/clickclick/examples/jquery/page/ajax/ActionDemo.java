@@ -2,9 +2,9 @@ package net.sf.clickclick.examples.jquery.page.ajax;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import net.sf.click.Control;
+import org.apache.click.Control;
 import net.sf.click.util.AjaxAdapter;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.util.HtmlStringBuffer;
 import net.sf.click.util.Partial;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
