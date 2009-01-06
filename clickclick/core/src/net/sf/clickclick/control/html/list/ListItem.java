@@ -1,6 +1,6 @@
 package net.sf.clickclick.control.html.list;
 
-import net.sf.click.control.AbstractContainer;
+import org.apache.click.control.AbstractContainer;
 
 /**
  * This control provides HTML listitem for ordered and unordered lists.

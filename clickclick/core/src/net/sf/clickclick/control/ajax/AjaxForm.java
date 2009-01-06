@@ -15,9 +15,9 @@
  */
 package net.sf.clickclick.control.ajax;
 
-import net.sf.click.AjaxControlRegistry;
-import net.sf.click.control.Form;
-import net.sf.click.control.HiddenField;
+import org.apache.click.AjaxControlRegistry;
+import org.apache.click.control.Form;
+import org.apache.click.control.HiddenField;
 
 /**
  *

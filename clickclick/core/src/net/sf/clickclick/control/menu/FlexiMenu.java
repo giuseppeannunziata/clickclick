@@ -2,9 +2,9 @@ package net.sf.clickclick.control.menu;
 
 import java.text.MessageFormat;
 import java.util.Iterator;
-import net.sf.click.extras.control.Menu;
-import net.sf.click.util.ClickUtils;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.extras.control.Menu;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * FlexiMenu overrides setContext (), so that the menu can be built programmatically

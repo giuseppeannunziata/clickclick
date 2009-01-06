@@ -1,8 +1,8 @@
 package net.sf.clickclick.control;
 
-import net.sf.click.control.Select;
-import net.sf.click.extras.control.DateField;
-import net.sf.click.extras.control.IntegerField;
+import org.apache.click.control.Select;
+import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.control.IntegerField;
 import org.apache.commons.lang.StringUtils;
 
 /**

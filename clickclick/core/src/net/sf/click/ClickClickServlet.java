@@ -15,8 +15,13 @@
  */
 package net.sf.click;
 
-import net.sf.click.util.PageImports;
+import org.apache.click.AjaxControlRegistry;
+import org.apache.click.util.PageImports;
 import net.sf.clickclick.util.AdvancedPageImports;
+import org.apache.click.ClickServlet;
+import org.apache.click.Context;
+import org.apache.click.ControlRegistry;
+import org.apache.click.Page;
 
 /**
  * Provides extra functionality not available in ClickServlet.

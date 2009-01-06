@@ -23,13 +23,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
-import net.sf.click.Control;
-import net.sf.click.Page;
-import net.sf.click.service.LogService;
-import net.sf.click.util.ClickUtils;
-import net.sf.click.util.Format;
-import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.PageImports;
+import org.apache.click.Control;
+import org.apache.click.Page;
+import org.apache.click.service.LogService;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.Format;
+import org.apache.click.util.HtmlStringBuffer;
+import org.apache.click.util.PageImports;
 import org.apache.commons.lang.StringUtils;
 
 /**

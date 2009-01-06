@@ -15,8 +15,8 @@
  */
 package net.sf.clickclick.control.panel;
 
-import net.sf.click.Control;
-import net.sf.click.control.AbstractControl;
+import org.apache.click.Control;
+import org.apache.click.control.AbstractControl;
 import net.sf.clickclick.control.html.Div;
 
 /**

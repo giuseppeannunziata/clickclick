@@ -15,7 +15,7 @@
  */
 package net.sf.clickclick.control.html;
 
-import net.sf.click.control.AbstractContainer;
+import org.apache.click.control.AbstractContainer;
 
 /**
  *

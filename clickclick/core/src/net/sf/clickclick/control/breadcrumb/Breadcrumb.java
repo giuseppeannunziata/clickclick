@@ -7,10 +7,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import net.sf.click.MockContext;
-import net.sf.click.control.AbstractControl;
-import net.sf.click.util.ClickUtils;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.MockContext;
+import org.apache.click.control.AbstractControl;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * This Control is an implementation of a breadcrumb or history bar.

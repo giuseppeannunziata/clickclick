@@ -32,9 +32,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import net.sf.click.service.ClickClickConfigService;
-import net.sf.click.service.ConfigService;
-import net.sf.click.util.ClickUtils;
+import org.apache.click.service.ClickClickConfigService;
+import org.apache.click.service.ConfigService;
+import org.apache.click.util.ClickUtils;
 
 /**
  * ReloadClassFilter allows changes to class and resource bundles to be picked up

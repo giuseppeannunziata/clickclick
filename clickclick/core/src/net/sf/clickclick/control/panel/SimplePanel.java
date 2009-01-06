@@ -16,10 +16,10 @@
 package net.sf.clickclick.control.panel;
 
 import java.net.MalformedURLException;
-import net.sf.click.Context;
-import net.sf.click.control.Panel;
-import net.sf.click.util.ClickUtils;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.Context;
+import org.apache.click.control.Panel;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.ClassUtils;
 
 /**

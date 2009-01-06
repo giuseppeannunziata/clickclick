@@ -15,13 +15,13 @@
  */
 package net.sf.clickclick.control.paginator;
 
-import net.sf.click.MockContext;
-import net.sf.click.control.AbstractControl;
-import net.sf.click.control.AbstractLink;
-import net.sf.click.control.ActionLink;
-import net.sf.click.control.Renderable;
-import net.sf.click.control.Table;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.MockContext;
+import org.apache.click.control.AbstractControl;
+import org.apache.click.control.AbstractLink;
+import org.apache.click.control.ActionLink;
+import org.apache.click.control.Renderable;
+import org.apache.click.control.Table;
+import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.util.CssImport;
 
 /**

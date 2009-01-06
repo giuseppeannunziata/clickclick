@@ -2,9 +2,9 @@ package net.sf.clickclick.control;
 
 import java.util.List;
 
-import net.sf.click.control.Option;
-import net.sf.click.control.Select;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.control.Option;
+import org.apache.click.control.Select;
+import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
 /**

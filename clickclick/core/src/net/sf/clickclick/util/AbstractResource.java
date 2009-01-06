@@ -17,8 +17,8 @@ package net.sf.clickclick.util;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.sf.click.Context;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.Context;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  *

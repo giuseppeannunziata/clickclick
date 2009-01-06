@@ -15,10 +15,10 @@
  */
 package net.sf.clickclick.control.ajax;
 
-import net.sf.click.AjaxControlRegistry;
+import org.apache.click.AjaxControlRegistry;
 import net.sf.click.AjaxListener;
-import net.sf.click.control.ActionLink;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.control.ActionLink;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  *

@@ -26,7 +26,8 @@ import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.sf.click.Context;
+import org.apache.click.Context;
+import org.apache.click.util.ClickUtils;
 
 /**
  * Partial encapsulates a fragment of a http response. A Partial can be used

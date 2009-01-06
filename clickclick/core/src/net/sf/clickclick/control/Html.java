@@ -15,8 +15,8 @@
  */
 package net.sf.clickclick.control;
 
-import net.sf.click.control.AbstractControl;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.control.AbstractControl;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * This control allows rendering of arbitrary html.

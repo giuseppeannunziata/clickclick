@@ -15,7 +15,8 @@
  */
 package net.sf.click.util;
 
-import net.sf.click.*;
+import net.sf.click.AjaxListener;
+import org.apache.click.*;
 
 /**
  * Provides an abstract adapter for receiving Ajax callbacks.

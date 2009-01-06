@@ -15,10 +15,10 @@
  */
 package net.sf.clickclick.control.html.table;
 
-import net.sf.click.MockContext;
-import net.sf.click.control.AbstractContainer;
-import net.sf.click.control.Container;
-import net.sf.click.control.HiddenField;
+import org.apache.click.MockContext;
+import org.apache.click.control.AbstractContainer;
+import org.apache.click.control.Container;
+import org.apache.click.control.HiddenField;
 import net.sf.clickclick.control.Html;
 import org.apache.commons.lang.math.NumberUtils;
 

@@ -1,8 +1,8 @@
 package net.sf.clickclick.control.html.table;
 
-import net.sf.click.Control;
-import net.sf.click.control.AbstractContainer;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.Control;
+import org.apache.click.control.AbstractContainer;
+import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.Text;
 
 /**
