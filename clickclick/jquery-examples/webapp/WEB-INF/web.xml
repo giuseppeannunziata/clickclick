@@ -6,7 +6,7 @@
 
 	<servlet>
 		<servlet-name>ClickServlet</servlet-name>
-		<servlet-class>net.sf.click.ClickClickServlet</servlet-class>
+		<servlet-class>org.apache.click.ClickClickServlet</servlet-class>
   		<load-on-startup>0</load-on-startup>
 	</servlet>
 

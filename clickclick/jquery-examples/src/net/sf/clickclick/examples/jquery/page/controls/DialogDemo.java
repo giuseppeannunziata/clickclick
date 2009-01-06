@@ -2,9 +2,9 @@ package net.sf.clickclick.examples.jquery.page.controls;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.sf.click.control.Button;
-import net.sf.click.control.Checkbox;
-import net.sf.click.control.Label;
+import org.apache.click.control.Button;
+import org.apache.click.control.Checkbox;
+import org.apache.click.control.Label;
 
 import net.sf.clickclick.control.Text;
 import net.sf.clickclick.control.grid.Grid;
@@ -15,8 +15,8 @@ import net.sf.clickclick.control.html.table.Row;
 import net.sf.clickclick.jquery.controls.JQDialog;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.util.AdvancedPageImports;
-import net.sf.clickclick.util.CssInclude;
-import net.sf.clickclick.util.JavascriptInclude;
+import net.sf.clickclick.util.Css;
+import net.sf.clickclick.util.Javascript;
 
 public class DialogDemo extends BorderPage {
 
@@ -32,11 +32,11 @@ public class DialogDemo extends BorderPage {
 
         Map model = new HashMap();
         String javascript = getContext().renderTemplate("controls/dialog-demo.js", model);
-        JavascriptInclude jsInclude = new JavascriptInclude(javascript);
+        Javascript jsInclude = new Javascript(javascript);
         pageImports.add(jsInclude);
 
         String css = getContext().renderTemplate("controls/dialog-demo.css", model);
-        CssInclude cssInclude = new CssInclude(css);
+        Css cssInclude = new Css(css);
         pageImports.add(cssInclude);
         
         return null;
