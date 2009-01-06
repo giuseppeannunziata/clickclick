@@ -15,8 +15,8 @@
  */
 package net.sf.clickclick.jquery.controls;
 
-import net.sf.click.AjaxControlRegistry;
-import net.sf.click.control.Select;
+import org.apache.click.AjaxControlRegistry;
+import org.apache.click.control.Select;
 import net.sf.clickclick.util.AdvancedPageImports;
 import net.sf.clickclick.util.JavascriptImport;
 

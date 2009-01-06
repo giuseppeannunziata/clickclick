@@ -18,14 +18,14 @@ package net.sf.clickclick.jquery.controls;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.sf.click.Context;
-import net.sf.click.control.Field;
+import org.apache.click.Context;
+import org.apache.click.control.Field;
 import net.sf.clickclick.control.ajax.AjaxForm;
-import net.sf.click.util.ClickUtils;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.util.AdvancedPageImports;
 import net.sf.clickclick.util.JavascriptImport;
-import net.sf.clickclick.util.JavascriptInclude;
+import net.sf.clickclick.util.Javascript;
 
 /**
  *
@@ -66,7 +66,7 @@ public class JQForm extends AjaxForm {
         model.put("dataType", getDataType());
         model.put("formId", getId());
 
-        pageImports.add(new JavascriptInclude(context.renderTemplate("/clickclick/jquery/form/jq-form.js", model)));
+        pageImports.add(new Javascript(context.renderTemplate("/clickclick/jquery/form/jq-form.js", model)));
 
         pageImports.add(new JavascriptImport(contextPath + "/clickclick/jquery/jquery-1.2.6.js"));
         pageImports.add(new JavascriptImport(contextPath + "/clickclick/jquery/form/jquery.form.js"));
