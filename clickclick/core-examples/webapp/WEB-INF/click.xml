@@ -7,7 +7,7 @@
 
   <mode value="trace"/>
 
-  <file-upload-service classname="net.sf.click.service.CommonsFileUploadService">
+  <file-upload-service classname="org.apache.click.service.CommonsFileUploadService">
   	<property name="sizeMax" value="1024"/>
   	<property name="fileSizeMax" value="1024"/>
   </file-upload-service>

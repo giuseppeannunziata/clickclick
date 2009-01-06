@@ -1,6 +1,6 @@
 package net.sf.clickclick.examples.page.control;
 
-import net.sf.click.MockContext;
+import org.apache.click.MockContext;
 import net.sf.clickclick.control.Text;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.control.html.Span;

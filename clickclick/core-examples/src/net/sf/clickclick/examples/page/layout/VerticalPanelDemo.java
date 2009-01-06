@@ -1,12 +1,12 @@
 package net.sf.clickclick.examples.page.layout;
 
-import net.sf.click.control.AbstractControl;
-import net.sf.click.control.Checkbox;
-import net.sf.click.control.Field;
-import net.sf.click.control.TextField;
-import net.sf.click.extras.control.HtmlForm;
-import net.sf.click.extras.control.IntegerField;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.control.AbstractControl;
+import org.apache.click.control.Checkbox;
+import org.apache.click.control.Field;
+import org.apache.click.control.TextField;
+import org.apache.click.extras.control.HtmlForm;
+import org.apache.click.extras.control.IntegerField;
+import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.FieldLabel;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.control.html.Span;
