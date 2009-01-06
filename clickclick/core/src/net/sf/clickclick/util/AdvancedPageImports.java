@@ -16,11 +16,9 @@
 package net.sf.clickclick.util;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.click.Control;
@@ -89,18 +87,6 @@ public class AdvancedPageImports extends PageImports {
 
     /** The list of CSS scripts. */
     private List cssInclude = new ArrayList();
-
-    /** The set of unique CSS imports and includes. */
-    private Set cssUniqueSet = new HashSet();
-
-    /** The global CSS include. */
-    private CssInclude cssGlobalInclude;
-
-    /** The global Javascript include. */
-    private JavascriptInclude jsGlobalInclude;
-
-    /** The set of unique Javascript imports and includes. */
-    private Set jsUniqueSet = new HashSet();
 
     // -------------------------------------------------------- Public Constructors
 
@@ -222,68 +208,6 @@ public class AdvancedPageImports extends PageImports {
         }
     }
 
-    public void add(CssImport cssImport) {
-        if (cssUniqueSet.contains(cssImport.getHref())) {
-            // Already contain this import source
-            return;
-        }
-        cssUniqueSet.add(cssImport.getHref());
-        cssImports.add(cssImport);
-    }
-
-    public void add(CssInclude cssInclude) {
-        if (cssInclude.isUnique()) {
-            if (cssUniqueSet.contains(cssInclude.getInclude().toString())) {
-                // Already contain this css include
-                return;
-            }
-            cssUniqueSet.add(cssInclude.getInclude().toString());
-        }
-        this.cssInclude.add(cssInclude);
-    }
-
-    public void add(JavascriptImport javascriptImport) {
-        if (jsUniqueSet.contains(javascriptImport.getSource())) {
-            // Already contain this import source
-            return;
-        }
-        jsUniqueSet.add(javascriptImport.getSource());
-        jsImports.add(javascriptImport);
-    }
-
-    public void add(JavascriptInclude javascriptInclude) {
-        if (javascriptInclude.isUnique()) {
-            if (jsUniqueSet.contains(javascriptInclude.getInclude().toString())) {
-                // Already contain this JavaScript include
-                return;
-            }
-            jsUniqueSet.add(javascriptInclude.getInclude().toString());
-        }
-        jsScripts.add(javascriptInclude);
-    }
-
-    public void appendToGlobalScript(String script) {
-        getGlobalScript().append(script);
-    }
-
-    public JavascriptInclude getGlobalScript() {
-        if (jsGlobalInclude == null) {
-            jsGlobalInclude = new JavascriptInclude();
-        }
-        return jsGlobalInclude;
-    }
-
-    public void appendToGlobalStyle(String style) {
-        getGlobalStyle().append(style);
-    }
-
-    public CssInclude getGlobalStyle() {
-        if (cssGlobalInclude == null) {
-            cssGlobalInclude = new CssInclude();
-        }
-        return cssGlobalInclude;
-    }
-
     /**
      * Process the given control HTML import line.
      *
@@ -303,7 +227,7 @@ public class AdvancedPageImports extends PageImports {
                 add(cssImport);
 
             } else if (line.startsWith("<style") && line.indexOf("text/css") != -1) {
-                CssInclude cssInclude = asCssInclude(lines[i]);
+                Css cssInclude = asCssInclude(lines[i]);
                 cssInclude.setUnique(true);
                 add(cssInclude);
 
@@ -313,7 +237,7 @@ public class AdvancedPageImports extends PageImports {
                     add(javascriptImport);
 
                 } else {
-                    JavascriptInclude javascriptInclude = asJavascriptInclude(lines[i]);
+                    Javascript javascriptInclude = asJavascriptInclude(lines[i]);
                     javascriptInclude.setUnique(true);
                     add(javascriptInclude);
 
@@ -325,6 +249,87 @@ public class AdvancedPageImports extends PageImports {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Process the Page's set of control HTML head imports.
+     */
+    protected void processPageControls() {
+        if (isInitialized()) {
+            return;
+        }
+
+        setInitialized(true);
+
+        if (page.hasControls()) {
+            for (int i = 0; i < page.getControls().size(); i++) {
+                Control control = (Control) page.getControls().get(i);
+
+                addImport(control.getHtmlImports());
+
+                // if (control.hasImports()) {
+                //     processImports(control.getImports());
+                // }
+            }
+        }
+
+        addImport(page.getHtmlImports());
+        // if (page.hasImports()) {
+        //     processImports(page.getImports());
+        // }
+    }
+
+    protected void processImports(List imports) {
+        if (imports == null || imports.isEmpty()) {
+            return;
+        }
+
+        Iterator it = imports.iterator();
+        while(it.hasNext()) {
+            add((Head) it.next());
+        }
+    }
+
+    /**
+     * Note: This method is not for public use. Once Page and AbstractControl
+     * supports getImports this method will become private.
+     *
+     * @param htmlImport
+     */
+    public void add(Head htmlImport) {
+        if (htmlImport instanceof JavascriptImport) {
+            if (jsImports.contains(htmlImport)) {
+                return;
+            }
+            jsImports.add(htmlImport);
+
+        } else if (htmlImport instanceof Javascript) {
+            if (((Javascript) htmlImport).isUnique()) {
+                if (jsScripts.contains(htmlImport)) {
+                    return;
+                }
+            }
+            jsScripts.add(htmlImport);
+
+        } else if (htmlImport instanceof CssImport) {
+            if (cssImports.contains(htmlImport)) {
+                return;
+            }
+            cssImports.add(htmlImport);
+
+        } else if (htmlImport instanceof Css) {
+            if (((Css) htmlImport).isUnique()) {
+                if (cssInclude.contains(htmlImport)) {
+                    return;
+                }
+            }
+            cssInclude.add(htmlImport);
+
+        } else {
+            throw new IllegalArgumentException(htmlImport.getClass().getName()
+                + " is not a valid type. Instead subclass either a Javascript"
+                + " or CSS HtmlImport.");
+        }
+    }
 
     /**
      * Return a HTML string of all the page's HTML imports, including:
@@ -350,8 +355,7 @@ public class AdvancedPageImports extends PageImports {
 
     /**
      * Return a HTML string of all the page's HTML CSS
-     * {@link #cssImports imports}, {@link #cssInclude scripts} and
-     * {@link #cssGlobalInclude}.
+     * {@link #cssImports imports} and {@link #cssInclude scripts}.
      *
      * @return only css imports and scripts
      */
@@ -370,14 +374,9 @@ public class AdvancedPageImports extends PageImports {
 
         // Then include all the styles e.g. <style>...</style>
         for (Iterator it = cssInclude.iterator(); it.hasNext();) {
-            CssInclude cssInclude = (CssInclude) it.next();
+            Css cssInclude = (Css) it.next();
             buffer.append(cssInclude.toString());
             buffer.append('\n');
-        }
-
-        // Lastly include the global css include
-        if (cssGlobalInclude != null) {
-            buffer.append(cssGlobalInclude.toString());
         }
 
         return buffer.toString();
@@ -386,8 +385,7 @@ public class AdvancedPageImports extends PageImports {
     /**
      * Return a HTML string of all the page's HTML JS imports and scripts.
      * <p/>
-     * This includes {@link #jsImports}, {@link #jsScripts} and
-     * {@link #jsGlobalInclude}.
+     * This includes {@link #jsImports} and {@link #jsScripts}.
      *
      * @return all javascript imports and scripts
      */
@@ -406,14 +404,9 @@ public class AdvancedPageImports extends PageImports {
 
         // Then include all the scripts e.g. <script>...</script>
         for (Iterator it = jsScripts.iterator(); it.hasNext();) {
-            JavascriptInclude javascriptInclude = (JavascriptInclude) it.next();
+            Javascript javascriptInclude = (Javascript) it.next();
             buffer.append(javascriptInclude.toString());
             buffer.append('\n');
-        }
-
-        // Lastly include global javascript
-        if (jsGlobalInclude != null) {
-            buffer.append(jsGlobalInclude.toString());
         }
 
         return buffer.toString();
@@ -421,8 +414,8 @@ public class AdvancedPageImports extends PageImports {
 
     /**
      * Return a string containing javascript imports and includes which should
-     * be included in the head of the Page. This includes {@link #jsImports},
-     * {@link #jsScripts} and {@link #jsGlobalInclude}.
+     * be included in the head of the Page. This includes {@link #jsImports} and
+     * {@link #jsScripts}.
      *
      * @return all head javascript imports and scripts
      */
@@ -450,20 +443,13 @@ public class AdvancedPageImports extends PageImports {
             }
         }
 
-        // Lastly include global javascript if targeted for head of the Page
-        if (jsGlobalInclude != null) {
-            if (jsGlobalInclude.getPosition() == JavascriptInclude.HEAD) {
-                buffer.append(jsGlobalInclude.toString());
-            }
-        }
-
         return buffer.toString();
     }
 
     /**
      * Return a string containing javascript imports and includes which should
-     * be included in the body of the Page. This includes {@link #jsImports},
-     * {@link #jsScripts} and {@link #jsGlobalInclude}.
+     * be included in the body of the Page. This includes {@link #jsImports} and
+     * {@link #jsScripts}.
      *
      * @return all body javascript imports and scripts
      */
@@ -482,20 +468,12 @@ public class AdvancedPageImports extends PageImports {
             }
         }
 
-        
         // Then include all the scripts e.g. <script>...</script>
         for (Iterator it = jsScripts.iterator(); it.hasNext();) {
             JavascriptImport javascriptInclude = (JavascriptImport) it.next();
             if (javascriptInclude.getPosition() == JavascriptImport.BODY) {
                 buffer.append(javascriptInclude.toString());
                 buffer.append('\n');
-            }
-        }
-
-        // Lastly include global javascript if targeted for body of the Page
-        if (jsGlobalInclude != null) {
-            if (jsGlobalInclude.getPosition() == JavascriptInclude.BODY) {
-                buffer.append(jsGlobalInclude.toString());
             }
         }
 
@@ -557,8 +535,8 @@ public class AdvancedPageImports extends PageImports {
         return cssImport;
     }
 
-    private CssInclude asCssInclude(String line) {
-        CssInclude cssInclude = new CssInclude();
+    private Css asCssInclude(String line) {
+        Css cssInclude = new Css();
         setAttributes(cssInclude, line);
         cssInclude.append(extractContent(line));
         return cssInclude;
@@ -570,8 +548,8 @@ public class AdvancedPageImports extends PageImports {
         return javascriptInclude;
     }
 
-    private JavascriptInclude asJavascriptInclude(String line) {
-        JavascriptInclude javascriptInclude = new JavascriptInclude();
+    private Javascript asJavascriptInclude(String line) {
+        Javascript javascriptInclude = new Javascript();
         setAttributes(javascriptInclude, line);
         javascriptInclude.append(extractContent(line));
         return javascriptInclude;
@@ -596,11 +574,11 @@ public class AdvancedPageImports extends PageImports {
     }
 
     /**
-     * input -> style="moo:ok;param:value" hello="ok"
+     * input -> style="padding:5px;color:blue" id="my-id"
      * @param line
      * @return
      */
-    private void setAttributes(AbstractResource control, String line) {
+    private void setAttributes(Head control, String line) {
         // Find index where attributes start -> first space char
         int start = line.indexOf(' ');
         if (start == -1) {
