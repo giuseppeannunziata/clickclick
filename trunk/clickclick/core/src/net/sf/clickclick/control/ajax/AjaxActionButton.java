@@ -16,11 +16,11 @@
 package net.sf.clickclick.control.ajax;
 
 import java.util.Iterator;
-import net.sf.click.AjaxControlRegistry;
+import org.apache.click.AjaxControlRegistry;
 import net.sf.click.AjaxListener;
-import net.sf.click.control.ActionButton;
-import net.sf.click.util.ClickUtils;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.control.ActionButton;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  *

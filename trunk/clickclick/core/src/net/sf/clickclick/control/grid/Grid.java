@@ -16,8 +16,8 @@
 package net.sf.clickclick.control.grid;
 
 import java.util.List;
-import net.sf.click.Control;
-import net.sf.click.control.Container;
+import org.apache.click.Control;
+import org.apache.click.control.Container;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.control.html.table.Cell;
 import net.sf.clickclick.control.html.table.HtmlTable;

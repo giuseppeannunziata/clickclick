@@ -1,8 +1,8 @@
 package net.sf.clickclick.control;
 
 import junit.framework.TestCase;
-import net.sf.click.control.Form;
-import net.sf.click.control.Select;
+import org.apache.click.control.Form;
+import org.apache.click.control.Select;
 
 public class StyledOptionTest extends TestCase {
 

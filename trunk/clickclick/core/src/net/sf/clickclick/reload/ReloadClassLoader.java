@@ -21,8 +21,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import net.sf.click.service.ConfigService;
-import net.sf.click.util.ClickUtils;
+import org.apache.click.service.ConfigService;
+import org.apache.click.util.ClickUtils;
 
 /**
  * ClassLoader which enables specified classes to be reloaded without restarting

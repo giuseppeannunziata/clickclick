@@ -15,10 +15,10 @@
  */
 package net.sf.clickclick.control.panel;
 
-import net.sf.click.Control;
-import net.sf.click.MockContext;
-import net.sf.click.Page;
-import net.sf.click.control.TextField;
+import org.apache.click.Control;
+import org.apache.click.MockContext;
+import org.apache.click.Page;
+import org.apache.click.control.TextField;
 import net.sf.clickclick.control.html.table.Cell;
 import net.sf.clickclick.control.html.table.Row;
 

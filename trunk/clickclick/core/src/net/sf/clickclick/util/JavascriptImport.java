@@ -15,7 +15,7 @@
  */
 package net.sf.clickclick.util;
 
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  *

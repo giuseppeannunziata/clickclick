@@ -15,10 +15,10 @@
  */
 package net.sf.clickclick.control;
 
-import net.sf.click.control.AbstractControl;
-import net.sf.click.control.Field;
-import net.sf.click.util.ClickUtils;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.control.AbstractControl;
+import org.apache.click.control.Field;
+import org.apache.click.util.ClickUtils;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * This control associates a HTML <em>label</em> with a target field.

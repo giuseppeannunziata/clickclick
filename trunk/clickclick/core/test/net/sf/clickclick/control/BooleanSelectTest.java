@@ -1,8 +1,8 @@
 package net.sf.clickclick.control;
 
 import junit.framework.TestCase;
-import net.sf.click.MockContext;
-import net.sf.click.servlet.MockRequest;
+import org.apache.click.MockContext;
+import org.apache.click.servlet.MockRequest;
 
 public class BooleanSelectTest extends TestCase {
 

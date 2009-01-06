@@ -16,6 +16,8 @@
 package net.sf.click;
 
 import net.sf.click.util.Partial;
+import org.apache.click.ActionListener;
+import org.apache.click.Control;
 
 /**
  * Provides an Ajax ActionListener.

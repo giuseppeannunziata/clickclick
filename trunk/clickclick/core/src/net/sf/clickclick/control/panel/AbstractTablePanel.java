@@ -15,7 +15,7 @@
  */
 package net.sf.clickclick.control.panel;
 
-import net.sf.click.Control;
+import org.apache.click.Control;
 import net.sf.clickclick.control.html.table.Cell;
 import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;

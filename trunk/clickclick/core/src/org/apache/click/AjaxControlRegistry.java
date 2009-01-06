@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.click;
+package org.apache.click;
 
+import net.sf.click.*;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import net.sf.click.control.ActionButton;
-import net.sf.click.control.ActionLink;
+import org.apache.click.control.ActionButton;
+import org.apache.click.control.ActionLink;
 import net.sf.click.util.Partial;
+import org.apache.click.ActionListener;
+import org.apache.click.Context;
+import org.apache.click.Control;
+import org.apache.click.ControlRegistry;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -75,12 +80,10 @@ public class AjaxControlRegistry extends ControlRegistry {
         controlList.add(control);
     }
 
-    // ------------------------------------------------ Package Private Methods
-
     /**
      * Checks if any Ajax controls have been registered.
      */
-    boolean hasAjaxControls() {
+    public boolean hasAjaxControls() {
         if (ajaxControlList == null || ajaxControlList.isEmpty()) {
             return false;
         }
@@ -93,7 +96,7 @@ public class AjaxControlRegistry extends ControlRegistry {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    boolean processAjaxControls(Context context) {
+    public boolean processAjaxControls(Context context) {
 
         if (!hasAjaxControls()) {
             return true;
@@ -127,6 +130,8 @@ public class AjaxControlRegistry extends ControlRegistry {
         // Fire the registered listeners
         return fireActionEvents(context);
     }
+
+    // ------------------------------------------------ Package Private Methods
 
     /**
      * Fire all the registered action events and return true if the page should
