@@ -13,6 +13,7 @@ import net.sf.click.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.controls.JQSelect;
 import net.sf.clickclick.util.AdvancedPageImports;
+import net.sf.clickclick.util.Css;
 import net.sf.clickclick.util.Javascript;
 
 public class SelectDemo extends BorderPage {
@@ -50,7 +51,7 @@ public class SelectDemo extends BorderPage {
         model.put("context", contextPath);
 
         String cssTemplate = "/ajax/select-demo.css";
-        pageImports.add(new Javascript(context.renderTemplate(cssTemplate, model)));
+        pageImports.add(new Css(context.renderTemplate(cssTemplate, model)));
 
         String jsTemplate = "/ajax/select-demo.js";
         pageImports.add(new Javascript(context.renderTemplate(jsTemplate, model)));
