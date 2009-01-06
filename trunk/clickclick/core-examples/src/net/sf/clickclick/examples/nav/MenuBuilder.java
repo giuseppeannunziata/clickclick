@@ -1,7 +1,7 @@
 package net.sf.clickclick.examples.nav;
 
-import net.sf.click.Context;
-import net.sf.click.extras.control.Menu;
+import org.apache.click.Context;
+import org.apache.click.extras.control.Menu;
 import net.sf.clickclick.control.menu.FlexiMenu;
 
 public class MenuBuilder {
