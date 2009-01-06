@@ -3,9 +3,9 @@
     <!-- Project Properties -->
     <property file="./build.properties"/>
     <xmlproperty file="./javascript-syntax-highlighter.xml"/>
-    <property name="jar.click" value="click-${click.version}.jar"/>
-    <property name="jar.click-extras" value="click-extras-${click.version}.jar"/>
-    <property name="jar.click-mock" value="click-mock-${click.version}.jar"/>
+    <property name="jar.click" value="click-${click.version}-incubator.jar"/>
+    <property name="jar.click-extras" value="click-extras-${click.version}-incubator.jar"/>
+    <property name="jar.click-mock" value="click-mock-${click.version}-incubator.jar"/>
     <property name="jar.lang" value="commons-lang-2.4.jar"/>
     <property name="jar.log4j" value="log4j-1.2.14.jar"/>
     <property name="jar.servlet" value="servlet-api-2.3.jar"/>
