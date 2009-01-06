@@ -96,7 +96,7 @@ import org.apache.commons.lang.StringUtils;
  * web application renders resources with different names.
  * <p/>
  * For detailed information on versioning JavaScript and CSS resources see
- * <a href="../../../../extras-api/net/sf/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>.
+ * <a href="../../../../extras-api/org/apache/click/extras/filter/PerformanceFilter.html">PerformanceFilter</a>.
  * <p/>
  * To enable versioning of your custom resources you need to define the
  * application version property <tt>application-version</tt> in the file
