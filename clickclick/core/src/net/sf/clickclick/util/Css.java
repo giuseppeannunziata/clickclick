@@ -138,7 +138,7 @@ public class Css extends Head {
      *
      * @param content the new content buffer
      */
-    public void setInclude(HtmlStringBuffer content) {
+    public void setContent(HtmlStringBuffer content) {
         this.content = content;
     }
 

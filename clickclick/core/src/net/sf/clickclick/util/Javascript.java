@@ -161,7 +161,7 @@ public class Javascript extends Head {
      *
      * @return the Javascript internal content buffer
      */
-    public HtmlStringBuffer getInclude() {
+    public HtmlStringBuffer getContent() {
         return content;
     }
 
@@ -170,7 +170,7 @@ public class Javascript extends Head {
      *
      * @param content the new content buffer
      */
-    public void setInclude(HtmlStringBuffer content) {
+    public void setContent(HtmlStringBuffer content) {
         this.content = content;
     }
 
@@ -232,7 +232,7 @@ public class Javascript extends Head {
         // Render CDATA tag if necessary
         renderCharacterDataPrefix(buffer);
 
-        buffer.append(getInclude());
+        buffer.append(getContent());
 
         renderCharacterDataSuffix(buffer);
 
