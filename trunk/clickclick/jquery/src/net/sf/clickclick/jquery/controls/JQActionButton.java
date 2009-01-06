@@ -18,12 +18,12 @@ package net.sf.clickclick.jquery.controls;
 import java.util.HashMap;
 import java.util.Map;
 import net.sf.click.AjaxListener;
-import net.sf.click.Context;
-import net.sf.click.Page;
+import org.apache.click.Context;
+import org.apache.click.Page;
 import net.sf.clickclick.control.ajax.AjaxActionButton;
 import net.sf.clickclick.util.AdvancedPageImports;
 import net.sf.clickclick.util.JavascriptImport;
-import net.sf.clickclick.util.JavascriptInclude;
+import net.sf.clickclick.util.Javascript;
 
 /**
  *
@@ -97,7 +97,7 @@ public class JQActionButton extends AjaxActionButton {
         model.put("busyIndicatorMessage", getBusyMessage());
 
         String include = getContext().renderTemplate("/clickclick/jquery/action/jq-action-button.js", model);
-        JavascriptInclude jsInclude = new JavascriptInclude(include);
+        Javascript jsInclude = new Javascript(include);
         pageImports.add(jsInclude);
 
         if (isShowBusyIndicator()) {

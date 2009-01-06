@@ -2,15 +2,15 @@ package net.sf.clickclick.jquery.controls;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.sf.click.Context;
-import net.sf.click.control.TextField;
-import net.sf.click.util.HtmlStringBuffer;
+import org.apache.click.Context;
+import org.apache.click.control.TextField;
+import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.util.AdvancedPageImports;
 import net.sf.clickclick.util.CssImport;
-import net.sf.clickclick.util.CssInclude;
+import net.sf.clickclick.util.Css;
 import net.sf.clickclick.util.JavascriptImport;
-import net.sf.clickclick.util.JavascriptInclude;
+import net.sf.clickclick.util.Javascript;
 
 /**
  *
@@ -52,11 +52,11 @@ public class JQColorPicker extends TextField {
         model.put("context", contextPath);
 
         String include = getContext().renderTemplate("/clickclick/jquery/colorpicker/jq-color-picker.js", model);
-        JavascriptInclude jsInclude = new JavascriptInclude(include);
+        Javascript jsInclude = new Javascript(include);
         pageImports.add(jsInclude);
 
         String style = getContext().renderTemplate("/clickclick/jquery/colorpicker/jq-color-picker.css", model);
-        CssInclude cssInclude = new CssInclude(style);
+        Css cssInclude = new Css(style);
         pageImports.add(cssInclude);
         return null;
     }
