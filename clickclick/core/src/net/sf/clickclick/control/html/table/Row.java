@@ -15,7 +15,11 @@ public class Row extends AbstractContainer {
     public Row(String name) {
         super(name);
     }
-    
+
+    public Cell add(Object text) {
+        return insert(text, getControls().size());
+    }
+
     public Control insert(Control control, int column) {
         if (!(control instanceof Cell)) {
             throw new IllegalArgumentException("Only cells can be inserted.");
@@ -27,6 +31,19 @@ public class Row extends AbstractContainer {
         if (column > getColumnCount()) {
             expandCells(column);
         }
+        super.insert(cell, column);
+        return cell;
+    }
+
+    public Cell insert(Object text, int column) {
+        if (column > getColumnCount()) {
+            expandCells(column);
+        }
+        if (text == null) {
+            text = "";
+        }
+        Cell cell = new Cell();
+        cell.setText(text.toString());
         super.insert(cell, column);
         return cell;
     }

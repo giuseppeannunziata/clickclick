@@ -4,6 +4,7 @@ import org.apache.click.Control;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.Text;
+import org.apache.click.util.ClickUtils;
 
 /**
  *
@@ -19,7 +20,11 @@ public class Cell extends AbstractContainer {
     public Cell(String name) {
         super(name);
     }
-    
+
+    public Cell(Control control) {
+        add(control);
+    }
+
     public void setText(String str) {
         Text text = new Text(str);
         add(text);
@@ -32,7 +37,11 @@ public class Cell extends AbstractContainer {
     public String getTag() {
         return "td";
     }
-    
+
+    public String getLabel() {
+        return ClickUtils.toLabel(getName());
+    }
+
     public Row getRow() {
         return (Row) getParent();
     }
@@ -59,7 +68,7 @@ public class Cell extends AbstractContainer {
         }
     }
 
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         Cell cell = new Cell("mycell");
         System.out.println(cell);
         System.out.println(cell.getRow());
