@@ -62,6 +62,18 @@ public class MenuBuilder {
         subMenu = createMenu("Raw Ajax Demo", "ajax/raw-ajax-demo.htm");
         menu.add(subMenu);
 
+        menu = createMenu("Repeater");
+        rootMenu.add(menu);
+
+        subMenu = createMenu("Repeat Form", "repeat/repeat-form.htm");
+        menu.add(subMenu);
+
+        subMenu = createMenu("Repeat Field", "repeat/repeat-field.htm");
+        menu.add(subMenu);
+
+        subMenu = createMenu("Table Repeater", "repeat/table-repeater.htm");
+        menu.add(subMenu);
+
         menu = createMenu("Reload", "reload/resource-bundle.htm");
         rootMenu.add(menu);
 
