@@ -15,14 +15,15 @@
  */
 package net.sf.clickclick.control.paginator;
 
+import java.util.List;
 import org.apache.click.MockContext;
 import org.apache.click.control.AbstractControl;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.Renderable;
 import org.apache.click.control.Table;
+import org.apache.click.element.CssImport;
 import org.apache.click.util.HtmlStringBuffer;
-import net.sf.clickclick.util.CssImport;
 
 /**
  * Paginator implementation based on the article:
@@ -130,9 +131,13 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         return pageTotal;
     }
 
-    public String getHtmlImports() {
-        CssImport cssImport = new CssImport("/clickclick/core/paginator/SimplePaginator.css", true);
-        return cssImport.toString();
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            CssImport cssImport = new CssImport("/clickclick/core/paginator/SimplePaginator.css");
+            headElements.add(cssImport);
+        }
+        return headElements;
     }
 
     public void calcPageTotal(int pageSize, int rows) {
