@@ -15,13 +15,8 @@
  */
 package org.apache.click;
 
-import org.apache.click.AjaxControlRegistry;
+import org.apache.click.util.ErrorPage;
 import org.apache.click.util.PageImports;
-import net.sf.clickclick.util.AdvancedPageImports;
-import org.apache.click.ClickServlet;
-import org.apache.click.Context;
-import org.apache.click.ControlRegistry;
-import org.apache.click.Page;
 
 /**
  * Provides extra functionality not available in ClickServlet.
@@ -46,27 +41,69 @@ public class ClickClickServlet extends ClickServlet {
         return new AjaxControlRegistry();
     }
 
-    /**
-     * @see ClickServlet#createPageImports(net.sf.click.Page)
-     *
-     * @param page
-     * @return the new PageImports instance
-     */
-    protected PageImports createPageImports(Page page) {
-        return new AdvancedPageImports(page);
+    protected void processPage(Page page) throws Exception {
+
+        final Context context = page.getContext();
+        final boolean isPost = context.isPost();
+
+        PageImports pageImports = createPageImports(page);
+        page.setPageImports(pageImports);
+
+        // Support direct access of click-error.htm
+        if (page instanceof ErrorPage) {
+            ErrorPage errorPage = (ErrorPage) page;
+            errorPage.setMode(configService.getApplicationMode());
+
+            // Clear the POST_PROCSES phase control listeners from the registry
+            // Registered listeners from other phases must still be invoked
+            ControlRegistry.getThreadLocalRegistry().getEventHolder(
+                ControlRegistry.POST_ON_PROCESS_EVENT).clear();
+        }
+
+        boolean continueProcessing = performOnSecurityCheck(page, context);
+
+        AjaxControlRegistry controlRegistry = (AjaxControlRegistry) AjaxControlRegistry.getThreadLocalRegistry();
+
+        if (continueProcessing) {
+            performOnInit(page, context);
+
+            // Perform Ajaxify phase after the onInit phase which ensures the
+            // Control ID has been set, Controls have been added to Containers,
+            // Repeater has adjusted its child IDs.
+            // The Ajaxify phase allows a control's Javascript to be modified
+            // as needed
+            controlRegistry.fireActionEvents(context, AjaxControlRegistry.ON_AJAX_EVENT);
+
+            // Check if Ajax processing is needed
+            if (!performAjaxProcessing(page, context, controlRegistry)) {
+                return;
+            }
+
+            continueProcessing = performOnProcess(page, context, controlRegistry);
+
+            if (continueProcessing) {
+                performOnPostOrGet(page, context, isPost);
+
+                performOnRender(page, context);
+            }
+        }
+
+        controlRegistry.fireActionEvents(context, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+
+        performRender(page, context);
     }
 
     // ------------------------------------------------ Package Private Methods
 
     /**
-     * @see ClickServlet#onProcessCheck(net.sf.click.Context, net.sf.click.ControlRegistry)
+     * Perform Ajax processing phase.
      *
      * @param page the page to process
      * @param context the request context
      * @param controlRegistry the request control registry
      * @return true if processing should continue, false otherwise
      */
-    boolean onProcessCheck(Page page, Context context, ControlRegistry controlRegistry) {
+    boolean performAjaxProcessing(Page page, Context context, ControlRegistry controlRegistry) {
         if (controlRegistry instanceof AjaxControlRegistry) {
             AjaxControlRegistry ajaxControlRegistry = (AjaxControlRegistry) controlRegistry;
             // Ajax requests are processed separately
