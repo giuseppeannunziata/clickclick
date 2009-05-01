@@ -23,10 +23,6 @@ import java.util.Set;
 import org.apache.click.control.ActionButton;
 import org.apache.click.control.ActionLink;
 import net.sf.click.util.Partial;
-import org.apache.click.ActionListener;
-import org.apache.click.Context;
-import org.apache.click.Control;
-import org.apache.click.ControlRegistry;
 import org.apache.commons.lang.Validate;
 
 /**
@@ -59,10 +55,23 @@ import org.apache.commons.lang.Validate;
  */
 public class AjaxControlRegistry extends ControlRegistry {
 
+    // -------------------------------------------------------------- Constants
+
+    /**
+     * Indicates the listener should fire in the Ajax phase which is processed
+     * <tt>BEFORE</tt> the onProcess phase.
+     * Listeners in this phase are <tt>guaranteed</tt> to trigger, even when
+     * redirecting, forwarding or processing stopped.
+     */
+    public static final int ON_AJAX_EVENT = 300;
+
     // -------------------------------------------------------- Variables
 
     /** The set of unique registered Ajax Controls. */
     private Set ajaxControlList;
+
+    /** The AJAX events holder. */
+    private EventHolder ajaxEventHolder;
 
     // --------------------------------------------------------- Public Methods
 
@@ -91,7 +100,7 @@ public class AjaxControlRegistry extends ControlRegistry {
     }
 
     /**
-     * Process all the registered controls and return true if the page should
+     * Process all ajax controls and return true if the page should
      * continue processing.
      *
      * @return true if the page should continue processing or false otherwise
@@ -128,32 +137,28 @@ public class AjaxControlRegistry extends ControlRegistry {
         }
 
         // Fire the registered listeners
-        return fireActionEvents(context);
+        return fireActionEvents(context, POST_ON_PROCESS_EVENT);
     }
 
     // ------------------------------------------------ Package Private Methods
 
-    /**
-     * Fire all the registered action events and return true if the page should
-     * continue processing.
-     *
-     * @return true if the page should continue processing or false otherwise
-     */
-    boolean fireActionEvents(Context context) {
+    boolean fireActionEvents(Context context, List eventSourceList,
+        List eventListenerList) {
         boolean continueProcessing = true;
 
-        if (!hasActionEvents()) {
-            return true;
-        }
-
-        List eventSourceList = getEventSourceList();
         for (int i = 0, size = eventSourceList.size(); i < size; i++) {
             Control source = (Control) eventSourceList.get(i);
-            ActionListener listener = (ActionListener) getEventListenerList().get(i);
+            ActionListener listener =
+                (ActionListener) eventListenerList.get(i);
 
             if (context.isAjaxRequest() && listener instanceof AjaxListener) {
 
-                Partial partial = ((AjaxListener) listener).onAjaxAction(source);
+                Partial partial = ((AjaxListener) listener).onAjaxAction(
+                    source);
+
+                // Ensure we execute the POST_ON_RENDER_EVENT for Ajax events
+                fireActionEvents(context, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+
                 if (partial != null) {
                     // Have to process Partial here
                     partial.process(context);
@@ -170,6 +175,21 @@ public class AjaxControlRegistry extends ControlRegistry {
         }
 
         return continueProcessing;
+    }
+
+    EventHolder getEventHolder(int phase) {
+        if (phase == ON_AJAX_EVENT) {
+            return getAjaxEventHolder();
+        } else {
+           return super.getEventHolder(phase);
+        }
+    }
+
+    EventHolder getAjaxEventHolder() {
+        if (ajaxEventHolder == null) {
+            ajaxEventHolder = new EventHolder();
+        }
+        return ajaxEventHolder;
     }
 
     /**
