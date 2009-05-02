@@ -2,12 +2,12 @@ package net.sf.clickclick.examples.page.ajax;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import org.apache.click.AjaxControlRegistry;
-import net.sf.click.util.AjaxAdapter;
+import net.sf.clickclick.AjaxControlRegistry;
+import net.sf.clickclick.util.AjaxAdapter;
 import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
 import org.apache.click.util.HtmlStringBuffer;
-import net.sf.click.util.Partial;
+import net.sf.clickclick.util.Partial;
 import net.sf.clickclick.examples.page.BorderPage;
 
 public class RawAjaxDemo extends BorderPage {
