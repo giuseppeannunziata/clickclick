@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.click;
+package net.sf.clickclick;
 
+import org.apache.click.*;
 import org.apache.click.util.ErrorPage;
 import org.apache.click.util.PageImports;
 
@@ -49,6 +50,8 @@ public class ClickClickServlet extends ClickServlet {
         PageImports pageImports = createPageImports(page);
         page.setPageImports(pageImports);
 
+        AjaxControlRegistry controlRegistry = AjaxControlRegistry.getThreadLocalRegistry();
+
         // Support direct access of click-error.htm
         if (page instanceof ErrorPage) {
             ErrorPage errorPage = (ErrorPage) page;
@@ -56,13 +59,10 @@ public class ClickClickServlet extends ClickServlet {
 
             // Clear the POST_PROCSES phase control listeners from the registry
             // Registered listeners from other phases must still be invoked
-            ControlRegistry.getThreadLocalRegistry().getEventHolder(
-                ControlRegistry.POST_ON_PROCESS_EVENT).clear();
+            controlRegistry.getEventHolder(ControlRegistry.POST_ON_PROCESS_EVENT).clear();
         }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
-
-        AjaxControlRegistry controlRegistry = (AjaxControlRegistry) AjaxControlRegistry.getThreadLocalRegistry();
 
         if (continueProcessing) {
             performOnInit(page, context);

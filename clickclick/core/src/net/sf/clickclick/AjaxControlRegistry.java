@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.click;
+package net.sf.clickclick;
 
-import net.sf.click.*;
+import org.apache.click.*;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.click.control.ActionButton;
 import org.apache.click.control.ActionLink;
-import net.sf.click.util.Partial;
+import net.sf.clickclick.util.Partial;
 import org.apache.commons.lang.Validate;
 
 /**
  * Extends ControlRegistry to provide a thread local register for managing Ajax
  * controls and ActionListener events.
- * <p/>
- * Developers who implement their own controls, should look at the example in
- * the {@link ControlRegistry} JavaDoc.
  * <p/>
  * Registering Ajax Controls for processing is done as follows:
  *
@@ -90,6 +87,17 @@ public class AjaxControlRegistry extends ControlRegistry {
     }
 
     /**
+     * Return the thread local registry instance.
+     *
+     * @return the thread local registry instance.
+     * @throws RuntimeException if a ControlRegistry is not available on the
+     * thread.
+     */
+    protected static AjaxControlRegistry getThreadLocalRegistry() {
+        return (AjaxControlRegistry) ControlRegistry.getThreadLocalRegistry();
+    }
+
+    /**
      * Checks if any Ajax controls have been registered.
      */
     public boolean hasAjaxControls() {
@@ -140,9 +148,7 @@ public class AjaxControlRegistry extends ControlRegistry {
         return fireActionEvents(context, POST_ON_PROCESS_EVENT);
     }
 
-    // ------------------------------------------------ Package Private Methods
-
-    boolean fireActionEvents(Context context, List eventSourceList,
+    protected boolean fireActionEvents(Context context, List eventSourceList,
         List eventListenerList) {
         boolean continueProcessing = true;
 
@@ -177,7 +183,11 @@ public class AjaxControlRegistry extends ControlRegistry {
         return continueProcessing;
     }
 
-    EventHolder getEventHolder(int phase) {
+    protected boolean fireActionEvents(Context context, int event) {
+        return super.fireActionEvents(context, event);
+    }
+
+    protected EventHolder getEventHolder(int phase) {
         if (phase == ON_AJAX_EVENT) {
             return getAjaxEventHolder();
         } else {
@@ -185,21 +195,23 @@ public class AjaxControlRegistry extends ControlRegistry {
         }
     }
 
+    /**
+     * Clear the registry.
+     */
+    protected void clearRegistry() {
+        if (hasAjaxControls()) {
+            ajaxControlList.clear();
+        }
+        super.clearRegistry();
+    }
+
+    // ------------------------------------------------ Package Private Methods
+
     EventHolder getAjaxEventHolder() {
         if (ajaxEventHolder == null) {
             ajaxEventHolder = new EventHolder();
         }
         return ajaxEventHolder;
-    }
-
-    /**
-     * Clear the registry.
-     */
-    void clearRegistry() {
-        if (hasAjaxControls()) {
-            ajaxControlList.clear();
-        }
-        super.clearRegistry();
     }
 
     // -------------------------------------------------------- Private Methods
