@@ -15,8 +15,8 @@
  */
 package net.sf.clickclick.control.ajax;
 
-import org.apache.click.AjaxControlRegistry;
-import net.sf.click.AjaxListener;
+import net.sf.clickclick.AjaxControlRegistry;
+import net.sf.clickclick.AjaxListener;
 import org.apache.click.control.ActionLink;
 import org.apache.click.util.HtmlStringBuffer;
 
