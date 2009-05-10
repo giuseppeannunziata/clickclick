@@ -1,32 +1,101 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.clickclick.control.html.table;
 
 import org.apache.click.Control;
 import org.apache.click.control.AbstractContainer;
+import org.apache.click.control.AbstractControl;
 
 /**
+ * Provide a table row control: &lt;tr&gt;.
  *
  * @author Bob Schellink
  */
 public class Row extends AbstractContainer {
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a default table row.
+     */
     public Row() {
     }
 
+    /**
+     * Create a table row with the given name.
+     *
+     * @param name the name of the row
+     */
     public Row(String name) {
         super(name);
     }
 
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Return the table row html tag: <tt>tr</tt>.
+     *
+     * @see AbstractControl#getTag()
+     *
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "tr";
+    }
+
+    /**
+     * Add the given text object by creating and adding a {@link Cell}
+     * instance to the row and setting the Cell content to the given text
+     * object.
+     * <p/>
+     * This method delegates to {@link #insert(java.lang.Object, int)}.
+     *
+     * @param text the text to add to the row
+     * @return the newly created Cell object
+     */
     public Cell add(Object text) {
         return insert(text, getControls().size());
     }
 
+    /**
+     * Add the control to the row at the given column. If the column does not
+     * exist, the row will {@link #expandCells(int) expand} until enough columns
+     * are available to add the Cell. If the column does exist the new Cell will
+     * be inserted at the given column and all cells to the right will move one
+     * column up.
+     *
+     * @param control the control to add
+     * @param column the column to add the control to
+     * @return the control that was added
+     */
     public Control insert(Control control, int column) {
-        if (!(control instanceof Cell)) {
-            throw new IllegalArgumentException("Only cells can be inserted.");
+        if (column > getColumnCount()) {
+            expandCells(column);
         }
-        return insert((Cell) control, column);
+        super.insert(control, column);
+        return control;
     }
 
+    /**
+     * Add the Cell to the row at the given column.
+     * <p/>
+     * This method delegates to {@link #insert(org.apache.click.Control, int)}.
+     *
+     * @param cell the Cell to add
+     * @param column the column to add the cell to
+     * @return the cell that was added
+     */
     public Cell insert(Cell cell, int column) {
         if (column > getColumnCount()) {
             expandCells(column);
@@ -35,6 +104,17 @@ public class Row extends AbstractContainer {
         return cell;
     }
 
+    /**
+     * Add the given text object by creating and adding a {@link Cell}
+     * instance to the row and setting the Cell content to the given text
+     * object. The text object will be added to the given column. If the column
+     * does not exist, the row will {@link #expandCells(int) expand} until
+     * enough columns are available to add the control.
+     *
+     * @param text the text to add to the row
+     * @param column the column to add the text to
+     * @return the newly created Cell object
+     */
     public Cell insert(Object text, int column) {
         if (column > getColumnCount()) {
             expandCells(column);
@@ -44,10 +124,19 @@ public class Row extends AbstractContainer {
         }
         Cell cell = new Cell();
         cell.setText(text.toString());
-        super.insert(cell, column);
-        return cell;
+        return insert(cell, column);
     }
 
+    /**
+     * Insert and return a new Cell at the given column. If the column
+     * does not exist, the row will {@link #expandCells(int) expand} until
+     * enough columns are available to add the control. If the column does
+     * exist the new Cell will be inserted at the given column and all cells
+     * to the right will move one column up.
+     *
+     * @param column the column to add the new Cell to
+     * @return the newly created Cell object
+     */
     public Cell insertCell(int column) {
         if (column < 0) {
             throw new IndexOutOfBoundsException("column must be >= 0");
@@ -62,6 +151,13 @@ public class Row extends AbstractContainer {
         }
     }
 
+    /**
+     * Remove and return the Cell at the given column, or null if no cell was
+     * found.
+     *
+     * @param column the column which cell to remove
+     * @return the removed cell or null if no cell was found
+     */
     public Cell removeCell(int column) {
         Cell cell = getCell(column);
         if (cell == null) {
@@ -72,21 +168,28 @@ public class Row extends AbstractContainer {
         return cell;
     }
 
+    /**
+     * Return the number of columns in this row.
+     *
+     * @return the number of columns in this row
+     */
     public int getColumnCount() {
         return hasControls() ? getControls().size() : 0;
     }
 
-    public Cell getCell(final int column) {
+    /**
+     * Return the Cell at the given column.
+     *
+     * @param column the column which Cell to return
+     * @return the Cell at the given column
+     */
+    public Cell getCell(int column) {
         if (hasControls()) {
             if (getControls().size() >= column) {
                 return (Cell) getControls().get(column);
             }
         }
         return null;
-    }
-
-    public String getTag() {
-        return "tr";
     }
 
     /**
@@ -109,12 +212,5 @@ public class Row extends AbstractContainer {
             add(newCell);
             columnCount++;
         }
-    }
-
-    public static void main(String[] args) {
-        Row row = new Row();
-        row.insert(new Cell("one"),3);
-        row.insert(new Cell("three"), 5);
-        System.out.println(row);
     }
 }

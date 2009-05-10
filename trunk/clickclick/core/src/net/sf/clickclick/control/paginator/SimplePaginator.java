@@ -26,75 +26,190 @@ import org.apache.click.element.CssImport;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
- * Paginator implementation based on the article:
- * http://woork.blogspot.com/2008/03/perfect-pagination-style-using-css.html
+ * Provides an independant paginator control.
+ * <p/>
+ * The Paginator is based on this article:
+ * http://woork.blogspot.com/2008/03/perfect-pagination-style-using-css.html.
+ *
+ * <h3>Pre defined styles</h3>
+ * The paginator CSS style sheet, ("/clickclick/core/paginator/SimplePaginator.css"),
+ * defines the following predefined styles:
+ * <ul>
+ *  <li>pagination-digg</li>
+ *  <li>pagination-clean</li>
+ *  <li>pagination-flickr</li>
+ * </ul>
  *
  * @author Bob Schellink
  */
 public class SimplePaginator extends AbstractControl implements Renderable {
 
+    // -------------------------------------------------------------- Constants
+
     private static final long serialVersionUID = 1L;
 
-    // --------------------------------------------------------- Public Methods
+    // -------------------------------------------------------------- Variables
 
+    /** The total number of pages. */
     private int pageTotal;
 
+    /** The current page number. */
     private int currentPage;
 
+    /** Indicates the lower bound for rendering paging links. */
     protected int lowerBound;
 
+    /** Indicates the upper bound for rendering paging links. */
     protected int upperBound;
 
+    /** The css style class, default is <tt>"pagination-digg"</tt>. */
     protected String styleClass = "pagination-digg";
 
+    /** The link to render. */
     protected AbstractLink pageLink;
 
     // ----------------------------------------------------------- Constructors
 
+    /**
+     * Create a default SimplePaginator.
+     */
+    public SimplePaginator() {
+
+    }
+
+    /**
+     * Create a SimplePaginator for the given name.
+     *
+     * @param name the name of the paginator
+     */
     public SimplePaginator(String name) {
         setName(name);
     }
 
+    // ------------------------------------------------------ Public Properties
+
+    /**
+     * Return the title of the <tt>first</tt> page link.
+     * <p/>
+     * The title can be localized through the message
+     * <tt>"paginator-first-title"</tt>.
+     *
+     * @return the title of the first page link
+     */
     public String getFirstTitleMessage() {
         return getMessage("paginator-first-title");
     }
 
+    /**
+     * Return the label of the <tt>first</tt> page link.
+     * <p/>
+     * The label can be localized through the message
+     * <tt>"paginator-first-label"</tt>.
+     *
+     * @return the label of the first page link
+     */
     public String getFirstLabelMessage() {
         return getMessage("paginator-first-label");
     }
 
+    /**
+     * Return the title of the <tt>last</tt> page link.
+     * <p/>
+     * The title can be localized through the message
+     * <tt>"paginator-last-title"</tt>.
+     *
+     * @return the title of the last page link
+     */
     public String getLastTitleMessage() {
         return getMessage("paginator-last-title");
     }
 
+    /**
+     * Return the label of the <tt>last</tt> page link.
+     * <p/>
+     * The label can be localized through the message
+     * <tt>"paginator-last-label"</tt>.
+     *
+     * @return the label of the last page link
+     */
     public String getLastLabelMessage() {
         return getMessage("paginator-last-label");
     }
-    
+
+    /**
+     * Return the title of the <tt>next</tt> page link.
+     * <p/>
+     * The title can be localized through the message
+     * <tt>"paginator-next-title"</tt>.
+     *
+     * @return the title of the next page link
+     */
     public String getNextTitleMessage() {
         return getMessage("paginator-next-title");
     }
 
+    /**
+     * Return the label of the <tt>next</tt> page link.
+     * <p/>
+     * The label can be localized through the message
+     * <tt>"paginator-next-label"</tt>.
+     *
+     * @return the label of the next page link
+     */
     public String getNextLabelMessage() {
         return getMessage("paginator-next-label");
     }
 
+    /**
+     * Return the title of the <tt>previous</tt> page link.
+     * <p/>
+     * The title can be localized through the message
+     * <tt>"paginator-previous-title"</tt>.
+     *
+     * @return the title of the previous page link
+     */
     public String getPreviousTitleMessage() {
         return getMessage("paginator-previous-title");
     }
 
+    /**
+     * Return the label of the <tt>previous</tt> page link.
+     * <p/>
+     * The label can be localized through the message
+     * <tt>"paginator-previous-label"</tt>.
+     *
+     * @return the label of the previous page link
+     */
     public String getPreviousLabelMessage() {
         return getMessage("paginator-previous-label");
     }
 
+    /**
+     * Return the title of the <tt>page link</tt>.
+     * <p/>
+     * The title can be localized through the message
+     * <tt>"paginator-goto-title"</tt>.
+     *
+     * @return the title of the page link
+     */
     public String getGotoPageTitleMessage() {
         return getMessage("paginator-goto-title");
     }
 
+    /**
+     * Set the page link.
+     *
+     * @param pageLink the page link
+     */
     public void setPageLink(AbstractLink pageLink) {
         this.pageLink = pageLink;
     }
 
+    /**
+     * Return the page link.
+     *
+     * @return the page link
+     */
     public AbstractLink getPageLink() {
         if (pageLink == null) {
             String name = getName();
@@ -107,30 +222,71 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         return pageLink;
     }
 
-    public String getStyleClass() {
-        return styleClass;
+    /**
+     * Set the HTML class attribute.
+     * <p/>
+     * <b>Note:</b> this method will replace the existing <tt>"class"</tt>
+     * attribute value.
+     * <p/>
+     * Predefined paginator CSS classes are:
+     * <ul>
+     *  <li>pagination-digg</li>
+     *  <li>pagination-clean</li>
+     *  <li>pagination-flickr</li>
+     * </ul>
+     *
+     * @param value the HTML class attribute
+     */
+    public void setClass(String value) {
+        setAttribute("class", value);
     }
 
-    public void setStyleClass(String styleClass) {
-        this.styleClass = styleClass;
-    }
-
+    /**
+     * Set the current page value.
+     *
+     * @param currentPage the current page value
+     */
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
     }
 
+    /**
+     * Return the current page value.
+     *
+     * @return the current page value
+     */
     public int getCurrentPage() {
         return currentPage;
     }
 
+    /**
+     * Set the total number of pages.
+     *
+     * @param pageTotal the total number of pages
+     */
     public void setPageTotal(int pageTotal) {
         this.pageTotal = pageTotal;
     }
 
+    /**
+     * Return the total number of pages.
+     *
+     * @return the total number of pages
+     */
     public int getPageTotal() {
         return pageTotal;
     }
 
+    /**
+     * Return the following head elements for the paginator:
+     * <ul>
+     * <li>
+     * "/clickclick/core/paginator/SimplePaginator.css"
+     * </li>
+     * </ul>
+     *
+     * @return the head elements of the paginator
+     */
     public List getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
@@ -140,6 +296,26 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         return headElements;
     }
 
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Provides a public method that calculates the {@link #pageTotal} from the
+     * given pageSize and total number of rows.
+     *
+     * <pre class="prettyprint">
+     * public MyPage() {
+     *     int currentPage = 1;
+     *     int pageSize = 10;
+     *     int rowCount = 3000;
+     *     SimplePaginator paginator = new SimplePaginator("my-paginator");
+     *     paginator.setCurrentPage(currentPage);
+     *     paginator.calcPageTotal(pageSize, rowCount);
+     * }
+     * </pre>
+     *
+     * @param pageSize the number of rows per page
+     * @param rows the number of rows to paginate over
+     */
     public void calcPageTotal(int pageSize, int rows) {
         // If pageTotal has value, exit early
         if (getPageTotal() > 0) {
@@ -156,6 +332,11 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         setPageTotal((int) Math.ceil(value));
     }
 
+    /**
+     * Render the paginator's output to the specified buffer.
+     *
+     * @param buffer the buffer to render output to
+     */
     public void render(HtmlStringBuffer buffer) {
 
         // If there are no pages to render, exit early
@@ -166,7 +347,7 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         calcLowerAndUpperBound();
 
         buffer.elementStart("ul");
-        String styleClass = getStyleClass();
+        String styleClass = getAttribute("class");
         if (styleClass != null) {
             buffer.appendAttribute("class", styleClass);
         }
@@ -180,10 +361,10 @@ public class SimplePaginator extends AbstractControl implements Renderable {
 
         for (int i = lowerBound; i < upperBound; i++) {
             int pageNumber = i + 1;
-            renderItem(buffer, pageNumber);
+            renderPageLinkContainer(buffer, pageNumber);
 
             if (i < upperBound - 1) {
-                renderSeparator(buffer);
+                renderPageLinkSeparator(buffer);
             }
         }
 
@@ -194,28 +375,43 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         buffer.elementEnd("ul");
     }
 
-    
+    /**
+     * Render the HTML representation of the paginator.
+     *
+     * @return the HTML representation of the paginator
+     */
     public String toString() {
-        HtmlStringBuffer buffer =
-            new HtmlStringBuffer(getPageTotal() * 70);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getPageTotal() * 70);
         render(buffer);
         return buffer.toString();
     }
 
     // ------------------------------------------------------ Protected Methods
 
-    protected void renderItem(HtmlStringBuffer buffer, int pageNumber) {
+    /**
+     * Render the page link container.
+     *
+     * @param buffer the buffer to render to
+     * @param pageNumber the page number of the page link to render
+     */
+    protected void renderPageLinkContainer(HtmlStringBuffer buffer, int pageNumber) {
         if (pageNumber == getCurrentPage()) {
             buffer.append("<li class=\"active\">");
         } else {
             buffer.append("<li>");
         }
-        renderValue(buffer, pageNumber);
+        renderPageLink(buffer, pageNumber);
         buffer.append("</li>");
         buffer.append("\n");
     }
 
-    protected void renderValue(HtmlStringBuffer buffer, int pageNumber) {
+    /**
+     * Render the page link for the given page number.
+     *
+     * @param buffer the buffer to render to
+     * @param pageNumber the page number of the page link to render
+     */
+    protected void renderPageLink(HtmlStringBuffer buffer, int pageNumber) {
         if (pageNumber == getCurrentPage()) {
             buffer.append(pageNumber);
         } else {
@@ -224,15 +420,25 @@ public class SimplePaginator extends AbstractControl implements Renderable {
 
             // Cater for zero based indexing and subtract 1 from pageNumber
             pageLink.setParameter(Table.PAGE, String.valueOf(pageNumber - 1));
-            pageLink.setTitle(getGotoPageTitleMessage() + " " +
-                pageNumber);
+            pageLink.setTitle(getGotoPageTitleMessage()
+                + " " + pageNumber);
             pageLink.render(buffer);
         }
     }
 
-    protected void renderSeparator(HtmlStringBuffer buffer) {
+    /**
+     * Render a separator between page links.
+     *
+     * @param buffer the buffer to render to
+     */
+    protected void renderPageLinkSeparator(HtmlStringBuffer buffer) {
     }
 
+    /**
+     * Render the <tt>first</tt> paginator link.
+     *
+     * @param buffer the buffer to render to
+     */
     protected void renderFirst(HtmlStringBuffer buffer) {
         buffer.elementStart("li");
         String pageValue = String.valueOf(0);
@@ -255,6 +461,11 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         buffer.elementEnd("li");
     }
 
+    /**
+     * Render the <tt>previous</tt> paginator link.
+     *
+     * @param buffer the buffer to render to
+     */
     protected void renderPrevious(HtmlStringBuffer buffer) {
         buffer.elementStart("li");
 
@@ -279,6 +490,11 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         buffer.elementEnd("li");
     }
 
+    /**
+     * Render the <tt>last</tt> paginator link.
+     *
+     * @param buffer the buffer to render to
+     */
     protected void renderLast(HtmlStringBuffer buffer) {
         buffer.elementStart("li");
         String pageValue = String.valueOf(getPageTotal() - 1);
@@ -301,6 +517,11 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         buffer.elementEnd("li");
     }
 
+    /**
+     * Render the <tt>next</tt> paginator link.
+     *
+     * @param buffer the buffer to render to
+     */
     protected void renderNext(HtmlStringBuffer buffer) {
         buffer.elementStart("li");
         String pageValue = String.valueOf(getCurrentPage() + 1);
@@ -323,6 +544,9 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         buffer.elementEnd("li");
     }
 
+    /**
+     * Calculate the {@link #lowerBound} and {@link #upperBound} values.
+     */
     protected void calcLowerAndUpperBound() {
         // Create sliding window of paging links
         lowerBound = Math.max(0, getCurrentPage() - 5);
@@ -330,18 +554,5 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         if (upperBound - lowerBound < 10) {
             lowerBound = Math.max(upperBound - 10, 0);
         }
-    }
-
-    public static void main(String[] args) {
-        final int currentPage = 2;
-        final int pageSize = 10;
-        final int rowCount = 3000;
-        MockContext.initContext();
-        SimplePaginator paginator = new SimplePaginator("my-paginator");
-        paginator.setCurrentPage(currentPage);
-        paginator.calcPageTotal(pageSize, rowCount);
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
-        paginator.render(buffer);
-        System.out.println(buffer);
     }
 }

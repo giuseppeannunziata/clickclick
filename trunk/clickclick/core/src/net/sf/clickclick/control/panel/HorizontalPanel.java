@@ -16,25 +16,41 @@
 package net.sf.clickclick.control.panel;
 
 import org.apache.click.Control;
-import org.apache.click.MockContext;
-import org.apache.click.Page;
-import org.apache.click.control.TextField;
 import net.sf.clickclick.control.html.table.Cell;
 import net.sf.clickclick.control.html.table.Row;
 
 /**
+ * Provides a panel that lays out its controls in a single horizontal row.
  *
  * @author Bob Schellink
  */
 public class HorizontalPanel extends AbstractTablePanel {
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a default HorizontalPanel.
+     */
     public HorizontalPanel() {
     }
-    
+
+    /**
+     * Create a HorizontalPanel with the given name.
+     *
+     * @param name the name of the panel
+     */
     public HorizontalPanel(String name) {
         super(name);
     }
 
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Adds the control to the panel.
+     *
+     * @param control the control to add
+     * @return the control that was added
+     */
     public Control add(Control control) {
         Row row = null;
         if (!table.hasControls()) {
@@ -52,21 +68,14 @@ public class HorizontalPanel extends AbstractTablePanel {
         return control;
     }
 
+    /**
+     * Remove the control from the panel.
+     *
+     * @param control the control that was removed
+     * @return true if the control was removed, false otherwise
+     */
     public boolean remove(Control control) {
         Cell cell = getCell(control);
         return table.remove(cell);
-    }
-
-    public static void main(String[] args) {
-        MockContext.initContext();
-        Page page = new Page();
-        HorizontalPanel panel = new HorizontalPanel("panel");
-        page.addControl(panel);
-        panel.setSpacing(5);
-        Control field = (Control) panel.add(new TextField("text"));
-        field = (Control) panel.add(new TextField("text"));
-        Cell cell = panel.getCell(field);
-        cell.setAttribute("class", "cell");
-        System.out.println(panel);
     }
 }

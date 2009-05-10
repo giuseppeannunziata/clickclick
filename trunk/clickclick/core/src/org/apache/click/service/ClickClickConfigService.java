@@ -31,25 +31,36 @@ import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Element;
 
 /**
+ * This class provides a ConfigService that does not cache Page metadata
+ * and enables hot reloading of Page classes.
  *
  * @author Bob Schellink
  */
 public class ClickClickConfigService extends XmlConfigService {
 
+    // -------------------------------------------------------- Constants
+
+    private static final Object PAGE_LOAD_LOCK = new Object();
+
+    // -------------------------------------------------------------- Variables
+
     private Map manualPageByPathMap = new HashMap();
 
     private Map manualPageByClassNameMap = new HashMap();
 
-    private static final Object PAGE_LOAD_LOCK = new Object();
-
     // --------------------------------------------------------- Public Methods
 
+    /**
+     * Return the list of page packages.
+     *
+     * @return the list of page packages.
+     */
     public List getPagesPackage() {
         return pagePackages;
     }
 
     /**
-     * @see ConfigService#getPageClass(String)
+     * @see org.apache.click.service.ConfigService#getPageClass(java.lang.String)
      *
      * @param path the page path
      * @return the page class for the given path or null if no class is found
@@ -100,6 +111,14 @@ public class ClickClickConfigService extends XmlConfigService {
         }
     }
 
+    /**
+     * @see org.apache.click.service.ConfigService#getPagePath(java.lang.Class)
+     *
+     * @param pageClass the page class
+     * @return path the page path or null if no path is found
+     * @throws IllegalArgumentException if the Page Class is not configured
+     * with a unique path
+     */
     public String getPagePath(Class pageClass) {
         // Try to lookup path from manually mapped pages first
         PageMetaData page = lookupManuallyStoredMetaData(pageClass);
@@ -111,6 +130,12 @@ public class ClickClickConfigService extends XmlConfigService {
         return new PathLookupAlgorithm().getPagePath(pageClass);
     }
 
+    /**
+     * @see org.apache.click.service.ConfigService#getPageHeaders(java.lang.String)
+     *
+     * @param path the path of the page
+     * @return a Map of headers for the given page path
+     */
     public Map getPageHeaders(String path) {
         // Try and load the manually mapped page first
         PageMetaData page = lookupManuallyStoredMetaData(path);
@@ -123,6 +148,13 @@ public class ClickClickConfigService extends XmlConfigService {
         }
     }
 
+    /**
+     * @see org.apache.click.service.ConfigService#getPageField(java.lang.Class, java.lang.String)
+     *
+     * @param pageClass the page class
+     * @param fieldName the name of the field
+     * @return the public field of the pageClass with the given name or null
+     */
     public Field getPageField(Class pageClass, String fieldName) {
         if (isProductionMode() || isProfileMode()) {
             return super.getPageField(pageClass, fieldName);
@@ -130,6 +162,12 @@ public class ClickClickConfigService extends XmlConfigService {
         return (Field) getPageFields(pageClass).get(fieldName);
     }
 
+    /**
+     * @see org.apache.click.service.ConfigService#getPageFieldArray(java.lang.Class)
+     *
+     * @param pageClass the page class
+     * @return an array public fields for the given page class
+     */
     public Field[] getPageFieldArray(Class pageClass) {
         if (isProductionMode() || isProfileMode()) {
             return super.getPageFieldArray(pageClass);
@@ -137,6 +175,12 @@ public class ClickClickConfigService extends XmlConfigService {
         return pageClass.getFields();
     }
 
+    /**
+     * @see org.apache.click.service.ConfigService#getPageFields(java.lang.Class)
+     *
+     * @param pageClass the page class
+     * @return a Map of public fields for the given page class
+     */
     public Map getPageFields(Class pageClass) {
         if (isProductionMode() || isProfileMode()) {
             return super.getPageFields(pageClass);
@@ -152,6 +196,16 @@ public class ClickClickConfigService extends XmlConfigService {
 
     // ------------------------------------------------ Package Private Methods
 
+    /**
+     * In Production modes delegate to the super implementation. In develolpment
+     * modes add manually defined Pages to the {@link #manualPageByPathMap}.
+     *
+     * @param pagesElm the xml element containing manually defined Pages
+     * @param pagesPackage the pages package prefix
+     *
+     * @throws java.lang.ClassNotFoundException if the specified Page class can
+     * not be found on the classpath
+     */
     void buildManualPageMapping(Element pagesElm, String pagesPackage) throws ClassNotFoundException {
         if (isProductionMode() || isProfileMode()) {
             super.buildManualPageMapping(pagesElm, pagesPackage);
@@ -173,6 +227,18 @@ public class ClickClickConfigService extends XmlConfigService {
         }
     }
 
+    /**
+     * In Production modes delegate to the super implementation. In development
+     * modes this method does <b>not</b> associate template files
+     * with matching Java classes found on the classpath.
+     * <p/>
+     * This method also rebuilds the {@link #excludesList}. This list contains
+     * URL paths that should not be auto-mapped.
+     *
+     * @param pagesElm the xml element containing the excluded URL paths
+     * @param pagesPackage the pages package prefix
+     * @param templates the list of templates to map to Page classes
+     */
     void buildAutoPageMapping(Element pagesElm, String pagesPackage, List templates) throws ClassNotFoundException {
 
         if(isProductionMode() || isProfileMode()) {
@@ -190,15 +256,19 @@ public class ClickClickConfigService extends XmlConfigService {
         }
     }
 
+    /**
+     * In Production modes delegate to the super implementation. In development
+     * modes this method builds the {@link #manualPageByClassNameMap} by using
+     * the Page Class name instead of the Page Class. Thus no reference to the
+     * class is stored and it can be reloaded. Further only manually mapped
+     * pages will be stored by this method as automapped pages are looked up
+     * dynamically.
+     */
     void buildClassMap() {
         if (isProductionMode() || isProfileMode()) {
             super.buildClassMap();
             return;
         }
-
-        //Build pages by class map.  The difference between this method and ClickApps method
-        //is that the key is a string not the actual class. Also only manually mapped
-        //pages will be stored here. The automapped pages are looked up dynamically.
 
         // Build pages by className map
         for (Iterator i = pageByPathMap.values().iterator(); i.hasNext();) {
@@ -225,6 +295,12 @@ public class ClickClickConfigService extends XmlConfigService {
         }
     }
 
+    /**
+     * Return the {@link PageMetaData} associated with the given path
+     *
+     * @param path the page path
+     * @return the PageMetaData object for the given path
+     */
     private PageMetaData lookupManuallyStoredMetaData(String path) {
         //Try and load the manually mapped page
         PageMetaData page = (PageMetaData) manualPageByPathMap.get(path);
@@ -235,6 +311,12 @@ public class ClickClickConfigService extends XmlConfigService {
         return page;
     }
 
+    /**
+     * Return the {@link PageMetaData} associated with the given page class.
+     *
+     * @param pageClass the page class
+     * @return the PageMetaData object for the given page class
+     */
     private PageMetaData lookupManuallyStoredMetaData(Class pageClass) {
         //Try and load the manually mapped page
         PageMetaData page = null;
@@ -255,6 +337,9 @@ public class ClickClickConfigService extends XmlConfigService {
 
     // ---------------------------------------------------------- Inner Classes
 
+    /**
+     * Encapsulate a Page metadata such as headers, classname and path.
+     */
     static class PageMetaData {
 
         final Map headers;
@@ -308,6 +393,10 @@ public class ClickClickConfigService extends XmlConfigService {
         }
     }
 
+    /**
+     * Encapsulates the algorithm used to lookup the Page path from a given
+     * Page class.
+     */
     class PathLookupAlgorithm {
 
         public String getPagePath(Class pageClass) {

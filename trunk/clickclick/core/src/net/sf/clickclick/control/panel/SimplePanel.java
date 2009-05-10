@@ -20,51 +20,48 @@ import org.apache.click.Context;
 import org.apache.click.control.Panel;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.commons.lang.ClassUtils;
 
 /**
- * A panel with fallback render functionality which allows the panel controls
- * to be rendered if its template is not available.
+ * Provides a panel that renders its controls in the order they were added,
+ * unless a template is specified in which case the panel will delegate
+ * rendering to the template instead.
  * <p/>
- * By default Panel will render its template or throw exception if template is
- * not found. Thus if you do not define a template for the Panel, an exception
- * is raised.
- * <p/>
- * SimplePanel on the other hand first checks if the template is
- * available on the servlet context path or classpath and if template is not
- * found, the panel controls are simply rendered in the order they were added.
- * <p/>
- * In effect SimplePanel falls back to the default rendering of
- * AbstractContainer if the Panel template is not found.
+ * SimplePanel first checks if the template is available on the servlet context
+ * path or the classpath and if a template is not found, the panel controls are
+ * rendered in the order they were added.
  *
  * @author Bob Schellink
  */
 public class SimplePanel extends Panel {
 
+    // ----------------------------------------------------------- Constructors
+
     /**
-     * Default empty constructor.
+     * Create a new default SimplePanel.
      */
     public SimplePanel() {
     }
 
     /**
-     * Construct a new panel with the specified name.
+     * Create a new SimplePanel with the specified name.
      *
      * @param name name of the panel
      */
     public SimplePanel(String name) {
-        super(name);
+        if (name != null) {
+            setName(name);
+        }
     }
 
+    // --------------------------------------------------------- Public Methods
+
     /**
-     * Render the AbstractTablePanel's internal HtmlTable.
-     * <p/>
-     * However like its superclass {@link net.sf.click.control.Panel} it is
-     * possible to override the default rendering by either specifying a
-     * {@link #template} or specifying a template based on the
-     * {@link #getClass() classes} name.
+     * Render the HTML representation of the SimplePanel. If a template is
+     * specified, rendering will be delegated to that template. If no template
+     * is specified, the child controls will be rendered in the order they were
+     * added.
      *
-     * @see net.sf.click.control.Panel#render(net.sf.click.util.HtmlStringBuffer)
+     * @see org.apache.click.control.Panel#render(org.apache.click.util.HtmlStringBuffer)
      *
      * @param buffer the specified buffer to render the Panel's output to
      */
@@ -78,14 +75,13 @@ public class SimplePanel extends Panel {
             if (hasTemplate) {
                 super.render(buffer);
             } else {
-                    ClickUtils.getLogService().info("No template was found for"
-                    + " panel " + ClassUtils.getShortClassName(getClass())
-                    + ". Rendering controls in the order they were added.");
-                renderContainer(buffer);
+                renderControls(buffer);
             }
         }
     }
-    
+
+    // ------------------------------------------------------ Protected Methods
+
     /**
      * Return true if the panel template is available, false otherwise.
      *
@@ -120,11 +116,11 @@ public class SimplePanel extends Panel {
     }
 
     /**
-     * Render the panel as a normal Container.
+     * Render the panel child controls in the order they were added.
      * 
      * @param buffer to buffer to render output to
      */
-    protected void renderContainer(HtmlStringBuffer buffer) {
+    protected void renderControls(HtmlStringBuffer buffer) {
         // If a template cannot be found for the panel, use default container
         // rendering
         if (getTag() != null) {

@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.clickclick.control.breadcrumb;
 
 import java.util.HashSet;
@@ -5,133 +18,235 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import org.apache.click.MockContext;
+import org.apache.click.Context;
 import org.apache.click.control.AbstractControl;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
- * This Control is an implementation of a breadcrumb or history bar.
- *
- * Correct usage of breadcrumb is:
- *
- * http://www.useit.com/alertbox/breadcrumbs.html
+ * Provides a history bar, sometimes referred to as a breadcrumb.
+ * <p/>
+ * The Breadcrumb records all pages a user visits and builds up a trail so one
+ * can navigate back to previous pages.
+ * <p/>
+ * <b>Please note</b> there are different ways to implement a breadcrumb. The
+ * following article outlines a different approach than what was taken here:
+ * http://www.useit.com/alertbox/breadcrumbs.html.
  */
 public class Breadcrumb extends AbstractControl {
 
-    // -------------------------------------------------------- Constants
+    // -------------------------------------------------------------- Constants
 
+    /**
+     * The value under which the breadcrumb trail is stored in the HttpSession,
+     * "<tt>breadcrumb</tt>".
+     */
     public static final String BREADCRUMB_KEY = "breadcrumb";
 
-    // -------------------------------------------------------- Instance Variables
+    // -------------------------------------------------------------- Variables
 
-    private int maxTrailLength = 5;
+    /** The maximum number of breadcrumbs to render. */
+    protected int trailLength = 5;
 
-    private String seperator = " / ";
+    /** The separator between breadcrumbs, defaults to <tt>"/"</tt>. */
+    protected String seperator = " / ";
 
-    private transient Trail trail;
+    /** Tracks the page paths the user visits. */
+    protected transient Trail trail;
 
-    private String label;
+    /** The breadcrumb label. */
+    protected String label;
 
-    private transient Set excludedPaths = new HashSet();
-    
-    // -------------------------------------------------------- Constructors
+    /** Set of URL paths that should not be tracked. */
+    protected transient Set excludedPaths = new HashSet();
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a default Breadcrumb.
+     */
     public Breadcrumb() {
     }
 
+    /**
+     * Create a Breadcrumb with the given name.
+     *
+     * @param name the name of the breadcrumb
+     */
     public Breadcrumb(String name) {
         setName(name);
     }
 
+    /**
+     * Create a Breadcrumb with the given name and label.
+     *
+     * @param name the name of the breadcrumb
+     * @param label the label of the breadcrumb
+     */
     public Breadcrumb(String name, String label) {
         setName(name);
         setLabel(label);
     }
 
-    public Breadcrumb(String name, int maxTrailLengthArg) {
-        this(name, null, maxTrailLengthArg, " / ");
+    /**
+     * Create a Breadcrumb with the given name and trail length.
+     *
+     * @param name the name of the breadcrumb
+     * @param trailLength the number of breadcrumbs to render
+     */
+    public Breadcrumb(String name, int trailLength) {
+        this(name, null, trailLength, " / ");
     }
 
-    public Breadcrumb(String name, String label, int maxTrailLengthArg) {
-        this(name, label, maxTrailLengthArg, " / ");
+    /**
+     * Create a Breadcrumb with the given name, label and trail length.
+     *
+     * @param name the name of the breadcrumb
+     * @param label the label of the breadcrumb
+     * @param trailLength the number of breadcrumbs to render
+     */
+    public Breadcrumb(String name, String label, int trailLength) {
+        this(name, label, trailLength, " / ");
     }
 
-    public Breadcrumb(String name, String label, int maxTrailLengthArg, String seperatorArg) {
+    /**
+     * Create a Breadcrumb with the given name, label, trail length and
+     * separator.
+     *
+     * @param name the name of the breadcrumb
+     * @param label the label of the breadcrumb
+     * @param trailLength the number of breadcrumbs to render
+     * @param separator the separator to render between breadcrumbs
+     */
+    public Breadcrumb(String name, String label, int trailLength, String seperator) {
         setName(name);
         setLabel(label);
-        setMaxTrailLength(maxTrailLengthArg);
-        setSeperator(seperatorArg);
+        setTrailLength(trailLength);
+        setSeperator(seperator);
     }
 
-    // -------------------------------------------------------- Public Getters/Setters
+    // ------------------------------------------------------ Public Properties
 
-    public int getMaxTrailLength() {
-        return maxTrailLength;
+    /**
+     * Return the number of breadcrumbs to render.
+     *
+     * @return the number of breadcrumbs to render
+     */
+    public int getTrailLength() {
+        return trailLength;
     }
 
-    public void setMaxTrailLength(int maxTrailLength) {
-        this.maxTrailLength = maxTrailLength;
+    /**
+     * Set the number of breadcrumbs to render.
+     *
+     * @param trailLength the number of breadcrumbs to render
+     */
+    public void setTrailLength(int trailLength) {
+        this.trailLength = trailLength;
     }
 
+    /**
+     * Return the separator to render between breadcrumbs.
+     *
+     * @return the separator to render between breadcrumbs
+     */
     public String getSeperator() {
         return seperator;
     }
 
+    /**
+     * Set the separator to render between breadcrumbs.
+     *
+     * @param seperator the separator to render between breadcrumbs
+     */
     public void setSeperator(String seperator) {
         this.seperator = seperator;
     }
 
+    /**
+     * Return the breadcrumb label.
+     *
+     * @return the breadcrumb label
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * Set the breadcrumb label.
+     *
+     * @param label the breadcrumb label
+     */
     public void setLabel(String label) {
         this.label = label;
     }
-    
+
+    /**
+     * Return the set of URL paths that should not be tracked.
+     *
+     * @return the set of URL paths that should not be tracked
+     */
     public Set getExcludedPaths() {
         return excludedPaths;
     }
 
+    /**
+     * Set the set of URL paths that should not be tracked.
+     *
+     * @param excludedPaths the set of URL paths that should not be tracked
+     */
     public void setLabel(Set excludedPaths) {
         this.excludedPaths = excludedPaths;
     }
 
-    // -------------------------------------------------------- Implement Control
+    // --------------------------------------------------------- Public Methods
 
+    /**
+     * The onInit event handler performs the following operations:
+     * <ul>
+     * <li>Invokes {@link #restoreState()} to retrieve the stored
+     * {@link Trail} instance between requests.</li>
+     * <li>Stores the {@link org.apache.click.util.ClickUtils#getResourcePath(javax.servlet.http.HttpServletRequest) path}
+     * of the parent Page in the {@link Trail} instance.</li>
+     * </ul>
+     */
     public void onInit() {
-        restoreState();
-        String contextPath = getContext().getRequest().getContextPath();
-        String path = ClickUtils.getResourcePath(getContext().getRequest());
+        Context context = getContext();
+        restoreState(context);
+        String contextPath = context.getRequest().getContextPath();
+        String path = ClickUtils.getResourcePath(context.getRequest());
         addTrail(contextPath + path);
     }
 
-    public String getHtmlImports() {
-        return null;
-    }
-
-    public void setListener(Object listener, String method) {
-    }
-
-    public void onDeploy(ServletContext servletContext) {
-    }
-
-    public void onRender() {
-    }
-
+    /**
+     * The onDestroy event handler performs the following operations:
+     * <ul>
+     * <li>Invokes {@link #saveState(org.apache.click.Context)} to store the
+     * {@link Trail} instance between requests.</li>
+     * </ul>
+     */
     public void onDestroy() {
-        saveState();
+        Context context = getContext();
+        saveState(context);
     }
 
+   /**
+    * Override default implementation as no processing is necessary.
+    *
+    * @see org.apache.click.Control#onProcess()
+    *
+    * @return true to continue Page event processing or false otherwise
+    */
     public boolean onProcess() {
         return true;
     }
 
-    // -------------------------------------------------------- Public Methods
-
+    /**
+     * Add the specified path to the trail.
+     *
+     * @param path the path to add to the trail
+     */
     public void addTrail(String path) {
         for(Iterator it = getExcludedPaths().iterator(); it.hasNext(); ) {
             String excludedPath = (String) it.next();
@@ -144,22 +259,40 @@ public class Breadcrumb extends AbstractControl {
             collapseTrail(path);
             return;
         }
-        String pageName = extractPageName(path);
+        String pageName = getDisplayLabel(path);
         getTrail().put(path, pageName);
     }
 
+    /**
+     * Remove the specified path from the trail.
+     *
+     * @param path the path to remove from the trail
+     */
     public void removeTrail(String path) {
         getTrail().remove(path);
     }
 
+    /**
+     * Return the size of the breadcrumb.
+     *
+     * @return the size of the breadcrumb
+     */
     public int size() {
         return getTrail().size();
     }
 
+    /**
+     * Remove all entries from the breadcrumb.
+     */
     public void clear() {
         getTrail().clear();
     }
 
+    /**
+     * Return the trail of breadcrumbs as a Map.
+     *
+     * @return the trail of breadcrumb
+     */
     public Map getTrail() {
         if (trail == null) {
             trail = new Trail(this);
@@ -167,14 +300,14 @@ public class Breadcrumb extends AbstractControl {
         return trail;
     }
 
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(getTrail().size() * 20);
-        renderTrail(buffer);
-        return buffer.toString();
-    }
-
-    // -------------------------------------------------------- Protected Methods
-    protected void renderTrail(HtmlStringBuffer buffer) {
+    /**
+     * Render the breadcrumb's output to the specified buffer.
+     * <p/>
+     * @see org.apache.click.Control#render(org.apache.click.util.HtmlStringBuffer)
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("div");
         buffer.appendAttribute("id", getId());
         buffer.closeTag();
@@ -192,8 +325,8 @@ public class Breadcrumb extends AbstractControl {
                 Entry entry = (Entry) it.next();
 
                 String path = (String) entry.getKey();
-                String pageName = (String) entry.getValue();
-                renderPath(path, pageName, !it.hasNext(), buffer);
+                String label = (String) entry.getValue();
+                renderPath(buffer, path, label, !it.hasNext());
 
                 if (it.hasNext()) {
                     buffer.append("<span style=\"padding:0 2px;\">");
@@ -205,11 +338,38 @@ public class Breadcrumb extends AbstractControl {
         buffer.append("</div>");
     }
 
-    protected void renderPath(String path, String pageName, boolean isLastEntry, HtmlStringBuffer buffer) {
+   /**
+     * Returns the HTML representation of this control.
+     * <p/>
+     * This method delegates the rendering to the method
+     * {@link #render(org.apache.click.util.HtmlStringBuffer)}.
+     *
+     * @see Object#toString()
+     *
+     * @return the HTML representation of this control
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getTrail().size() * 20);
+        render(buffer);
+        return buffer.toString();
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Render a breadcrumb path to the given buffer.
+     *
+     * @param buffer the buffer to render to
+     * @param path the path to render
+     * @param label the label to render for the given path
+     * @param isLastEntry true if this is the last path to render, false otherwise
+     */
+    protected void renderPath(HtmlStringBuffer buffer, String path,
+        String label, boolean isLastEntry) {
 
         // If its the last entry only render a string not a hyperlink.
         if (isLastEntry) {
-            buffer.append(pageName);
+            buffer.append(label);
             return;
         }
 
@@ -222,12 +382,18 @@ public class Breadcrumb extends AbstractControl {
 
         buffer.closeTag();
 
-        buffer.append(pageName);
+        buffer.append(label);
 
         buffer.elementEnd("a");
     }
 
-    protected String extractPageName(String path) {
+    /**
+     * Return the label to display for the given path.
+     *
+     * @param path the path of the current page
+     * @return the label to display for the given path
+     */
+    protected String getDisplayLabel(String path) {
 
         // We start off optimistic
         String pagePath = path;
@@ -246,6 +412,12 @@ public class Breadcrumb extends AbstractControl {
         return pagePath;
     }
 
+    /**
+     * This method ensures that when a user navigates to a URL that is already
+     * present in the breadcrumb trail, all entries after this path is removed.
+     *
+     * @param newPath the current URL path
+     */
     protected void collapseTrail(String newPath) {
         // Indicates if trail entries must be removed
         boolean remove = false;
@@ -266,8 +438,14 @@ public class Breadcrumb extends AbstractControl {
         }
     }
 
-    protected void restoreState() {
-        Trail existingTrail = (Trail) getContext().getSession().getAttribute(BREADCRUMB_KEY);
+    /**
+     * Retrieves the breadcrumb {@link #getTrail() trail} from the HttpSession.
+     * The trail is retrieved from the HttpSession with the key {@link #BREADCRUMB_KEY}.
+     *
+     * @param context the current request context
+     */
+    protected void restoreState(Context context) {
+        Trail existingTrail = (Trail) context.getSession().getAttribute(BREADCRUMB_KEY);
         if (existingTrail == null) {
             return;
         }
@@ -276,25 +454,16 @@ public class Breadcrumb extends AbstractControl {
         
     }
 
-    protected void saveState() {
-        HttpSession session = getContext().getRequest().getSession(false);
+    /**
+     * Stores the breadcrumb {@link #getTrail() trail} in the HttpSession.
+     * The trail is stored in the HttpSession under the key {@link #BREADCRUMB_KEY}.
+     *
+     * @param context the current request context
+     */
+    protected void saveState(Context context) {
+        HttpSession session = context.getRequest().getSession(false);
         if (session != null) {
             session.setAttribute(BREADCRUMB_KEY, trail);
         }
-    }
-
-    public static void main(String[] args) {
-        MockContext.initContext();
-        Breadcrumb crumb = new Breadcrumb("bc", "bread crumb label:", 6, " / ");
-
-        String link = "path1";
-        crumb.addTrail(link);
-        link = "context/path2";
-        crumb.addTrail(link);
-        link = "context/path2";
-        crumb.addTrail(link);
-        link = "/context/path3.htm?param1=one&param2=two";
-        crumb.addTrail(link);
-        System.out.println(crumb);
     }
 }

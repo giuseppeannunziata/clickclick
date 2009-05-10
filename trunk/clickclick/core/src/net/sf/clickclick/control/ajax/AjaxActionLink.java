@@ -21,55 +21,105 @@ import org.apache.click.control.ActionLink;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
+ * Provides a server-side Ajax enabled ActionLink.
+ * <p/>
+ * <b>Please note:</b> AjaxActionLink does not work out-of-the-box since no
+ * client-side Ajax support is provided.
  *
  * @author Bob Schellink
  */
 public class AjaxActionLink extends ActionLink {
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create an AjaxActionLink with the given name.
+     *
+     * @param name the link name
+     */
     public AjaxActionLink(String name) {
         super(name);
     }
 
+    /**
+     * Create a AjaxActionLink with the given name and label.
+     *
+     * @param name the link name
+     * @param label the link display label
+     */
     public AjaxActionLink(String name, String label) {
         super(name, label);
     }
 
+    /**
+     * Create a AjaxActionLink with the given name, label and id.
+     *
+     * @param name the link name
+     * @param label the link display label
+     * @param id the link id
+     */
+    public AjaxActionLink(String name, String label, String id) {
+        super(name, label);
+        setId(id);
+    }
+
+    /**
+     * Create an AjaxActionLink for the given listener object.
+     */
     public AjaxActionLink(AjaxListener ajaxListener) {
         setActionListener(ajaxListener);
     }
 
+    /**
+     * Create a AjaxActionLink with the given name and listener object.
+     *
+     * @param name the link name
+     * @param ajaxListener the Ajax Listener target object
+     */
     public AjaxActionLink(String name, AjaxListener ajaxListener) {
         super(name);
         setActionListener(ajaxListener);
     }
 
+    /**
+     * Create a AjaxActionLink with the given name, label and listener object.
+     *
+     * @param name the link name
+     * @param label the link display label
+     * @param ajaxListener the Ajax Listener target object
+     */
     public AjaxActionLink(String name, String label, AjaxListener ajaxListener) {
         super(name, label);
         setActionListener(ajaxListener);
     }
 
+    /**
+     * Create an AjaxActionLink with no name defined.
+     * <p/>
+     * <b>Please note</b> the control's name must be defined before it is valid.
+     */
     public AjaxActionLink() {
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // --------------------------------------------------------- Public Methods
 
-    public String getId() {
-        String id = super.getId();
-        if (id == null) {
-            return getName() + "_id";
-        } else {
-            return id;
-        }
-    }
-
+    /**
+     * Register the link with the {@link net.sf.clickclick.AjaxControlRegistry}.
+     */
     public void onInit() {
         super.onInit();
-        // Add id parameter to trigger onProcess event
         AjaxControlRegistry.registerAjaxControl(this);
     }
 
+    /**
+     * Render the link to the given buffer.
+     *
+     * @param buffer the buffer to render to
+     */
     public void render(HtmlStringBuffer buffer) {
-        setParameter(getId(), "1");
+        // Ensure the name attribute is rendered
+        setAttribute("name", getName());
+
         super.render(buffer);
     }
 }

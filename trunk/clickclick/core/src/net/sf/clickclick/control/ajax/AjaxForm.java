@@ -15,26 +15,73 @@
  */
 package net.sf.clickclick.control.ajax;
 
-import org.apache.click.AjaxControlRegistry;
+import net.sf.clickclick.AjaxControlRegistry;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
+ * Provides a server-side Ajax enabled Form.
+ * <p/>
+ * <b>Please note:</b> AjaxForm does not work out-of-the-box since no
+ * client-side Ajax support is provided.
  *
  * @author Bob Schellink
  */
 public class AjaxForm extends Form {
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a default AjaxForm.
+     */
     public AjaxForm() {
     }
 
+    /**
+     * Create an AjaxForm for the given name.
+     *
+     * @param name the name of the form
+     */
     public AjaxForm(String name) {
         super(name);
     }
 
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Register the link with the {@link net.sf.clickclick.AjaxControlRegistry}.
+     */
     public void onInit() {
         super.onInit();
-        add(new HiddenField(name, getId()));
         AjaxControlRegistry.registerAjaxControl(this);
+    }
+
+    /**
+     * Render the link to the given buffer.
+     * <p/>
+     * This method delegates to {@link #addIdField()} to add a hidden field
+     * containing the Form's ID which ensures Ajax requests from this form are
+     * identified.
+     *
+     * @param buffer the buffer to render to
+     */
+    public void render(HtmlStringBuffer buffer) {
+        addIdField();
+        super.render(buffer);
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Adds a hidden Field containing the Form's ID which ensures Ajax requests
+     * from this form can be identified.
+     */
+    protected void addIdField() {
+        // Add the Form ID as a HiddeField to trigger Ajax callback
+        String id = getId();
+        if (getField(id) == null) {
+            add(new HiddenField(id, "1"));
+        }
     }
 }

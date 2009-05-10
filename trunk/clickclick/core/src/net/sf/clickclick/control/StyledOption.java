@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.clickclick.control;
 
 import java.util.List;
@@ -8,61 +21,93 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * The StyledOption class adds the <code>id</code> attribute to the html option element thus allowing you to add specific css makeup to individual html instances
- * <p>
+ * The StyledOption class adds the <tt>id</tt> attribute to the html option
+ * element thus allowing you to add specific css makeup to individual html
+ * instances.
+ * <p/>
  * The id is generated as follows: <code>formName-selectName-optionName</code>
- * Please note that the possible styles that can be applied is limited and rendering differs greatly between browser
- * <p>
- * Tested elements:<br />
- * Safe on all browsers: <code>background-color</code> and <code>color</code>
- * <p>Firefox also supports background-image, font, border and padding.
- * <p>Firefox however does not apply the style of the selected element to the Select control. You can simulate this behaviour with Javascript if you so wish (see samplepage)
- * <p>See the samplepage for inspiration
+ * Please note that the possible styles that can be applied is limited and
+ * rendering differs greatly between browser.
+ * <p/>
+ * Tested elements:
+ * <p/>
+ * Safe on all browsers: <tt>background-color</tt> and <tt>color</tt>.
+ * <p/>
+ * Firefox also supports background-image, font, border and padding.
+ * <p/>
+ * Firefox however does not apply the style of the selected element to the
+ * Select control. You can simulate this behaviour with Javascript if you so
+ * wish (see samplepage).
+ * <p/>
+ * See the samplepage for inspiration.
  *
  * @author Christopher Highway
  */
 public class StyledOption extends Option {
+
+    // -------------------------------------------------------------- Constants
+
     private static final long serialVersionUID = 1L;
 
-    private final String      name;
-    private String            id;
+    // -------------------------------------------------------------- Variables
+
+    /** The option name. */
+    private final String name;
+
+    /** The option id. */
+    private String id;
 
     /**
-     * use the constructor <code>StyledOption(value, name, label)</code> if the label has to be empty.
-     * @param value will be used as value, name and label
+     * Create a new StyledOption for the given value.
+     * <p/>
+     * The value will be used as the StyledOption's name and label.
+     *
+     * @param value the value of the StyledOption
      */
     public StyledOption(String value) {
         super(value);
-        if (StringUtils.isEmpty(value)) throw new IllegalArgumentException("Value cannot be null if it is also to be used as Name.");
+        if (StringUtils.isEmpty(value)) {
+            throw new IllegalArgumentException("Value cannot be null if it is also to be used as Name.");
+        }
         name = value;
     }
 
     /**
-     * use the constructor <code>StyledOption(value, name, label)</code> if the label has to be empty.
-     * @param value
-     * @param name the name is also used as label
+     * Create a new StyledOption for the given value and name.
+     * <p/>
+     * The name will be used as the StyledOption's label.
+     *
+     * @param value the value of the StyledOption
+     * @param name the name of the StyledOption
      */
     public StyledOption(Object value, String name) {
         super(value, name);
-        if (StringUtils.isEmpty(name)) throw new IllegalArgumentException("Please provide a name for this option.");
+        if (StringUtils.isEmpty(name)) {
+            throw new IllegalArgumentException("Please provide a name for this option.");
+        }
         this.name = name;
     }
 
     /**
-     * individual properties for value, name and label
-     * @param value
-     * @param name
-     * @param label can be empty
+     * Create a new StyledOption for the given value, name and label.
+     *
+     * @param value the value of the StyledOption
+     * @param name the name of the StyledOption
+     * @param label the label of the StyledOption
      */
     public StyledOption(Object value, String name, String label) {
         super(value, label);
-        if (StringUtils.isEmpty(name)) throw new IllegalArgumentException("Please provide a name for this option.");
+        if (StringUtils.isEmpty(name)) {
+            throw new IllegalArgumentException("Please provide a name for this option.");
+        }
         this.name = name;
     }
 
     // ------------------------------------------------------------------
 
     /**
+     * Return the option name.
+     *
      * @return name of the option
      */
     public String getName() {
@@ -70,7 +115,8 @@ public class StyledOption extends Option {
     }
 
     /**
-     * return the custom id set for this option
+     * Return the custom id set for this option.
+     *
      * @return the HTML id attribute
      */
     public String getId() {
@@ -78,7 +124,8 @@ public class StyledOption extends Option {
     }
 
     /**
-     * the id of this option, leave empty to let StyledOption generate the default id (formName-selectName-optionName)
+     * The id of this option, leave empty to let StyledOption generate the
+     * default id (formName-selectName-optionName).
      *
      * @param id the HTML id attribute
      */
@@ -86,10 +133,12 @@ public class StyledOption extends Option {
         this.id = id;
     }
 
-    // ------------------------------------------------------------------
+    // --------------------------------------------------------- Public Methods
 
     /**
-     * copied everything from Option, just adding the id attribute
+     * Render the HTML representation of the Option.
+     * <p/>
+     * Copied everything from Option, just adding the id attribute.
      */
     public void render(Select select, HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
@@ -123,9 +172,10 @@ public class StyledOption extends Option {
     }
 
     /**
-     * option is not a field so we need to pass the parent manually
-     * @param select
-     * @return
+     * Option is not a field so we need to pass the parent manually.
+     *
+     * @param select the parent Select control
+     * @return the ID attribute value
      */
     String getIdAttr(Select select) {
         if (StringUtils.isEmpty(id)) {

@@ -1,38 +1,62 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.clickclick.control.menu;
 
-import java.text.MessageFormat;
 import java.util.Iterator;
+import java.util.List;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.extras.control.Menu;
-import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
- * FlexiMenu overrides setContext (), so that the menu can be built programmatically
- * without the need of a menu.xml configuration.
+ * Provides a menu with the following features:
+ * <ul>
+ * <li>FlexiMenu contains two predefined styles to layout the menus either
+ * {@link #HORIZONTAL vertically} or {@link #VERTICAL horizontally}.</li>
+ * <li>FlexiMenus are constructed programmatically, thus the application menu
+ * can be specified in a relational database.</li>
+ * </ul>
+ *
+ * @author Bob Schellink
  */
 public class FlexiMenu extends Menu {
 
+    // -------------------------------------------------------------- Constants
+
+    /** The menu CSS style: <tt>"horizontal"</tt>. */
     public static final String HORIZONTAL = "horizontal";
 
+    /** The menu CSS style: <tt>"vertical"</tt>. */
     public static final String VERTICAL = "vertical";
 
+    // -------------------------------------------------------------- Variables
+
+    /** The menu orientation, by default {@link #VERTICAL}. */
     private String orientation = VERTICAL;
 
-    protected static final String MENU_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/clickclick/core/menu/{2}-menu.css\"></link>\n" +
-        "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n" +
-        "<script type=\"text/javascript\" src=\"{0}/clickclick/core/menu/menu.js\"></script>\n" +
-        "<script type=\"text/javascript\">addLoadEvent( function() '{ initMenu() '} );</script>\n";
+    // ----------------------------------------------------------- Constructors
 
     /**
-     * Call super default constructor
+     * Create a default menu.
      */
     public FlexiMenu() {
-        super();
     }
 
     /**
-     * Create a new root Menu instance with the given name.
+     * Create a FlexiMenu with the given name.
      *
      * @param name the name of the menu
      */
@@ -40,18 +64,35 @@ public class FlexiMenu extends Menu {
         super(name);
     }
 
-    public void add(Menu menu) {
-        getChildren().add(menu);
-    }
+    // ------------------------------------------------------ Public Properties
 
+    /**
+     * Return the menu orientation.
+     *
+     * @see #setOrientation(java.lang.String)
+     *
+     * @return the menu orientation
+     */
     public String getOrientation() {
         return orientation;
     }
 
+    /**
+     * Set the menu orientation.
+     * <p/>
+     * Supported values are: {@link #VERTICAL} and {@link #HORIZONTAL}.
+     *
+     * @param orientation the menu orientation
+     */
     public void setOrientation(String orientation) {
         this.orientation = orientation;
     }
 
+    /**
+     * Return true if the menu contains any child submenus.
+     *
+     * @return true if the menu contains any child submenus
+     */
     public boolean hasChildren() {
         if (getChildren().size() == 0) {
             return false;
@@ -59,6 +100,11 @@ public class FlexiMenu extends Menu {
         return true;
     }
 
+    /**
+     * Return the HTML href attribute value.
+     *
+     * @return the HTML href attribute value
+     */
     public String getHref() {
         if (getPath() == null) {
             setPath("#");
@@ -77,30 +123,94 @@ public class FlexiMenu extends Menu {
         }
     }
 
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Add the given menu as a submenu.
+     *
+     * @param menu the submenu to add
+     */
+    public void add(Menu menu) {
+        getChildren().add(menu);
+    }
+
+    /**
+     * Return true if any child menus have the user in one of their menu roles,
+     * false otherwise.
+     * <p/>
+     * If no {@link #getRoles() roles} are defined, this method returns true,
+     * meaning all users will be able to view all menus.
+     *
+     * @return true if the user is in one of the child menu roles, or false otherwise
+     */
     public boolean isUserInChildMenuRoles() {
-        if (getContext().getRequest().getRemoteUser() == null) {
+        List roles = getRoles();
+        if (roles == null || roles.isEmpty()) {
             return true;
         }
         return super.isUserInChildMenuRoles();
     }
 
+    /**
+     * Return true if the user is in one of the menu roles, false otherwise.
+     * <p/>
+     * If no {@link #getRoles() roles} are defined, this method returns true,
+     * meaning all users will be able to view all menus.
+     *
+     * @return true if the user is in one of the menu roles, false otherwise
+     */
     public boolean isUserInRoles() {
-        if (getContext().getRequest().getRemoteUser() == null) {
+        List roles = getRoles();
+        if (roles == null || roles.isEmpty()) {
             return true;
         }
         return super.isUserInRoles();
     }
 
+    /**
+     * Override default implementation and return null.
+     *
+     * @see #getHeadElements()
+     *
+     * @return override default implementation and return null
+     */
     public String getHtmlImports() {
-        String[] args = {
-            getContext().getRequest().getContextPath(),
-            ClickUtils.getResourceVersionIndicator(getContext()),
-            getOrientation()
-        };
-
-        return MessageFormat.format(MENU_IMPORTS, args);
+        return null;
     }
 
+    /**
+     * Return the list of head element as defined by {@link #MENU_IMPORTS}.
+     *
+     * @return the list of html imports
+     */
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            String menuStyle = getOrientation() + "-menu.css";
+            CssImport cssImport = new CssImport("/clickclick/core/menu/" + menuStyle);
+            headElements.add(cssImport);
+
+            JsImport jsImport = new JsImport("/click/control.js");
+            headElements.add(jsImport);
+
+            jsImport = new JsImport("/clickclick/core/menu/menu.js");
+            headElements.add(jsImport);
+
+            JsScript jsScript = new JsScript("addLoadEvent( function() { initMenu() } );");
+            headElements.add(jsScript);
+        }
+
+        return headElements;
+    }
+
+    /**
+     * Render the HTML representation of the Menu.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("ul");
         buffer.appendAttribute("class", "menu");
@@ -111,12 +221,23 @@ public class FlexiMenu extends Menu {
         buffer.elementEnd("ul");
     }
 
+    /**
+     * Render the HTML representation of the Menu.
+     *
+     * @return the HTML representation of the Menu
+     */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(256);
         render(buffer);
         return buffer.toString();
     }
 
+    /**
+     * Render the given menu.
+     *
+     * @param buffer the buffer to render to
+     * @param menu the menu to render
+     */
     protected void renderMenu(HtmlStringBuffer buffer, Menu menu) {
         Iterator it = menu.getChildren().iterator();
         while (it.hasNext()) {
@@ -128,13 +249,13 @@ public class FlexiMenu extends Menu {
                     buffer.appendAttribute("class", sb.toString());
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenuItem(buffer, child);
+                    renderMenuLink(buffer, child);
                 } else {
                     sb.append(" ").append("menuItemBullet");
                     buffer.appendAttribute("class", sb.toString());
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenuItem(buffer, child);
+                    renderMenuLink(buffer, child);
                     buffer.elementStart("ul");
                     buffer.appendAttribute("class", "submenu");
                     buffer.closeTag();
@@ -149,7 +270,13 @@ public class FlexiMenu extends Menu {
         }
     }
 
-    protected void renderMenuItem(HtmlStringBuffer buffer, Menu menu) {
+    /**
+     * Render the given menu as a link.
+     *
+     * @param buffer the buffer to render to
+     * @param menu the menu to render as a link
+     */
+    protected void renderMenuLink(HtmlStringBuffer buffer, Menu menu) {
 
         buffer.elementStart("a");
 

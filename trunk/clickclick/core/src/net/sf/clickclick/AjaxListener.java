@@ -20,7 +20,43 @@ import org.apache.click.ActionListener;
 import org.apache.click.Control;
 
 /**
- * Provides an Ajax ActionListener.
+ * Provides an Ajax listener interface for receiving Ajax events.
+ * <p/>
+ * The class that is interested in processing an Ajax event
+ * implements this interface, and the object created with that class is
+ * registered with a control, using the controls's <tt>setActionListener</tt>
+ * method. When an Ajax event occurs, that object's <tt>onAjaxAction</tt> method
+ * is invoked.
+ * <p/>
+ * The {@link #onAjaxAction(org.apache.click.Control)} method returns a
+ * {@link net.sf.clickclick.util.Partial} object which contains the server's
+ * response.
+ *
+ * <h3>Listener Example</h3>
+ *
+ * An AjaxListener example is provided below:
+ *
+ * <pre class="prettyprint">
+ * public MyPage extends Page {
+ *
+ *    public ActionLink link = new ActionLink();
+ *
+ *    public MyPage() {
+ *
+ *       link.setActionListener(new AjaxListener() {
+ *           public Partial onAjaxAction(Control source) {
+ *               return onLinkClick();
+ *           }
+ *        });
+ *    }
+ *
+ *    public Partial onLinkClick() {
+ *       Partial partial = new Partial();
+ *       partial.setContent("<script>alert('Hello World');</script>");
+ *       return partial;
+ *    }
+ * }
+ * </pre>
  *
  * @author Bob Schellink
  */

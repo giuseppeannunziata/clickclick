@@ -1,5 +1,6 @@
 /*
- * Copyright 2002-2006 The Apache Software Foundation
+ * Copyright 2008 Bob Schellink
+ *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
  * You may obtain a copy of the License at
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.click.service.ConfigService;
-import org.apache.click.util.ClickUtils;
 
 /**
  * ClassLoader which enables specified classes to be reloaded without restarting
@@ -49,30 +49,92 @@ import org.apache.click.util.ClickUtils;
  */
 public class ReloadClassLoader extends URLClassLoader {
 
+    // -------------------------------------------------------------- Variables
+
+    /** The list of classes and folders to be reloaded. */
     private List includes = new ArrayList();
 
+    /** The list of classes and folders to be excluded from reloading. */
     private List excludes = new ArrayList();
-    
+
+    /** The Click ConfigService. */
     private ConfigService configService;
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Creates a new ReloadClassLoader instance for the given URLs, parent
+     * ClassLoader and ConfigService.
+     *
+     * @param classpath the classpath as an array of URLs
+     * @param parent the parent ClassLoader
+     * @param configService the Click ConfigService
+     */
     public ReloadClassLoader(URL[] classpath, ClassLoader parent,
         ConfigService configService) {
         super(classpath, parent);
         this.configService = configService;
     }
 
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Add a class or folder to be reloaded by this ClassLoader.
+     *
+     * @param include a class or folder to be reloaded by this ClassLoader
+     */
     public void addInclude(String include) {
         includes.add(include);
     }
 
+    /**
+     * Add a class or folder to be excluded from reloading by this ClassLoader.
+     *
+     * @param exclude a class or folder to be excluded from reloading by this
+     * ClassLoader
+     */
     public void addExclude(String exclude) {
         excludes.add(exclude);
     }
-    
+
+    /**
+     * Promote this method to public.
+     *
+     * @param url the URL to be added to the search path of URLs
+     */
     public void addURL(URL url) {
         super.addURL(url);
     }
 
+    /**
+     * Finds a resource with the given name. If the resource is not found in
+     * this ClassLoader the parent ClassLoader will be checked.
+     *
+     * @param  name the resource name
+     * @return a URL object for reading the resource, or null if no resource
+     * could not be found or the invoker doesn't have adequate privileges to
+     * get the resource.
+     */
+    public final URL getResource(String name) {
+        //Try to find resource locally
+        URL resource = findResource(name);
+
+        if (resource == null) {
+            //If not found try parent
+            resource = getParent().getResource(name);
+        }
+        return resource;
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return true if the given class should be loaded by this ClassLoader or
+     * not.
+     *
+     * @param name the class to reload
+     * @return true if the class should be loaded, false otherwise
+     */
     protected boolean shouldLoadClass(String name) {
         if(name == null || name.length() == 0) {
             return false;
@@ -102,6 +164,22 @@ public class ReloadClassLoader extends URLClassLoader {
         return false;
     }
 
+    /**
+     * Loads the class with the given name. First try and load the class through
+     * this ClassLoader before loading it through the parent ClassLoader.
+     * <p/>
+     * Only classes which are listed in the {@link #includes} list will be
+     * loaded.
+     * <p/>
+     * This method delegates to {@link #shouldLoadClass(java.lang.String)}
+     * to check if a class should be loaded.
+     *
+     * @param  name the binary name of the class
+     * @param  resolve if true then resolve the class
+     * @return the resulting Class object
+     *
+     * @throws  ClassNotFoundException if the class could not be found
+     */
     protected Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
         //First, check if the class has already been loaded
         Class c = findLoadedClass(name);
@@ -138,16 +216,5 @@ public class ReloadClassLoader extends URLClassLoader {
             resolveClass(c);
         }
         return c;
-    }
-    
-    public final URL getResource(String name) {
-        //Try to find resource locally
-        URL resource = findResource(name);
-        
-        if (resource == null) {
-            //If not found try parent
-            resource = getParent().getResource(name);
-        }
-        return resource;
     }
 }

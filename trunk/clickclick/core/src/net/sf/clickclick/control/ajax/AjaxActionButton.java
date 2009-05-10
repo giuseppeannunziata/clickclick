@@ -16,13 +16,18 @@
 package net.sf.clickclick.control.ajax;
 
 import java.util.Iterator;
-import org.apache.click.AjaxControlRegistry;
-import net.sf.click.AjaxListener;
+import net.sf.clickclick.AjaxControlRegistry;
+import net.sf.clickclick.AjaxListener;
+import org.apache.click.Context;
 import org.apache.click.control.ActionButton;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
+ * Provides a server-side Ajax enabled ActionButton.
+ * <p/>
+ * <b>Please note:</b> AjaxActionButton does not work out-of-the-box since no
+ * client-side Ajax support is provided.
  *
  * @author Bob Schellink
  */
@@ -31,7 +36,7 @@ public class AjaxActionButton extends ActionButton {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a Submit button with the given name.
+     * Create an AjaxActionButton with the given name.
      *
      * @param name the button name
      */
@@ -40,7 +45,7 @@ public class AjaxActionButton extends ActionButton {
     }
 
     /**
-     * Create a Submit button with the given name and label.
+     * Create a AjaxActionButton with the given name and label.
      *
      * @param name the button name
      * @param label the button display label
@@ -50,18 +55,26 @@ public class AjaxActionButton extends ActionButton {
     }
 
     /**
-     * Create an ActionButton for the given listener object and listener method.
-     * 
-     * @throws IllegalArgumentException if the name, listener or method is null
-     * or if the method is blank
+     * Create a AjaxActionLink with the given name, label and id.
+     *
+     * @param name the link name
+     * @param label the link display label
+     * @param id the link id
+     */
+    public AjaxActionButton(String name, String label, String id) {
+        super(name, label);
+        setId(id);
+    }
+
+    /**
+     * Create an AjaxActionButton for the given listener object.
      */
     public AjaxActionButton(AjaxListener ajaxListener) {
         setActionListener(ajaxListener);
     }
 
     /**
-     * Create a Submit button with the given name, listener object and
-     * listener method.
+     * Create a AjaxActionButton with the given name and listener object.
      *
      * @param name the button name
      * @param ajaxListener the Ajax Listener target object
@@ -72,14 +85,11 @@ public class AjaxActionButton extends ActionButton {
     }
 
     /**
-     * Create a Submit button with the given name, label, listener object and
-     * listener method.
+     * Create a AjaxActionButton with the given name, label and listener object.
      *
      * @param name the button name
      * @param label the button display label
      * @param ajaxListener the Ajax Listener target object
-     * @throws IllegalArgumentException if listener is null or if the method
-     * is blank
      */
     public AjaxActionButton(String name, String label, AjaxListener ajaxListener) {
         super(name, label);
@@ -87,7 +97,7 @@ public class AjaxActionButton extends ActionButton {
     }
 
     /**
-     * Create an Submit button with no name defined.
+     * Create an AjaxActionButton with no name defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
@@ -95,24 +105,27 @@ public class AjaxActionButton extends ActionButton {
         super();
     }
 
-    // ------------------------------------------------------ Public Attributes
+    // --------------------------------------------------------- Public Methods
 
-    public String getId() {
-        String id = super.getId();
-        if (id == null) {
-            return getName() + "_id";
-        } else {
-            return id;
-        }
-    }
-
+    /**
+     * Register the button with the {@link net.sf.clickclick.AjaxControlRegistry}.
+     */
     public void onInit() {
         super.onInit();
         AjaxControlRegistry.registerAjaxControl(this);
     }
 
+    /**
+     * Return the AjaxActionButton href attribute for the given value.
+     * This method will encode the URL with the session ID if required using
+     * <tt>HttpServletResponse.encodeURL()</tt>.
+     *
+     * @param value the button value parameter
+     * @return the button HTML href attribute value
+     */
     public String getHref(Object value) {
-        String uri = ClickUtils.getRequestURI(getContext().getRequest());
+        Context context = getContext();
+        String uri = ClickUtils.getRequestURI(context.getRequest());
 
         HtmlStringBuffer buffer =
             new HtmlStringBuffer(uri.length() + getName().length() + 40);
@@ -127,7 +140,7 @@ public class AjaxActionButton extends ActionButton {
             buffer.append("&amp;");
             buffer.append(VALUE);
             buffer.append("=");
-            buffer.append(ClickUtils.encodeUrl(value, getContext()));
+            buffer.append(ClickUtils.encodeUrl(value, context));
         }
 
         if (hasParameters()) {
@@ -137,7 +150,7 @@ public class AjaxActionButton extends ActionButton {
                 if (!name.equals(ACTION_BUTTON) && !name.equals(VALUE)) {
                     Object paramValue = getParameters().get(name);
                     String encodedValue
-                        = ClickUtils.encodeUrl(paramValue, getContext());
+                        = ClickUtils.encodeUrl(paramValue, context);
                     buffer.append("&amp;");
                     buffer.append(name);
                     buffer.append("=");
@@ -146,15 +159,24 @@ public class AjaxActionButton extends ActionButton {
             }
         }
 
-        return getContext().getResponse().encodeURL(buffer.toString());
+        return context.getResponse().encodeURL(buffer.toString());
     }
 
+    /**
+     * Return the AjaxActionButton href attribute value.
+     *
+     * @return the button HTML href attribute value
+     */
     public String getHref() {
         return getHref(getValueObject());
     }
 
+    /**
+     * Render the button to the given buffer.
+     *
+     * @param buffer the buffer to render to
+     */
     public void render(HtmlStringBuffer buffer) {
-        setParameter(getId(), "1");
         buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
