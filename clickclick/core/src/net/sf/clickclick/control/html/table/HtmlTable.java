@@ -15,30 +15,117 @@
  */
 package net.sf.clickclick.control.html.table;
 
-import org.apache.click.MockContext;
 import org.apache.click.control.AbstractContainer;
-import org.apache.click.control.Container;
-import org.apache.click.control.HiddenField;
-import net.sf.clickclick.control.Html;
+import org.apache.click.control.AbstractControl;
 import org.apache.commons.lang.math.NumberUtils;
 
 /**
+ * Provides an HTML table control: &lt;table&gt;.
+ * <p/>
+ * <b>Please note:</b> HtmlTable is not related to nor extends from
+ * {@link org.apache.click.control.Table}.
+ * <p/>
+ * The following example shows how to use an HtmlTable control to render a 2 X 2
+ * grid.
+ * <p/>
+ * Given the Page <tt>MyPage.java</tt>:
+ *
+ * <pre class="prettyprint">
+ * public MyPage extends Page {
+ *
+ *     public onInit() {
+ *         // Create a new HtmlTable
+ *         HtmlTable table = new HtmlTable("htmlTable");
+ *
+ *         // Create row 1 and add two cells
+ *         Row row1 = new Row();
+ *         table.add(row1);
+ *         row1.add("row 1, cell 1");
+ *         row1.add("row 1, cell 2");
+ *
+ *         // Create row 2 and add another two cells
+ *         Row row2 = new Row();
+ *         table.add(row2);
+ *         row2.add("row 2, cell 1");
+ *         row2.add("row 2, cell 2");
+ *
+ *         // Add the table to the Page control list
+ *         addControl(table);
+ *     }
+ * } </pre>
+ *
+ * and the template <tt>my-page.htm</tt>:
+ *
+ * <pre class="prettyprint">
+ * $htmlTable </pre>
+ *
+ * will render as:
+ *
+ * <div class="border">
+ * <table name="table" id="table" border="1">
+ *   <tr>
+ *     <td>row 1, cell 1</td>
+ *     <td>row 1, cell 2</td>
+ *   </tr>
+ *   <tr>
+ *     <td>row 2, cell 1</td>
+ *     <td>row 2, cell 2</td>
+ *   </tr>
+ * </table>
+ * </div>
  *
  * @author Bob Schellink
  */
 public class HtmlTable extends AbstractContainer {
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a default HtmlTable.
+     * <p/>
+     * The table border is automatically set to 1.
+     */
     public HtmlTable() {
+        this(null);
     }
 
+    /**
+     * Create an HtmlTable for the given name.
+     * <p/>
+     * The table border is automatically set to 1.
+     */
     public HtmlTable(String name) {
         super(name);
+        setAttribute("border", "1");
     }
 
+    // ------------------------------------------------------ Public Properties
+
+    /**
+     * Return the table's html tag: <tt>table</tt>.
+     *
+     * @see AbstractControl#getTag()
+     *
+     * @return this controls html tag
+     */
     public String getTag() {
         return "table";
     }
-    
+
+    /**
+     * Set the table <tt>cellspacing</tt> attribute value.
+     *
+     * @param cellspacing the table cellspacing attribute value
+     */
+    public void setCellspacing(int cellspacing) {
+        setAttribute("cellspacing", Integer.toString(cellspacing));
+    }
+
+    /**
+     * Return the table <tt>cellspacing</tt> attribute value.
+     *
+     * @return the table cellspacing attribute value
+     */
     public int getCellspacing() {
         String cellspacing = getAttribute("cellspacing");
         if (NumberUtils.isNumber(cellspacing)) {
@@ -47,68 +134,47 @@ public class HtmlTable extends AbstractContainer {
         return 0;
     }
 
-    public void setCellspacing(int cellspacing) {
-        setAttribute("cellspacing", Integer.toString(cellspacing));
+    /**
+     * Set the table <tt>cellpadding</tt> attribute value.
+     *
+     * @param cellpadding the table cellpadding attribute value
+     */
+    public void setCellpadding(int cellpadding) {
+        setAttribute("cellpadding", Integer.toString(cellpadding));
     }
 
-    public static void main(String[] args) {
+    /**
+     * Return the table <tt>cellpadding</tt> attribute value.
+     *
+     * @return the table cellpadding attribute value
+     */
+    public int getCellpadding() {
+        String cellpadding = getAttribute("cellpadding");
+        if (NumberUtils.isNumber(cellpadding)) {
+            return NumberUtils.toInt(cellpadding);
+        }
+        return 0;
+    }
 
-        MockContext.initContext();
+    /**
+     * Set the table <tt>border</tt> attribute value.
+     *
+     * @param border the table border attribute value
+     */
+    public void setBorder(int border) {
+        setAttribute("border", Integer.toString(border));
+    }
 
-        HtmlTable table = new HtmlTable("table");
-        Row row = new Row("Row1");
-        table.add(row);
-        row = new Row("Row2");
-        table.add(row);
-        row = new Row("Row3");
-        table.add(row);
-        row = new Row("Row4");
-        table.add(row);
-        System.out.println("===================================START");
-        System.out.println(table);
-        System.out.println("===================================END");
-        table.remove(row);
-        System.out.println(table);
-        System.out.println("===================================REMOVED");
-        
-        Container caption = new AbstractContainer() {
-
-            public String getTag() {
-                return "caption";
-            }
-        };
-        table.add(caption);
-
-        Html html = new Html("caption 1\n");
-        caption.add(html);
-        Container thead = new AbstractContainer() {
-
-            public String getTag() {
-                return "thread";
-            }
-        };
-        row = new Row();
-        thead.add(row);
-        Cell cell = new Cell();
-        row.add(cell);
-        cell = new Cell();
-        row.add(cell);
-        table.add(thead);
-
-        row = new Row();
-
-        cell = new Cell();
-        //cell.setValue("hello");
-        html = new Html("hello");
-        cell.add(html);
-        HiddenField field = new HiddenField("myfield", String.class);
-        field.setValue("my hidden value");
-        cell.add(field);
-        cell.add(new Html("value 2"));
-        row.add(cell);
-        table.add(row);
-        table.add(row);
-//         
-        System.out.println(table);
+    /**
+     * Return the table <tt>border</tt> attribute value.
+     *
+     * @return the table border attribute value
+     */
+    public int getBorder() {
+        String border = getAttribute("border");
+        if (NumberUtils.isNumber(border)) {
+            return NumberUtils.toInt(border);
+        }
+        return 0;
     }
 }

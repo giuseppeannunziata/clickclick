@@ -20,26 +20,62 @@ import org.apache.click.control.AbstractControl;
 import net.sf.clickclick.control.html.Div;
 
 /**
+ * Provides a panel for absolute positioning of controls.
+ * <p/>
+ * When adding controls the left and top positions can be specified where the
+ * control should be rendered.
  *
  * @author Bob Schellink
  */
 public class AbsolutePanel extends SimplePanel {
 
-    private Div div;
+    // -------------------------------------------------------------- Variables
 
+    /** Internal div used for rendering the layout. */
+    protected Div div;
+
+    // ------------------------------------------------------------ Constructor
+
+    /**
+     * Create a default AbsolutePanel.
+     */
     public AbsolutePanel() {
-        init();
+        this(null);
     }
 
+    /**
+     * Create a AbsolutePanel with the given name.
+     *
+     * @param name the name of the panel
+     */
     public AbsolutePanel(String name) {
         super(name);
-        init();
+        div = new Div();
+        super.insert(div, 0);
+        div.setStyle("position", "relative");
+        div.setStyle("overflow", "hidden");
     }
 
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Adds the control to the panel at positions left=0, top=0.
+     *
+     * @param control the control to add
+     * @return the added control
+     */
     public Control add(Control control) {
         return add(control, 0, 0);
     }
 
+    /**
+     * Adds the control to the panel at the given left and top positions.
+     *
+     * @param control the control to add
+     * @param left the left position
+     * @param top the top position
+     * @return the added control
+     */
     public Control add(Control control, int left, int top) {
         
         AbstractControl abstractControl = null;
@@ -60,14 +96,10 @@ public class AbsolutePanel extends SimplePanel {
         return control;
     }
 
+    /**
+     * @throws UnsupportedOperationException as insert is not supported
+     */
     public Control insert(Control control, int index) {
         throw new UnsupportedOperationException("insert is not supported by this Panel");
-    }
-
-    protected void init() {
-        div = new Div();
-        super.insert(div, 0);
-        div.setStyle("position", "relative");
-        div.setStyle("overflow", "hidden");
     }
 }

@@ -314,7 +314,7 @@ public class ReloadClassFilter implements Filter {
      * @param chain
      */
     protected void handleRequest(ServletRequest request, ServletResponse response,
-        FilterChain chain) {
+        FilterChain chain) throws IOException, ServletException {
 
         // TODO should createReloadClassLoader be synchronized
         //synchronized (lock) {
@@ -329,18 +329,24 @@ public class ReloadClassFilter implements Filter {
             // Set the new context class loader
             Thread.currentThread().setContextClassLoader(reloadClassLoader);
             chain.doFilter(request, response);
-        } catch (Throwable t) {
+        /*} catch (Throwable t) {
             while (t instanceof ServletException) {
                 t = ((ServletException) t).getRootCause();
             }
             clickClickConfigService.getLogService().error(
                 "Could not handle request", t);
+            throw t;*/
         } finally {
             // Restore the context class loader
             Thread.currentThread().setContextClassLoader(orig);
         }
     }
 
+    /**
+     * Create and return a new ReloadClassLoader instance.
+     *
+     * @return a newly instantiated ReloadClassLoader
+     */
     protected ReloadClassLoader createReloadClassLoader() {
         ClassLoader parent = Thread.currentThread().getContextClassLoader();
         classpath = getClasspath();
@@ -360,6 +366,12 @@ public class ReloadClassFilter implements Filter {
         return loader;
     }
 
+    /**
+     * Add the path to the specified classpath entries.
+     *
+     * @param path the path to add to the classpath
+     * @param classpath the Set of classpath entries
+     */
     protected void addToClasspath(String path, Set classpath) {
         try {
             File f = new File(path);

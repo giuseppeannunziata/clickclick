@@ -1,3 +1,16 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.clickclick.control.repeater;
 
 import java.util.List;
@@ -13,20 +26,110 @@ import org.apache.click.control.Panel;
 import org.apache.click.util.ContainerUtils;
 
 /**
- * This control does the following:
- * Include child controls in its namespace by prefixing control names with its own
+ * Provides a Repeater control for displaying a list of items. For every item in
+ * the list the Repeater will display the same specified components.
+ * <p/>
+ * <h3>Usage</h3>
+ * When creating a Repeater you must implement the abstract method
+ * {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+ * which is invoked by the Repeater for every item in the {@link #items} list.
+ * <p/>
+ * In the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+ * method you setup the components for the given item and the Repeater will
+ * display these components for every item in the {@link #items} list.
+ * <p/>
+ * <h3>Basic Example</h3>
+ *
+ * Given the Page <tt>MyPage.java</tt>:
+ *
+ * <pre class="prettyprint">
+ * public class MyPage extends Page {
+ *
+ *     private Repeater repeater;
+ *
+ *     public void onInit() {
+ *         // Create a Repeater and implement the buildRow method
+ *         repeater = new Repeater("repeater") {
+ *             public void buildRow(Object item, RepeaterRow row, int index) {
+ *                 // Form each item create a Field
+ *                 Field field = new TextField("name");
+ *
+ *                 // Set the Field value to the item's String representation
+ *                 field.setValue(item.toString());
+ *
+ *                 // Add the Field to the Repeater by adding it to the RepeaterRow
+ *                 row.add(field);
+ *             }
+ *         };
+ *
+ *         // Add the repeater to the Page
+ *         addControl(repeater);
+ *
+ *         // Create a list of items and set it as the Repeater item list
+ *         List items = new ArrayList();
+ *         items.add("one");
+ *         items.add("two");
+ *         repeater.setItems(items);
+ *     }
+ * } </pre>
+ *
+ * and the template <tt>my-page.htm</tt>:
+ *
+ * <pre class="prettyprint">
+ * $repeater </pre>
+ *
+ * will render as:
+ *
+ * <div class="border">
+ * <input type="text" name="name_0" id="name_0" value="one" size="20"/>
+ * <input type="text" name="name_1" id="name_1" value="two" size="20"/>
+ * </div>
+ *
+ * <h3>How does the Repeater work?</h3>
+ *
+ * In the example above a TextField is displayed for each item in the list. Both
+ * fields are called <span class="st">"name"</span> and one can expect the
+ * fields to be rendered as:
+ *
+ * <pre class="prettyprint">
+ * &lt;input type="text" name="name" id="name" ... /&gt;
+ * &lt;input type="text" name="name" id="name" ... /&gt;</pre>
+ *
+ * The two fields will have the same <tt>id</tt> and <tt>name</tt>, meaning it's
+ * not possible to differentiate the fields.
+ * <p/>
+ * The Repeater resolves this issue by ensuring the <tt>name</tt> of child
+ * controls in each {@link RepeaterRow} is unique by adding the index of the row
+ * to each control. Thus the Repeater renders the two Fields as:
+ *
+ * <pre class="prettyprint">
+ * &lt;input type="text" name="name_0" id="name_0" ... /&gt;
+ * &lt;input type="text" name="name_1" id="name_1" ... /&gt;</pre>
  *
  * @author Bob Schellink
  */
 public abstract class Repeater extends AbstractContainer {
 
+    // -------------------------------------------------------------- Constants
+
     private static final long serialVersionUID = 1L;
 
+    // -------------------------------------------------------------- Variables
+
+    /** The list of items to be rendered. */
     protected List items = null;
 
+    /**
+     * Create a default Repeater.
+     */
     public Repeater() {
     }
 
+    /**
+     * Create a Repeater with the given name.
+     *
+     * @param name the repeater name
+     */
     public Repeater(String name) {
         super(name);
     }
@@ -43,8 +146,10 @@ public abstract class Repeater extends AbstractContainer {
     }
 
     /**
-     * Set the value of items and delegates to {@link #buildRows()} to start
-     * building the repeater controls.
+     * Set the items to render.
+     * <p/>
+     * This method delegates to {@link #buildRows()} to build the controls for
+     * each item in the given list.
      *
      * @param items new value of items
      */
@@ -55,25 +160,53 @@ public abstract class Repeater extends AbstractContainer {
 
     // --------------------------------------------------------- Public Methods
 
+    /**
+     * @throws UnsupportedOperationException if invoked. Rather add controls
+     * through the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+     * method.
+     */
     public Control add(Control control) {
-        throw new UnsupportedOperationException("Method not supported.");
+        throw new UnsupportedOperationException("Method not supported. Rather"
+            + " add controls through the #buildRow method.");
     }
 
+    /**
+     * @throws UnsupportedOperationException if invoked. Rather add controls
+     * through the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+     * method.
+     */
     public Control insert(Control control, int index) {
-        throw new UnsupportedOperationException("Method not supported.");
+        throw new UnsupportedOperationException("Method not supported. Rather"
+            + " add controls through the #buildRow method.");
     }
 
+    /**
+     * Inserts the item at the given index.
+     *
+     * @param item the item to add
+     * @param index the index to add the item to
+     */
     public void insertItem(Object item, int index) {
         getItems().add(index, item);
         createRow(index);
     }
 
+    /**
+     * Add the item to the list of {@link #items}.
+     *
+     * @param item the item to add
+     */
     public void addItem(Object item) {
         getItems().add(item);
         int index = getItems().size();
         createRow(index - 1);
     }
 
+    /**
+     * Remove the item from the list of {@link #items}.
+     *
+     * @param item the item to remove
+     */
     public void removeItem(Object item) {
         int index = getItems().indexOf(item);
         boolean removed = getItems().remove(item);
@@ -83,6 +216,14 @@ public abstract class Repeater extends AbstractContainer {
         }
     }
 
+    /**
+     * Move the item up one index in the list of {@link #items}.
+     * <p/>
+     * When moving the item up, the {@link RepeaterRow} for that item is also
+     * moved up.
+     *
+     * @param item the item to move up in the list of {@link #items}
+     */
     public void moveUp(Object item) {
         List items = getItems();
         int index = items.indexOf(item);
@@ -106,6 +247,14 @@ public abstract class Repeater extends AbstractContainer {
         super.insert(row, index);
     }
 
+    /**
+     * Move the item down one index in the list of {@link #items}.
+     * <p/>
+     * When moving the item down, the {@link RepeaterRow} for that item is also
+     * moved down.
+     *
+     * @param item the item to move down in the list of {@link #items}
+     */
     public void moveDown(Object item) {
         List items = getItems();
         int index = items.indexOf(item);
@@ -132,31 +281,57 @@ public abstract class Repeater extends AbstractContainer {
 
     // TODO create actionLinks for moveUp and moveDown ???
 
-    protected void buildRows() {
-        if (items == null) {
-            return;
-        }
-        for (int i = 0; i < items.size(); i++ ) {
-            createRow(i);
-        }
+    // ------------------------------------------------------ Protected Methods
 
-        // TODO should the names be changed here or in a Pre onProcess phase callback???
-        // Update control name indexes to match incoming request parameters
-        addIndexToControlNames();
-
-        ControlRegistry.registerActionEvent(this, new ActionListener() {
-            public boolean onAction(Control source) {
-                // Before rendering update control name indexes so that each control
-                // will have a unique request parameter when posting to the server
-                addIndexToControlNames();
-                return true;
-            }
-
-        }, ControlRegistry.POST_ON_RENDER_EVENT);
-    }
-
+    /**
+     * This method is provided for users to build up the controls for the
+     * specified item.
+     * <p/>
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public MyPage extends Page {
+     *
+     *     Repeater repeater = new Repeater("repeater") {
+     *
+     *         public void buildRow(final Object item, RepeaterRow row, int index) {
+     *
+     *             final Customer customer = (Customer) item;
+     *
+     *             final Form form = new Form("form");
+     *             row.add(form);
+     *
+     *             form.add(new TextField("firstname"));
+     *             form.add(new TextField("lastname"));
+     *             form.add(new TextField("age"));
+     *
+     *             Submit submit = new Submit("submit");
+     *             submit.setActionListener(new ActionListener() {
+     *
+     *                 public boolean onAction(Control source) {
+     *                     if (form.isValid()) {
+     *                         form.copyTo(customer);
+     *                         getCustomerService().save(customer);
+     *                     }
+     *                     return true;
+     *                 }
+     *             });
+     *             form.add(submit);
+     *         }
+     *     }
+     * }; </pre>
+     *
+     * @param item the item to build controls for
+     * @param row the RepeaterRow for the given item
+     * @param index the index of the given item
+     */
     public abstract void buildRow(Object item, RepeaterRow row, int index);
 
+    /**
+     * @see org.apache.click.Control#onProcess().
+     *
+     * @return true if page processing should continue, false otherwise
+     */
     public boolean onProcess() {
         boolean result = super.onProcess();
 
@@ -167,17 +342,13 @@ public abstract class Repeater extends AbstractContainer {
         return result;
     }
 
-    /*
-    public void onRender() {
-        // TODO onRender has no guarantee that it will be called as user can
-        // cancel this phase by returning false from listener.
-        super.onRender();
-
-        // Before rendering update control name indexes so that each control
-        // will have a unique request parameter when posting to the server
-        addIndexToControlNames(true);
-    }*/
-
+    /**
+     * Copy the values of all {@link org.apache.click.control.Field Fields}
+     * contained in a Repeater row to its associated item.
+     * <p/>
+     * This method delegates to {@link #copyTo(java.lang.Object)} for every
+     * item in the {@link #items} list.
+     */
     public void copyToItems() {
         if (getItems() == null) {
             throw new IllegalStateException("Items have not been set.");
@@ -189,6 +360,14 @@ public abstract class Repeater extends AbstractContainer {
         }
     }
 
+    /**
+     * Copy the values of each item in the {@link #items} list to
+     * the {@link org.apache.click.control.Field Fields} contained in the
+     * associated RepeaterRow.
+     * <p/>
+     * This method delegates to {@link #copyFrom(java.lang.Object)} for every
+     * item in the {@link #items} list.
+     */
     public void copyFromItems() {
         List items = getItems();
         if (items == null) {
@@ -200,6 +379,16 @@ public abstract class Repeater extends AbstractContainer {
         }
     }
 
+    /**
+     * Copy Field values from the item's associated RepeaterRow, to the given
+     * item's attributes. The specified item can either be a POJO
+     * (plain old java object) or a {@link java.util.Map}.
+     * <p/>
+     * For more information on how Fields and Objects are copied see
+     * {@link org.apache.click.util.ContainerUtils#copyContainerToObject(org.apache.click.control.Container, java.lang.Object)}.
+     *
+     * @param item the item to populate with field values
+     */
     public void copyTo(Object item) {
         List items = getItems();
         if (items == null) {
@@ -211,7 +400,16 @@ public abstract class Repeater extends AbstractContainer {
         ContainerUtils.copyContainerToObject(container, item);
     }
 
-
+    /**
+     * Copy the given item's attributes into the Field values of the associated
+     * RepeaterRow. The specified item can either be a POJO
+     * (plain old java object) or a {@link java.util.Map}.
+     * <p/>
+     * For more information on how Fields and Objects are copied see
+     * {@link org.apache.click.util.ContainerUtils#copyObjectToContainer(java.lang.Object, org.apache.click.control.Container)}.
+     *
+     * @param item the item to copy attribute values from
+     */
     public void copyFrom(Object item) {
         if (getItems() == null) {
             throw new IllegalStateException("Items have not been set.");
@@ -224,6 +422,49 @@ public abstract class Repeater extends AbstractContainer {
 
     // ------------------------------------------------------ Protected Methods
 
+    /**
+     * Build the rows for every Repeater item.
+     * <p/>
+     * This method delegates to {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+     * for every item in the {@link #items} list.
+     */
+    protected void buildRows() {
+        if (items == null) {
+            return;
+        }
+        for (int i = 0; i < items.size(); i++ ) {
+            createRow(i);
+        }
+
+        // TODO should the names be changed here or in a Pre onProcess phase callback???
+        // Update control name indexes to match incoming request parameters
+        addIndexToControlNames();
+
+        // Register a callback to add the index to child control names
+        ControlRegistry.registerActionEvent(this, new ActionListener() {
+            public boolean onAction(Control source) {
+                // Before rendering update control name indexes so that each control
+                // will have a unique request parameter when posting to the server
+                addIndexToControlNames();
+                return true;
+            }
+
+        }, ControlRegistry.POST_ON_RENDER_EVENT);
+    }
+
+    /**
+     * Adds an index to the name of child controls to ensure controls are unique
+     * within the Repeater.
+     * <p/>
+     * Indexing is zero based, meaning controls contained in the first
+     * RepeaterRow will have <tt>"_0"</tt> appended to their names and controls
+     * contained in the second RepeaterRow will have <tt>"_1"</tt> appended.
+     * <p/>
+     * For example, a control contained in the first RepeaterRow called
+     * <tt>"firstname"</tt> will be renamed to <tt>"firstname_0"</tt>, and
+     * a control in the second RepeaterRow will be renamed to
+     * <tt>"firstname_1"</tt> etc.
+     */
     protected void addIndexToControlNames() {
         List controls = getControls();
         for (int count = 0; count < controls.size(); count++ ) {
@@ -232,6 +473,9 @@ public abstract class Repeater extends AbstractContainer {
         }
     }
 
+    /**
+     * Removes the index from the name of child controls.
+     */
     protected void removeIndexFromControlNames() {
         List controls = getControls();
         for (int count = 0; count < controls.size(); count++ ) {
@@ -242,6 +486,12 @@ public abstract class Repeater extends AbstractContainer {
 
     // -------------------------------------------------------- Private Methods
 
+    /**
+     * Adds the index to child controls contained in the given container.
+     *
+     * @param container the container which child controls must be indexed
+     * @param index the index to apply to child control names
+     */
     private void addIndexToControlNames(final Container container, String index) {
         List controls = container.getControls();
         for (int i = 0; i < controls.size(); i++) {
@@ -260,7 +510,11 @@ public abstract class Repeater extends AbstractContainer {
             } else if (control instanceof Panel) {
                 ((Panel) control).getLabel();
             }
-            ammendName(control, index);
+
+            // Append the index to the Control name
+            addIndex(control, index);
+
+            // If control is a container, add the index to its child controls
             if (control instanceof Container) {
                Container childContainer = (Container) control;
                addIndexToControlNames(childContainer, index);
@@ -268,11 +522,18 @@ public abstract class Repeater extends AbstractContainer {
         }
     }
 
+    /**
+     * Remove the index from the child controls contained in the given
+     * container.
+     *
+     * @param container the container which child controls the index
+     * must be removed from
+     */
     private void removeIndexFromControlNames(final Container container) {
         List controls = container.getControls();
         for (int i = 0; i < controls.size(); i++) {
             Control control = (Control) controls.get(i);
-            revertName(control);
+            removeIndex(control);
             if (control instanceof Container) {
                Container childContainer = (Container) control;
                removeIndexFromControlNames(childContainer);
@@ -280,15 +541,26 @@ public abstract class Repeater extends AbstractContainer {
         }
     }
 
-    private void ammendName(Control control, String id) {
+    /**
+     * Adds the given index to the control.
+     *
+     * @param control the control which name must be indexed
+     * @param index the index to add to the control name
+     */
+    private void addIndex(Control control, String index) {
         if (control.getName() == null) {
             return;
         }
-        String indexedName = control.getName() + "_" + id;
+        String indexedName = control.getName() + '_' + index;
         control.setName(indexedName);
     }
 
-    private void revertName(Control control) {
+    /**
+     * Remove the index from the given control name.
+     *
+     * @param control the control form which the index must be removed from
+     */
+    private void removeIndex(Control control) {
         if (control.getName() == null) {
            return;
         }
@@ -298,6 +570,11 @@ public abstract class Repeater extends AbstractContainer {
         }
     }
 
+    /**
+     * Create a new RepeaterRow for the given index.
+     *
+     * @param index the index to create a row for
+     */
     private void createRow(int index) {
         RepeaterRow row = new RepeaterRow();
         super.insert(row, index);
@@ -305,6 +582,12 @@ public abstract class Repeater extends AbstractContainer {
         buildRow(item, row, index);
     }
 
+    /**
+     * Remove the row at the given index.
+     *
+     * @param index the index to remove the row from
+     * @return true if the row was removed, false otherwise
+     */
     private boolean removeRow(int index) {
         RepeaterRow row = (RepeaterRow) getControls().get(index);
         return super.remove(row);

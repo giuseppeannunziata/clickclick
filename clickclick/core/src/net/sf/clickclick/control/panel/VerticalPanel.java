@@ -16,25 +16,41 @@
 package net.sf.clickclick.control.panel;
 
 import org.apache.click.Control;
-import org.apache.click.MockContext;
-import org.apache.click.Page;
-import org.apache.click.control.TextField;
 import net.sf.clickclick.control.html.table.Cell;
 import net.sf.clickclick.control.html.table.Row;
 
 /**
+ * Provides a panel that lays out its controls in a single vertical column.
  *
  * @author Bob Schellink
  */
 public class VerticalPanel extends AbstractTablePanel {
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a default VerticalPanel.
+     */
     public VerticalPanel() {
     }
 
+    /**
+     * Create a VerticalPanel with the given name.
+     *
+     * @param name the name of the panel
+     */
     public VerticalPanel(String name) {
        super(name);
     }
 
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Add the control to the panel.
+     *
+     * @param control the control to add
+     * @return the added control
+     */
     public Control add(Control control) {
         Row row = new Row();
         table.add(row);
@@ -46,20 +62,14 @@ public class VerticalPanel extends AbstractTablePanel {
         return control;
     }
 
+    /**
+     * Remove the control from the panel.
+     *
+     * @param control the control to remove
+     * @return true if the control was removed, false otherwise
+     */
     public boolean remove(Control control) {
         Row row = getRow(control);
         return table.remove(row);
-    }
-
-    public static void main(String[] args) {
-        MockContext.initContext();
-        Page page = new Page();
-        VerticalPanel panel = new VerticalPanel("panel");
-        page.addControl(panel);
-        Control field = (Control) panel.add(new TextField("text"));
-        field = (Control) panel.add(new TextField("text"));
-        Cell cell = panel.getCell(field);
-        cell.setAttribute("class", "cell");
-        System.out.println(panel);
     }
 }

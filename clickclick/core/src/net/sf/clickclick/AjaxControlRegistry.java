@@ -18,7 +18,6 @@ package net.sf.clickclick;
 import org.apache.click.*;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import org.apache.click.control.ActionButton;
 import org.apache.click.control.ActionLink;
@@ -60,7 +59,7 @@ public class AjaxControlRegistry extends ControlRegistry {
      * Listeners in this phase are <tt>guaranteed</tt> to trigger, even when
      * redirecting, forwarding or processing stopped.
      */
-    public static final int ON_AJAX_EVENT = 300;
+    public static final int ON_AJAX_EVENT = 250;
 
     // -------------------------------------------------------- Variables
 
@@ -69,6 +68,15 @@ public class AjaxControlRegistry extends ControlRegistry {
 
     /** The AJAX events holder. */
     private EventHolder ajaxEventHolder;
+
+    /** Track the last event that was fired. */
+    private int lastEventFired = -1;
+
+    /**
+     * Guard against firing the postOnRenderEvent more than once for Ajax
+     * requests.
+     */
+    private boolean postOnRenderEventFired = false;
 
     // --------------------------------------------------------- Public Methods
 
@@ -148,45 +156,76 @@ public class AjaxControlRegistry extends ControlRegistry {
         return fireActionEvents(context, POST_ON_PROCESS_EVENT);
     }
 
-    protected boolean fireActionEvents(Context context, List eventSourceList,
-        List eventListenerList) {
+    /**
+     * For Ajax requests this method will fire the Ajax listener and if a
+     * {@link net.sf.clickclick.util.Partial} is returned, stream it back to
+     * the browser.
+     *
+     * @see org.apache.click.ControlRegistry#fireActionEvent(org.apache.click.Context, org.apache.click.Control, org.apache.click.ActionListener, int)
+     *
+     * @param context the request context
+     * @param source the source control
+     * @param listener the listener to fire
+     * @param event the specific event which events to fire
+     *
+     * @return true if the page should continue processing or false otherwise
+     */
+    protected boolean fireActionEvent(Context context, Control source,
+        ActionListener listener, int event) {
+
+        this.lastEventFired = event;
+
         boolean continueProcessing = true;
 
-        for (int i = 0, size = eventSourceList.size(); i < size; i++) {
-            Control source = (Control) eventSourceList.get(i);
-            ActionListener listener =
-                (ActionListener) eventListenerList.get(i);
+        if (context.isAjaxRequest() && listener instanceof AjaxListener) {
 
-            if (context.isAjaxRequest() && listener instanceof AjaxListener) {
+            Partial partial = ((AjaxListener) listener).onAjaxAction(source);
 
-                Partial partial = ((AjaxListener) listener).onAjaxAction(
-                    source);
+            // Guard against firing the POST_ON_RENDER_EVENT more than once
+            // for Ajax requests
+            if (!postOnRenderEventFired) {
+                postOnRenderEventFired = true;
 
                 // Ensure we execute the POST_ON_RENDER_EVENT for Ajax events
                 fireActionEvents(context, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+            }
 
-                if (partial != null) {
-                    // Have to process Partial here
-                    partial.process(context);
-                }
+            if (partial != null) {
+                // Have to process Partial here
+                partial.process(context);
+            }
 
-                // Ajax requests stops further processing
+            // Ajax requests stops further processing
+            continueProcessing = false;
+
+        } else {
+            if (!listener.onAction(source)) {
                 continueProcessing = false;
-
-            } else {
-                if (!listener.onAction(source)) {
-                    continueProcessing = false;
-                }
             }
         }
 
         return continueProcessing;
     }
 
+    /**
+     * @see org.apache.click.ControlRegistry#fireActionEvents(org.apache.click.Context, int)
+     *
+     * @param context the request context
+     * @param event the event which listeners to fire
+     *
+     * @return true if the page should continue processing or false otherwise
+     */
     protected boolean fireActionEvents(Context context, int event) {
         return super.fireActionEvents(context, event);
     }
 
+    /**
+     * @see org.apache.click.ControlRegistry#getEventHolder(int)
+     *
+     * @param event the event which EventHolder to retrieve
+     *
+     * @return the EventHolder for the specified event
+     */
     protected EventHolder getEventHolder(int phase) {
         if (phase == ON_AJAX_EVENT) {
             return getAjaxEventHolder();
@@ -196,20 +235,49 @@ public class AjaxControlRegistry extends ControlRegistry {
     }
 
     /**
+     * Allow the Registry to handle the error that occurred.
+     */
+    protected void errorOccurred(Throwable throwable) {
+        if (hasAjaxControls()) {
+            ajaxControlList.clear();
+        }
+        lastEventFired = -1;
+        getEventHolder(ON_AJAX_EVENT).clear();
+        super.errorOccurred(throwable);
+    }
+
+    /**
      * Clear the registry.
      */
     protected void clearRegistry() {
         if (hasAjaxControls()) {
             ajaxControlList.clear();
         }
+        lastEventFired = -1;
+        postOnRenderEventFired = false;
         super.clearRegistry();
+    }
+
+    /**
+     * Create a new EventHolder instance.
+     *
+     * @param event the EventHolder's event
+     * @return new EventHolder instance
+     */
+    protected EventHolder createEventHolder(int event) {
+        return new AjaxEventHolder(event);
     }
 
     // ------------------------------------------------ Package Private Methods
 
+    /**
+     * Return the EventHolder for the {@link #ON_AJAX_EVENT}.
+     *
+     * @return the Ajax EventHolder
+     */
     EventHolder getAjaxEventHolder() {
         if (ajaxEventHolder == null) {
-            ajaxEventHolder = new EventHolder();
+            ajaxEventHolder = createEventHolder(ON_AJAX_EVENT);
         }
         return ajaxEventHolder;
     }
@@ -228,4 +296,41 @@ public class AjaxControlRegistry extends ControlRegistry {
         return ajaxControlList;
     }
 
+    // ---------------------------------------------------------- Inner Classes
+
+    /**
+     * Extends EventHolder to provide special Ajax handling.
+     */
+    public class AjaxEventHolder extends EventHolder {
+
+        /**
+         * Construct a new AjaxEventHolder for the given event.
+         *
+         * @param event the AjaxEventHolder's event 
+         */
+        public AjaxEventHolder(int event) {
+            super(event);
+        }
+
+        /**
+         * Register the event source and event ActionListener to be fired in the
+         * specified event.
+         *
+         * @param source the action event source
+         * @param listener the event action listener
+         * @param event the specific event to trigger the action event
+         */
+        public void registerActionEvent(Control source, ActionListener listener) {
+            super.registerActionEvent(source, listener);
+
+            if (event == ON_AJAX_EVENT && event < lastEventFired) {
+                // If the Ajax event for which this listener is registering
+                // already fired, trigger the listener immediately.
+                // This feature is useful for stateful pages where controls are
+                // added in the listener or onRender method
+                AjaxControlRegistry.this.fireActionEvent(Context.getThreadLocalContext(),
+                    source, listener, event);
+            }
+        }
+    }
 }

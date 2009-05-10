@@ -19,83 +19,118 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.click.Control;
-import org.apache.click.MockContext;
-import org.apache.click.Page;
-import org.apache.click.control.TextField;
 import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.html.table.Cell;
 import net.sf.clickclick.control.html.table.Row;
 
 /**
+ * Provides a dock panel where controls can be docked to either the
+ * {@link #NORTH}, {@link #SOUTH}, {@link #EAST}, {@link #WEST} or
+ * {@link #CENTER}.
  *
  * @author Bob Schellink
  */
 public class DockPanel extends AbstractTablePanel {
 
+    // -------------------------------------------------------------- Constants
+
+    /** The center layout position - middle of the panel. */
     public static final int CENTER = 0;
 
+    /** The north layout position - top of the panel. */
     public static final int NORTH = 1;
 
+    /** The east layout position - right side of the panel. */
     public static final int EAST = 2;
 
+    /** The south layout position - bottom of the panel. */
     public static final int SOUTH = 3;
 
+    /** The west layout position - left side of the panel. */
     public static final int WEST = 4;
 
+    // -------------------------------------------------------------- Variables
+
+    /** The list of controls docked on this panel. */
     protected List dockedControls = new ArrayList();
 
     /** Default colspan value is 1 which caters for center control. */
     protected int dockColspan = 1;
-    
+
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a default DockPanel.
+     */
     public DockPanel() {
+        this(null);
     }
 
+    /**
+     * Create a DockPanel for the given name.
+     *
+     * @param name the name of the panel
+     */
     public DockPanel(String name) {
         super(name);
+        setHorizontalAlignment(ALIGN_CENTER);
     }
 
-    public Control add(Control control, int direction) {
-        ControlHolder holder = new ControlHolder();
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Adds the control at the specified dock position.
+     *
+     * @param control the control to add
+     * @param position the position to dock the control at
+     * @return the added control
+     */
+    public Control add(Control control, int position) {
+        PositionHolder holder = new PositionHolder();
         holder.control = control;
-        holder.direction = direction;
+        holder.position = position;
         // Need to increase the colspan if controls are docked to west or east
-        if (direction == WEST || direction == EAST) {
+        if (position == WEST || position == EAST) {
             dockColspan++;
         }
         dockedControls.add(holder);
-        /*
-        Row row = null;
-        if (!table.hasControls()) {
-        row = new Row();
-        table.add(row);
-        } else {
-        row = (Row) table.getControls().get(0);
-        }
-        
-        row.add(cell);
-        cell.add(control);*/
         return control;
     }
 
+    /**
+     * Adds the control at the {@link #CENTER} dock position.
+     *
+     * @param control the control to ad
+     * @return the added control
+     */
     public Control add(Control control) {
         return add(control, CENTER);
     }
 
+    /**
+     * Remove the control from the panel.
+     *
+     * @param control the control to remove
+     * @return true if the control was removed, false otherwise
+     */
     public boolean remove(Control control) {
         Cell cell = getCell(control);
         return table.remove(cell);
     }
 
+    /**
+     * Render the HTML representation of the DockPanel.
+     *
+     * @param buffer the specified buffer to render the Panel's output to
+     */
     public void render(HtmlStringBuffer buffer) {
         assemblePanel();
         super.render(buffer);
     }
 
-    protected void init() {
-        super.init();
-        setHorizontalAlignment(ALIGN_CENTER);
-    }
-    
+    /**
+     * Assemble the layout of the DockPanel.
+     */
     protected void assemblePanel() {
         Row middleRow = new Row();
         Cell centerCell = createCell();
@@ -105,8 +140,8 @@ public class DockPanel extends AbstractTablePanel {
         int northCount = 0;
         int westCount = 0;
         for (Iterator it = dockedControls.iterator(); it.hasNext();) {
-            ControlHolder holder = (ControlHolder) it.next();
-            switch (holder.direction) {
+            PositionHolder holder = (PositionHolder) it.next();
+            switch (holder.position) {
                 case NORTH: {
                     Row row = new Row();
                     table.insert(row, northCount);
@@ -147,6 +182,11 @@ public class DockPanel extends AbstractTablePanel {
         }
     }
 
+    /**
+     * Create a new Cell for the DockPanel.
+     *
+     * @return a newly created Cell instance
+     */
     protected Cell createCell() {
         Cell cell = new Cell();
         cell.setStyle("text-align", getHorizontalAlignment());
@@ -154,35 +194,17 @@ public class DockPanel extends AbstractTablePanel {
         return cell;
     }
 
-    public static void main(String[] args) {
-        MockContext.initContext();
-        Page page = new Page();
-        DockPanel panel = new DockPanel("panel");
-        page.addControl(panel);
-        panel.setSpacing(5);
-        Control field = (Control) panel.add(new TextField("north1"), NORTH);
-        field = (Control) panel.add(new TextField("north2"), NORTH);
+    // ---------------------------------------------------------- Inner classes
 
-        field = (Control) panel.add(new TextField("west1"), WEST);
-        field = (Control) panel.add(new TextField("west2"), WEST);
-        
-        field = (Control) panel.add(new TextField("center"));
-        
-        field = (Control) panel.add(new TextField("east1"), EAST);
-        field = (Control) panel.add(new TextField("east2"), EAST);
-        
-        field = (Control) panel.add(new TextField("south1"), SOUTH);
-        field = (Control) panel.add(new TextField("south2"), SOUTH);
-        
-        //Cell cell = panel.getCell(field);
-        //cell.setAttribute("class", "cell");
-        System.out.println(panel);
-    }
+    /**
+     * Provide a class that tracks the position of a given control.
+     */
+    class PositionHolder {
 
-    class ControlHolder {
-
+        /** The control which position to track. */
         public Control control;
 
-        public int direction;
+        /** The position of a control. */
+        public int position;
     }
 }
