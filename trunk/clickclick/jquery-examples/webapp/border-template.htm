@@ -2,27 +2,28 @@
 <html>
     <head>
         <title>Click JQuery Example - $title</title>
-        <link rel="stylesheet" type="text/css" href="$context/assets/style.css" title="Style"></link>
+        <link rel="stylesheet" type="text/css" href="$context/assets/style.css" title="Style"/>
         <link rel="stylesheet" type="text/css" href="${context}/assets/css/syntax-highlighter.css"/>
         <script type="text/javascript" src="${context}/assets/js/syntax-highlighter.js"></script>
-        ${cssImports}
+        ${headElements}
+        ${jsElements}
     </head>
-    
+
     <body>
-        
+
         <div id="header">
             <span id="title">jquery-example :: $title</span>
         </div>
-        
+
         #if ($rootMenu) 
         #writeMenu($rootMenu) 
         #end
-        
+
         <div id="container">
             #parse($path)
         </div>
-        
-        ${jsImports}
+
+        <!-- Activate source code highlighting. -->
         <script type="text/javascript">prettyPrint();</script>
     </body>
 </html>
