@@ -1,4 +1,3 @@
-jQuery.noConflict();
 jQuery(document).ready(function(){
     jQuery('#$imageId').click(function() {
         jQuery('#$fieldId').click();
