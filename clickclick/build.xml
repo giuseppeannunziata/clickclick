@@ -3,13 +3,13 @@
     <!-- Project Properties -->
     <property file="./build.properties"/>
     <xmlproperty file="./javascript-syntax-highlighter.xml"/>
-    <property name="jar.click" value="click-${click.version}-incubator.jar"/>
-    <property name="jar.click-extras" value="click-extras-${click.version}-incubator.jar"/>
-    <property name="jar.click-mock" value="click-mock-${click.version}-incubator.jar"/>
-    <property name="jar.lang" value="commons-lang-2.4.jar"/>
-    <property name="jar.log4j" value="log4j-1.2.14.jar"/>
-    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
-    <property name="jar.junit" value="junit-3.8.1.jar"/>
+    <property name="jar.click" value="click-${click.version}.jar"/>
+    <property name="jar.click-extras" value="click-extras-${click.version}.jar"/>
+    <property name="jar.click-mock" value="click-mock-${click.version}.jar"/>
+    <property name="jar.lang" value="commons-lang-${commons-lang.version}.jar"/>
+    <property name="jar.log4j" value="log4j-${log4j.version}.jar"/>
+    <property name="jar.servlet" value="servlet-api-${servlet-api.version}.jar"/>
+    <property name="jar.junit" value="junit-${junit.version}.jar"/>
     <property name="javac.source" value="1.4"/>
     <property name="repository" value="http://repo1.maven.org"/>
 
@@ -18,7 +18,7 @@
         <attribute name="name"/>
         <attribute name="path"/>
         <sequential>
-            <get src="${repository}/maven/@{path}/jars/@{name}"
+            <get src="${repository}/maven2/@{path}/@{name}"
                  dest="lib/@{name}"
                  verbose="true"
                  usetimestamp="true"/>
@@ -187,13 +187,13 @@
     </target>
 
     <target name="get-deps" description="download JAR dependencies">
-        <downloadMacro name="${jar.click}" path="net.sf.click"/>
-        <downloadMacro name="${jar.click-extras}" path="net.sf.click"/>
-        <downloadMacro name="${jar.click-mock}" path="net.sf.click"/>
-        <downloadMacro name="${jar.lang}" path="commons-lang"/>
-        <downloadMacro name="${jar.log4j}" path="log4j"/>
-        <downloadMacro name="${jar.junit}" path="junit"/>
-        <downloadMacro name="${jar.servlet}" path="javax.servlet"/>
+        <downloadMacro name="${jar.click}" path="org/apache/click/click/${click.version}"/>
+        <downloadMacro name="${jar.click-extras}" path="org/apache/click/click-extras/${click.version}"/>
+        <downloadMacro name="${jar.click-mock}" path="org/apache/click/click-mock/${click.version}"/>
+        <downloadMacro name="${jar.lang}" path="commons-lang/commons-lang/${commons-lang.version}"/>
+        <downloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
+        <downloadMacro name="${jar.junit}" path="junit/junit/${junit.version}"/>
+        <downloadMacro name="${jar.servlet}" path="javax/servlet/servlet-api/${servlet-api.version}"/>
     </target>
 
     <target name="get-deps-proxy" description="download JAR dependencies">
