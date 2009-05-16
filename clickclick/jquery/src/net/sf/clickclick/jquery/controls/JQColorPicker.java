@@ -6,11 +6,12 @@ import org.apache.click.Context;
 import org.apache.click.control.TextField;
 import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.html.Div;
-import net.sf.clickclick.util.AdvancedPageImports;
-import net.sf.clickclick.util.CssImport;
-import net.sf.clickclick.util.Css;
-import net.sf.clickclick.util.JavascriptImport;
-import net.sf.clickclick.util.Javascript;
+import org.apache.click.util.PageImports;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
+import org.apache.click.element.CssImport;
+import org.apache.click.element.CssStyle;
+
 
 /**
  *
@@ -33,7 +34,7 @@ public class JQColorPicker extends TextField {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
+        PageImports pageImports = getPage().getPageImports();
         Context context = getContext();
         String contextPath = context.getRequest().getContextPath();
 
@@ -41,10 +42,10 @@ public class JQColorPicker extends TextField {
         pageImports.add(new CssImport(resource));
 
         resource = contextPath + "/clickclick/jquery/jquery-1.2.6.js";
-        pageImports.add(new JavascriptImport(resource));
+        pageImports.add(new JsImport(resource));
         
         resource = contextPath + "/clickclick/jquery/colorpicker/js/colorpicker.js";
-        pageImports.add(new JavascriptImport(resource));
+        pageImports.add(new JsImport(resource));
         
         Map model = new HashMap();
         model.put("fieldId", getId());
@@ -52,11 +53,11 @@ public class JQColorPicker extends TextField {
         model.put("context", contextPath);
 
         String include = getContext().renderTemplate("/clickclick/jquery/colorpicker/jq-color-picker.js", model);
-        Javascript jsInclude = new Javascript(include);
+        JsScript jsInclude = new JsScript(include);
         pageImports.add(jsInclude);
 
         String style = getContext().renderTemplate("/clickclick/jquery/colorpicker/jq-color-picker.css", model);
-        Css cssInclude = new Css(style);
+        CssImport cssInclude = new CssImport(style);
         pageImports.add(cssInclude);
         return null;
     }

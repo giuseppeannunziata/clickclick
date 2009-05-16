@@ -15,10 +15,11 @@
  */
 package net.sf.clickclick.jquery.controls;
 
-import org.apache.click.AjaxControlRegistry;
+import net.sf.clickclick.AjaxControlRegistry;
 import org.apache.click.control.Select;
-import net.sf.clickclick.util.AdvancedPageImports;
-import net.sf.clickclick.util.JavascriptImport;
+import org.apache.click.util.PageImports;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 
 /**
  *
@@ -50,9 +51,9 @@ public class JQSelect extends Select {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
+        PageImports pageImports = getPage().getPageImports();
         String contextPath = getContext().getRequest().getContextPath();
-        JavascriptImport jsImport = new JavascriptImport(contextPath + "/clickclick/jquery/jquery-1.2.6.js");
+        JsImport jsImport = new JsImport(contextPath + "/clickclick/jquery/jquery-1.2.6.js");
         pageImports.add(jsImport);
         return null;
     }

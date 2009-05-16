@@ -1,9 +1,10 @@
 package net.sf.clickclick.jquery.controls;
 
 import net.sf.clickclick.control.html.Div;
-import net.sf.clickclick.util.AdvancedPageImports;
-import net.sf.clickclick.util.CssImport;
-import net.sf.clickclick.util.JavascriptImport;
+import org.apache.click.util.PageImports;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
+import org.apache.click.element.CssImport;
 
 /**
  *
@@ -21,9 +22,9 @@ public class JQDialog extends Div {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
+        PageImports pageImports = getPage().getPageImports();
         String contextPath = getContext().getRequest().getContextPath();
-        CssImport cssImport = new CssImport(contextPath 
+        CssImport cssImport = new CssImport(contextPath
             + "/clickclick/jquery/ui/flora.dialog.css");
         cssImport.setAttribute("media", "screen");
         pageImports.add(cssImport);
@@ -33,23 +34,23 @@ public class JQDialog extends Div {
         cssImport.setAttribute("media", "screen");
         pageImports.add(cssImport);
 
-        JavascriptImport jsImport = new JavascriptImport(contextPath
+        JsImport jsImport = new JsImport(contextPath
             + "/clickclick/jquery/jquery-1.2.6.js");
         pageImports.add(jsImport);
 
-        jsImport = new JavascriptImport(contextPath 
+        jsImport = new JsImport(contextPath
             + "/clickclick/jquery/ui/ui.core.js");
         pageImports.add(jsImport);
         
-        jsImport = new JavascriptImport(contextPath 
+        jsImport = new JsImport(contextPath
             + "/clickclick/jquery/ui/ui.draggable.js");
         pageImports.add(jsImport);
         
-        jsImport = new JavascriptImport(contextPath
+        jsImport = new JsImport(contextPath
             + "/clickclick/jquery/ui/ui.resizable.js");
         pageImports.add(jsImport);
         
-        jsImport = new JavascriptImport(contextPath
+        jsImport = new JsImport(contextPath
             + "/clickclick/jquery/ui/ui.dialog.js");
         pageImports.add(jsImport);
         return null;

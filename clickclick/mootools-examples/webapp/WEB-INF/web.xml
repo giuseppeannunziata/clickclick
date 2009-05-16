@@ -2,13 +2,13 @@
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
 	<servlet>
-		<servlet-name>ClickServlet</servlet-name>
-		<servlet-class>org.apache.click.ClickClickServlet</servlet-class>
+		<servlet-name>ClickClickServlet</servlet-name>
+		<servlet-class>net.sf.clickclick.ClickClickServlet</servlet-class>
   		<load-on-startup>0</load-on-startup>
 	</servlet>
 
   <servlet-mapping>
-		<servlet-name>ClickServlet</servlet-name>
+		<servlet-name>ClickClickServlet</servlet-name>
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
 

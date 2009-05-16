@@ -2,9 +2,11 @@ package net.sf.clickclick.examples.mootools.page.ajax;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.sf.click.util.AjaxAdapter;
+import net.sf.clickclick.util.AjaxAdapter;
 import org.apache.click.Context;
 import org.apache.click.Control;
+import org.apache.click.element.CssStyle;
+import org.apache.click.element.JsScript;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
@@ -12,12 +14,10 @@ import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.util.HtmlStringBuffer;
-import net.sf.click.util.Partial;
+import org.apache.click.util.PageImports;
+import net.sf.clickclick.util.Partial;
 import net.sf.clickclick.examples.mootools.page.BorderPage;
 import net.sf.clickclick.mootools.controls.MTAjaxForm;
-import net.sf.clickclick.util.AdvancedPageImports;
-import net.sf.clickclick.util.Css;
-import net.sf.clickclick.util.Javascript;
 
 public class FormDemo extends BorderPage {
 
@@ -68,7 +68,7 @@ public class FormDemo extends BorderPage {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = getAdvancedPageImports();
+        PageImports pageImports = getPageImports();
 
         Map model = new HashMap();
         Context context = getContext();
@@ -76,10 +76,10 @@ public class FormDemo extends BorderPage {
         model.put("context", contextPath);
         
         String cssTemplate = "/ajax/form-demo.css";
-        pageImports.add(new Css(context.renderTemplate(cssTemplate, model)));
+        pageImports.add(new CssStyle(context.renderTemplate(cssTemplate, model)));
 
         String jsTemplate = "/ajax/form-demo.js";
-        pageImports.add(new Javascript(context.renderTemplate(jsTemplate, model)));
+        pageImports.add(new JsScript(context.renderTemplate(jsTemplate, model)));
         
         return null;
     }
