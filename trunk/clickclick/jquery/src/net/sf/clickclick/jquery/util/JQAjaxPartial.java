@@ -18,7 +18,7 @@ package net.sf.clickclick.jquery.util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.click.Context;
-import net.sf.click.util.Partial;
+import net.sf.clickclick.util.Partial;
 
 /**
  *

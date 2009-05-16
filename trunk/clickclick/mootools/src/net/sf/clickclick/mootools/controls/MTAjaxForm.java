@@ -1,8 +1,8 @@
 package net.sf.clickclick.mootools.controls;
 
 import net.sf.clickclick.control.ajax.AjaxForm;
-import net.sf.clickclick.util.AdvancedPageImports;
-import net.sf.clickclick.util.JavascriptImport;
+import org.apache.click.util.PageImports;
+import org.apache.click.element.JsImport;
 
 /**
  *
@@ -19,10 +19,10 @@ public class MTAjaxForm extends AjaxForm {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
+        PageImports pageImports = getPage().getPageImports();
 
         String contextPath = getContext().getRequest().getContextPath();
-        pageImports.add(new JavascriptImport(contextPath + "/clickclick/mootools/mootools-1.2.js"));
+        pageImports.add(new JsImport(contextPath + "/clickclick/mootools/mootools-1.2.js"));
         
         return null;
     }

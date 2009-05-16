@@ -7,10 +7,10 @@ import org.apache.click.Context;
 import org.apache.click.extras.control.Menu;
 import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.menu.FlexiMenu;
-import net.sf.clickclick.util.AdvancedPageImports;
-import net.sf.clickclick.util.CssImport;
-import net.sf.clickclick.util.JavascriptImport;
-import net.sf.clickclick.util.Javascript;
+import org.apache.click.util.PageImports;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
+import org.apache.click.element.CssImport;
 import org.apache.commons.lang.ClassUtils;
 
 /**
@@ -45,7 +45,7 @@ public class JQMenu extends FlexiMenu {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
+        PageImports pageImports = getPage().getPageImports();
         Context context = getContext();
         String contextPath = context.getRequest().getContextPath();
 
@@ -60,25 +60,25 @@ public class JQMenu extends FlexiMenu {
         }
 
         resource = contextPath + "/clickclick/jquery/jquery-1.2.6.js";
-        pageImports.add(new JavascriptImport(resource));
+        pageImports.add(new JsImport(resource));
 
         resource = contextPath +
             "/clickclick/jquery/superfish/js/hoverIntent.js";
-        pageImports.add(new JavascriptImport(resource));
+        pageImports.add(new JsImport(resource));
 
         resource = contextPath +
             "/clickclick/jquery/superfish/js/bgiframe.js";
-        pageImports.add(new JavascriptImport(resource));
+        pageImports.add(new JsImport(resource));
 
         resource = contextPath +
             "/clickclick/jquery/superfish/js/superfish.js";
-        pageImports.add(new JavascriptImport(resource));
+        pageImports.add(new JsImport(resource));
 
         Map model = new HashMap();
         model.put("options", getOptions());
 
         String include = getContext().renderTemplate("/clickclick/jquery/superfish/jq-menu.js", model);
-        Javascript jsInclude = new Javascript(include);
+        JsScript jsInclude = new JsScript(include);
 
         // Script must be unique as multiple menus can be included on Page
         // using the same script. No need to include the script twice.
@@ -111,11 +111,11 @@ public class JQMenu extends FlexiMenu {
                 if (child.getChildren().size() == 0) {
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenuItem(buffer, child);
+                    renderMenu(buffer, child);
                 } else {
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenuItem(buffer, child);
+                    renderMenu(buffer, child);
                     buffer.elementStart("ul");
                     buffer.closeTag();
                     buffer.append("\n");

@@ -23,9 +23,9 @@ import org.apache.click.control.Field;
 import net.sf.clickclick.control.ajax.AjaxForm;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
-import net.sf.clickclick.util.AdvancedPageImports;
-import net.sf.clickclick.util.JavascriptImport;
-import net.sf.clickclick.util.Javascript;
+import org.apache.click.util.PageImports;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 
 /**
  *
@@ -57,7 +57,7 @@ public class JQForm extends AjaxForm {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
+        PageImports pageImports = getPage().getPageImports();
         Context context = getContext();
         String contextPath = context.getRequest().getContextPath();
         Map model = new HashMap();
@@ -66,12 +66,12 @@ public class JQForm extends AjaxForm {
         model.put("dataType", getDataType());
         model.put("formId", getId());
 
-        pageImports.add(new Javascript(context.renderTemplate("/clickclick/jquery/form/jq-form.js", model)));
+        pageImports.add(new JsScript(context.renderTemplate("/clickclick/jquery/form/jq-form.js", model)));
 
-        pageImports.add(new JavascriptImport(contextPath + "/clickclick/jquery/jquery-1.2.6.js"));
-        pageImports.add(new JavascriptImport(contextPath + "/clickclick/jquery/form/jquery.form.js"));
+        pageImports.add(new JsImport(contextPath + "/clickclick/jquery/jquery-1.2.6.js"));
+        pageImports.add(new JsImport(contextPath + "/clickclick/jquery/form/jquery.form.js"));
 
-        pageImports.add(new JavascriptImport(contextPath + "/clickclick/jquery/blockui/jquery.blockUI.js"));
+        pageImports.add(new JsImport(contextPath + "/clickclick/jquery/blockui/jquery.blockUI.js"));
         return super.getHtmlImports();
     }
 

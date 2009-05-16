@@ -17,13 +17,13 @@ package net.sf.clickclick.jquery.controls;
 
 import java.util.HashMap;
 import java.util.Map;
-import net.sf.click.AjaxListener;
+import net.sf.clickclick.AjaxListener;
 import org.apache.click.Context;
 import org.apache.click.Page;
 import net.sf.clickclick.control.ajax.AjaxActionLink;
-import net.sf.clickclick.util.AdvancedPageImports;
-import net.sf.clickclick.util.JavascriptImport;
-import net.sf.clickclick.util.Javascript;
+import org.apache.click.util.PageImports;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 
 /**
  *
@@ -77,11 +77,11 @@ public class JQActionLink extends AjaxActionLink {
     }
 
     public String getHtmlImports() {
-        AdvancedPageImports pageImports = (AdvancedPageImports) getPage().getPageImports();
+        PageImports pageImports = getPage().getPageImports();
         Context context = getContext();
         String contextPath = context.getRequest().getContextPath();
 
-        JavascriptImport jsImport = new JavascriptImport(contextPath + "/clickclick/jquery/jquery-1.2.6.js");
+        JsImport jsImport = new JsImport(contextPath + "/clickclick/jquery/jquery-1.2.6.js");
         pageImports.add(jsImport);
 
         Page page = getPage();
@@ -97,11 +97,11 @@ public class JQActionLink extends AjaxActionLink {
         model.put("busyIndicatorMessage", getBusyMessage());
  
         String include = getContext().renderTemplate("/clickclick/jquery/action/jq-action-link.js", model);
-        Javascript jsInclude = new Javascript(include);
+        JsScript jsInclude = new JsScript(include);
         pageImports.add(jsInclude);
 
         if (isShowBusyIndicator()) {
-            jsImport = new JavascriptImport(contextPath + "/clickclick/jquery/blockui/jquery.blockUI.js");
+            jsImport = new JsImport(contextPath + "/clickclick/jquery/blockui/jquery.blockUI.js");
             pageImports.add(jsImport);
         }
         return null;
