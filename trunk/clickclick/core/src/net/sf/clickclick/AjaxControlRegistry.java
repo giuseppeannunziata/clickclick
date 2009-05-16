@@ -89,7 +89,7 @@ public class AjaxControlRegistry extends ControlRegistry {
     public static void registerAjaxControl(Control control) {
         Validate.notNull(control, "Null control parameter");
 
-        AjaxControlRegistry instance = (AjaxControlRegistry) getThreadLocalRegistry();
+        AjaxControlRegistry instance = getThreadLocalRegistry();
         Set controlList = instance.getAjaxControls();
         controlList.add(control);
     }
