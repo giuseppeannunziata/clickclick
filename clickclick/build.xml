@@ -15,13 +15,15 @@
 
     <!-- Macro Definitions -->        
     <macrodef name="downloadMacro">
-        <attribute name="name"/>
+        <attribute name="name"/>  
         <attribute name="path"/>
+        <attribute name="ignoreFail" default="false"/>
         <sequential>
             <get src="${repository}/maven2/@{path}/@{name}"
                  dest="lib/@{name}"
                  verbose="true"
-                 usetimestamp="true"/>
+                 usetimestamp="true"
+                 ignoreerrors="@{ignoreFail}" />
         </sequential>
     </macrodef>
 
@@ -187,13 +189,28 @@
     </target>
 
     <target name="get-deps" description="download JAR dependencies">
-        <downloadMacro name="${jar.click}" path="org/apache/click/click/${click.version}"/>
-        <downloadMacro name="${jar.click-extras}" path="org/apache/click/click-extras/${click.version}"/>
-        <downloadMacro name="${jar.click-mock}" path="org/apache/click/click-mock/${click.version}"/>
+        <downloadMacro name="${jar.click}" path="org/apache/click/click/${click.version}" ignorefail="true"/>
+        <downloadMacro name="${jar.click-extras}" path="org/apache/click/click-extras/${click.version}" ignorefail="true"/>
+        <downloadMacro name="${jar.click-mock}" path="org/apache/click/click-mock/${click.version}" ignorefail="true"/>
         <downloadMacro name="${jar.lang}" path="commons-lang/commons-lang/${commons-lang.version}"/>
         <downloadMacro name="${jar.log4j}" path="log4j/log4j/${log4j.version}"/>
         <downloadMacro name="${jar.junit}" path="junit/junit/${junit.version}"/>
         <downloadMacro name="${jar.servlet}" path="javax/servlet/servlet-api/${servlet-api.version}"/>
+        
+        <!-- Check if downloading Click JARs was possible. Otherwise require manual build&download -->
+        <available file="lib/${jar.click}" property="isClickJarAvail"/>
+        <available file="lib/${jar.click-extras}" property="isClickExtrasJarAvail"/>
+        <available file="lib/${jar.click-mock}" property="isClickMockJarAvail"/>
+        <condition property="failed">
+            <or>
+                <isfalse value="${isClickJarAvail}"/>
+                <isfalse value="${isClickExtrasJarAvail}"/>
+                <isfalse value="${isClickMockJarAvail}"/>
+            </or>
+        </condition>
+        <fail if="failed">
+            Click JARs can't be downloaded automatically. This is probably due to the fact that ClickClick depends on an unreleased Click version, so you need to build the Click JARs yourself and copy them to this 'lib' directory. See http://incubator.apache.org/click/docs/developer-guide/building.html for more details on how to build the Click JARs.
+        </fail>
     </target>
 
     <target name="get-deps-proxy" description="download JAR dependencies">
@@ -209,11 +226,15 @@
 
     <target name="build" depends="clean" description="build ClickClick extensions JAR files">
         <mkdir dir="dist"/>
-        <available file="lib/${jar.click}" property="isJarAvail"/>
-        <fail message="Download JAR dependencies first with 'get-deps'">
+        <available file="lib/${jar.click}" property="isClickJarAvail"/>
+        <available file="lib/${jar.click-extras}" property="isClickExtrasJarAvail"/>
+        <available file="lib/${jar.click-mock}" property="isClickMockJarAvail"/>
+        <fail message="Download *all* required Click JAR dependencies first with 'get-deps' (or build them manually and copy them to this 'lib' directory!)">
             <condition>
                 <or>
-                    <isfalse value="${isJarAvail}"/>
+                    <isfalse value="${isClickJarAvail}"/>
+                    <isfalse value="${isClickExtrasJarAvail}"/>
+                    <isfalse value="${isClickMockJarAvail}"/>
                 </or>
             </condition>
         </fail>
