@@ -1,93 +1,208 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.clickclick.jquery.controls;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import org.apache.click.Context;
 import org.apache.click.extras.control.Menu;
 import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.menu.FlexiMenu;
-import org.apache.click.util.PageImports;
+import net.sf.clickclick.jquery.helper.JQHelper;
+import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
-import org.apache.click.element.CssImport;
-import org.apache.commons.lang.ClassUtils;
 
 /**
- * Based on the JQuery plugin, Superfish -> http://users.tpg.com.au/j_birch/plugins/superfish/
+ * Provide a drop-down Menu control based on the JQuery Superfish plugin:
+ * http://users.tpg.com.au/j_birch/plugins/superfish/.
  *
  * @author Bob Schellink
  */
 public class JQMenu extends FlexiMenu {
 
-    private String options = "animation : { opacity:'show', height:'show' }, speed: 'fast'";
-    
-    public JQMenu() {        
+    // -------------------------------------------------------------- Constants
+
+    /**
+     * The JQMenu CSS import:
+     * "<tt>/clickclick/jquery/superfish/css/superfish.css</tt>".
+     */
+    public static String menuCssImport =
+        "/clickclick/jquery/superfish/css/superfish.css";
+
+    /**
+     * The vertical JQMenu CSS import:
+     * "<tt>/clickclick/jquery/superfish/css/superfish-vertical.css</tt>".
+     */
+    public static String  menuCssVerticalImport = "/clickclick/jquery/superfish/css/superfish-vertical.css";
+
+    /**
+     * The JQMenu JS library:
+     * "<tt>/clickclick/jquery/superfish/js/superfish.js</tt>".
+     */
+    public static String menuJsImport =
+        "/clickclick/jquery/superfish/js/superfish.js";
+
+    /**
+     * The JQMenu Hover-Intent plugin import:
+     * "<tt>/clickclick/jquery/superfish/js/hoverIntent.js</tt>".
+     */
+    public static String hoverIntentImport =
+        "/clickclick/jquery/superfish/js/hoverIntent.js";
+
+    /**
+     * The JQMenu BGI-Frame plugin import:
+     * "<tt>/clickclick/jquery/superfish/js/bgiframe.js</tt>".
+     */
+    public static String bgiFrameImport =
+        "/clickclick/jquery/superfish/js/bgiframe.js";
+
+    // -------------------------------------------------------------- Variables
+
+    /**
+     * The menu JavaScript template:
+     * "<tt>/clickclick/jquery/superfish/jquery.menu.template.js</tt>".
+     */
+    protected String template = "/clickclick/jquery/templates/superfish/jquery.menu.template.js";
+
+    /** The menu JavaScript template model. */
+    protected Map jsModel;
+
+    /** The default menu options. */
+    protected String options = "animation : { opacity:'show', height:'show' }, speed: 'fast'";
+
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a default JQMenu.
+     */
+    public JQMenu() {
     }
-    
+
+    /**
+     * Create a JQMenu with the given name.
+     *
+     * @param name the name of the control
+     */
     public JQMenu(String name) {
         super(name);
     }
-    
+
+    // ------------------------------------------------------ Public Properties
+
+    /**
+     * Return the menu options.
+     *
+     * @see #setOptions(java.lang.String)
+     *
+     * @return the menu options
+     */
     public String getOptions() {
         return options;
     }
 
     /**
+     * Set the menu options.
+     * <p/>
      * Please see the following link on how to set the menu Options:
-     *
      * http://users.tpg.com.au/j_birch/plugins/superfish/#options
-     * 
-     * @param options
+     *
+     * @param options the menu options
      */
     public void setOptions(String options) {
         this.options = options;
     }
 
-    public String getHtmlImports() {
-        PageImports pageImports = getPage().getPageImports();
-        Context context = getContext();
-        String contextPath = context.getRequest().getContextPath();
-
-        String resource = contextPath +
-            "/clickclick/jquery/superfish/css/superfish.css";
-        pageImports.add(new CssImport(resource));
-
-        if (VERTICAL.equals(getOrientation())) {
-            resource = contextPath +
-                "/clickclick/jquery/superfish/css/superfish-vertical.css";
-            pageImports.add(new CssImport(resource));
-        }
-
-        resource = contextPath + "/clickclick/jquery/jquery-1.2.6.js";
-        pageImports.add(new JsImport(resource));
-
-        resource = contextPath +
-            "/clickclick/jquery/superfish/js/hoverIntent.js";
-        pageImports.add(new JsImport(resource));
-
-        resource = contextPath +
-            "/clickclick/jquery/superfish/js/bgiframe.js";
-        pageImports.add(new JsImport(resource));
-
-        resource = contextPath +
-            "/clickclick/jquery/superfish/js/superfish.js";
-        pageImports.add(new JsImport(resource));
-
-        Map model = new HashMap();
-        model.put("options", getOptions());
-
-        String include = getContext().renderTemplate("/clickclick/jquery/superfish/jq-menu.js", model);
-        JsScript jsInclude = new JsScript(include);
-
-        // Script must be unique as multiple menus can be included on Page
-        // using the same script. No need to include the script twice.
-        jsInclude.setId(ClassUtils.getShortClassName(this.getClass()));
-        //jsInclude.setRemoveDuplicates(true);
-        pageImports.add(jsInclude);
-        return null;
+    /**
+     * Return the menu JavaScript template.
+     *
+     * @return the template the JavaScript template
+     */
+    public String getTemplate() {
+        return template;
     }
 
+    /**
+     * Set the menu JavaScript template.
+     *
+     * @param template the JavaScript template
+     */
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    /**
+     * Return the JavaScript template model.
+     *
+     * @return the JavaScript template model
+     */
+    public Map getJsModel() {
+        if(jsModel == null) {
+            jsModel = new HashMap();
+        }
+        return jsModel;
+    }
+
+    /**
+     * Set the JavaScript template model.
+     *
+     * @param model the JavaScript template model
+     */
+    public void setJsModel(Map model) {
+        this.jsModel = model;
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Return the JQColorPicker resources: {@link #menuCssImport},
+     * {@link #menuCssVerticalImport},
+     * {@link net.sf.clickclick.jquery.helper.JQHelper#jqueryImport},
+     * {@link #hoverIntentImport}, {@link #bgiFrameImport},
+     * {@link #menuJsImport}.
+     *
+     * @return the list of head elements
+     */
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            headElements.add(new CssImport(menuCssImport));
+
+            if (VERTICAL.equals(getOrientation())) {
+                headElements.add(new CssImport(menuCssVerticalImport));
+            }
+
+            headElements.add(new JsImport(JQHelper.jqueryImport));
+            headElements.add(new JsImport(hoverIntentImport));
+            headElements.add(new JsImport(bgiFrameImport));
+            headElements.add(new JsImport(menuJsImport));
+        }
+
+        addJsTemplate(headElements);
+
+        return headElements;
+    }
+
+    /**
+     * Render the HTML representation of the JQMenu.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("ul");
         String cssClass = "sf-menu";
@@ -102,6 +217,40 @@ public class JQMenu extends FlexiMenu {
         buffer.elementEnd("ul");
     }
 
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Add the JQMenu JavaScript {@link #template} to the list of head elements.
+     * <p/>
+     * You can override this method to add your own template.
+     *
+     * @param headElements the list of head elements to include for this control
+     */
+    protected void addJsTemplate(List headElements) {
+        String id = getId();
+        if (id == null) {
+            throw new IllegalStateException("Menu name is not set.");
+        }
+
+        JsScript jsScript = new JsScript();
+        jsScript.setId(id + "_superfish");
+
+        if (!headElements.contains(jsScript)) {
+            // Get the data model to pass to the templates
+            Map model = getJsModel();
+            model.put("options", getOptions());
+            jsScript.setModel(model);
+            jsScript.setTemplate(getTemplate());
+            headElements.add(jsScript);
+        }
+    }
+
+    /**
+     * Render the given menu.
+     *
+     * @param buffer the buffer to render to
+     * @param menu the menu to render
+     */
     protected void renderMenu(HtmlStringBuffer buffer, Menu menu) {
         Iterator it = menu.getChildren().iterator();
         while (it.hasNext()) {
@@ -111,11 +260,11 @@ public class JQMenu extends FlexiMenu {
                 if (child.getChildren().size() == 0) {
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenu(buffer, child);
+                    renderMenuLink(buffer, child);
                 } else {
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenu(buffer, child);
+                    renderMenuLink(buffer, child);
                     buffer.elementStart("ul");
                     buffer.closeTag();
                     buffer.append("\n");
