@@ -1,11 +1,15 @@
-jQuery.noConflict();
 jQuery(document).ready(function(){
+    jQuery('#dialog').dialog({title: 'Hello'});
+    jQuery('#dialog').dialog('close');
     jQuery('#table th').click(function(event) {
       var target = jQuery(event.target);
       var offset = target.offset();
-      jQuery('#dialog').css({"display":"block"});
-      jQuery('#dialog').dialog("close");
-      jQuery('#dialog').dialog({width: "200px", position: [offset.left + target.width(), offset.top]});
+      //jQuery('#dialog').css({"display":"block"});
+      //jQuery('#dialog').dialog('open');
+      //jQuery('#dialog').dialog("close");
+      //jQuery('#dialog').dialog({position: [offset.left + target.width(), offset.top]});
+      jQuery('#dialog').dialog('option', 'position', [offset.left+target.width(), offset.top]);
+      jQuery('#dialog').dialog('open');
     });
 
     jQuery('#chk_firstname').click(function() {

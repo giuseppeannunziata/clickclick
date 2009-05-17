@@ -1,13 +1,11 @@
 package net.sf.clickclick.examples.jquery.page.controls;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.click.control.Button;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Label;
-import org.apache.click.util.PageImports;
-import org.apache.click.element.JsScript;
-import org.apache.click.element.CssStyle;
 
 import net.sf.clickclick.control.Text;
 import net.sf.clickclick.control.grid.Grid;
@@ -17,6 +15,8 @@ import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
 import net.sf.clickclick.jquery.controls.JQDialog;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
+import org.apache.click.element.CssStyle;
+import org.apache.click.element.JsScript;
 
 public class DialogDemo extends BorderPage {
 
@@ -27,19 +27,22 @@ public class DialogDemo extends BorderPage {
         addControl(buildDialog());
     }
 
-    public String getHtmlImports() {
-        PageImports pageImports = getPageImports();
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
 
-        Map model = new HashMap();
-        String javascript = getContext().renderTemplate("controls/dialog-demo.js", model);
-        JsScript jsInclude = new JsScript(javascript);
-        pageImports.add(jsInclude);
+            Map model = new HashMap();
+            String javascript = getContext().renderTemplate(
+                "controls/dialog-demo.js", model);
+            JsScript jsInclude = new JsScript(javascript);
+            headElements.add(jsInclude);
 
-        String css = getContext().renderTemplate("controls/dialog-demo.css", model);
-        CssStyle cssInclude = new CssStyle(css);
-        pageImports.add(cssInclude);
-        
-        return null;
+            String css = getContext().renderTemplate("controls/dialog-demo.css",
+                                                     model);
+            CssStyle cssStyle = new CssStyle(css);
+            headElements.add(cssStyle);
+        }
+        return headElements;
     }
 
     // -------------------------------------------------------- Private Methods
@@ -59,15 +62,15 @@ public class DialogDemo extends BorderPage {
         HeaderCell header = new HeaderCell();
         header.add(new Text("Firstname"));
         row.add(header);
-        
+
         header = new HeaderCell();
         header.add(new Text("Lastname"));
         row.add(header);
-        
+
         header = new HeaderCell();
         header.add(new Text("Age"));
         row.add(header);
-        
+
         header = new HeaderCell();
         header.add(new Text("Street"));
         row.add(header);
@@ -81,17 +84,17 @@ public class DialogDemo extends BorderPage {
         Cell cell = new Cell();
         cell.add(new Text("Steve"));
         row.add(cell);
-        
+
         cell = new Cell();
         cell.add(new Text("Jones"));
         row.add(cell);
 
-        
+
         cell = new Cell();
         cell.add(new Text("21"));
         row.add(cell);
-        
-        
+
+
         cell = new Cell();
         cell.add(new Text("15 Short street"));
         row.add(cell);
@@ -100,7 +103,7 @@ public class DialogDemo extends BorderPage {
     private JQDialog buildDialog() {
         JQDialog dialog = new JQDialog("dialog");
         dialog.setStyle("display", "none");
-        
+
         Grid grid = new Grid("grid");
         grid.insert(new Label("Hide Firstname"), 1, 1);
         Checkbox chk = new Checkbox("chk_firstname");
@@ -112,11 +115,11 @@ public class DialogDemo extends BorderPage {
         grid.insert(new Label("Hide Street"), 4, 1);
         grid.insert(new Checkbox("chk_street"), 4, 2);
         dialog.add(grid);
-        
+
         Button button = new Button("close");
         button.setAttribute("onclick", "jQuery('#dialog').dialog('close');");
         dialog.add(button);
-        
+
         return dialog;
     }
 }

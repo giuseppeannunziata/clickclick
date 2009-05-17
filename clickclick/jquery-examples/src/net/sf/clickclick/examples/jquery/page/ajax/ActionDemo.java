@@ -8,8 +8,9 @@ import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.util.Partial;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.JQActionButton;
-import net.sf.clickclick.jquery.controls.JQActionLink;
+import net.sf.clickclick.jquery.controls.ajax.JQActionButton;
+import net.sf.clickclick.jquery.controls.ajax.JQActionLink;
+import net.sf.clickclick.jquery.util.Taconite;
 import org.apache.commons.lang.math.RandomUtils;
 
 /**
@@ -21,20 +22,21 @@ public class ActionDemo extends BorderPage {
     public void onInit() {
         // Example 1
         // The target div will have its content replaced through Ajax
-        Div target1 = new Div("target1");
+        final Div target1 = new Div("target1");
         addControl(target1);
 
-        // Create a Ajaxified link that will update a specified target with a 
+        // Create a Ajaxified link that will update a specified target with a
         // Partial response
         JQActionButton button = new JQActionButton("button", "Click here to make Ajax request");
 
-        // Set the target to update
-        button.setTargetId(target1.getId());
         button.setActionListener(new AjaxAdapter() {
 
             public Partial onAjaxAction(Control source) {
                 // Create a response that will be placed inside the target div
-                return new Partial(createResponse());
+                Taconite response = new Taconite();
+                response.replaceContent(target1, createResponse());
+                return response;
+                //return new Partial(createResponse());
             }
         });
         addControl(button);
@@ -52,34 +54,33 @@ public class ActionDemo extends BorderPage {
 
         JQActionLink link = new JQActionLink("link", "Click here to make Ajax request");
 
-        // By setting the data type to SCRIPT, the Partial response will be
-        // executed as normal Javascript. This provides full client side control
-        // to the user
-        link.setDataType(JQActionLink.SCRIPT);
-
         // Provide an alternative message when an Ajax call is made
-        link.setBusyMessage("\"<h1><img src='" + getContext().getRequest().getContextPath() +
-            "/assets/images/indicator.gif' /> Just a moment...</h1>\"");
+        link.getJQueryHelper().setIndicatorMessage("\"<h1><img src=\""
+            + getContext().getRequest().getContextPath()
+            + "/assets/images/indicator.gif\" /> Just a moment...</h1>\"");
 
         link.setActionListener(new AjaxAdapter() {
 
             public Partial onAjaxAction(Control source) {
                 // This partial will randomly update one target and clear the other
-                String activeTargetId = null;
-                String inactiveTargetId = null;
 
+                Taconite response = new Taconite();
                 // Randomly update a different target
                 if (RandomUtils.nextBoolean()) {
-                    activeTargetId = target2.getId();
-                    inactiveTargetId = target3.getId();
+                    response.empty(target3);
+                    response.replaceContent(target2, createResponse());
                 } else {
-                    activeTargetId = target3.getId();
-                    inactiveTargetId = target2.getId();
+                    //activeTargetId = target3.getId();
+                    //inactiveTargetId = target2.getId();
+                    response.empty(target2);
+                    response.replaceContent(target3, createResponse());
                 }
 
+                return response;
+
                 // Return normal Javascript that will be executed by JQuery
-                return new Partial("jQuery('#" + activeTargetId + "').html(\"" + createResponse() + "\");" +
-                    "jQuery('#" + inactiveTargetId + "').html(\"\");");
+                //return new Partial("jQuery('#" + activeTargetId + "').html(\"" + createResponse() + "\");" +
+                //   "jQuery('#" + inactiveTargetId + "').html(\"\");");
             }
         });
         addControl(link);
