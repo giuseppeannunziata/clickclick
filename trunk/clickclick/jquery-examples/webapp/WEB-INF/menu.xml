@@ -8,8 +8,15 @@
         <menu label="Color Picker" path="controls/color-picker.htm"/>
     </menu>
     <menu label="Ajax" path="#">
+        <menu label="Action Link Demo" path="ajax/action-link-demo.htm"/>
+        <menu label="Action Button Demo" path="ajax/action-button-demo.htm"/>
         <menu label="Action Demo" path="ajax/action-demo.htm"/>
-        <menu label="Form" path="ajax/form-demo.htm"/>
-        <menu label="Select" path="ajax/select-demo.htm"/>
+        <menu separator="true"/>
+        <menu label="Form Demo" path="ajax/form-demo.htm"/>
+        <menu separator="true"/>
+        <menu label="Select Demo" path="ajax/select-demo.htm"/>
+        <menu separator="true"/>
+        <menu label="AutoComplete" path="ajax/auto-complete.htm"/>
+        <menu label="Advanced AutoComplete" path="ajax/advanced-auto-complete.htm"/>
     </menu>
 </menu>

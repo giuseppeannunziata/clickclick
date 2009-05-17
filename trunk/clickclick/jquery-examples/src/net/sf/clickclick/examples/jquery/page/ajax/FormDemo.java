@@ -1,147 +1,126 @@
 package net.sf.clickclick.examples.jquery.page.ajax;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import net.sf.clickclick.control.Text;
+import net.sf.clickclick.control.html.Div;
 import org.apache.click.Control;
-import net.sf.clickclick.AjaxListener;
-import org.apache.click.control.Checkbox;
+import net.sf.clickclick.util.Partial;
+import net.sf.clickclick.examples.jquery.page.BorderPage;
+import net.sf.clickclick.jquery.controls.ajax.JQForm;
+import net.sf.clickclick.jquery.util.Taconite;
+import net.sf.clickclick.util.AjaxAdapter;
+import org.apache.click.control.Field;
+import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.extras.control.EmailField;
-import org.apache.click.util.HtmlStringBuffer;
-import net.sf.clickclick.util.Partial;
-import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.JQForm;
-import net.sf.clickclick.control.html.Div;
-import net.sf.clickclick.examples.jquery.page.HomePage;
-import net.sf.clickclick.jquery.util.JQAjaxPartial;
+import org.apache.click.extras.prototype.CalendarField;
 
+/**
+ * This example demonstrates using the ajax aware JQForm (JQuery Form).
+ *
+ * An AjaxListener is registered on the Form's Submit button which is fired
+ * when the Form is submitted via Ajax.
+ *
+ * If the Form is successfully completed, a success response is returned,
+ * otherwise an error response is returned.
+ *
+ * @author Bob Schellink
+ */
 public class FormDemo extends BorderPage {
 
-    public String title = "Form Demo";
+    private Form form = new JQForm("form");
 
-    private JQForm form = new JQForm("form");
+    private Div msgHolder = new Div("msgHolder");
 
-    private Div target = new Div("target");
+    private Text textMsg = new Text();
 
-    /**
-     * Build form and fields
-     */
     public void onInit() {
         super.onInit();
 
-        // Setup Ajax
-        form.setDataType(JQForm.HTML);
-        form.setClearTarget(true);
-        form.setTargetId(target.getId());
+        addControl(form);
+        addControl(msgHolder);
+        msgHolder.add(textMsg);
 
         // Setup fields
-        TextField textField = new TextField("firstName");
-        textField.setValue("Steve");
-        textField.setRequired(true);
-        form.add(textField);
-        
-        textField = new TextField("lastName");
-        textField.setValue("Masters");
-        textField.setRequired(true);
-        form.add(textField);
+        form.add(new TextField("firstName", true));
+        form.add(new TextField("lastName", true));
+        form.add(new EmailField("email", "E-Mail"));
 
-        EmailField emailField = new EmailField("email", "E-Mail");
-        emailField.setSize(20);
-        emailField.setValue("steve@test.com");
-        form.add(emailField);
+        Submit submit = new Submit("submit");
+        form.add(submit);
 
-        final Checkbox redirect = new Checkbox("redirect", "Redirect to Home after submit?");
-        form.add(redirect);
-
-        Submit submit = new Submit("submit");        
-
-        // Set AjaxListener on Submit that will be invoked when submit is performed
-        submit.setActionListener(new AjaxListener() {
- 
-            public boolean onAction(Control source) {
-                actionPerformed(source);
-                return true;
-            }
+        // Set AjaxListener on Submit which will be invoked when form is submitted
+        submit.setActionListener(new AjaxAdapter() {
 
             public Partial onAjaxAction(Control source) {
                 if (form.isValid()) {
-                    actionPerformed(source);
-                    // Return a Partial response
-                    boolean shouldRedirect = redirect.isChecked();
-                    return createSuccessPartial(shouldRedirect);
+                    saveForm();
+                    return createSuccessResponse();
                 } else {
-                    return createErrorPartial();
+                    return createErrorResponse();
                 }
             }
-
-            private void actionPerformed(Control source) {
-                // Perform submit action e.g. saving the Form to database
-                System.out.println("Form saved to database");
-            }
         });
-        form.add(submit);
+    }
 
-        addControl(form);
-
-        // Add ajax target
-        addControl(target);
+    private void saveForm() {
+        System.out.println("Form saved to database");
     }
 
     /**
-     * Returns a formatted date String.
+     * Return a Partial response (using a Taconite Partial object)
+     * that does the following:
+     *
+     * 1. Replace the Form in the browser with the current Form
+     * 2. Style the message holder with a green background which indicates success
+     * 3. Replace the message holder with the current message holder
      */
-    private String getDate() {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss:S");
-        return format.format(new Date());
-    }
+    private Partial createSuccessResponse() {
+        Taconite partial = new Taconite();
 
-    /**
-     * Create a Partial response
-     */
-    private Partial createSuccessPartial(boolean shouldRedirect) {
-        JQAjaxPartial partial = new JQAjaxPartial();
-        // For redirect, set redirectUrl and return the partial
-        if (shouldRedirect) {
-            partial.setRedirect(HomePage.class);
-            return partial;
-        }
+        form.add(new CalendarField("date"));
+        // 1. Replace the Form in the browser with the current one
+        partial.replace(form);
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
-        buffer.append("<pre>Map {\n");
-        buffer.append("    [firstName] => ").append(form.getFieldValue("firstName")).append("\n");
-        buffer.append("    [lastName] => ").append(form.getFieldValue("lastName")).append("\n");
-        buffer.append("    [email] => ").append(form.getFieldValue("email")).append("\n");
-        buffer.append("}</pre>");
+        // Set a success message
+        textMsg.setText("Successfully submitted Form");
 
-        // Set the partial content
-        partial.setContent(buffer.toString());
+        // 2. Style the message holder with a red background
+        msgHolder.setAttribute("style", "color:white; background: green; border: black 1px solid;padding: 5px; float: left");
 
-        // Set the target Control that will have its html replaced by the
-        // Partial content
-        partial.setTargetId(target.getId());
+        // 3. Replace the message holder in the browser with the current one
+        partial.replace(msgHolder);
 
         return partial;
     }
 
     /**
-     * Create a Partial response
+     * Return a Partial response (using a Taconite Partial object)
+     * that does the following:
+     *
+     * 1. Replace the Form in the browser with the current Form
+     * 2. Style the message holder with a red background which indicates an error
+     * 3. Replace the message holder with the current message holder
+     * 4. Use a native JQuery script to set focus on the first error field
      */
-    private Partial createErrorPartial() {
-        JQAjaxPartial partial = new JQAjaxPartial();
+    private Partial createErrorResponse() {
+        Taconite partial = new Taconite();
 
-        // Set the partial content, in this case the form because it is invalid
-        // and we need to display its error messages
-        partial.setContent(form);
+        // 1. Replace the Form in the browser with the current one
+        partial.replace(form);
 
-        // Set partial to replace the target itself, not just its content
-        partial.setReplaceTarget(true);
+        // Set an error message
+        textMsg.setText("Form contained errors.");
 
-        // Set the form as the target Control that will have its html replaced by the
-        // Partial content
-        partial.setTargetId(form.getId());
+        // 2. Style the message holder with a red background
+        msgHolder.setAttribute("style", "color:white; background: red; border: black 1px solid;padding: 5px; float: left");
 
-        partial.setFocusId(form.getFocusField().getId());
+        // 3. Replace the message holder in the browser with the current one
+        partial.replace(msgHolder);
+
+        // 4. Add javascript to set focus on the first invalid field
+        Field field = (Field) form.getErrorFields().get(0);
+        partial.eval("$('#" + field.getId() + "').focus()");
 
         return partial;
     }

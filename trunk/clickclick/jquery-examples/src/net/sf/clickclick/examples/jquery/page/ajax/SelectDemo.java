@@ -1,65 +1,72 @@
 package net.sf.clickclick.examples.jquery.page.ajax;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.sf.clickclick.util.AjaxAdapter;
-import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.element.CssStyle;
-import org.apache.click.element.JsScript;
 import org.apache.click.control.Form;
 import org.apache.click.control.Option;
 import org.apache.click.control.Select;
-import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PageImports;
 import net.sf.clickclick.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.JQSelect;
+import net.sf.clickclick.jquery.controls.ajax.JQSelect;
+import net.sf.clickclick.jquery.util.Taconite;
+import org.apache.click.control.Submit;
+import org.apache.click.control.TextField;
 
 public class SelectDemo extends BorderPage {
 
     public String title = "Select Demo";
 
-    private Select provinceSelect = new JQSelect("provinceSelect", "Select a Province:");
+    // Create a JQuery Select control.
+    private JQSelect provinceSelect = new JQSelect("provinceSelect", "Select a Province:", true);
 
-    private Select citySelect = new Select("citySelect", "Select a City:");
+    private Select citySelect = new Select("citySelect", "Select a City:", true);
 
-    public Form form = new Form("form");
+    private Form form = new Form("form");
 
-    public void onInit() {
-        super.onInit();
+    public SelectDemo() {
+        // Create a stateful page
+        setStateful(true);
+
+        addControl(form);
 
         provinceSelect.setActionListener(new AjaxAdapter() {
             public Partial onAjaxAction(Control source) {
-                String provinceCode = getContext().getRequestParameter(provinceSelect.getName());
-                return populateCities(provinceCode);
+                return updateCities();
             }
         });
 
-        //When page is initialized, load provinces.
-        populateProvinces();
+        form.add(new TextField("name", true));
         form.add(provinceSelect);
         form.add(citySelect);
+        form.add(new Submit("submit", this, "onSubmit"));
+
+        //When page is initialized, load the provinces and cities.
+        populateProvinces();
+        populateCities();
     }
 
-    public String getHtmlImports() {
-        PageImports pageImports = getPageImports();
-
-        Context context = getContext();
-        Map model = new HashMap();
-        String contextPath = context.getRequest().getContextPath();
-        model.put("context", contextPath);
-
-        String cssTemplate = "/ajax/select-demo.css";
-        pageImports.add(new CssStyle(context.renderTemplate(cssTemplate, model)));
-
-        String jsTemplate = "/ajax/select-demo.js";
-        pageImports.add(new JsScript(context.renderTemplate(jsTemplate, model)));
-        
-        return null;
-    }
-    
     // -------------------------------------------------------- Private Methods
+
+    public boolean onSubmit() {
+        if (form.isValid()) {
+            // Save form
+        }
+        return true;
+    }
+
+    private Partial updateCities() {
+        Taconite partial = new Taconite();
+
+        // Clear the city options
+        citySelect.getOptionList().clear();
+
+        // Populate the cities
+        populateCities();
+
+        // Update the citySelect
+        partial.replace(citySelect);
+        return partial;
+    }
 
     private void populateProvinces() {
         provinceSelect.add(Option.EMPTY_OPTION);
@@ -68,24 +75,20 @@ public class SelectDemo extends BorderPage {
         provinceSelect.add(new Option("N", "KwaZulu Natal"));
     }
 
-    private Partial populateCities(String provinceCode) {
-        if (provinceCode == null) {
-            return null;
-        }
+    private void populateCities() {
+        citySelect.add(Option.EMPTY_OPTION);
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
-
+        // Retrieve the selected province
+        String provinceCode = provinceSelect.getValue();
         if ("GAU".equals(provinceCode)) {
-            new Option("PTA", "Pretoria").render(citySelect, buffer);
-            new Option("JHB", "Johannesburg").render(citySelect, buffer);
-            new Option("CEN", "Centurion").render(citySelect, buffer);
+            citySelect.add(new Option("PTA", "Pretoria"));
+            citySelect.add(new Option("JHB", "Johannesburg"));
+            citySelect.add(new Option("CEN", "Centurion"));
         } else if ("WC".equals(provinceCode)) {
-            new Option("CT", "Cape Town").render(citySelect, buffer);
-            new Option("G", "George").render(citySelect, buffer);
+            citySelect.add(new Option("CT", "Cape Town"));
+            citySelect.add(new Option("G", "George"));
         } else if ("N".equals(provinceCode)) {
-            new Option("DBN", "Durban").render(citySelect, buffer);
+            citySelect.add(new Option("DBN", "Durban"));
         }
-
-        return new Partial(buffer.toString());
     }
 }
