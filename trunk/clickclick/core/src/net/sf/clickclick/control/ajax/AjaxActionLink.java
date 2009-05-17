@@ -18,7 +18,6 @@ package net.sf.clickclick.control.ajax;
 import net.sf.clickclick.AjaxControlRegistry;
 import net.sf.clickclick.AjaxListener;
 import org.apache.click.control.ActionLink;
-import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a server-side Ajax enabled ActionLink.
@@ -109,17 +108,5 @@ public class AjaxActionLink extends ActionLink {
     public void onInit() {
         super.onInit();
         AjaxControlRegistry.registerAjaxControl(this);
-    }
-
-    /**
-     * Render the link to the given buffer.
-     *
-     * @param buffer the buffer to render to
-     */
-    public void render(HtmlStringBuffer buffer) {
-        // Ensure the name attribute is rendered
-        setAttribute("name", getName());
-
-        super.render(buffer);
     }
 }
