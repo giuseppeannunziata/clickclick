@@ -49,6 +49,13 @@ a:visited { color: blue; }
 }
 
 /* Code examples */
+.border {
+    border: 1px solid #888888;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
 	font-family: Courier New, courier;
 	font-size: 10pt;
