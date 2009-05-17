@@ -16,6 +16,7 @@
 package net.sf.clickclick.control.panel;
 
 import java.net.MalformedURLException;
+import org.apache.click.ActionListener;
 import org.apache.click.Context;
 import org.apache.click.control.Panel;
 import org.apache.click.util.ClickUtils;
@@ -138,4 +139,14 @@ public class SimplePanel extends Panel {
             renderContent(buffer);
         }
     }
-}
+
+    // TODO - Panel should not override these methods?
+    public void setListener(Object listener, String method) {
+        this.listener = listener;
+        this.listenerMethod = method;
+    }
+
+    public void setActionListener(ActionListener listener) {
+        this.actionListener = listener;
+    }
+ }
