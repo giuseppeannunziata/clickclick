@@ -877,13 +877,19 @@ $.prototype.init.prototype = $.prototype;
     /**
      * Return the url of the given Element or null if no url is available.
      *
-     * Elements which provides a URL include: href, form, img
+     * Elements which provides a URL include: href, form, img. This function
+     * also caters for onclick handlers using 'location.href'.
      */
     Click.url = function(el) {
         var attr;
         if(attr = el.attributes.href) {
         } else if(attr = el.attributes.src) {
         } else if(attr = el.attributes.action) {
+        } else if(attr = el.attributes.onclick) {
+            // If the onclick handler does not contain location.href, nullify reference
+            if (attr && attr.value.indexOf('location.href')<0) {
+                attr=null;
+            }
         }
         if(attr) return attr.value;
         return null;
