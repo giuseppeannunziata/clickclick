@@ -885,11 +885,6 @@ $.prototype.init.prototype = $.prototype;
         if(attr = el.attributes.href) {
         } else if(attr = el.attributes.src) {
         } else if(attr = el.attributes.action) {
-        } else if(attr = el.attributes.onclick) {
-            // If the onclick handler does not contain location.href, nullify reference
-            if (attr && attr.value.indexOf('location.href')<0) {
-                attr=null;
-            }
         }
         if(attr) return attr.value;
         return null;
