@@ -51,11 +51,19 @@ public class AdvancedAutoComplete extends BorderPage {
 
         final IntegerField integerField = new IntegerField("integerField");
         JQAutoCompleteHelper jquery = new JQAutoCompleteHelper(integerField);
+
+        // Decorate the integerField with Ajax functionality
         jquery.ajaxify();
+
         integerField.setActionListener(new AjaxAdapter(){
             public Partial onAjaxAction(Control source) {
                 System.out.println("Ajax 2");
+
+                String criteria = integerField.getValue();
+
+                // Create a Partial to contains the auto complete suggestions
                 Partial partial = new Partial();
+
                 HtmlStringBuffer buffer = new HtmlStringBuffer();
                 buffer.append("601020\n");
                 buffer.append("101020\n");
