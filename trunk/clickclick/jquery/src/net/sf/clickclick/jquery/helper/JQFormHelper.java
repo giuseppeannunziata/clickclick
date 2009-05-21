@@ -20,6 +20,68 @@ import org.apache.click.element.JsImport;
 
 /**
  * Provide a specialized JQuery helper that Ajax enables a target Form.
+ * <p/>
+ * JQFormHelper can either be embedded inside a custom Form, or used to decorate
+ * the Form.
+ *
+ * <h3>Embedded example</h3>
+ *
+ * Below is an example of a custom Form with an embedded JQFormHelper that
+ * enables Ajax behavior:
+ *
+ * <pre class="prettyprint">
+ * public class JQForm extends AjaxForm {
+ *
+ *     // The embedded JQuery Form helper object.
+ *     private JQFormHelper jqFormHelper = new JQFormHelper(this);
+ *
+ *     // Constructor
+ *     public JQForm(String name) {
+ *         super(name);
+ *     }
+ *
+ *     // Initialize the Ajax functionality
+ *     public void onInit() {
+ *         super.onInit();
+           jqFormHelper.ajaxify();
+ *     }
+ * } </pre>
+ *
+ * Below is an example how to decorate a Form to update itself when the
+ * form is submitted:
+ *
+ * <pre class="prettyprint">
+ * public class FormDemo extends BorderPage {
+ *
+ *     private Form form = new Form("form");
+ *
+ *     public FormDemo() {
+ *
+ *         form.add(new TextField("firstname");
+ *         form.add(new TextField("lastname");
+ *         form.add(new IntegerField("age");
+ *
+ *         // Register an Ajax listener on the form which is invoked when the
+ *         // form is submitted.
+ *         form.setActionListener(new AjaxAdapter() {
+ *             public Partial onAjaxAction(Control source) {
+ *                 Taconite partial = new Taconite();
+ *
+ *                 // 1. Replace the Form in the browser with the current one
+ *                 partial.replace(form);
+ *
+ *                 return partial;
+ *             }
+ *         });
+ *
+ *         JQFormHelper helper = new JQFormHelper(form);
+ *
+ *         // Ajaxify the the Field
+ *         helper.ajaxify();
+ *
+ *         addControl(form);
+ *     }
+ * } </pre>
  *
  * @author Bob Schellink
  */

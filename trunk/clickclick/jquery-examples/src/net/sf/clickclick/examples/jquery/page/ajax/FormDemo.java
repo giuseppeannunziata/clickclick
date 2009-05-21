@@ -12,8 +12,8 @@ import org.apache.click.control.Field;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
+import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.EmailField;
-import org.apache.click.extras.prototype.CalendarField;
 
 /**
  * This example demonstrates using the ajax aware JQForm (JQuery Form).
@@ -78,7 +78,7 @@ public class FormDemo extends BorderPage {
     private Partial createSuccessResponse() {
         Taconite partial = new Taconite();
 
-        form.add(new CalendarField("date"));
+        form.add(new DateField("date"));
         // 1. Replace the Form in the browser with the current one
         partial.replace(form);
 
