@@ -1,6 +1,5 @@
 package net.sf.clickclick.examples.jquery.page.taconite;
 
-import net.sf.click.extras.control.CalendarField;
 import org.apache.click.Control;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
@@ -30,7 +29,7 @@ public class TaconitePage extends Page {
 
             public Partial onAjaxAction(Control source) {
                 Taconite partial = new Taconite();
-                partial.replaceContent('#' + wrapperId, new CalendarField("date"));
+                partial.replaceContent('#' + wrapperId, new DateField("date"));
                 return partial;
             }
         });
