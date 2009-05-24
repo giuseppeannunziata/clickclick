@@ -139,14 +139,4 @@ public class SimplePanel extends Panel {
             renderContent(buffer);
         }
     }
-
-    // TODO - Panel should not override these methods?
-    public void setListener(Object listener, String method) {
-        this.listener = listener;
-        this.listenerMethod = method;
-    }
-
-    public void setActionListener(ActionListener listener) {
-        this.actionListener = listener;
-    }
  }
