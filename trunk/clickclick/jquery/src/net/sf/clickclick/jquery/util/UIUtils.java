@@ -22,6 +22,7 @@ public class UIUtils {
 
     // -------------------------------------------------------------- Constants
 
+    /** The JQuery UI style, default value is "<tt>smoothness</tt>". */
     public static String style = "smoothness";
 
     // --------------------------------------------------------- Static Methods
