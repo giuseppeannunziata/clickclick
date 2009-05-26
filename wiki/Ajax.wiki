@@ -1,9 +1,13 @@
-!ClickClick provides out-of-the-box server side Ajax support through [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/core/src/net/sf/click/ClickClickServlet.java ClickClickServlet].
+!ClickClick provides out-of-the-box server side Ajax support through [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/core/src/net/sf/clickclick/ClickClickServlet.java ClickClickServlet].
 
 === Activate Ajax Support ===
 
-See GettingStarted on how to setup the !ClickClickServlet.
+In order to make use of Ajax support you must use the !ClickClickServlet. See GettingStarted on how to setup the !ClickClickServlet.
 
-=== How does it work ===
+=== The Ajax request cycle ===
+
+Before digging into the Ajax request cycle, lets look at Click's normal request cycle through the [http://incubator.apache.org/click/docs/pages.html#page-execution sequence diagram] and [http://incubator.apache.org/click/docs/pages.html#activity-diagram activity diagram].
+
+
 
 === Example ===
