@@ -27,4 +27,4 @@ To use !ClickClickServlet simply include clickclick.jar on your classpath and re
 </web-app>
 }}}
 
-Note, you only have to change the value of the _<servlet-class>_ element.
+Note, you only have to change the value of the _&lt;servlet-class&gt;_ element.
