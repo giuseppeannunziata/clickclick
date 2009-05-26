@@ -4,11 +4,15 @@ jQuery(document).ready(function(){
   // rebind the event if the Control is replaced since LiveQuery does this for you.
   // Also note the method Click.debounce which merge multiple callbacks if they
   // are invoked too many times within a specified threshold
-  jQuery('$selector').livequery(#if($event) "$event", #end Click.debounce(function() {
-    // Extract parameters from link href
+  jQuery('$selector').livequery(#if($event) "$event", #end Click.debounce(template, $threshold));
+  // $threshold is the number of milliseconds within which multiple function
+  // callbacks will be merged into one function callback
 
-    // Retrieve the underlying d
+  function template() {
+    // Retrieve the underlying element
     var target = jQuery('$selector')[0];
+
+    // Extract parameters from element href/src/target
     var params = Click.params(target);
 
     // Add any parameters passed in from the Page
@@ -28,8 +32,8 @@ jQuery(document).ready(function(){
       beforeSend: function() {
         // Show request indicator if enabled
         #if($showIndicator == "true")
-          #if($indicatorTarget) jQuery('$indicatorTarget').block({ message: '$indicatorMessage' });
-          #else jQuery.blockUI({ message: '$indicatorMessage' });
+          #if($indicatorTarget) jQuery('$indicatorTarget').block({ $!{indicatorOptions} });
+          #else jQuery.blockUI({ $!{indicatorOptions} });
           #end
         #end
       },
@@ -47,7 +51,5 @@ jQuery(document).ready(function(){
     });
     // Return false to override default event behavior
     return false;
-  }, $threshold));
-  // $threshold is the number of milliseconds within which multiple function
-  // callbacks will be merged into one function callback
+  };
 });
