@@ -116,6 +116,26 @@ public abstract class AbstractTablePanel extends SimplePanel {
     }
 
     /**
+     * Return the internal table used for laying out controls.
+     *
+     * @return the internal table used for laying out controls
+     */
+    public HtmlTable getTable() {
+        return table;
+    }
+
+    /**
+     * Set the internal table used for laying out controls.
+     *
+     * @param table the internal table used for laying out controls
+     */
+    public void setTable(HtmlTable table) {
+        super.remove(this.table);
+        this.table = table;
+        super.insert(table, 0);
+    }
+
+    /**
      * Set the horizontal alignment for controls rendered by the panel.
      *
      * @param horizontalAlignment the horizontal alignment of controls
@@ -167,6 +187,24 @@ public abstract class AbstractTablePanel extends SimplePanel {
      */
     public int getSpacing() {
         return table.getCellspacing();
+    }
+
+    /**
+     * Set the table border width.
+     *
+     * @param border the table border width
+     */
+    public void setBorder(int border) {
+        table.setBorder(border);
+    }
+
+    /**
+     * Return the table border width.
+     *
+     * @return the table border width
+     */
+    public int getBorder() {
+        return table.getBorder();
     }
 
     /**

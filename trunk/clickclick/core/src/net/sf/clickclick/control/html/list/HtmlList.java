@@ -13,13 +13,9 @@
  */
 package net.sf.clickclick.control.html.list;
 
-import net.sf.clickclick.control.FieldLabel;
 import org.apache.click.Control;
-import org.apache.click.MockContext;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.AbstractControl;
-import org.apache.click.control.Field;
-import org.apache.click.control.TextField;
 
 /**
  * Provides an HTML list control supporting both ordered and unordered lists:

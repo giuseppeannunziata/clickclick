@@ -32,6 +32,7 @@ public class HorizontalPanel extends AbstractTablePanel {
      * Create a default HorizontalPanel.
      */
     public HorizontalPanel() {
+        this(null);
     }
 
     /**
@@ -41,6 +42,7 @@ public class HorizontalPanel extends AbstractTablePanel {
      */
     public HorizontalPanel(String name) {
         super(name);
+        setBorder(0);
     }
 
     // --------------------------------------------------------- Public Methods

@@ -74,6 +74,7 @@ public class DockPanel extends AbstractTablePanel {
     public DockPanel(String name) {
         super(name);
         setHorizontalAlignment(ALIGN_CENTER);
+        setBorder(0);
     }
 
     // --------------------------------------------------------- Public Methods

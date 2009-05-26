@@ -13,6 +13,7 @@
  */
 package net.sf.clickclick.control.html;
 
+import net.sf.clickclick.control.Text;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.AbstractControl;
 
@@ -57,6 +58,14 @@ import org.apache.click.control.AbstractControl;
  */
 public class Span extends AbstractContainer {
 
+    // -------------------------------------------------------------- Variables
+
+    /**
+     * The span text control. Please note that a span can contain any number
+     * of other child controls as well.
+     */
+    private Text text;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -98,5 +107,33 @@ public class Span extends AbstractContainer {
      */
     public final String getTag() {
         return "span";
+    }
+
+    /**
+     * Convenience method to set the given text as the span content. If the
+     * given text is null, the span content will be cleared.
+     *
+     * @param text the text to set as the span content
+     */
+    public void setText(String text) {
+        this.text.setText(text);
+        if (text == null) {
+            remove(this.text);
+        } else {
+            if (!getControls().contains(this.text)) {
+                add(this.text);
+            }
+        }
+    }
+
+    /**
+     * Return the span text content or null if no text was set.
+     *
+     * @return the span text content or null if no text was set
+     */
+    public String getText() {
+        Object value = text.getText();
+        String result = value == null ? null : value.toString();
+        return result;
     }
 }
