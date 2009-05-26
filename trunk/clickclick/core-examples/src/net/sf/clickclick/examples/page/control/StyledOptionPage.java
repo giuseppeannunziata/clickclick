@@ -8,7 +8,7 @@ import org.apache.click.control.Form;
 import org.apache.click.control.Label;
 import org.apache.click.control.Reset;
 import org.apache.click.control.Select;
-import net.sf.clickclick.control.FieldLabel;
+import net.sf.clickclick.control.html.HtmlLabel;
 import net.sf.clickclick.control.StyledOption;
 import net.sf.clickclick.control.grid.Grid;
 import net.sf.clickclick.control.html.Span;
@@ -135,7 +135,7 @@ public class StyledOptionPage extends BorderPage {
         form.add(grid2);
         Span s = new Span();
         s.add(chJavascript);
-        s.add(new FieldLabel(chJavascript, "Turn Javascript on (Firefox only)"));
+        s.add(new HtmlLabel(chJavascript, "Turn Javascript on (Firefox only)"));
         form.add(s);
         form.add(sbReset);
     }
