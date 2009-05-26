@@ -1,0 +1,21 @@
+window_sizes 1920 1115 450 1350 800 82
+diagrams
+  active  sequencediagram_ref 130562 // ajax-get-sequence-diagram
+    1071 715 100 4 0 0
+  classdiagram_ref 129154 // click-class-diagram
+    1071 715 100 4 0 0
+  activitydiagram_ref 129410 // activity-diagram-small
+    1071 715 100 4 0 0
+  sequencediagram_ref 131714 // control-post-sequence-diagram
+    1071 715 120 4 0 0
+end
+show_stereotypes
+selected class_ref 137218 // ClickClickServlet
+open
+  classview_ref 129154 // pages
+  classview_ref 130306 // controls
+  
+  package_ref 131714 // apache
+  class_ref 137218 // ClickClickServlet
+end
+end
