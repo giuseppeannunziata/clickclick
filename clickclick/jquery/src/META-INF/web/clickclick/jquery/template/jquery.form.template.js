@@ -39,8 +39,8 @@ jQuery(document).ready(function() {
 // pre-submit callback
 function preSubmit(formData, jqForm, options) {
      #if($showIndicator == "true")
-       #if($indicatorTarget) jQuery('$indicatorTarget').block({ message: '$indicatorMessage' });
-       #else jQuery.blockUI({ message: '$indicatorMessage' });
+        #if($indicatorTarget) jQuery('$indicatorTarget').block({ $!{indicatorOptions} });
+        #else jQuery.blockUI({ $!{indicatorOptions} });
        #end
      #end
 
