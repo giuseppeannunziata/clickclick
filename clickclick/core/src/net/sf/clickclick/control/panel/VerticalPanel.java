@@ -32,6 +32,7 @@ public class VerticalPanel extends AbstractTablePanel {
      * Create a default VerticalPanel.
      */
     public VerticalPanel() {
+        this(null);
     }
 
     /**
@@ -41,6 +42,7 @@ public class VerticalPanel extends AbstractTablePanel {
      */
     public VerticalPanel(String name) {
        super(name);
+       setBorder(0);
     }
 
     // --------------------------------------------------------- Public Methods
