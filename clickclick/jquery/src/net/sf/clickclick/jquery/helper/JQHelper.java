@@ -21,7 +21,6 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import org.apache.click.ActionListener;
 import net.sf.clickclick.AjaxControlRegistry;
-import net.sf.clickclick.AjaxListener;
 import net.sf.clickclick.util.AjaxUtils;
 import org.apache.click.Context;
 import org.apache.click.Control;
@@ -34,6 +33,10 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Provide a JQuery helper that Ajax enables a target control object.
+ * <p/>
+ * This helper has an associated JavaScript template that can be modified
+ * according to your needs. Click <a href="../../../../../js/template/jquery.template.js.txt">here</a>
+ * to view the template.
  * <p/>
  * JQHelper can either be embedded inside Click controls or used to decorate
  * the control.
@@ -267,6 +270,13 @@ public class JQHelper {
      */
     private String indicatorTarget;
 
+    /**
+     * The Ajax indicator (busy indicator) options. See the JQuery
+     * <a href="http://malsup.com/jquery/block/">BlockUI</a> plugin for
+     * available options.
+     */
+    private String indicatorOptions;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -310,7 +320,7 @@ public class JQHelper {
 
             if (indicatorMessage == null) {
                 // Set a default message
-                indicatorMessage = "<h1>Please wait...</h1>";
+                indicatorMessage = "Error occurred!";
             }
         }
         return errorMessage;
@@ -400,6 +410,11 @@ public class JQHelper {
      * Set the message to display when an Ajax indicator (busy indicator) is
      * shown. If no value is specified the the default value:
      * "<tt>&;lt;h1&gt;Please wait...&lt;/h1&gt;</tt>" is used.
+     * <p/>
+     * <b>Please note:</b> the indicator message will be enclosed inside single
+     * quotes ('). If the message itself contains single quotes, they must be
+     * escaped using two backslash (\\) characters e.g:
+     * "<tt>Please enter your \\'name\\'.</tt>".
      *
      * @param indicatorMessage the message to display wnen an Ajax indicator is
      * shown
@@ -443,6 +458,49 @@ public class JQHelper {
             throw new IllegalArgumentException("control ID not set");
         }
         this.indicatorTarget = '#' + indicatorTarget.getId();
+    }
+
+    /**
+     * Return the Ajax indicator (busy indicator) options.
+     *
+     * @see #setIndicatorOptions(java.lang.String)
+     *
+     * @return the target element that displays the Ajax indicator
+     */
+    public String getIndicatorOptions() {
+        return indicatorOptions;
+    }
+
+    /**
+     * Set the Ajax indicator (busy indicator) options.
+     * <p/>
+     * The Ajax indicator is based on the JQuery
+     * <a href="http://malsup.com/jquery/block/">BlockUI</a> plugin so you can
+     * use any of the options outlined
+     * <a href="http://malsup.com/jquery/block/#options">here</a>.
+     * <p/>
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public String getIndicatorOptions() {
+     *     String options =
+     *     "css : {"
+     *         + "  textAlign: 'right',"
+     *         + "  color: 'blue'"
+     *         + "},"
+     *         + "centerX: false,"
+     *         + "centerY: false";
+     *
+     *     return options;
+     * } </pre>
+     *
+     * <b>Please note</b> that the "<tt>message</tt>" option must be specified
+     * through {@link #setIndicatorMessage(java.lang.String)} instead.
+     *
+     * @param indicatorOptions the Ajax indicator optiosn
+     */
+    public void setIndicatorOptions(String indicatorOptions) {
+        this.indicatorOptions = indicatorOptions;
     }
 
     /**
@@ -732,6 +790,7 @@ public class JQHelper {
      * <p/>
      * The following values are added:
      * <ul>
+     * <li>"{@link #context}" - the request context path e.g: '/myapp'</li>
      * <li>"{@link #control}" - the target control</li>
      * <li>"{@link #selector}" - the CSS selector</li>
      * <li>"{@link #event}" - the event that initiates the Ajax request</li>
@@ -742,8 +801,8 @@ public class JQHelper {
      * <li>"{@link #threshold}" - the threshold within which multiple Ajax
      * requests are merged into a single request.</li>
      * <li>"{@link #showIndicator}" - the showIndicator flag</li>
-     * <li>"{@link #indicatorMessage}"</span> - the message to display when the
-     * Ajax indicator is displayed</li>
+     * <li>"{@link #indicatorOptions}"</span> - the Ajax indicator options. Note
+     * that {@link #indicatorMessage} is rendered as part of the options</li>
      * <li>"{@link #indicatorTarget}" - the target element of the Ajax indicator</li>
      * <li>"{@link #errorMessage}" - the message to display if an Ajax error occurs</li>
      * <li>"{@link #parameters}" - the Ajax request parameters</li>
@@ -758,7 +817,23 @@ public class JQHelper {
         boolean productionMode = configService.isProductionMode()
             || configService.isProfileMode();
 
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        String message = getIndicatorMessage();
+        String options = getIndicatorOptions();
+
+        if (message != null) {
+            buffer.append("message:'").append(message).append("'");
+        }
+
+        if (options != null) {
+            if (buffer.length() > 0) {
+                buffer.append(",");
+            }
+            buffer.append(options);
+        }
+
         Map model = new HashMap();
+        model.put("context", context.getRequest().getContextPath());
         model.put("control", getControl());
         model.put("selector", getSelector());
         model.put("event", getEvent());
@@ -767,7 +842,7 @@ public class JQHelper {
         model.put("type", getType());
         model.put("threshold", getThreshold());
         model.put("showIndicator", isShowIndicator() ? "true" : "false");
-        model.put("indicatorMessage", getIndicatorMessage());
+        model.put("indicatorOptions", buffer.toString());
         model.put("indicatorTarget", getIndicatorTarget());
         model.put("errorMessage", getErrorMessage());
         model.put("parameters", serializeParameters());
