@@ -22,6 +22,10 @@ import org.apache.click.element.JsImport;
  * Provide a specialized JQuery helper that adds auto complete functionality
  * to a target Field control.
  * <p/>
+ * This helper has an associated JavaScript template that can be modified
+ * according to your needs. Click <a href="../../../../../js/template/jquery.autocomplete.template.js.txt">here</a>
+ * to view the template.
+ * <p/>
  * When text is entered in a field an Ajax request is made back to the server
  * with the entered text as a request parameter. On the server a list of
  * suggested completions is compiled, based on the entered text, and send back

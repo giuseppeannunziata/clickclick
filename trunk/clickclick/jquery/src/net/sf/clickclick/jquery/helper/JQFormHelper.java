@@ -21,6 +21,10 @@ import org.apache.click.element.JsImport;
 /**
  * Provide a specialized JQuery helper that Ajax enables a target Form.
  * <p/>
+ * This helper has an associated JavaScript template that can be modified
+ * according to your needs. Click <a href="../../../../../js/template/jquery.form.template.js.txt">here</a>
+ * to view the template.
+ * <p/>
  * JQFormHelper can either be embedded inside a custom Form, or used to decorate
  * the Form.
  *
@@ -99,11 +103,11 @@ public class JQFormHelper extends JQHelper {
 
     /**
      * The path of the template to render:
-     * "<tt>/clickclick/jquery/template/jquery.form.js</tt>".
+     * "<tt>/clickclick/jquery/template/jquery.form.template.js</tt>".
      */
     private String template = "/clickclick/jquery/template/jquery.form.template.js";
 
-    // ----------------------------------------------------------- Cosntructors
+    // ----------------------------------------------------------- Constructors
 
     /**
      * Create a JQFormHelper for the given target Form.
