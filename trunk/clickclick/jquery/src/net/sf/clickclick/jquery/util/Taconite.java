@@ -866,6 +866,23 @@ public class Taconite extends Partial {
      * Create a {@link #REPLACE} command for the target Control and content
      * and add it to the list of commands.
      * <p/>
+     * The content will replace the target Control.
+     *
+     * @param target the target Control
+     * @param content the content to replace the target Control
+     * @return the command that was created
+     */
+    public Command replace(Control target, String content) {
+        if (target == null) {
+            throw new IllegalArgumentException("Control is null");
+        }
+        return add(Taconite.REPLACE, getSelector(target), content);
+    }
+
+    /**
+     * Create a {@link #REPLACE} command for the target Control and content
+     * and add it to the list of commands.
+     * <p/>
      * The content Control will replace the target Control.
      *
      * @param target the target Control
