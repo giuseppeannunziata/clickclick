@@ -5,7 +5,7 @@ import org.apache.click.control.Field;
 import org.apache.click.control.TextField;
 import org.apache.click.extras.control.HtmlForm;
 import org.apache.click.extras.control.IntegerField;
-import net.sf.clickclick.control.FieldLabel;
+import net.sf.clickclick.control.html.HtmlLabel;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.control.panel.HorizontalPanel;
 import net.sf.clickclick.examples.page.BorderPage;
@@ -63,7 +63,7 @@ public class HorizontalPanelDemo extends BorderPage {
     }
 
     private void addField(Field field, HorizontalPanel horizontalPanel) {
-        FieldLabel label = new FieldLabel(field);
+        HtmlLabel label = new HtmlLabel(field);
         horizontalPanel.add(label);
         horizontalPanel.add(field);
     }
