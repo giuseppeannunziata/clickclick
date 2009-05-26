@@ -8,6 +8,23 @@ In order to make use of Ajax support you must use the !ClickClickServlet. See Ge
 
 Before digging into the Ajax request cycle, lets look at Click's normal request cycle through the [http://incubator.apache.org/click/docs/pages.html#page-execution sequence diagram] and [http://incubator.apache.org/click/docs/pages.html#activity-diagram activity diagram].
 
+Here is the list of events processed during normal request execution:
 
+ # onSecurityCheck()
+ # onInit()
+ # onProcess
+ # onGet() / onPost()
+ # onRender()
+ # onDestroy()
+
+Ajax requests are handled a bit differently. The following events are processed during an Ajax request:
+
+ # onSecurityCheck()
+ # onInit()
+ # onProcess
+
+Below is the Ajax GET request execution sequence:
+
+[http://code.google.com/p/clickclick/source/browse/trunk/site/images/uml/ajax-get-sequence-diagram.gif]
 
 === Example ===
