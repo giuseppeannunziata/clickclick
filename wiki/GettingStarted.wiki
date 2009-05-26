@@ -1,12 +1,11 @@
-Most of the components shipped with !ClickClick are dependent on features provided by the [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/core/src/net/sf/click/ClickClickServlet.java ClickClickServlet].
+Most of the components shipped with !ClickClick are dependent on features provided by the [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/core/src/net/sf/clickclick/ClickClickServlet.java ClickClickServlet].
 
 Some features provided by !ClickClickServlet incldues:
 
   * Ajax Support
-  * Advanced Javascript and CSS includes
-  * Dynamic class reloading (see changes to Pages without restarting your application)
+  * Dynamic class reloading (view changes to Pages without restarting your application)
 
-To use !ClickClickServlet simply include clickclick.jar on your classpath and replace 'net.sf.click.!ClickServlet' with 'net.sf.click.!ClickClickServlet' in your web.xml. See the example below:
+To use !ClickClickServlet simply include clickclick.jar on your classpath and replace 'net.sf.click.!ClickServlet' with 'net.sf.clickclick.!ClickClickServlet' in your web.xml. See the example below:
 
 {{{
 <?xml version="1.0" encoding="ISO-8859-1"?>
@@ -17,7 +16,7 @@ To use !ClickClickServlet simply include clickclick.jar on your classpath and re
 
   <servlet>
     <servlet-name>ClickServlet</servlet-name>
-    <servlet-class>net.sf.click.ClickClickServlet</servlet-class>
+    <servlet-class>net.sf.clickclick.ClickClickServlet</servlet-class>
     <load-on-startup>0</load-on-startup>
   </servlet>
 
