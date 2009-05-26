@@ -73,9 +73,9 @@ public class JQMenu extends FlexiMenu {
 
     /**
      * The menu JavaScript template:
-     * "<tt>/clickclick/jquery/superfish/jquery.menu.template.js</tt>".
+     * "<tt>/clickclick/jquery/template/superfish/jquery.menu.template.js</tt>".
      */
-    protected String template = "/clickclick/jquery/templates/superfish/jquery.menu.template.js";
+    protected String template = "/clickclick/jquery/template/superfish/jquery.menu.template.js";
 
     /** The menu JavaScript template model. */
     protected Map jsModel;
@@ -227,13 +227,13 @@ public class JQMenu extends FlexiMenu {
      * @param headElements the list of head elements to include for this control
      */
     protected void addJsTemplate(List headElements) {
-        String id = getId();
-        if (id == null) {
+        String name = getName();
+        if (name == null) {
             throw new IllegalStateException("Menu name is not set.");
         }
 
         JsScript jsScript = new JsScript();
-        jsScript.setId(id + "_superfish");
+        jsScript.setId(name + "_superfish");
 
         if (!headElements.contains(jsScript)) {
             // Get the data model to pass to the templates
