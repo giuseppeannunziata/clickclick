@@ -291,10 +291,14 @@
                     doctitle="ClickClick jQuery API"
                     classpath="classpath"
       	            overview="documentation/jquery-overview.html"/>
-        <copy file="documentation/javadoc-stylesheet.css"
-      	    overwrite="true"
+        <copy file="documentation/javadoc-stylesheet.css" overwrite="true"
       	    tofile="documentation/jquery-api/stylesheet.css"/>
-        
+
+        <copy todir="documentation/jquery-api/js/template" overwrite="true">
+            <fileset dir="jquery/src/META-INF/web/clickclick/jquery/template"/>
+            <globmapper from="*.js" to="*.js.txt"/>
+        </copy>
+
         <!-- Javadoc for MooTools -->
         <delete quiet="false" failonerror="false">
              <fileset dir="documentation/mootools-api" includes="**/*"/>
