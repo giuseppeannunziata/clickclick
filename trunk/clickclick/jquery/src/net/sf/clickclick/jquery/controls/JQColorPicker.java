@@ -83,7 +83,9 @@ public class JQColorPicker extends TextField {
      * @param name the name of the control
      */
     public JQColorPicker(String name) {
-        super(name);
+        if (name != null) {
+            setName(name);
+        }
     }
 
     // --------------------------------------------------------- Public Methods
