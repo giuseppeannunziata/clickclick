@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.sf.clickclick.control.panel.SimplePanel;
+import net.sf.clickclick.examples.jquery.control.Window;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import net.sf.clickclick.jquery.util.Taconite;
@@ -13,15 +14,18 @@ import net.sf.clickclick.util.Partial;
 import org.apache.click.Control;
 import org.apache.click.control.Column;
 import org.apache.click.control.Table;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
+ * Demonstrates how to lazily load table rows rendered inside a Window.
  *
  * @author Bob Schellink
  */
 public class LazyLoadDemo extends BorderPage {
 
-    Table table1;
-    Table table2;
+    private Table table1;
+
+    private Table table2;
 
     public LazyLoadDemo() {
          table1 = new Table("table1");
@@ -42,8 +46,8 @@ public class LazyLoadDemo extends BorderPage {
     }
 
     public void onInit() {
-        SimplePanel panel1 = new SimplePanel("panel1");
-        panel1.setActionListener(new AjaxAdapter(){
+        Window window1 = new Window("panel1");
+        window1.setActionListener(new AjaxAdapter(){
 
             public Partial onAjaxAction(Control source) {
                 Taconite taconite = new Taconite();
@@ -53,15 +57,13 @@ public class LazyLoadDemo extends BorderPage {
             }
         });
 
-        JQHelper helper = new JQHelper(panel1);
-        helper.setIndicatorTarget(panel1);
-        helper.setEvent(JQHelper.ON_DOMREADY);
-        helper.ajaxify();
-        panel1.add(table1);
-        addControl(panel1);
+        JQHelper helper = new JQHelper(window1);
+        setupHelper(helper, window1);
+        window1.add(table1);
+        addControl(window1);
 
-        SimplePanel panel2 = new SimplePanel("panel2");
-        panel2.setActionListener(new AjaxAdapter(){
+        Window window2 = new Window("panel2");
+        window2.setActionListener(new AjaxAdapter(){
 
             public Partial onAjaxAction(Control source) {
                 Taconite taconite = new Taconite();
@@ -71,18 +73,51 @@ public class LazyLoadDemo extends BorderPage {
             }
         });
 
-        helper = new JQHelper(panel2);
-        helper.setEvent(JQHelper.ON_DOMREADY);
-        helper.setIndicatorTarget(panel2);
-        helper.ajaxify();
+        helper = new JQHelper(window2);
+        setupHelper(helper, window2);
 
-        panel2.add(table2);
-        addControl(panel2);
+        window2.add(table2);
+        addControl(window2);
+    }
+
+    // -------------------------------------------------------- Private Methods
+
+    private void setupHelper(JQHelper helper, Control indicatorTarget) {
+        // Set the event to ON_DOMREADY, meaning the Ajax request is invoked
+        // as soon as the browser DOM is available
+        helper.setEvent(JQHelper.ON_DOMREADY);
+
+        // Set the target of the Ajax indicator (busy indicator)
+        helper.setIndicatorTarget(indicatorTarget);
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        String contextPath = getContext().getRequest().getContextPath();
+
+        // Set a custom indicator message that displays an animated gif
+        helper.setIndicatorMessage("<b>Loading...&nbsp;</b> <img src=\""
+            + contextPath + "/assets/images/ajax-loader.gif\"/>");
+
+        // Set indicator options to align the message box in the upper right
+        // hand corner
+        buffer.append("centerX: false,");
+        buffer.append("centerY: false,");
+        buffer.append("css: {");
+        buffer.append("  textAlign: 'right',");
+        buffer.append("  padding: 5,");
+        buffer.append("  width: '',");
+        buffer.append("  top:  '5px',");
+        buffer.append("  left: '',");
+        buffer.append("  right: '5px'");
+        buffer.append("}");
+
+        helper.setIndicatorOptions(buffer.toString());
+
+        helper.ajaxify();
     }
 
     private List createData() {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
         }
 

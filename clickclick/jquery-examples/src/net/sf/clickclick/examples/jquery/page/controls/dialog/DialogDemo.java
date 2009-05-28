@@ -1,4 +1,4 @@
-package net.sf.clickclick.examples.jquery.page.controls;
+package net.sf.clickclick.examples.jquery.page.controls.dialog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +13,8 @@ import net.sf.clickclick.control.html.table.Cell;
 import net.sf.clickclick.control.html.table.HeaderCell;
 import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
-import net.sf.clickclick.jquery.controls.JQDialog;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
+import net.sf.clickclick.jquery.controls.ui.UIDialog;
 import org.apache.click.element.CssStyle;
 import org.apache.click.element.JsScript;
 
@@ -32,14 +32,10 @@ public class DialogDemo extends BorderPage {
             headElements = super.getHeadElements();
 
             Map model = new HashMap();
-            String javascript = getContext().renderTemplate(
-                "controls/dialog-demo.js", model);
-            JsScript jsInclude = new JsScript(javascript);
+            JsScript jsInclude = new JsScript("controls/dialog/dialog-demo.js", model);
             headElements.add(jsInclude);
 
-            String css = getContext().renderTemplate("controls/dialog-demo.css",
-                                                     model);
-            CssStyle cssStyle = new CssStyle(css);
+            CssStyle cssStyle = new CssStyle("controls/dialog/dialog-demo.css", model);
             headElements.add(cssStyle);
         }
         return headElements;
@@ -100,9 +96,8 @@ public class DialogDemo extends BorderPage {
         row.add(cell);
     }
 
-    private JQDialog buildDialog() {
-        JQDialog dialog = new JQDialog("dialog");
-        dialog.setStyle("display", "none");
+    private UIDialog buildDialog() {
+        UIDialog dialog = new UIDialog("dialog");
 
         Grid grid = new Grid("grid");
         grid.insert(new Label("Hide Firstname"), 1, 1);

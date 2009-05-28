@@ -3,11 +3,15 @@
     <menu label=" Home" path="home.htm" imageSrc="/assets/images/home.png"/>
     <menu label="Basic" path="basic/basic.htm"/>
     <menu label="Controls" path="#">
-        <menu label="Dialog" path="controls/dialog-demo.htm"/>
+        <menu label="JQuery UI Calendar" path="controls/calendar-demo.htm"/>
+        <menu label="JQuery UI Slider" path="controls/slider-demo.htm"/>
+        <menu label="JQuery UI Dialog" path="controls/dialog/dialog-demo.htm"/>
         <menu label="Menu" path="controls/menu.htm"/>
         <menu label="Color Picker" path="controls/color-picker.htm"/>
     </menu>
     <menu label="Ajax" path="#">
+        <menu label="Text Update Demo" path="ajax/text-demo.htm"/>
+        <menu separator="true"/>
         <menu label="Action Link Demo" path="ajax/action-link-demo.htm"/>
         <menu label="Action Button Demo" path="ajax/action-button-demo.htm"/>
         <menu label="Action Demo" path="ajax/action-demo.htm"/>
@@ -18,5 +22,8 @@
         <menu separator="true"/>
         <menu label="AutoComplete" path="ajax/auto-complete.htm"/>
         <menu label="Advanced AutoComplete" path="ajax/advanced-auto-complete.htm"/>
+        <menu separator="true"/>
+        <menu label="Lazy Load Demo" path="ajax/lazy-load-demo.htm"/>
+        <menu label="Ajax Refresh Demo" path="ajax/refresh-demo.htm"/>
     </menu>
 </menu>
