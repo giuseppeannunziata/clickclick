@@ -34,7 +34,7 @@ public class DecoratorTest extends BorderPage {
                 ++count;
                 button.setParameter("count", Integer.toString(count));
                 button.setLabel("Counter: " + Integer.toString(count));
-                Command command = new Command(Taconite.REPLACE, "a.test",button).setCharacterData(true);
+                Command command = new Command(Taconite.REPLACE, "a.test",button).characterData(true);
 
                 // link normally contian '&' which breaks XML parsing. TODO update
                 // Click Link's to use &amp; instead

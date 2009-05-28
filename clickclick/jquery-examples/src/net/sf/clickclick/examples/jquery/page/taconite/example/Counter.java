@@ -26,7 +26,7 @@ public class Counter extends BorderPage {
                 ++count;
                 link.setParameter("count", Integer.toString(count));
                 link.setLabel("Counter: " + Integer.toString(count));
-                Command command = new Command("replace", link).setCharacterData(true);
+                Command command = new Command("replace", link).characterData(true);
 
                 // link normally contian '&' which breaks XML parsing. TODO update
                 // Click Link's to use &amp; instead
