@@ -14,8 +14,6 @@ public class ActionLinkDemo extends BorderPage {
 
     public ActionLinkDemo() {
         addControl(link);
-        link.getJQueryHelper().setIndicatorTarget("#div");
-        link.getJQueryHelper().setIndicatorMessage("<h1><img src=\"/jquery-examples/assets/images/indicator.gif\"/></h1>");
         link.setActionListener(new AjaxAdapter() {
 
             public Partial onAjaxAction(Control source) {
