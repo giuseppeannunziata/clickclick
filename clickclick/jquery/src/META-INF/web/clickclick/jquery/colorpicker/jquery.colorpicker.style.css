@@ -17,7 +17,7 @@
     left: 0;
     width: 21px;
     height: 21px;
-    background: url($context/clickclick/jquery/colorpicker/images/select21.png);
+    background: url(images/select21.png);
 }
 .colorPickerSelector div {
     position: absolute;
@@ -25,7 +25,7 @@
     left: 3px;
     width: 15px;
     height: 15px;
-    background: url($context/clickclick/jquery/colorpicker/images/select21.png) center;
+    background: url(images/select21.png) center;
 }
 .colorPickerImage {
     display: inline;
