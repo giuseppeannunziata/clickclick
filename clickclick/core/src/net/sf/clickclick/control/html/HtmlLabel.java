@@ -160,7 +160,7 @@ public class HtmlLabel extends Label {
             setName(name);
         }
         this.target = target;
-        this.label = label + ":";
+        this.label = label;
         if (accesskey != null) {
             setAttribute("accesskey", accesskey);
         }
