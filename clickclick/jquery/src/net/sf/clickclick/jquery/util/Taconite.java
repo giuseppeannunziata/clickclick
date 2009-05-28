@@ -23,11 +23,9 @@ import net.sf.clickclick.util.AjaxUtils;
 import org.apache.click.Control;
 import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.util.Partial;
-import org.apache.click.MockContext;
 import org.apache.click.element.CssStyle;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
-import org.apache.click.extras.control.DateField;
 import org.apache.click.util.PageImports;
 import org.apache.commons.lang.StringUtils;
 
@@ -323,7 +321,7 @@ public class Taconite extends Partial {
         if (element == null) {
             throw new IllegalArgumentException("Element is null");
         }
-        Command command = createCommand(Taconite.ADD_HEADER);
+        Command command = newCommand(Taconite.ADD_HEADER);
         command.add(element);
         return command;
     }
@@ -347,7 +345,7 @@ public class Taconite extends Partial {
         if (elements == null) {
             throw new IllegalArgumentException("Elements are null");
         }
-        Command command = createCommand(Taconite.ADD_HEADER);
+        Command command = newCommand(Taconite.ADD_HEADER);
         command.setContent(elements);
         return command;
     }
@@ -365,7 +363,7 @@ public class Taconite extends Partial {
      * @return the command that was created
      */
     public Command after(String selector, String content) {
-        return add(Taconite.AFTER, selector, content);
+        return create(Taconite.AFTER, selector, content);
     }
 
     /**
@@ -384,7 +382,7 @@ public class Taconite extends Partial {
         if (content == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.AFTER, selector, content);
+        return create(Taconite.AFTER, selector, content);
     }
 
     /**
@@ -401,7 +399,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.AFTER, getSelector(target), content);
+        return create(Taconite.AFTER, getSelector(target), content);
     }
 
     /**
@@ -418,7 +416,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.AFTER, getSelector(target), content);
+        return create(Taconite.AFTER, getSelector(target), content);
     }
 
     /**
@@ -434,7 +432,7 @@ public class Taconite extends Partial {
      * @return the command that was created
      */
     public Command append(String selector, String content) {
-        return add(Taconite.APPEND, selector, content);
+        return create(Taconite.APPEND, selector, content);
     }
 
     /**
@@ -453,7 +451,7 @@ public class Taconite extends Partial {
         if (content == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.APPEND, selector, content);
+        return create(Taconite.APPEND, selector, content);
     }
 
     /**
@@ -470,7 +468,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.APPEND, getSelector(target), content);
+        return create(Taconite.APPEND, getSelector(target), content);
     }
 
     /**
@@ -487,7 +485,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.APPEND, getSelector(target), content);
+        return create(Taconite.APPEND, getSelector(target), content);
     }
 
     /**
@@ -506,7 +504,7 @@ public class Taconite extends Partial {
         if (selector == null) {
             throw new IllegalArgumentException("Selector is null");
         }
-        return add(Taconite.ATTR, selector, name, value);
+        return create(Taconite.ATTR, selector, name, value);
     }
 
     /**
@@ -524,7 +522,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.ATTR, getSelector(target), name, value);
+        return create(Taconite.ATTR, getSelector(target), name, value);
     }
 
     /**
@@ -541,7 +539,7 @@ public class Taconite extends Partial {
         if (selector == null) {
             throw new IllegalArgumentException("Selector is null");
         }
-        return add(Taconite.ATTR, selector, attributes);
+        return create(Taconite.ATTR, selector, attributes);
     }
 
     /**
@@ -558,7 +556,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.ATTR, getSelector(target), attributes);
+        return create(Taconite.ATTR, getSelector(target), attributes);
     }
 
     /**
@@ -574,7 +572,7 @@ public class Taconite extends Partial {
      * @return the command that was created
      */
     public Command before(String selector, String content) {
-        return add(Taconite.BEFORE, selector, content);
+        return create(Taconite.BEFORE, selector, content);
     }
 
     /**
@@ -593,7 +591,7 @@ public class Taconite extends Partial {
         if (content == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.BEFORE, selector, content);
+        return create(Taconite.BEFORE, selector, content);
     }
 
     /**
@@ -610,7 +608,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.BEFORE, getSelector(target), content);
+        return create(Taconite.BEFORE, getSelector(target), content);
     }
 
     /**
@@ -627,7 +625,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.BEFORE, getSelector(target), content);
+        return create(Taconite.BEFORE, getSelector(target), content);
     }
 
     /**
@@ -643,7 +641,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.EMPTY, getSelector(target));
+        return create(Taconite.EMPTY, getSelector(target));
     }
 
     /**
@@ -660,7 +658,7 @@ public class Taconite extends Partial {
         if (selector == null) {
             throw new IllegalArgumentException("Selector is null");
         }
-        return add(Taconite.EMPTY, selector);
+        return create(Taconite.EMPTY, selector);
     }
 
     /**
@@ -676,7 +674,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.HIDE, getSelector(target));
+        return create(Taconite.HIDE, getSelector(target));
     }
 
     /**
@@ -692,7 +690,7 @@ public class Taconite extends Partial {
         if (selector == null) {
             throw new IllegalArgumentException("Selector is null");
         }
-        return add(Taconite.HIDE, selector);
+        return create(Taconite.HIDE, selector);
     }
 
     /**
@@ -708,7 +706,7 @@ public class Taconite extends Partial {
         if (StringUtils.isBlank(content)) {
             throw new IllegalArgumentException("Content cannot be empty.");
         }
-        Command command = createCommand(Taconite.EVAL);
+        Command command = newCommand(Taconite.EVAL);
         command.getContent().add(content);
         return command;
     }
@@ -726,7 +724,7 @@ public class Taconite extends Partial {
      * @return the command that was created
      */
     public Command prepend(String selector, String content) {
-        return add(Taconite.PREPEND, selector, content);
+        return create(Taconite.PREPEND, selector, content);
     }
 
     /**
@@ -745,7 +743,7 @@ public class Taconite extends Partial {
         if (content == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.PREPEND, selector, content);
+        return create(Taconite.PREPEND, selector, content);
     }
 
     /**
@@ -762,7 +760,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.PREPEND, getSelector(target), content);
+        return create(Taconite.PREPEND, getSelector(target), content);
     }
 
     /**
@@ -779,7 +777,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.PREPEND, getSelector(target), content);
+        return create(Taconite.PREPEND, getSelector(target), content);
     }
 
     /**
@@ -795,7 +793,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.REMOVE, getSelector(target));
+        return create(Taconite.REMOVE, getSelector(target));
     }
 
     /**
@@ -808,7 +806,7 @@ public class Taconite extends Partial {
      * @return the command that was created
      */
     public Command remove(String selector) {
-        return add(Taconite.REMOVE, selector);
+        return create(Taconite.REMOVE, selector);
     }
 
     /**
@@ -824,7 +822,7 @@ public class Taconite extends Partial {
      * @return the command that was created
      */
     public Command replace(String selector, String content) {
-        return add(Taconite.REPLACE, selector, content);
+        return create(Taconite.REPLACE, selector, content);
     }
 
     /**
@@ -840,7 +838,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.REPLACE, getSelector(target), target);
+        return create(Taconite.REPLACE, getSelector(target), target);
     }
 
     /**
@@ -859,7 +857,7 @@ public class Taconite extends Partial {
         if (content == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.REPLACE, selector, content);
+        return create(Taconite.REPLACE, selector, content);
     }
 
     /**
@@ -876,7 +874,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.REPLACE, getSelector(target), content);
+        return create(Taconite.REPLACE, getSelector(target), content);
     }
 
     /**
@@ -893,7 +891,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.REPLACE, getSelector(target), content);
+        return create(Taconite.REPLACE, getSelector(target), content);
     }
 
     /**
@@ -909,7 +907,7 @@ public class Taconite extends Partial {
      * @return the command that was created
      */
     public Command replaceContent(String selector, String content) {
-        return add(Taconite.REPLACE_CONTENT, selector, content);
+        return create(Taconite.REPLACE_CONTENT, selector, content);
     }
 
     /**
@@ -925,7 +923,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.REPLACE_CONTENT, getSelector(target), target);
+        return create(Taconite.REPLACE_CONTENT, getSelector(target), target);
     }
 
     /**
@@ -943,7 +941,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.REPLACE_CONTENT, getSelector(target), content);
+        return create(Taconite.REPLACE_CONTENT, getSelector(target), content);
     }
 
     /**
@@ -961,7 +959,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.REPLACE_CONTENT, getSelector(target), content);
+        return create(Taconite.REPLACE_CONTENT, getSelector(target), content);
     }
 
     /**
@@ -980,7 +978,7 @@ public class Taconite extends Partial {
         if (content == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.REPLACE_CONTENT, selector, content);
+        return create(Taconite.REPLACE_CONTENT, selector, content);
     }
 
     /**
@@ -996,7 +994,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.SHOW, getSelector(target));
+        return create(Taconite.SHOW, getSelector(target));
     }
 
     /**
@@ -1012,7 +1010,7 @@ public class Taconite extends Partial {
         if (selector == null) {
             throw new IllegalArgumentException("Selector is null");
         }
-        return add(Taconite.SHOW, selector);
+        return create(Taconite.SHOW, selector);
     }
 
     /**
@@ -1028,7 +1026,7 @@ public class Taconite extends Partial {
      * @return the command that was created
      */
     public Command wrap(String selector, String content) {
-        return add(Taconite.WRAP, selector, content);
+        return create(Taconite.WRAP, selector, content);
     }
 
     /**
@@ -1047,7 +1045,7 @@ public class Taconite extends Partial {
         if (content == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.WRAP, selector, content);
+        return create(Taconite.WRAP, selector, content);
     }
 
     /**
@@ -1064,7 +1062,7 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.WRAP, getSelector(target), content);
+        return create(Taconite.WRAP, getSelector(target), content);
     }
 
     /**
@@ -1081,44 +1079,81 @@ public class Taconite extends Partial {
         if (target == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        return add(Taconite.WRAP, getSelector(target), content);
+        return create(Taconite.WRAP, getSelector(target), content);
     }
 
-    public Command add(String commandName, String selector) {
+    /**
+     * Create a new command for the given command name and CSS selector.
+     *
+     * @param commandName the name of the command to execute
+     * @param selector the CSS selector to identify the target of the operation
+     * @return the command created
+     */
+    public Command create(String commandName, String selector) {
         if (StringUtils.isBlank(commandName)) {
-            throw new IllegalArgumentException("Command name is null or blank: " + commandName);
+            throw new IllegalArgumentException("Command name is null or blank: "
+                + commandName);
         }
-        Command command = createCommand(commandName, selector);
+        Command command = newCommand(commandName, selector);
         return command;
     }
 
-    public Command add(String commandName, String selector, Control content) {
+    /**
+     * Create a new command for the given command name, CSS selector and content.
+     *
+     * @param commandName the name of the command to execute
+     * @param selector the CSS selector to identify the target of the operation
+     * @param content the command content
+     * @return the command created
+     */
+    public Command create(String commandName, String selector, Control content) {
         if (StringUtils.isBlank(commandName)) {
-            throw new IllegalArgumentException("Command name is null or blank: " + commandName);
+            throw new IllegalArgumentException("Command name is null or blank: "
+                + commandName);
         }
         if (content == null) {
             throw new IllegalArgumentException("Control is null");
         }
-        Command command = createCommand(commandName, selector);
+        Command command = newCommand(commandName, selector);
         command.add(content);
         return command;
     }
 
-    public Command add(String commandName, String selector, String content) {
+    /**
+     * Create a new command for the given command name, CSS selector and content.
+     *
+     * @param commandName the name of the command to execute
+     * @param selector the CSS selector to identify the target of the operation
+     * @param content the command content
+     * @return the command created
+     */
+    public Command create(String commandName, String selector, String content) {
         if (StringUtils.isBlank(commandName)) {
-            throw new IllegalArgumentException("Command name is null or blank: " + commandName);
+            throw new IllegalArgumentException("Command name is null or blank: "
+                + commandName);
         }
         if (StringUtils.isBlank(content)) {
             throw new IllegalArgumentException("Content is null or blank: " + content);
         }
-        Command command = createCommand(commandName, selector);
+        Command command = newCommand(commandName, selector);
         command.add(content);
         return command;
     }
 
-    public Command add(String commandName, String selector, String name, String value) {
+    /**
+     * Create a new command for the given command name, CSS selector and
+     * name/value attribute pair.
+     *
+     * @param commandName the name of the command to execute
+     * @param selector the CSS selector to identify the target of the operation
+     * @param name the command name attribute
+     * @param value the command value attribute
+     * @return the command created
+     */
+    public Command create(String commandName, String selector, String name, String value) {
         if (StringUtils.isBlank(commandName)) {
-            throw new IllegalArgumentException("Command name is null or blank: " + commandName);
+            throw new IllegalArgumentException("Command name is null or blank: "
+                + commandName);
         }
         if (name == null) {
             throw new IllegalArgumentException("name is null");
@@ -1126,29 +1161,50 @@ public class Taconite extends Partial {
         if (value == null) {
             throw new IllegalArgumentException("value is null");
         }
-        Command command = createCommand(commandName, selector);
+        Command command = newCommand(commandName, selector);
         command.setName(name);
         command.setValue(value);
         return command;
     }
 
-    public Command add(String commandName, String selector, String... attributes) {
+    /**
+     * Create a new command for the given command name, CSS selector and
+     * attributes.
+     *
+     * @param commandName the name of the command to execute
+     * @param selector the CSS selector to identify the target of the operation
+     * @param attributes the command attributes
+     * @return the command created
+     */
+    public Command create(String commandName, String selector, String... attributes) {
         if (StringUtils.isBlank(commandName)) {
-            throw new IllegalArgumentException("Command name is null or blank: " + commandName);
+            throw new IllegalArgumentException("Command name is null or blank: "
+                + commandName);
         }
         if (attributes == null) {
             throw new IllegalArgumentException("attributes is null");
         }
-        Command command = createCommand(commandName, selector);
+        Command command = newCommand(commandName, selector);
         command.arguments(attributes);
         return command;
     }
 
+   /**
+     * Render Taconite to the specified response.
+     *
+     * @param request the page servlet request
+     * @param response the page servlet response
+     */
     public void render(HttpServletRequest request, HttpServletResponse response) {
         setReader(new StringReader(toString()));
         super.render(request, response);
     }
 
+    /**
+     * Render the XML representation of Taconite to the given buffer.
+     *
+     * @param buffer the buffer to render output to
+     */
     public void render(HtmlStringBuffer buffer) {
         processHeadElements();
 
@@ -1162,6 +1218,11 @@ public class Taconite extends Partial {
         renderTagEnd(tag, buffer);
     }
 
+    /**
+     * Return a XML representation of Taconite.
+     *
+     * @return the XML representation of Taconite
+     */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(commands.size() + 150);
         render(buffer);
@@ -1170,6 +1231,16 @@ public class Taconite extends Partial {
 
     // ------------------------------------------------------ Protected Methods
 
+    /**
+     * Return the CSS selector for the given control.
+     * <p/>
+     * This method delegates to
+     * {@link net.sf.clickclick.util.AjaxUtils#getSelector(org.apache.click.Control)}
+     * in order to retrieve the selector for the given control.
+     *
+     * @param control the control to lookup a CSS selector for
+     * @return the CSS selector for the given control
+     */
     protected String getSelector(Control control) {
         String selector = AjaxUtils.getSelector(control);
         if (selector == null) {
@@ -1180,10 +1251,21 @@ public class Taconite extends Partial {
         return selector;
     }
 
+    /**
+     * Render the {@link #getTag() tag} name to the given buffer.
+     *
+     * @param tagName the tag name to render
+     * @param buffer the buffer to render to
+     */
     protected void renderTagBegin(String tagName, HtmlStringBuffer buffer) {
         buffer.elementStart(tagName);
     }
 
+    /**
+     * Render the Taconite content to the given buffer.
+     *
+     * @param buffer the buffer to render to
+     */
     protected void renderContent(HtmlStringBuffer buffer) {
         Iterator it = commands.iterator();
         while(it.hasNext()) {
@@ -1193,10 +1275,31 @@ public class Taconite extends Partial {
         }
     }
 
+    /**
+     * Closes the specified tag.
+     *
+     * @param tagName the tag name to render
+     * @param buffer the buffer to render to
+     */
     protected void renderTagEnd(String tagName, HtmlStringBuffer buffer) {
         buffer.elementEnd(tagName);
     }
 
+    /**
+     * Process the HEAD elements of Controls contained within Taconite commands.
+     * This method will recursively process Containers and all child controls.
+     * <p/>
+     * All non JsScript HEAD elements will be added to a new Command which is
+     * set as the first command in Taconite. This ensures that HEAD elements
+     * are present in the Page before any DOM content is added.
+     * <p/>
+     * All JsScript HEAD elements will be added to a new Command which is set
+     * as the last command in Taconite. This ensures that JavaScript snippets
+     * are executed after the DOM content is available. If JsScript elements
+     * was not added after DOM content you would run into situations where
+     * JavaScript code would reference DOM elements which have not been added
+     * to the DOM yet.
+     */
     protected void processHeadElements() {
         if (commands.size() == 0) {
             return;
@@ -1205,12 +1308,22 @@ public class Taconite extends Partial {
         PageImports pageImports = new PageImports(null);
 
         Iterator it = commands.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Command command = (Command) it.next();
             processHeadElements(command, pageImports);
         }
 
         List headElements = pageImports.getHeadElements();
+
+        // Ensure CssStyle content is wrapped in CDATA tags because the content
+        // must be valid XML.
+        for (int i = 0, size = headElements.size(); i < size; i++) {
+            Element element = (Element) headElements.get(i);
+            if (element instanceof CssStyle) {
+                ((CssStyle) element).setCharacterData(true);
+            }
+        }
+
         List jsElements = pageImports.getJsElements();
 
         Command headElementsCommand = new Command(Taconite.ADD_HEADER);
@@ -1221,7 +1334,7 @@ public class Taconite extends Partial {
         // when scripts are executed. Otherwise scripts which target elements
         // will fail as the elements are only loaded after the script executes
         Command jsScriptsCommand = new Command(Taconite.ADD_HEADER);
-        addJavaScriptElements(headElementsCommand, jsScriptsCommand, jsElements);
+        splitJavaScriptElements(headElementsCommand, jsScriptsCommand, jsElements);
 
         // Add headElements at the top of the command list
         if(headElementsCommand.getContent().size() > 0) {
@@ -1234,16 +1347,31 @@ public class Taconite extends Partial {
         }
     }
 
-    protected Command createCommand(String commandName) {
+    /**
+     * Create a new command for the given command name and add the command to
+     * Taconite's {@link #commands} list.
+     *
+     * @param commandName the name of the command to execute
+     * @return the command created
+     */
+    protected Command newCommand(String commandName) {
         Command command = new Command(commandName);
         add(command);
         return command;
     }
 
-    protected Command createCommand(String commandName, String select) {
+    /**
+     * Create a new command for the given command name and CSS selector and add
+     * the command to Taconite's {@link #commands} list.
+     *
+     * @param commandName the name of the command to execute
+     * @param selector the CSS selector of the command
+     * @return the command created
+     */
+    protected Command newCommand(String commandName, String selector) {
         Command command = new Command(commandName);
-        if (StringUtils.isNotBlank(select)) {
-            command.setSelector(select);
+        if (StringUtils.isNotBlank(selector)) {
+            command.setSelector(selector);
         }
         add(command);
         return command;
@@ -1251,6 +1379,13 @@ public class Taconite extends Partial {
 
     // ------------------------------------------------ Package Private Methods
 
+    /**
+     * Process the HEAD elements of the given command and add the elements to
+     * pageImports.
+     *
+     * @param command the command to process
+     * @param pageImports the pageImports to add HEAD elements to
+     */
     void processHeadElements(Command command, PageImports pageImports) {
         Iterator it = command.getContent().iterator();
         while(it.hasNext()) {
@@ -1273,7 +1408,16 @@ public class Taconite extends Partial {
         }
     }
 
-    void addJavaScriptElements(Command headElementsCommand, Command jsScriptsCommand,
+    /**
+     * Add the JavaScript elements (JsImport and JsScript) to either one of the
+     * two given commands. JsScript elements must be added to jsScriptsCommand
+     * and JsImport elements must be added to headElementsCommand.
+     *
+     * @param headElementsCommand the command added as the first taconite command
+     * @param jsScriptsCommand the command added as the last taconite command
+     * @param jsElements list of JsScript elements
+     */
+    void splitJavaScriptElements(Command headElementsCommand, Command jsScriptsCommand,
         List jsElements) {
 
         Iterator it = jsElements.iterator();
@@ -1296,30 +1440,9 @@ public class Taconite extends Partial {
                 }
                 jsScriptsCommand.add(element);
 
-            } else if (element instanceof CssStyle) {
-                ((CssStyle) element).setCharacterData(true);
-                headElementsCommand.add(element);
             } else {
                 headElementsCommand.add(element);
             }
         }
-    }
-
-    /*
-    JsScript createDomReadyScript() {
-        JsScript script = new JsScript();
-        script.setId("set-dom-ready");
-        script.append("if (typeof(Click) != 'undefined')");
-        script.append("if (typeof(Click.domready) != 'undefined')");
-        script.append("Click.domready.ready = true;");
-        script.setCharacterData(true);
-        return script;
-    }*/
-
-    public static void main(String[] args) {
-        MockContext.initContext();
-        Taconite partial = new Taconite();
-        partial.replace(new DateField("date"));
-        System.out.println(partial);
     }
 }
