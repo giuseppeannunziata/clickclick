@@ -57,8 +57,15 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class HtmlLabel extends Label {
 
+    // -------------------------------------------------------------- Variables
+
     /** The target Field object. */
-    private Field target;
+    protected Field target;
+
+    /**
+     * The String to render after the label for example ":", default value is null.
+     */
+    protected String suffix;
 
     /**
      * Create a default HtmlLabel instance.
@@ -208,6 +215,46 @@ public class HtmlLabel extends Label {
     }
 
     /**
+     * Return the label suffix, for example ":", default value is null.
+     *
+     * @return the label suffix
+     */
+    public String getSuffix() {
+        return suffix;
+    }
+
+    /**
+     * Set the label suffix, for example ":".
+     *
+     * @param suffix the label suffix
+     */
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+
+    /**
+     * Return the label "<tt>accesskey</tt>" attribute or null if this attribute
+     * is not defined.
+     *
+     * @return the label accesskey attribute
+     */
+    public String getAccesskey() {
+        if (hasAttributes()) {
+            return getAttribute("accesskey");
+        }
+        return null;
+    }
+
+    /**
+     * Set the label "<tt>accesskey</tt>" attribute.
+     *
+     * @param accesskey the label accesskey attribute
+     */
+    public void setAccesskey(String accesskey) {
+        setAttribute("accesskey", accesskey);
+    }
+
+    /**
      * Return the Field value. This method delegates to {@link #getLabel()}.
      *
      * @return the Field value
@@ -280,6 +327,20 @@ public class HtmlLabel extends Label {
     }
 
     /**
+     * Return the field's value from the request.
+     *
+     * @return the field's value from the request
+     */
+    protected String getRequestValue() {
+        String value = getContext().getRequestParameter(getName());
+        if (value != null) {
+            return value.trim();
+        } else {
+            return getLabel();
+        }
+    }
+
+    /**
      * Render the HTML representation of the HtmlLabel. The HtmlLabel is
      * rendered as an HTML "&ltlabel&gt; element e.g:
      * "&lt;label for="firstnameId">Firstname:&lt;/label&gt;.
@@ -296,6 +357,9 @@ public class HtmlLabel extends Label {
         // Open tag: <label
         buffer.elementStart(getTag());
 
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("title", getTitle());
+
         Field target = getTarget();
         if (target != null) {
             // Set attribute to target field's id
@@ -310,6 +374,9 @@ public class HtmlLabel extends Label {
 
         // Add label text: <label for="firstname">Firstname:
         buffer.append(label);
+        if (getSuffix() != null) {
+            buffer.append(getSuffix());
+        }
 
         // Close tag: <label for="firstname">Firstname:</label>
         buffer.elementEnd(getTag());
