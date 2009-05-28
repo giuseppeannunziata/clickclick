@@ -11,29 +11,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.clickclick.jquery.controls;
+package net.sf.clickclick.jquery.controls.ui;
 
+import java.util.ArrayList;
 import java.util.List;
-import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import net.sf.clickclick.jquery.util.UIUtils;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
+import org.apache.click.extras.control.DateField;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
- * Provide a Dialog control based on the JQuery UI Dialog widget:
- * http://docs.jquery.com/UI/Dialog.
+ * Provide a Calendar field based on the JQuery UI Datepicker widget:
+ * http://docs.jquery.com/UI/Datepicker.
  *
  * @author Bob Schellink
  */
-public class UIDialog extends Div {
+public class UICalendarField extends DateField {
 
     // ----------------------------------------------------------- Constructors
 
     /**
      * Create a default dialog.
      */
-    public UIDialog() {
+    public UICalendarField() {
         this(null);
     }
 
@@ -42,7 +44,7 @@ public class UIDialog extends Div {
      *
      * @param name the name of the dialog
      */
-    public UIDialog(String name) {
+    public UICalendarField(String name) {
         super(name);
         setAttribute("class", UIUtils.style);
     }
@@ -50,7 +52,7 @@ public class UIDialog extends Div {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Return the JQDialog resources: 
+     * Return the JQDialog resources:
      * {@link net.sf.clickclick.jquery.helper.JQHelper#jqueryImport},
      * {@link net.sf.clickclick.jquery.util.UIUtils#jqueryUICssImport},
      * {@link net.sf.clickclick.jquery.util.UIUtils#jqueryUIJsImport}.
@@ -59,7 +61,7 @@ public class UIDialog extends Div {
      */
     public List getHeadElements() {
         if (headElements == null) {
-            headElements = super.getHeadElements();
+            headElements = new ArrayList(0);
 
             CssImport cssImport = new CssImport(UIUtils.getJQueryUICssImport());
             cssImport.setAttribute("media", "screen");
@@ -72,5 +74,15 @@ public class UIDialog extends Div {
             headElements.add(jsImport);
         }
         return headElements;
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * This method renders nothing since JQuery takes care of the button.
+     *
+     * @param buffer the buffer to render output to
+     */
+    protected void renderCalendarButton(HtmlStringBuffer buffer) {
     }
 }
