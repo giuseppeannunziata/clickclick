@@ -11,14 +11,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+(function() {// Execute within a closure
 
 // prepare the form when the DOM is ready
 var formOptions;
+
 jQuery(document).ready(function() {
     formOptions = {
         beforeSubmit:  preSubmit,   // pre-submit callback
         dataType:      'xml',   // must be 'xml' to work with JQuery Taconite support
-        complete:      postSubmit   // post-submit callback
+        complete:      postSubmit,   // post-submit callback
+        data: {"X-Requested-With" : "XMLHttpRequest"} // add the special "X-Requested-With" parameter
+        // which tricks Click into thinking its an Ajax request. We do this because
+        // if a FileField is present in the Form, the JQuery Form plugin uses an
+        // IFrame to submit that data instead of Ajax. Since an IFrame submit is
+        // just a normal request, Click won't process the request as Ajax and
+        // simply return the Page template. By passing "X-Requested-With" Click handles
+        // the request as an Ajax request
 
         // other available options:
         //success:       showResponse,  // post-submit callback
@@ -38,6 +47,10 @@ jQuery(document).ready(function() {
 
 // pre-submit callback
 function preSubmit(formData, jqForm, options) {
+     #if($javascriptValidate)
+       if(!on_form_submit()) return false;
+     #end
+
      #if($showIndicator == "true")
         #if($indicatorTarget) jQuery('$indicatorTarget').block({ $!{indicatorOptions} });
         #else jQuery.blockUI({ $!{indicatorOptions} });
@@ -48,7 +61,7 @@ function preSubmit(formData, jqForm, options) {
 
     // formData is an array; here we use jQuery.param to convert it to a string to display it
     // but the form plugin does this for you automatically when it submits the data
-    var queryString = jQuery.param(formData);
+    // var queryString = jQuery.param(formData);
 
     // jqForm is a jQuery object encapsulating the form element.  To access the
     // DOM element for the form do this:
@@ -81,3 +94,4 @@ function onSuccess(responseData, statusText, xhr) {
 function onError(statusText, xhr) {
     alert('$errorMessage' #if ($productionMode != "true") + '\n\n' + xhr.responseText #end);
 }
+})();
