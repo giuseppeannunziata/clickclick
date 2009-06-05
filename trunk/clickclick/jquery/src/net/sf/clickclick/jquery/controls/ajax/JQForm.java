@@ -13,9 +13,13 @@
  */
 package net.sf.clickclick.jquery.controls.ajax;
 
+import java.util.List;
 import net.sf.clickclick.control.ajax.AjaxForm;
 import net.sf.clickclick.jquery.helper.JQFormHelper;
 import net.sf.clickclick.jquery.helper.JQHelper;
+import org.apache.click.element.JsScript;
+import org.apache.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provide an Ajax enabled Form control.
@@ -31,6 +35,9 @@ public class JQForm extends AjaxForm {
 
     /** The JQuery helper object. */
     private JQHelper jqHelper = new JQFormHelper(this);
+
+    /** The JavaScript focus function HEAD element. */
+    private JsScript focusScript;
 
     // ----------------------------------------------------------- Constructors
 
@@ -77,5 +84,80 @@ public class JQForm extends AjaxForm {
     public void onInit() {
         super.onInit();
         jqHelper.ajaxify();
+    }
+
+    /**
+     * Set the JavaScript client side form validation flag.
+     *
+     * @param validate the JavaScript client side validation flag
+     */
+    public void setJavaScriptValidation(boolean validate) {
+        super.setJavaScriptValidation(validate);
+        jqHelper.getModel().put("javascriptValidate", validate);
+    }
+
+    /**
+     * Return JQForm HEAD elements.
+     *
+     * @return the JQForm HEAD elements
+     */
+    public List getHeadElements() {
+        if (!getContext().isAjaxRequest()) {
+            return super.getHeadElements();
+        } else {
+            if (headElements == null) {
+                headElements = super.getHeadElements();
+
+                focusScript = new JsScript();
+                headElements.add(focusScript);
+            }
+            return headElements;
+        }
+    }
+
+    /**
+     * Render the Form field focus JavaScript to the string buffer.
+     *
+     * @param buffer the StringBuffer to render to
+     * @param formFields the list of form fields
+     */
+    protected void renderFocusJavaScript(HtmlStringBuffer buffer,
+        List formFields) {
+        if (!getContext().isAjaxRequest()) {
+            super.renderFocusJavaScript(buffer, formFields);
+        } else {
+            HtmlStringBuffer tempBuf = new HtmlStringBuffer();
+            super.renderFocusJavaScript(tempBuf, formFields);
+            String temp = tempBuf.toString();
+            if (StringUtils.isBlank(temp)) {
+                return;
+            }
+            String prefix = "<script type=\"text/javascript\"><!--";
+            temp = temp.substring(prefix.length());
+            String suffix = "//--></script>\n";
+            int end = temp.indexOf(suffix);
+            temp = temp.substring(0, end);
+            focusScript.getContent().append(temp);
+        }
+    }
+
+    /**
+     * Render the given form start tag and the form hidden fields to the given
+     * buffer.
+     *
+     * @param buffer the HTML string buffer to render to
+     * @param formFields the list of form fields
+     */
+    protected void renderHeader(HtmlStringBuffer buffer, List formFields) {
+        if (getJavaScriptValidation()) {
+            // The default implementation renders an inline onsubmit handler on form.
+            // Here we skip rendering that inilne onsubmit handler which is instead
+            // handled by the jquery.form.template.js
+            setJavaScriptValidation(false);
+            super.renderHeader(buffer, formFields);
+            setJavaScriptValidation(true);
+        } else {
+            super.renderHeader(buffer, formFields);
+        }
     }
 }
