@@ -14,6 +14,7 @@
 package net.sf.clickclick.control.repeater;
 
 import java.util.List;
+import net.sf.clickclick.AjaxControlRegistry;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.ControlRegistry;
@@ -449,7 +450,7 @@ public abstract class Repeater extends AbstractContainer {
                 return true;
             }
 
-        }, ControlRegistry.POST_ON_RENDER_EVENT);
+        }, AjaxControlRegistry.POST_ON_RENDER_EVENT);
     }
 
     /**

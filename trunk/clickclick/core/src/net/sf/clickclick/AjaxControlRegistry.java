@@ -26,7 +26,21 @@ import org.apache.commons.lang.Validate;
 
 /**
  * Extends ControlRegistry to provide a thread local register for managing Ajax
- * controls and ActionListener events.
+ * controls and ActionListener events. AjaxControlRegistry also adds support for
+ * registering listeners to fire <tt>after</tt> the <tt>onRender</tt> event.
+ * <p/>
+ * <b>Please note:</b> this class is meant for component development.
+ * <p/>
+ * Ajax events can be specified with the constant {@link #ON_AJAX_EVENT} and
+ * <tt>onRender</tt> events can be specified through the constant
+ * {@link #POST_ON_RENDER_EVENT}.
+ * <p/>
+ * The ClickClickServlet will notify the AjaxControlRegistry which ActionListeners
+ * to fire. For example, before the <tt>onProcess</tt> event, the ClickClickServlet
+ * will notify the registry to fire ActionListeners registered for the
+ * {@link #ON_AJAX_EVENT}. Similarly, after the <tt>onRender</tt> event,
+ * the ClickClickServlet will notify the registry to fire ActionListeners
+ * registered for the {@link #POST_ON_RENDER_EVENT}.
  * <p/>
  * Registering Ajax Controls for processing is done as follows:
  *
@@ -46,6 +60,46 @@ import org.apache.commons.lang.Validate;
  *     });
  * } </pre>
  *
+ * On rare occasions one need to manipulate a Control's state right before it
+ * is rendered. The {@link #POST_ON_RENDER_EVENT} callback can be used for this
+ * situation. For example:
+ *
+ * <pre class="prettyprint">
+ * public class MyForm extends Form {
+ *
+ *     public MyForm() {
+ *         init();
+ *     }
+ *
+ *     public MyForm(String name) {
+ *         super(name);
+ *         init();
+ *     }
+ *
+ *     private void init() {
+ *         ActionListener listener = new ActionListener() {
+ *             public boolean onAction(Control source {
+ *                 // Add a hidden field to hold state for MyForm
+ *                 add(new HiddenField("my-form-name", getName() + '_' + "myform"));
+ *                 return true;
+ *             }
+ *         };
+ *
+ *         AjaxControlRegistry.registerActionEvent(this, listener, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+ *     }
+ *
+ *     ...
+ *
+ * } </pre>
+ *
+ * The above example fires the ActionListener <tt>after</tt> the <tt>onRender</tt>
+ * event. This ensures a HiddenField is added right before the MyForm is
+ * streamed to the browser.
+ * <p/>
+ * Registering the listener in MyForm constructor guarantees that the
+ * listener will be registered even if MyForm is subclassed because the compiler
+ * forces subclasses to invoke their super constructor.
+ *
  * @author Bob Schellink
  * @author Malcolm Edgar
  */
@@ -61,10 +115,21 @@ public class AjaxControlRegistry extends ControlRegistry {
      */
     public static final int ON_AJAX_EVENT = 250;
 
+    /**
+     * Indicates the listener should fire <tt>AFTER</tt> the onRender event.
+     * Listeners fired in the <tt>POST_ON_RENDER_EVENT</tT> are
+     * <tt>guaranteed</tt> to trigger, even when redirecting, forwarding or if
+     * page processing is cancelled.
+     */
+    public static final int POST_ON_RENDER_EVENT = 400;
+
     // -------------------------------------------------------- Variables
 
     /** The set of unique registered Ajax Controls. */
     private Set ajaxControlList;
+
+    /** The POST_RENDER events holder. */
+    private EventHolder postRenderEventHolder;
 
     /** The AJAX events holder. */
     private EventHolder ajaxEventHolder;
@@ -159,7 +224,8 @@ public class AjaxControlRegistry extends ControlRegistry {
     /**
      * For Ajax requests this method will fire the Ajax listener and if a
      * {@link net.sf.clickclick.util.Partial} is returned, stream it back to
-     * the browser.
+     * the browser. This method will also ensure that any
+     * {@link #POST_ON_RENDER_EVENT} listeners are executed for Ajax requests.
      *
      * @see org.apache.click.ControlRegistry#fireActionEvent(org.apache.click.Context, org.apache.click.Control, org.apache.click.ActionListener, int)
      *
@@ -226,11 +292,13 @@ public class AjaxControlRegistry extends ControlRegistry {
      *
      * @return the EventHolder for the specified event
      */
-    protected EventHolder getEventHolder(int phase) {
-        if (phase == ON_AJAX_EVENT) {
+    protected EventHolder getEventHolder(int event) {
+        if (event == POST_ON_RENDER_EVENT) {
+            return getPostRenderEventHolder();
+        } else if (event == ON_AJAX_EVENT) {
             return getAjaxEventHolder();
         } else {
-           return super.getEventHolder(phase);
+           return super.getEventHolder(event);
         }
     }
 
@@ -255,6 +323,7 @@ public class AjaxControlRegistry extends ControlRegistry {
         }
         lastEventFired = -1;
         postOnRenderEventFired = false;
+        getPostRenderEventHolder().clear();
         super.clearRegistry();
     }
 
@@ -269,6 +338,18 @@ public class AjaxControlRegistry extends ControlRegistry {
     }
 
     // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Return the {@link #POST_ON_RENDER_EVENT} {@link EventHolder}.
+     *
+     * @return the {@link #POST_ON_RENDER_EVENT} {@link EventHolder}
+     */
+    EventHolder getPostRenderEventHolder() {
+        if (postRenderEventHolder == null) {
+            postRenderEventHolder = createEventHolder(POST_ON_RENDER_EVENT);
+        }
+        return postRenderEventHolder;
+    }
 
     /**
      * Return the EventHolder for the {@link #ON_AJAX_EVENT}.
