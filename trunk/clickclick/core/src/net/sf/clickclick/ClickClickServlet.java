@@ -79,13 +79,6 @@ public class ClickClickServlet extends ClickServlet {
         if (continueProcessing) {
             performOnInit(page, context);
 
-            // Perform Ajaxify event after the onInit event which ensures the
-            // Control ID has been set, Controls have been added to Containers,
-            // Repeater has adjusted its child IDs etc.
-            // The Ajaxify event allows a control's Javascript to be modified
-            // as needed
-            controlRegistry.fireActionEvents(context, AjaxControlRegistry.ON_AJAX_EVENT);
-
             // Check if Ajax processing is needed
             if (!performAjaxProcessing(page, context, controlRegistry)) {
                 return;
@@ -126,11 +119,19 @@ public class ClickClickServlet extends ClickServlet {
      *
      * @param page the page to process
      * @param context the request context
-     * @param controlRegistry the request control registry
+     * @param ajaxControlRegistry the request control registry
      * @return true if processing should continue, false otherwise
      */
     protected boolean performAjaxProcessing(Page page, Context context,
         AjaxControlRegistry ajaxControlRegistry) {
+
+        // Perform ON_AJAX_EVENT after the onInit event which ensures the
+        // Control ID has been set, Controls have been added to Containers,
+        // Repeater has adjusted its child IDs etc.
+        // The ON_AJAX_EVENT allows a control's Javascript to be modified
+        // as needed
+        ajaxControlRegistry.fireActionEvents(context,
+                                             AjaxControlRegistry.ON_AJAX_EVENT);
 
         // Ajax requests are processed separately
         if (context.isAjaxRequest() && !context.isForward()) {
@@ -138,7 +139,7 @@ public class ClickClickServlet extends ClickServlet {
             if (ajaxControlRegistry.hasAjaxControls()) {
 
                 // Perform onProcess for regsitered Ajax controls
-                processAjaxControls(context, ajaxControlRegistry);
+                processAjaxControls(ajaxControlRegistry, context);
 
                 // Fire listeners registered during the onProcess event. This
                 // step will accumulate Partials that are returned by registered
@@ -148,20 +149,10 @@ public class ClickClickServlet extends ClickServlet {
                 // Ensure we execute the POST_ON_RENDER_EVENT for Ajax events
                 ajaxControlRegistry.fireActionEvents(context, AjaxControlRegistry.POST_ON_RENDER_EVENT);
 
-                // Process and render a response for all Partials that was
-                // accumulated during the Ajax Control's onProcess event. Partials
-                // will render directly to the output stream so no further
-                // rendering is needed beyond this point
                 List partials = ajaxControlRegistry.getPartials();
-                for (int i = 0, size = partials.size(); i < size; i++) {
-                    Partial partial = (Partial) partials.get(0);
 
-                    // Pop the first entry in the list
-                    partials.remove(0);
-
-                    // Process and render the Partial response
-                    partial.process(context);
-                }
+                // Render a response consisting of the list of partials
+                renderPartials(partials, context);
 
                 // Since Ajax Controls was registered, stop further processing
                 return false;
@@ -173,13 +164,42 @@ public class ClickClickServlet extends ClickServlet {
     }
 
     /**
+     * Render a response for all the given Partial objects that was accumulated
+     * during the Ajax Control's onProcess event.
+     * <p/>
+     * <b>Please note</b> as a side effect this method will remove the Partial
+     * instances from the partials list as they are rendered
+     *
+     * @param partials list of Partial responses
+     * @param context the request context
+     */
+    protected void renderPartials(List<Partial> partials, Context context) {
+
+        // Process and render a response for all Partials that was
+        // accumulated during the Ajax Control's onProcess event. Partials
+        // will render directly to the output stream so no further
+        // rendering is needed beyond this point
+        for (int i = 0, size = partials.size(); i < size; i++) {
+            Partial partial = partials.get(0);
+
+            // Pop the first entry in the list
+            partials.remove(0);
+
+            // Process and render the Partial response
+            partial.process(context);
+        }
+    }
+
+    /**
      * Process all ajax controls and return true if the page should
      * continue processing.
      *
+     * @param ajaxControlRegistry the request control registry
+     * @param context the request context
      * @return true if the page should continue processing or false otherwise
      */
-    protected boolean processAjaxControls(Context context,
-        AjaxControlRegistry ajaxControlRegistry) {
+    protected boolean processAjaxControls(AjaxControlRegistry ajaxControlRegistry,
+        Context context) {
 
         if (!ajaxControlRegistry.hasAjaxControls()) {
             return true;
