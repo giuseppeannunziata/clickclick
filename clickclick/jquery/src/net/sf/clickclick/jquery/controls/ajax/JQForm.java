@@ -137,7 +137,7 @@ public class JQForm extends AjaxForm {
             String suffix = "//--></script>\n";
             int end = temp.indexOf(suffix);
             temp = temp.substring(0, end);
-            focusScript.getContent().append(temp);
+            focusScript.setContent(temp);
         }
     }
 
