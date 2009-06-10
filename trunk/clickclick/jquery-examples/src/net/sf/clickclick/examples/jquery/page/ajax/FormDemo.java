@@ -8,7 +8,6 @@ import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.controls.ajax.JQForm;
 import net.sf.clickclick.jquery.util.Taconite;
 import net.sf.clickclick.util.AjaxAdapter;
-import org.apache.click.control.Field;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
@@ -101,7 +100,6 @@ public class FormDemo extends BorderPage {
      * 1. Replace the Form in the browser with the current Form
      * 2. Style the message holder with a red background which indicates an error
      * 3. Replace the message holder with the current message holder
-     * 4. Use a native JQuery script to set focus on the first error field
      */
     private Partial createErrorResponse() {
         Taconite partial = new Taconite();
@@ -117,10 +115,6 @@ public class FormDemo extends BorderPage {
 
         // 3. Replace the message holder in the browser with the current one
         partial.replace(msgHolder);
-
-        // 4. Add javascript to set focus on the first invalid field
-        Field field = (Field) form.getErrorFields().get(0);
-        partial.eval("$('#" + field.getId() + "').focus()");
 
         return partial;
     }

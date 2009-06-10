@@ -966,15 +966,18 @@ public class JQHelper {
      * @param headElements list which to add the debug script to
      */
     protected void addJSDebugScript(List headElements) {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(100);
+        buffer.append("if (typeof jQuery != 'undefined') {\n");
+        buffer.append("  if (typeof jQuery.taconite != 'undefined') {\n");
+        buffer.append("    jQuery.taconite.debug = true;\n");
+        buffer.append("  }\n");
+        buffer.append("  if (typeof Click != 'undefined') {\n");
+        buffer.append("    Click.debug = true;\n");
+        buffer.append("  }\n");
+        buffer.append("}");
+
         JsScript jsScript = new JsScript();
-        jsScript.append("if (typeof jQuery != 'undefined') {\n");
-        jsScript.append("  if (typeof jQuery.taconite != 'undefined') {\n");
-        jsScript.append("    jQuery.taconite.debug = true;\n");
-        jsScript.append("  }\n");
-        jsScript.append("  if (typeof Click != 'undefined') {\n");
-        jsScript.append("    Click.debug = true;\n");
-        jsScript.append("  }\n");
-        jsScript.append("}");
+        jsScript.setContent(buffer.toString());
 
         jsScript.setId("enable_js_debugging");
         headElements.add(jsScript);
