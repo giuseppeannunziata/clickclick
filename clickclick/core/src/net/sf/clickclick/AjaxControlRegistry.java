@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,12 +13,11 @@
  */
 package net.sf.clickclick;
 
+import java.util.ArrayList;
 import org.apache.click.*;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
-import org.apache.click.control.ActionButton;
-import org.apache.click.control.ActionLink;
 import net.sf.clickclick.util.Partial;
 import org.apache.commons.lang.Validate;
 
@@ -125,8 +122,11 @@ public class AjaxControlRegistry extends ControlRegistry {
 
     // -------------------------------------------------------- Variables
 
+    /** List of {@link net.sf.clickclick.util.Partial} Ajax responses. */
+    private List partials;
+
     /** The set of unique registered Ajax Controls. */
-    private Set ajaxControlList;
+    private Set ajaxControls;
 
     /** The POST_RENDER events holder. */
     private EventHolder postRenderEventHolder;
@@ -136,12 +136,6 @@ public class AjaxControlRegistry extends ControlRegistry {
 
     /** Track the last event that was fired. */
     private int lastEventFired = -1;
-
-    /**
-     * Guard against firing the postOnRenderEvent more than once for Ajax
-     * requests.
-     */
-    private boolean postOnRenderEventFired = false;
 
     // --------------------------------------------------------- Public Methods
 
@@ -171,54 +165,39 @@ public class AjaxControlRegistry extends ControlRegistry {
     }
 
     /**
+     * Return the list of Partial Ajax responses. If no partial is available
+     * this method returns an empty list
+     *
+     * @return list of Partial Ajax responses or an empty list of no partial
+     * is available
+     */
+    public List getPartials() {
+        if (partials == null) {
+            partials = new ArrayList();
+        }
+        return partials;
+    }
+
+    /**
      * Checks if any Ajax controls have been registered.
      */
     public boolean hasAjaxControls() {
-        if (ajaxControlList == null || ajaxControlList.isEmpty()) {
+        if (ajaxControls == null || ajaxControls.isEmpty()) {
             return false;
         }
         return true;
     }
 
     /**
-     * Process all ajax controls and return true if the page should
-     * continue processing.
+     * Return the set of registered Ajax Controls.
      *
-     * @return true if the page should continue processing or false otherwise
+     * @return set of registered Ajax Controls
      */
-    public boolean processAjaxControls(Context context) {
-
-        if (!hasAjaxControls()) {
-            return true;
+    public Set getAjaxControls() {
+        if (ajaxControls == null) {
+            ajaxControls = new LinkedHashSet();
         }
-
-        for (Iterator it = ajaxControlList.iterator(); it.hasNext();) {
-            Control control = (Control) it.next();
-
-            // Check if control is targeted by this request
-            String id = control.getId();
-            if (id != null && context.getRequestParameter(id) != null) {
-                control.onProcess();
-            } else {
-                // Handle edge cases for ActionLink and ActionButton where ID
-                // might not be defined
-                String name = control.getName();
-                if (name != null) {
-                    boolean clicked = name.equals(context.getRequestParameter(
-                        ActionLink.ACTION_LINK));
-                    if (!clicked) {
-                        clicked = name.equals(context.getRequestParameter(
-                            ActionButton.ACTION_BUTTON));
-                    }
-                    if (clicked) {
-                        control.onProcess();
-                    }
-                }
-            }
-        }
-
-        // Fire the registered listeners
-        return fireActionEvents(context, POST_ON_PROCESS_EVENT);
+        return ajaxControls;
     }
 
     /**
@@ -247,18 +226,9 @@ public class AjaxControlRegistry extends ControlRegistry {
 
             Partial partial = ((AjaxListener) listener).onAjaxAction(source);
 
-            // Guard against firing the POST_ON_RENDER_EVENT more than once
-            // for Ajax requests
-            if (!postOnRenderEventFired) {
-                postOnRenderEventFired = true;
-
-                // Ensure we execute the POST_ON_RENDER_EVENT for Ajax events
-                fireActionEvents(context, AjaxControlRegistry.POST_ON_RENDER_EVENT);
-            }
-
             if (partial != null) {
-                // Have to process Partial here
-                partial.process(context);
+                // Add partials to process to the partials list
+                getPartials().add(partial);
             }
 
             // Ajax requests stops further processing
@@ -307,7 +277,7 @@ public class AjaxControlRegistry extends ControlRegistry {
      */
     protected void errorOccurred(Throwable throwable) {
         if (hasAjaxControls()) {
-            ajaxControlList.clear();
+            ajaxControls.clear();
         }
         lastEventFired = -1;
         getEventHolder(ON_AJAX_EVENT).clear();
@@ -319,10 +289,9 @@ public class AjaxControlRegistry extends ControlRegistry {
      */
     protected void clearRegistry() {
         if (hasAjaxControls()) {
-            ajaxControlList.clear();
+            ajaxControls.clear();
         }
         lastEventFired = -1;
-        postOnRenderEventFired = false;
         getPostRenderEventHolder().clear();
         super.clearRegistry();
     }
@@ -361,20 +330,6 @@ public class AjaxControlRegistry extends ControlRegistry {
             ajaxEventHolder = createEventHolder(ON_AJAX_EVENT);
         }
         return ajaxEventHolder;
-    }
-
-    // -------------------------------------------------------- Private Methods
-
-    /**
-     * Return the set of unique Ajax Controls.
-     *
-     * @return set of unique Ajax Controls
-     */
-    private Set getAjaxControls() {
-        if (ajaxControlList == null) {
-            ajaxControlList = new LinkedHashSet();
-        }
-        return ajaxControlList;
     }
 
     // ---------------------------------------------------------- Inner Classes
