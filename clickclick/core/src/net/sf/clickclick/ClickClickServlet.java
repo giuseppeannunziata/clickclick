@@ -40,11 +40,11 @@ public class ClickClickServlet extends ClickServlet {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Creates and returns a new ControlRegistry instance.
+     * Creates and returns a new ActionEventDispatcher instance.
      *
      * @return the new ControlRegistry instance
      */
-    protected ControlRegistry createControlRegistry() {
+    protected ActionEventDispatcher createActionEventDispatcher() {
         return new AjaxControlRegistry();
     }
 

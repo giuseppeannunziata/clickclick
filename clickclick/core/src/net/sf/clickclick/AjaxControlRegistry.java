@@ -22,9 +22,9 @@ import net.sf.clickclick.util.Partial;
 import org.apache.commons.lang.Validate;
 
 /**
- * Extends ControlRegistry to provide a thread local register for managing Ajax
- * controls and ActionListener events. AjaxControlRegistry also adds support for
- * registering listeners to fire <tt>after</tt> the <tt>onRender</tt> event.
+ * Enhances ActionEventDispatcher to provide a thread local registry for managing
+ * Ajax controls and ActionListener events. AjaxControlRegistry also adds support
+ * for registering listeners to fire <tt>after</tt> the <tt>onRender</tt> event.
  * <p/>
  * <b>Please note:</b> this class is meant for component development.
  * <p/>
@@ -45,8 +45,8 @@ import org.apache.commons.lang.Validate;
  * public void onInit() {
  *     Form form = new Form("form");
  *
- *     // Ajaxify the form by registering it in the ControlRegistry
- *     ControlRegistry.registerAjaxControl(form);
+ *     // Ajaxify the form by registering it in the AjaxControlRegistry
+ *     AjaxControlRegistry.registerAjaxControl(form);
  *
  *     Submit submit = new Submit("submit");
  *     submit.setListener(new AjaxListener() {
@@ -100,7 +100,7 @@ import org.apache.commons.lang.Validate;
  * @author Bob Schellink
  * @author Malcolm Edgar
  */
-public class AjaxControlRegistry extends ControlRegistry {
+public class AjaxControlRegistry extends ActionEventDispatcher {
 
     // -------------------------------------------------------------- Constants
 
@@ -157,11 +157,11 @@ public class AjaxControlRegistry extends ControlRegistry {
      * Return the thread local registry instance.
      *
      * @return the thread local registry instance.
-     * @throws RuntimeException if a ControlRegistry is not available on the
+     * @throws RuntimeException if an AjaxControlRegistry is not available on the
      * thread.
      */
     protected static AjaxControlRegistry getThreadLocalRegistry() {
-        return (AjaxControlRegistry) ControlRegistry.getThreadLocalRegistry();
+        return (AjaxControlRegistry) ActionEventDispatcher.getThreadLocalDispatcher();
     }
 
     /**
@@ -206,7 +206,7 @@ public class AjaxControlRegistry extends ControlRegistry {
      * the browser. This method will also ensure that any
      * {@link #POST_ON_RENDER_EVENT} listeners are executed for Ajax requests.
      *
-     * @see org.apache.click.ControlRegistry#fireActionEvent(org.apache.click.Context, org.apache.click.Control, org.apache.click.ActionListener, int)
+     * @see org.apache.click.ActionEventDispatcher#fireActionEvent(org.apache.click.Context, org.apache.click.Control, org.apache.click.ActionListener, int)
      *
      * @param context the request context
      * @param source the source control
@@ -244,7 +244,7 @@ public class AjaxControlRegistry extends ControlRegistry {
     }
 
     /**
-     * @see org.apache.click.ControlRegistry#fireActionEvents(org.apache.click.Context, int)
+     * @see org.apache.click.ActionEventDispatcher#fireActionEvents(org.apache.click.Context, int)
      *
      * @param context the request context
      * @param event the event which listeners to fire
@@ -256,7 +256,7 @@ public class AjaxControlRegistry extends ControlRegistry {
     }
 
     /**
-     * @see org.apache.click.ControlRegistry#getEventHolder(int)
+     * @see org.apache.click.ActionEventDispatcher#getEventHolder(int)
      *
      * @param event the event which EventHolder to retrieve
      *
@@ -293,7 +293,7 @@ public class AjaxControlRegistry extends ControlRegistry {
         }
         lastEventFired = -1;
         getPostRenderEventHolder().clear();
-        super.clearRegistry();
+        super.clearEvents();
     }
 
     /**

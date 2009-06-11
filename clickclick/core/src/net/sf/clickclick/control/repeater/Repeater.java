@@ -17,7 +17,6 @@ import java.util.List;
 import net.sf.clickclick.AjaxControlRegistry;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
-import org.apache.click.ControlRegistry;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.Container;
@@ -442,7 +441,7 @@ public abstract class Repeater extends AbstractContainer {
         addIndexToControlNames();
 
         // Register a callback to add the index to child control names
-        ControlRegistry.registerActionEvent(this, new ActionListener() {
+        AjaxControlRegistry.dispatchActionEvent(this, new ActionListener() {
             public boolean onAction(Control source) {
                 // Before rendering update control name indexes so that each control
                 // will have a unique request parameter when posting to the server
