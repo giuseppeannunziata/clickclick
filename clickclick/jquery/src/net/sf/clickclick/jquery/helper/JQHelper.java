@@ -869,7 +869,7 @@ public class JQHelper {
         // elements in this event, Controls inside containers such as Repeaters
         // can still be Ajax targets because their names, at this stage, still
         // have the Repeater index applied.
-        AjaxControlRegistry.registerActionEvent(getControl(), new ActionListener() {
+        AjaxControlRegistry.dispatchActionEvent(getControl(), new ActionListener() {
             public boolean onAction(Control source) {
                 AjaxControlRegistry.registerAjaxControl(source);
                 addHeadElements(getControl().getHeadElements());
