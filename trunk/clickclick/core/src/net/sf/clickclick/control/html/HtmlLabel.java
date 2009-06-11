@@ -321,7 +321,7 @@ public class HtmlLabel extends Label {
             validate();
         }
 
-        registerActionEvent();
+        dispatchActionEvent();
 
         return true;
     }
