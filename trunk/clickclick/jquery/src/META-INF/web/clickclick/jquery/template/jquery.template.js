@@ -9,11 +9,8 @@ jQuery(document).ready(function(){
   // callbacks will be merged into one function callback
 
   function template() {
-    // Retrieve the underlying element
-    var target = this;
-
     // Extract parameters from element href/src/target
-    var params = Click.params(target);
+    var params = Click.params(this);
 
     // Add any parameters passed in from the Page
     var defaultParams = Click.urlPairs('$!{parameters}');
@@ -22,7 +19,7 @@ jQuery(document).ready(function(){
     }
 
     // Add the Control attributes 'name', 'value' and 'id' as parameters
-    Click.addNameValueIdPairs(target, params);
+    Click.addNameValueIdPairs(this, params);
 
     // Invoke the Ajax request
     jQuery.ajax({
