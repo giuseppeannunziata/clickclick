@@ -77,7 +77,6 @@ public class FormDemo extends BorderPage {
     private Partial createSuccessResponse() {
         Taconite partial = new Taconite();
 
-        form.add(new DateField("date"));
         // 1. Replace the Form in the browser with the current one
         partial.replace(form);
 
