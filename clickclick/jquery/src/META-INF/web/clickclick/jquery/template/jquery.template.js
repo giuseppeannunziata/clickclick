@@ -10,7 +10,7 @@ jQuery(document).ready(function(){
 
   function template() {
     // Retrieve the underlying element
-    var target = jQuery('$selector')[0];
+    var target = this;
 
     // Extract parameters from element href/src/target
     var params = Click.params(target);
