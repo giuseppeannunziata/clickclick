@@ -89,7 +89,7 @@ public class AjaxUtils {
                 if (!link.hasAttribute("class")) {
                     link.setAttribute("class", '_' + name);
                 }
-                buffer.append(tag).append("[class=");
+                buffer.append(tag).append("[class*=");
                 buffer.append(link.getAttribute("class")).append("]");
 
             } else {
