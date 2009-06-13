@@ -19,6 +19,7 @@
         <menu label="Form Demo" path="ajax/form-demo.htm"/>
         <menu separator="true"/>
         <menu label="Table Demo" path="ajax/table-demo.htm"/>
+        <menu label="Stateful Table Demo" path="ajax/stateful-table-demo.htm"/>
         <menu separator="true"/>
         <menu label="Select Demo" path="ajax/select-demo.htm"/>
         <menu separator="true"/>

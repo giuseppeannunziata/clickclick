@@ -11,43 +11,22 @@ import org.apache.click.control.Column;
 import org.apache.click.control.Table;
 import org.apache.click.extras.control.TableInlinePaginator;
 
-public class TableDemo extends BorderPage {
+public class StatefulTableDemo extends BorderPage {
+
+    private ActionLink link = new JQActionLink("link", "Load Table", "linkId");
 
     private Table table;
 
-    public TableDemo() {
+    public StatefulTableDemo() {
+        setStateful(true);
 
         buildTable();
 
+        addControl(link);
         addControl(table);
 
-        table.getControlLink().setActionListener(new AjaxAdapter() {
-
-            public Partial onAjaxAction(Control source) {
-                Taconite partial = new Taconite();
-
-                // Note: table must be processed in order to update paging and
-                // sorting state
-                table.onProcess();
-
-                // Note: there is no onRender event during Ajax calls, so we
-                // invoke onRender explicitly in order to set table rows
-                onRender();
-
-                // If an external Table Paginator is used, we must take care to
-                // remove left over paginator elements
-                // partial.remove(".pagelinks, .pagebanner, .pagelinks-nobanner");
-
-                // Append a table after the link
-                partial.replace(table);
-
-                return partial;
-            }
-        });
-    }
-
-    public void onRender() {
-        table.setRowList(getCustomerService().getCustomers());
+        // Register ajax listener on link to load table initially
+        link.setActionListener(new TableAjaxListener());
     }
 
     private void buildTable() {
@@ -61,6 +40,8 @@ public class TableDemo extends BorderPage {
             public ActionLink getControlLink() {
                 if (controlLink == null) {
                     controlLink = new JQActionLink();
+                    // Register ajax listener on table link to handle paging and sorting
+                    controlLink.setActionListener(new TableAjaxListener());
                 }
                 return controlLink;
             }
@@ -98,5 +79,25 @@ public class TableDemo extends BorderPage {
         column.setTextAlign("right");
         column.setWidth("100px;");
         table.addColumn(column);
+    }
+
+    // ---------------------------------------------------------- Inner classes
+
+    private class TableAjaxListener extends AjaxAdapter {
+
+        public Partial onAjaxAction(Control source) {
+            Taconite partial = new Taconite();
+
+            table.setRowList(getCustomerService().getCustomers());
+
+            // Note: table must be processed in order to update paging and
+            // sorting state
+            table.onProcess();
+
+            // Replace the content of the element (with ID #target) with table
+            partial.replaceContent("#target", table);
+
+            return partial;
+        }
     }
 }
