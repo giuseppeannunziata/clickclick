@@ -18,6 +18,8 @@
         <menu separator="true"/>
         <menu label="Form Demo" path="ajax/form-demo.htm"/>
         <menu separator="true"/>
+        <menu label="Table Demo" path="ajax/table-demo.htm"/>
+        <menu separator="true"/>
         <menu label="Select Demo" path="ajax/select-demo.htm"/>
         <menu separator="true"/>
         <menu label="AutoComplete" path="ajax/auto-complete.htm"/>
