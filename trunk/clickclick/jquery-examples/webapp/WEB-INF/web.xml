@@ -4,6 +4,13 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
 
+	<!--
+	Provides an in-memory domain.
+	-->
+	<listener>
+		<listener-class>net.sf.clickclick.examples.jquery.util.StartupListener</listener-class>
+	</listener>
+
 	<servlet>
 		<servlet-name>ClickClickServlet</servlet-name>
 		<servlet-class>net.sf.clickclick.ClickClickServlet</servlet-class>
