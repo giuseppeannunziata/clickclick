@@ -1,5 +1,7 @@
 package net.sf.clickclick.examples.jquery.page;
 
+import net.sf.clickclick.examples.jquery.services.ApplicationRegistry;
+import net.sf.clickclick.examples.jquery.services.CustomerService;
 import net.sf.clickclick.jquery.util.UIUtils;
 import org.apache.click.extras.control.Menu;
 import org.apache.click.util.ClickUtils;
@@ -27,5 +29,9 @@ public class BorderPage extends BasePage {
      */
     public String getTemplate() {
         return "border-template.htm";
+    }
+
+    public CustomerService getCustomerService() {
+        return ApplicationRegistry.getInstance().getCustomerService();
     }
 }
