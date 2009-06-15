@@ -6,7 +6,7 @@ In order to make use of Ajax support you must use the !ClickClickServlet. See Ge
 
 === The Ajax request cycle ===
 
-Before digging into the Ajax request cycle, lets look at Click's normal request cycle through the [http://incubator.apache.org/click/docs/pages.html#page-execution sequence diagram] and [http://incubator.apache.org/click/docs/pages.html#activity-diagram activity diagram].
+Before digging into the Ajax request cycle, lets look at Click's normal request cycle through the [http://incubator.apache.org/click/images/get-sequence-diagram.png sequence diagram] and [http://incubator.apache.org/click/docs/pages.html#activity-diagram activity diagram].
 
 Here is the list of events processed during normal request execution:
 
