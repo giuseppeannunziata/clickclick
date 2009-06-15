@@ -1,6 +1,6 @@
 format 66
 "diagrams" // diagrams
-  revision 9
+  revision 22
   modified_by 2 "bob"
   // class settings
   //class diagram settings
@@ -26,7 +26,7 @@ format 66
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default show_stereotype_properties default
   
-  classview 129154 "pages"
+  classview 129154 "ajax"
     //class diagram settings
     draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
     //collaboration diagram settings
@@ -42,13 +42,8 @@ format 66
     //activity diagram settings
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default show_stereotype_properties default
-    classdiagram 129154 "click-class-diagram"
-      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition yes show_members_visibility yes show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language uml show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-      size A4
-    end
-
     activity 128386 "Servlet Container"
-      activitydiagram 129410 "activity-diagram-small"
+      activitydiagram 129410 "ajax-request-activity-diagram"
 	package_name_in_tab default show_context default show_opaque_action_definition yes auto_label_position default write_flow_label_horizontally default draw_all_relations no shadow yes
 	show_infonote default drawing_language uml show_stereotype_properties default
 	activity_color lightyellow activityaction_color lightyellow 
@@ -57,11 +52,11 @@ format 66
 
       activitynode 128002 initial "HTTP Request"
 	flow 128002 "<flow>"
-	  on activityaction_ref 128130 // activity action ClickServlet.handleRequest()
+	  on activityaction_ref 128130 // activity action ClickClickServlet.handleRequest()
 	end
       end
 
-      activityaction 128130 "ClickServlet.handleRequest()"
+      activityaction 128130 "ClickClickServlet.handleRequest()"
 	opaque_action
 	flow 129154 "<flow>"
 	  on activityaction_ref 129282 // activity action new Page
@@ -80,6 +75,10 @@ format 66
 	flow 129282 "<flow>"
 	  on activitynode_ref 129282 // decision
 	end
+
+	flow 136322 "<flow>"
+	  on activitynode_ref 132738 // decision
+	end
       end
 
       activitynode 129282 decision ""
@@ -94,73 +93,23 @@ format 66
 
       activityaction 129410 "Page.onInit()"
 	opaque_action
-	flow 129666 "<flow>"
-	  on activitynode_ref 129410 // decision
+	flow 140034 "<flow>"
+	  on activityaction_ref 129538 // activity action process Ajax Controls
+	end
+
+	flow 140674 "<flow>"
+	  on activityaction_ref 129538 // activity action process Ajax Controls
 	end
       end
 
-      activitynode 129410 decision ""
-	flow 129794 "no"
-	  on activityaction_ref 129538 // activity action process Controls
-	end
-
-	flow 130178 "yes"
-	  on activitynode_ref 129794 // join
-	end
-      end
-
-      activityaction 129538 "process Controls"
+      activityaction 129538 "process Ajax Controls"
 	opaque_action
-	flow 130050 "<flow>"
-	  on activitynode_ref 129666 // decision
+	flow 140418 "<flow>"
+	  on activityaction_ref 132738 // activity action dispatch Control event listeners
 	end
       end
 
-      activitynode 129666 decision ""
-	flow 130306 "yes"
-	  on activitynode_ref 129794 // join
-	end
-
-	flow 131330 "<flow>"
-	  on activitynode_ref 130050 // join
-	end
-
-	flow 131458 "no"
-	  on activitynode_ref 130050 // join
-	end
-      end
-
-      activitynode 129794 join ""
-	flow 130434 "<flow>"
-	  on activitynode_ref 129922 // decision
-	end
-      end
-
-      activitynode 129922 decision ""
-	flow 130562 "no"
-	  on activityaction_ref 129666 // activity action Page.onGet()
-	end
-
-	flow 130690 "yes"
-	  on activityaction_ref 129794 // activity action Page.onPost()
-	end
-      end
-
-      activityaction 129666 "Page.onGet()"
-	opaque_action
-	flow 131074 "<flow>"
-	  on activityaction_ref 129922 // activity action Page.onRender()
-	end
-      end
-
-      activityaction 129794 "Page.onPost()"
-	opaque_action
-	flow 130946 "<flow>"
-	  on activityaction_ref 129922 // activity action Page.onRender()
-	end
-      end
-
-      activityaction 129922 "Page.onRender()"
+      activityaction 129922 "render Partials"
 	opaque_action
 	flow 135042 "<flow>"
 	  on activitynode_ref 130050 // join
@@ -168,58 +117,7 @@ format 66
       end
 
       activitynode 130050 join ""
-	flow 132610 "<flow>"
-	  on activitynode_ref 131202 // decision
-	end
-      end
-
-      activitynode 131202 decision ""
-	flow 132738 "no"
-	  on activitynode_ref 131330 // decision
-	end
-
-	flow 132866 "yes"
-	  on activityaction_ref 131074 // activity action redirect request
-	end
-      end
-
-      activitynode 131330 decision ""
-	flow 132994 "no"
-	  on activityaction_ref 131330 // activity action render page template
-	end
-
-	flow 133122 "yes"
-	  on activityaction_ref 131202 // activity action forward request
-	end
-      end
-
-      activityaction 131074 "redirect request"
-	opaque_action
-	flow 133762 "<flow>"
-	  on activitynode_ref 131458 // join
-	end
-      end
-
-      activityaction 131202 "forward request"
-	opaque_action
-	flow 133378 "<flow>"
-	  on activitynode_ref 131458 // join
-	end
-      end
-
-      activityaction 131330 "render page template"
-	opaque_action
-	flow 133250 "<flow>"
-	  on activitynode_ref 131458 // join
-	end
-
-	flow 133890 "<flow>"
-	  on activitynode_ref 131458 // join
-	end
-      end
-
-      activitynode 131458 join ""
-	flow 133506 "<flow>"
+	flow 139906 "<flow>"
 	  on activityaction_ref 131458 // activity action Page.onDestroy()
 	end
       end
@@ -230,31 +128,29 @@ format 66
 	  on activitynode_ref 129154 // activity_final
 	end
       end
+
+      activitynode 132610 activity_final ""
+      end
+
+      activitynode 132738 decision ""
+	flow 137602 "false"
+	  on activitynode_ref 132610 // activity_final
+	end
+
+	flow 138754 "true"
+	  on activitynode_ref 129282 // decision
+	end
+      end
+
+      activityaction 132738 "dispatch Control event listeners"
+	opaque_action
+	flow 140546 "<flow>"
+	  on activityaction_ref 129922 // activity action render Partials
+	end
+      end
     end
 
-    sequencediagram 130562 "ajax-get-sequence-diagram"
-      show_full_operations_definition no write_horizontally no class_drawing_mode default drawing_language uml draw_all_relations default shadow default show_stereotype_properties default
-      overlapping_bars size A4
-    end
-  end
-
-  classview 130306 "controls"
-    //class diagram settings
-    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
-    //collaboration diagram settings
-    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
-    //object diagram settings
-     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
-    //sequence diagram settings
-    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
-    //state diagram settings
-    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
-    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
-    //class settings
-    //activity diagram settings
-    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
-    show_infonote default drawing_language default show_stereotype_properties default
-    sequencediagram 131714 "control-post-sequence-diagram"
+    sequencediagram 130562 "ajax-request-sequence-diagram"
       show_full_operations_definition no write_horizontally no class_drawing_mode default drawing_language uml draw_all_relations default shadow default show_stereotype_properties default
       overlapping_bars size A4
     end
