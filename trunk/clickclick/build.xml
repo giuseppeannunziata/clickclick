@@ -82,28 +82,28 @@
             <delete dir="@{name}-examples/webapp/WEB-INF/classes" quiet="false"/>
             <mkdir dir="@{name}-examples/webapp/WEB-INF/classes"/>
             <copy todir="@{name}-examples/webapp/WEB-INF/classes">
-               <fileset dir="@{name}-examples/src">
-                  <exclude name="**/package.html"/>
-               </fileset>
+                <fileset dir="@{name}-examples/src">
+                    <exclude name="**/package.html"/>
+                </fileset>
             </copy>
-              <delete dir="@{name}-examples/webapp/WEB-INF/lib"/>
-              <mkdir dir="@{name}-examples/webapp/WEB-INF/lib"/>
-              <copy todir="@{name}-examples/webapp/WEB-INF/lib">
-                  <fileset dir="lib">
-                      <exclude name="junit*"/>
-                      <exclude name="servlet*"/>
-                  </fileset>
-                  <fileset dir="dist">
-                      <include name="clickclick-core*.jar"/>
-                      <include name="clickclick-@{name}*.jar"/>
-                  </fileset>
-              </copy>
-              <javac srcdir="@{name}-examples/src"
+            <delete dir="@{name}-examples/webapp/WEB-INF/lib"/>
+            <mkdir dir="@{name}-examples/webapp/WEB-INF/lib"/>
+            <copy todir="@{name}-examples/webapp/WEB-INF/lib">
+                <fileset dir="lib">
+                    <exclude name="junit*"/>
+                    <exclude name="servlet*"/>
+                </fileset>
+                <fileset dir="dist">
+                    <include name="clickclick-core*.jar"/>
+                    <include name="clickclick-@{name}*.jar"/>
+                </fileset>
+            </copy>
+            <javac srcdir="@{name}-examples/src"
                    destdir="@{name}-examples/webapp/WEB-INF/classes"
                    debug="true"
                    encoding="ISO-8859-1"
-                   source="1.4">
-               <classpath refid="@{cp}"/>
+                   source="1.5">
+                <classpath refid="@{cp}"/>
             </javac>
             <delete quiet="true" failonerror="false">
                 <fileset dir="@{name}-examples/webapp/javadoc" includes="**/*"/>
@@ -118,8 +118,9 @@
                      windowtitle="Click Examples"
                      doctitle="Click Example API">
                 <classpath refid="classpath"/>
+                <classpath refid="@{cp}"/>
                 <packageset dir="@{name}-examples/src"/>
-                <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+                <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
                 <link href="http://click.sourceforge.net/docs/click-api/"/>
                 <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
             </javadoc>
@@ -260,7 +261,7 @@
         <delete file="dist/jquery-examples.war"/>
         <buildWarMacro name="jquery" cp="jquery.classpath"/>
 
-        <!-- build mootols examples -->
+        <!-- build mootools examples -->
         <delete file="dist/mootools-examples.war"/>
         <buildWarMacro name="mootools" cp="mootools.classpath"/>
     </target>
@@ -276,10 +277,10 @@
                     windowtitle="ClickClick Core Extensions API"
                     doctitle="ClickClick Core API"
                     classpath="classpath"
-      	            overview="documentation/core-overview.html"/>    
+                    overview="documentation/core-overview.html"/>    
         <copy file="documentation/javadoc-stylesheet.css"
-      	    overwrite="true"
-      	    tofile="documentation/core-api/stylesheet.css"/>
+            overwrite="true"
+            tofile="documentation/core-api/stylesheet.css"/>
 
         <!-- Javadoc for jquery -->
         <delete quiet="false" failonerror="false">
@@ -290,9 +291,9 @@
                     windowtitle="ClickClick jQuery Extensions API"
                     doctitle="ClickClick jQuery API"
                     classpath="classpath"
-      	            overview="documentation/jquery-overview.html"/>
+                    overview="documentation/jquery-overview.html"/>
         <copy file="documentation/javadoc-stylesheet.css" overwrite="true"
-      	    tofile="documentation/jquery-api/stylesheet.css"/>
+            tofile="documentation/jquery-api/stylesheet.css"/>
 
         <copy todir="documentation/jquery-api/js/template" overwrite="true">
             <fileset dir="jquery/src/META-INF/web/clickclick/jquery/template"/>
@@ -308,10 +309,10 @@
                     windowtitle="ClickClick MooTools Extensions API"
                     doctitle="ClickClick MooTools API"
                     classpath="classpath"
-      	            overview="documentation/mootools-overview.html"/>
+                    overview="documentation/mootools-overview.html"/>
         <copy file="documentation/javadoc-stylesheet.css"
-      	    overwrite="true"
-      	    tofile="documentation/mootools-api/stylesheet.css"/>
+            overwrite="true"
+            tofile="documentation/mootools-api/stylesheet.css"/>
         
 
     </target>
@@ -349,20 +350,20 @@
 
 Main targets:
 
-	build-distribution    build distribution ZIP file
-	build-all             build all JARs and examples
-	build                 build ClickClick extensions JAR files
-	build-examples        build ClickClick examples
-	build-sources         build source ZIP files for use with IDEs
-	get-deps              download JAR dependencies
-	get-deps-proxy        download JAR dependencies via proxy
-	help                  display the Help message
-	javadoc               create Javadoc HTML files
+    build-distribution    build distribution ZIP file
+    build-all             build all JARs and examples
+    build                 build ClickClick extensions JAR files
+    build-examples        build ClickClick examples
+    build-sources         build source ZIP files for use with IDEs
+    get-deps              download JAR dependencies
+    get-deps-proxy        download JAR dependencies via proxy
+    help                  display the Help message
+    javadoc               create Javadoc HTML files
 
 Environment:
 
-	java.home = ${java.home}
-	ant.home  = ${ant.home}
+    java.home = ${java.home}
+    ant.home  = ${ant.home}
 
 Please ensure you have configured build.properties</echo>
    </target>     
@@ -385,7 +386,7 @@ Please ensure you have configured build.properties</echo>
                      overview="@{overview}"
                      doctitle="@{doctitle}">
                 <classpath refid="@{classpath}"/>
-                <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+                <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
                 <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
                 <link href="http://click.sourceforge.net/docs/click-api/"/>
                 <bottom>${root.properties.highlighter}</bottom>
