@@ -10,7 +10,7 @@ Before digging into the Ajax request cycle, lets first look at Click's normal re
 
 [http://incubator.apache.org/click/images/get-sequence-diagram.png]
 
-Here is the list of events processed during normal request execution:
+Lets summarize the list of events processed during a normal request execution:
 
  # onSecurityCheck()
  # onInit()
@@ -19,14 +19,24 @@ Here is the list of events processed during normal request execution:
  # onRender()
  # onDestroy()
 
-Ajax requests are handled a bit differently. Here is the Ajax GET request execution sequence:
+Ajax requests are handled a bit differently as illustrated below:
 
-[http://code.google.com/p/clickclick/source/browse/trunk/site/images/diagrams/ajax-request-sequence-diagram.png]
+[http://clickclick.googlecode.com/svn/trunk/site/images/diagrams/ajax-request-sequence-diagram.png]
 
-The following events are processed during an Ajax request:
+Only three events are processing during an Ajax request. They are:
 
  # onSecurityCheck()
  # onInit()
  # onProcess()
+
+Stepping through the Ajax request sequence, a Page is created and its `onSecurityCheck()` event handler is executed. This method can be used to ensure the user is authenticated to access the Page. By returning false, ensures that no further processing ensues.
+
+The next event handler is `onInit()` where Page Controls are created such Forms, Fields and Tables.
+
+Next, the target Ajax control is processed and if the control action listener is set, it is invoked. ClickClick provides an AjaxListener, subclass of ActionListener, that returns a Partial object.
+
+Finally ClickClickServlet renders the Partial response to the browser.
+
+A Partial can be described as a fragment (of a Page) sent back to the browser for an Ajax request.
 
 === Example ===
