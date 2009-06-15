@@ -1,6 +1,6 @@
 format 66
 "apache" // org::click::apache
-  revision 3
+  revision 7
   modified_by 2 "bob"
   // class settings
   //class diagram settings
@@ -42,117 +42,6 @@ format 66
     //activity diagram settings
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default show_stereotype_properties default
-    class 130946 "Context"
-      visibility public 
-      cpp_decl ""
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      attribute 128130 "context"
-	protected explicit_type "ServletContext"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 130306 "config"
-	protected explicit_type "ServletConfig"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 130434 "request"
-	protected explicit_type "HttpServletRequest"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 130562 "response"
-	protected explicit_type "HttpServletResponse"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 130690 "session"
-	protected explicit_type "HttpSession"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      attribute 130818 "isPost"
-	protected explicit_type "boolean"
-	cpp_decl ""
-	java_decl ""
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-      end
-
-      classrelation 128130 // #context
-	relation_ref 128002 // #context
-      end
-    end
-
-    class 128002 "ClickServlet"
-      visibility public 
-      cpp_decl ""
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      ncouples 1
-      key "" value "
-"
-      operation 129026 "handleRequest"
-	public explicit_return_type ""
-	nparams 0
-	
-	
-	
-	
-	
-      end
-
-      operation 129154 "renderTemplate"
-	public explicit_return_type ""
-	nparams 0
-	
-	
-	
-	
-	
-      end
-
-      operation 129922 "doGet"
-	public explicit_return_type ""
-	nparams 0
-	
-	
-	
-	
-	
-      end
-    end
-
     class 129538 "Browser"
       visibility package stereotype "actor"
       cpp_decl ""
@@ -197,7 +86,7 @@ format 66
       end
 
       operation 133250 "getHeadElements"
-	public return_type class_ref 132098 // List
+	public explicit_return_type "List"
 	nparams 0
 	
 	
@@ -277,7 +166,7 @@ format 66
       end
 
       operation 129666 "getModel"
-	public return_type class_ref 132226 // Map
+	public explicit_return_type "Map"
 	nparams 0
 	
 	
@@ -366,30 +255,6 @@ format 66
 	python_decl ""
 	idl_decl ""
       end
-
-      classrelation 128002 // (#context)
-	relation 128002 o--- name "#context"
-	  a role_name "" multiplicity "1" private
-	    classrelation_ref 128002 // (#context)
-	  b role_name "" multiplicity "1" private
-	    classrelation_ref 128130 // #context
-      end
-
-      classrelation 129282 // (#controls)
-	relation 129154 *--- name "#controls"
-	  a role_name "" multiplicity "1" private
-	    classrelation_ref 129282 // (#controls)
-	  b role_name "" multiplicity "1" private
-	    classrelation_ref 129410 // #controls
-      end
-
-      classrelation 129538 // (#model)
-	relation 129282 *--- name "#model"
-	  a role_name "" multiplicity "1" private
-	    classrelation_ref 129538 // (#model)
-	  b role_name "" multiplicity "1" private
-	    classrelation_ref 129666 // #model
-      end
     end
 
     class 129794 "Control"
@@ -408,7 +273,7 @@ ${members}};
       explicit_switch_type ""
       
       operation 131330 "getContext"
-	public return_type class_ref 130946 // Context
+	public explicit_return_type "Context"
 	nparams 0
 	
 	
@@ -418,7 +283,7 @@ ${members}};
       end
 
       operation 133122 "getHeadElements"
-	public return_type class_ref 132098 // List
+	public explicit_return_type "List"
 	nparams 0
 	
 	
@@ -438,7 +303,7 @@ ${members}};
       end
 
       operation 134530 "getMessages"
-	public return_type class_ref 132226 // Map
+	public explicit_return_type "Map"
 	nparams 0
 	
 	
@@ -469,7 +334,7 @@ ${members}};
       end
 
       operation 134658 "getParent"
-	public return_type class_ref 132354 // Object
+	public explicit_return_type "Object"
 	nparams 0
 	
 	
@@ -481,7 +346,7 @@ ${members}};
       operation 134786 "setParent"
 	public explicit_return_type "void"
 	nparams 1
-	  param in name "parent" type class_ref 132354 // Object
+	  param in name "parent" explicit_type "Object"
 	
 	
 	
@@ -539,16 +404,6 @@ ${members}};
 	
 	
       end
-
-      classrelation 129922 // <aggregation>
-	relation_ref 129410 // <aggregation>
-      end
-
-      classrelation 130178 // <aggregation>
-	relation_ref 129538 // <aggregation>
-      end
     end
   end
-
-  package_ref 131842 // control
 end

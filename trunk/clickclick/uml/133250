@@ -1,6 +1,6 @@
 format 66
 "clickclick" // net::sf::clickclick
-  revision 1
+  revision 2
   modified_by 2 "bob"
   // class settings
   //class diagram settings
@@ -42,7 +42,7 @@ format 66
     //activity diagram settings
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default show_stereotype_properties default
-    class 137218 "ClickClickServlet"
+    class 128002 "ClickClickServlet"
       visibility public 
       cpp_decl ""
       java_decl ""
@@ -51,7 +51,10 @@ format 66
       idl_decl ""
       explicit_switch_type ""
       
-      operation 136066 "handleRequest"
+      ncouples 1
+      key "" value "
+"
+      operation 129026 "handleRequest"
 	public explicit_return_type ""
 	nparams 0
 	
@@ -61,7 +64,7 @@ format 66
 	
       end
 
-      operation 136194 "renderTemplate"
+      operation 129154 "renderTemplate"
 	public explicit_return_type ""
 	nparams 0
 	
@@ -71,7 +74,7 @@ format 66
 	
       end
 
-      operation 136322 "doGet"
+      operation 129922 "doGet"
 	public explicit_return_type ""
 	nparams 0
 	
@@ -81,5 +84,6 @@ format 66
 	
       end
     end
+
   end
 end

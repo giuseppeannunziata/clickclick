@@ -1,6 +1,6 @@
 format 66
 "uml-diagrams"
-  revision 12
+  revision 13
   modified_by 2 "bob"
 
 
@@ -39,8 +39,6 @@ format 66
   ncouples 1
   key "html dir" value "c:/dev/uml/click/docs/"
   package_ref 129282 // diagrams
-
-  package_ref 131074 // java
 
   package_ref 131458 // org
 
