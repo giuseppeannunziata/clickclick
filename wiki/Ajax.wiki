@@ -6,20 +6,7 @@ In order to make use of Ajax support you must use the !ClickClickServlet. See Ge
 
 === The Ajax request cycle ===
 
-Before digging into the Ajax request cycle, lets first look at Click's normal request cycle:
-
-[http://incubator.apache.org/click/images/get-sequence-diagram.png]
-
-Lets summarize the list of events processed during a normal request execution:
-
- # onSecurityCheck()
- # onInit()
- # onProcess
- # onGet() / onPost()
- # onRender()
- # onDestroy()
-
-Ajax requests are handled a bit differently as illustrated below:
+Ajax requests are handled a bit differently from normal Click requests, as illustrated below:
 
 [http://clickclick.googlecode.com/svn/trunk/site/images/diagrams/ajax-request-sequence-diagram.png]
 
@@ -29,14 +16,51 @@ Only three events are processing during an Ajax request. They are:
  # onInit()
  # onProcess()
 
-Stepping through the Ajax request sequence, a Page is created and its `onSecurityCheck()` event handler is executed. This method can be used to ensure the user is authenticated to access the Page. By returning false, ensures that no further processing ensues.
+Stepping through the Ajax request sequence, a Page is created and its `onSecurityCheck()` event handler is executed. This method can be used to ensure the user is authenticated to access the Page. By returning false, no further processing occurs.
 
-The next event handler is `onInit()` where Page Controls are created such Forms, Fields and Tables.
+The next event handler is `onInit()` where Page Controls are created such as Forms, Fields and Tables.
 
 Next, the target Ajax control is processed and if the control action listener is set, it is invoked. ClickClick provides an AjaxListener, subclass of ActionListener, that returns a Partial object.
 
 Finally ClickClickServlet renders the Partial response to the browser.
 
-A Partial can be described as a fragment (of a Page) sent back to the browser for an Ajax request.
+A Partial can be described as a fragment (of a Page) sent back to the browser. For example a Partial can be used to return new Controls, or add rows to a Table.
 
 === Example ===
+
+The AjaxDemo.java Page:
+
+{{{
+public class AjaxDemo extends Page {
+
+    public AjaxDemo() {
+        AjaxActionLink link = new AjaxActionLink("link", "Click here", "link-id");
+
+        link.setActionListener(new AjaxAdapter(){
+
+            // The onAjaxAction method is invoked when the link is followed
+            public Partial onAjaxAction(Control source) {
+                Partial partial = new Partial();
+                partial.append("<h2>Hello world!</h2>");
+                return partial;
+            }
+        });
+
+        addControl(link);
+    }
+
+    private class HelloWorldListener extends AjaxAdapter {
+        public Partial onAjaxAction(Control source) {
+            Partial partial = new Partial();
+            partial.append("<h2>Hello world!</h2>");
+            return partial;
+        }
+    }
+}
+}}}
+
+The ajax-demo.htm template:
+
+{{{
+$link
+}}}
