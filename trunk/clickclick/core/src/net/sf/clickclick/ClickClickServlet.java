@@ -22,6 +22,7 @@ import net.sf.clickclick.util.Partial;
 import org.apache.click.*;
 import org.apache.click.control.ActionButton;
 import org.apache.click.control.ActionLink;
+import org.apache.click.util.ErrorPage;
 import org.apache.click.util.PageImports;
 
 /**
@@ -59,49 +60,49 @@ public class ClickClickServlet extends ClickServlet {
 
         final Context context = page.getContext();
 
-        // Non Ajax requests are handled by default implementation
-        if (!context.isAjaxRequest()) {
-            super.processPage(page);
-            return;
-        }
-
         AjaxControlRegistry controlRegistry = AjaxControlRegistry.getThreadLocalRegistry();
 
         PageImports pageImports = createPageImports(page);
         page.setPageImports(pageImports);
+
+        // Support direct access of click-error.htm
+        if (page instanceof ErrorPage) {
+            ErrorPage errorPage = (ErrorPage) page;
+            errorPage.setMode(configService.getApplicationMode());
+
+            controlRegistry.errorOccurred(errorPage.getError());
+        }
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
 
         if (continueProcessing) {
             performOnInit(page, context);
 
-            // Check if this is a legacy Ajax request. Legacy Ajax requests
-            // don't have Ajax Controls registered on the ControlRegistry
-            if (controlRegistry.hasAjaxControls()) {
+            // Check if processing should continue after Ajax processing is
+            // performed.
+            if (!performAjaxProcessing(page, context, controlRegistry)) {
+                return;
+            }
 
-                // Process Ajax controls
-                performAjaxProcessing(page, context, controlRegistry);
+            continueProcessing = performOnProcess(page, context, controlRegistry);
 
-            } else {
-                // This is a legacy Ajax request and will have the same
-                // event callbacks (life cycle) as a normal non-ajax request.
-                continueProcessing = performOnProcess(page, context, controlRegistry);
+            if (continueProcessing) {
+                performOnPostOrGet(page, context, context.isPost());
 
-                if (continueProcessing) {
-                    performOnPostOrGet(page, context, context.isPost());
-
-                    performOnRender(page, context);
-                }
-
-                controlRegistry.fireActionEvents(context, AjaxControlRegistry.POST_ON_RENDER_EVENT);
-
-                performRender(page, context);
+                performOnRender(page, context);
             }
         } else {
             // If security check fails for an Ajax request, Click returns without
             // any rendering. It is up to the user to render a Partial response
             // in the onSecurityCheck event
+            if (context.isAjaxRequest()) {
+                return;
+            }
         }
+
+        controlRegistry.fireActionEvents(context, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+
+        performRender(page, context);
     }
 
     /**
