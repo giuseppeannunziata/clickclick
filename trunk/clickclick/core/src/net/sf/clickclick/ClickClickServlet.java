@@ -22,7 +22,6 @@ import net.sf.clickclick.util.Partial;
 import org.apache.click.*;
 import org.apache.click.control.ActionButton;
 import org.apache.click.control.ActionLink;
-import org.apache.click.util.ErrorPage;
 import org.apache.click.util.PageImports;
 
 /**
@@ -59,43 +58,50 @@ public class ClickClickServlet extends ClickServlet {
     protected void processPage(Page page) throws Exception {
 
         final Context context = page.getContext();
-        final boolean isPost = context.isPost();
 
-        PageImports pageImports = createPageImports(page);
-        page.setPageImports(pageImports);
+        // Non Ajax requests are handled by default implementation
+        if (!context.isAjaxRequest()) {
+            super.processPage(page);
+            return;
+        }
 
         AjaxControlRegistry controlRegistry = AjaxControlRegistry.getThreadLocalRegistry();
 
-        // Support direct access of click-error.htm
-        if (page instanceof ErrorPage) {
-            ErrorPage errorPage = (ErrorPage) page;
-            errorPage.setMode(configService.getApplicationMode());
-
-            controlRegistry.errorOccurred(errorPage.getError());
-        }
+        PageImports pageImports = createPageImports(page);
+        page.setPageImports(pageImports);
 
         boolean continueProcessing = performOnSecurityCheck(page, context);
 
         if (continueProcessing) {
             performOnInit(page, context);
 
-            // Check if Ajax processing is needed
-            if (!performAjaxProcessing(page, context, controlRegistry)) {
-                return;
+            // Check if this is a legacy Ajax request. Legacy Ajax requests
+            // don't have Ajax Controls registered on the ControlRegistry
+            if (controlRegistry.hasAjaxControls()) {
+
+                // Process Ajax controls
+                performAjaxProcessing(page, context, controlRegistry);
+
+            } else {
+                // This is a legacy Ajax request and will have the same
+                // event callbacks (life cycle) as a normal non-ajax request.
+                continueProcessing = performOnProcess(page, context, controlRegistry);
+
+                if (continueProcessing) {
+                    performOnPostOrGet(page, context, context.isPost());
+
+                    performOnRender(page, context);
+                }
+
+                controlRegistry.fireActionEvents(context, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+
+                performRender(page, context);
             }
-
-            continueProcessing = performOnProcess(page, context, controlRegistry);
-
-            if (continueProcessing) {
-                performOnPostOrGet(page, context, isPost);
-
-                performOnRender(page, context);
-            }
+        } else {
+            // If security check fails for an Ajax request, Click returns without
+            // any rendering. It is up to the user to render a Partial response
+            // in the onSecurityCheck event
         }
-
-        controlRegistry.fireActionEvents(context, AjaxControlRegistry.POST_ON_RENDER_EVENT);
-
-        performRender(page, context);
     }
 
     /**
@@ -134,6 +140,7 @@ public class ClickClickServlet extends ClickServlet {
                                              AjaxControlRegistry.ON_AJAX_EVENT);
 
         // Ajax requests are processed separately
+        // TODO: Ajax doesn't support forward, is still necessary to check isForward?
         if (context.isAjaxRequest() && !context.isForward()) {
 
             if (ajaxControlRegistry.hasAjaxControls()) {
@@ -274,6 +281,8 @@ public class ClickClickServlet extends ClickServlet {
                     try {
                         writer = response.getWriter();
                         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+                        // TODO: use return an ErrorReport instance instead
                         writer.write("<error>\n");
                         exception.printStackTrace(writer);
                         writer.write("\n</error>");
