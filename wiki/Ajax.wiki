@@ -28,7 +28,7 @@ A Partial can be described as a fragment (of a Page) sent back to the browser. F
 
 === Example ===
 
-The AjaxDemo.java Page:
+The !AjaxDemo.java Page:
 
 {{{
 public class AjaxDemo extends Page {
@@ -47,14 +47,6 @@ public class AjaxDemo extends Page {
         });
 
         addControl(link);
-    }
-
-    private class HelloWorldListener extends AjaxAdapter {
-        public Partial onAjaxAction(Control source) {
-            Partial partial = new Partial();
-            partial.append("<h2>Hello world!</h2>");
-            return partial;
-        }
     }
 }
 }}}
