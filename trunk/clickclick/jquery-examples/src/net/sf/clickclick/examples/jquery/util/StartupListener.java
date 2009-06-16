@@ -82,7 +82,6 @@ public class StartupListener implements ServletContextListener {
                 CUSTOMERS.add(customer);
             }
         });
-        System.out.println("Customers loaded : [" + CUSTOMERS.size() + "]");
     }
 
     private static void loadFile(String filename, LineProcessor lineProcessor)
