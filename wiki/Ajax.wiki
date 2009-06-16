@@ -26,6 +26,10 @@ Finally ClickClickServlet renders the Partial response to the browser.
 
 A Partial can be described as a fragment (of a Page) sent back to the browser. For example a Partial can be used to return new Controls, or add rows to a Table.
 
+Another view of the Ajax execution flow can be seen in the diagram below:
+
+[http://clickclick.googlecode.com/svn/trunk/site/images/diagrams/ajax-request-activity-diagram.png]
+
 === Example ===
 
 The !AjaxDemo.java Page:
