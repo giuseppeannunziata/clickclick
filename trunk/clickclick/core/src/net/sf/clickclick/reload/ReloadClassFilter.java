@@ -79,7 +79,7 @@ import org.apache.click.util.ClickUtils;
  * --&gt;
  *     &lt;context-param&gt;
  *         &lt;param-name&gt;config-service-class&lt;/param-name&gt;
- *         &lt;param-value&gt;net.sf.click.service.ClickClickConfigService&lt;/param-value&gt;
+ *         &lt;param-value&gt;org.apache.click.service.ClickClickConfigService&lt;/param-value&gt;
  *     &lt;/context-param&gt;
  *
  * &lt;!--
@@ -88,7 +88,7 @@ import org.apache.click.util.ClickUtils;
  * --&gt;
  *   &lt;filter&gt;
  *       &lt;filter-name&gt;reload-filter&lt;/filter-name&gt;
- *       &lt;filter-class&gt;net.sf.click.extras.devel.ReloadClassFilter&lt;/filter-class&gt;
+ *       &lt;filter-class&gt;net.sf.clickclick.reload.ReloadClassFilter&lt;/filter-class&gt;
  *       &lt;init-param&gt;
  *           &lt;param-name&gt; 
  *               includes
