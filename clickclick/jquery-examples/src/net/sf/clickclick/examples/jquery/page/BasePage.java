@@ -1,7 +1,5 @@
 package net.sf.clickclick.examples.jquery.page;
 
-import org.apache.log4j.Logger;
-
 import org.apache.click.Page;
 
 /**
@@ -9,19 +7,4 @@ import org.apache.click.Page;
  *  other application pages should extend.
  */
 public class BasePage extends Page {
-
-    private Logger logger;
-
-    /**
-     * Return the class logger.
-     *
-     * @return the class logger
-     */
-    public Logger getLogger() {
-        if (logger == null) {
-            logger = Logger.getLogger(getClass());
-        }
-        return logger;
-    }
-
 }
