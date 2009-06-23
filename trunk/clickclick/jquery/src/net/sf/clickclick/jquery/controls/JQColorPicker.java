@@ -88,6 +88,19 @@ public class JQColorPicker extends TextField {
         }
     }
 
+    /**
+     * Create a JQColorPicker with the given name and required status.
+     *
+     * @param name the name of the control
+     * @param required the field required status
+     */
+    public JQColorPicker(String name, boolean required) {
+        if (name != null) {
+            setName(name);
+        }
+        setRequired(required);
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
