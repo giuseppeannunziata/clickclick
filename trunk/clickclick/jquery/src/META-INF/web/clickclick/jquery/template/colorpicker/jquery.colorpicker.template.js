@@ -12,21 +12,19 @@
  * limitations under the License.
  */
 
-jQuery(document).ready(function(){
-    jQuery('#$imageId').click(function() {
-        jQuery('#$fieldId').click();
-    })
-    jQuery('#$fieldId').ColorPicker({
-        onSubmit: function(hsb, hex, rgb, el) {
-            jQuery('#$fieldId').val('#' + hex);
-            jQuery('#$imageId div div').css('backgroundColor', '#' + hex);
-            jQuery(el).ColorPickerHide();
-        },
-        onBeforeShow: function () {
-            jQuery(this).ColorPickerSetColor(this.value);
-        }
-    })
-    .bind('keyup', function(){
+jQuery('#$imageId').live("click", function() {
+    jQuery('#$fieldId').click();
+})
+jQuery('#$fieldId').ColorPicker({
+    onSubmit: function(hsb, hex, rgb, el) {
+        jQuery('#$fieldId').val('#' + hex);
+        jQuery('#$imageId div div').css('backgroundColor', '#' + hex);
+        jQuery(el).ColorPickerHide();
+    },
+    onBeforeShow: function () {
         jQuery(this).ColorPickerSetColor(this.value);
-    });
+    }
+})
+.bind('keyup', function(){
+    jQuery(this).ColorPickerSetColor(this.value);
 });
