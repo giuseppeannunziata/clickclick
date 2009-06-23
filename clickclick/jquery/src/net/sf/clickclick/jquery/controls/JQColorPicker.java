@@ -216,6 +216,8 @@ public class JQColorPicker extends TextField {
         jsScript.setId(id + "_jqcolorpicker_js");
 
         if (!headElements.contains(jsScript)) {
+            jsScript.setExecuteOnDomReady(true);
+
             // Create the data model to pass to the templates
             Map model = getJsModel();
             model.put("fieldId", id);
