@@ -43,7 +43,7 @@ ul#verticalMenu a {
 }
 
 ul#verticalMenu :hover {
-    z-index: 999;
+    z-index: 9999;
 }
 
 /* Root Menu Hover Persistence */
