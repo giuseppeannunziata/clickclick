@@ -18,7 +18,7 @@ jQuery(document).ready(function(){
     })
     jQuery('#$fieldId').ColorPicker({
         onSubmit: function(hsb, hex, rgb) {
-            jQuery('#$fieldId').val(hex);
+            jQuery('#$fieldId').val('#' + hex);
             jQuery('#$imageId div div').css('backgroundColor', '#' + hex);
         },
         onBeforeShow: function () {
