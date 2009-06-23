@@ -67,7 +67,7 @@ ul#horizontalMenu a {
 }
 
 ul#horizontalMenu :hover {
-    z-index: 999;
+    z-index: 9999;
 }
 
 /* Root Menu Hover Persistence */
