@@ -13,7 +13,7 @@ public class ColorPickerPage extends BorderPage {
 
     public void onInit() {
         JQColorPicker colorPicker = new JQColorPicker("colorPicker");
-        colorPicker.setValue("a61b1b");
+        colorPicker.setValue("#a61b1b");
         form.add(colorPicker);
         
         form.add(new Submit("submit"));
