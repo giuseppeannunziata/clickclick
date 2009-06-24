@@ -15,6 +15,10 @@
 jQuery('#$imageId').live("click", function() {
     jQuery('#$fieldId').click();
 })
+
+// Ensure previous ColorPicker versions are removed
+jQuery('div.colorpicker').remove();
+
 jQuery('#$fieldId').ColorPicker({
     onSubmit: function(hsb, hex, rgb, el) {
         jQuery('#$fieldId').val('#' + hex);
