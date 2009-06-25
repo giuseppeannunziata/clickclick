@@ -314,7 +314,18 @@ function go(xml) {
                     dest.style.cssText = v;
                     dest.setAttribute(n, v);
                 }
-                else $.attr(dest, n, v);
+                else {
+                    // IE workaround for inline event handlers
+                    if(n.toLowerCase().substring(0, 2) == 'on') {
+                        if ($.browser.msie) {
+                            eval("dest." + n.toLowerCase() + "=function(){" + v + "}");
+                        } else {
+                            dest.setAttribute(n, v);
+                        }
+                    } else {
+                        $.attr(dest, n, v);
+                    }
+                }
             }
             return attr;
         };
