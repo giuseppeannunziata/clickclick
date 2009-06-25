@@ -37,7 +37,7 @@ public class AjaxDemo extends Page {
 
 In the example above an Ajax aware !ActionLink is created and an !AjaxAdapter listener is registered on the link that is dispatched when the link is clicked.
 
-Inside the listener a !Partial instance is created (Partial represents a partial page response) that returns the markup "&lt;h2&gt;Hello world!&lt;/h2&gt;" to the browser.
+Inside the listener a !Partial instance is created (Partial represents a partial page response) that returns the markup "{{{<h2>Hello world!</h2>}}}" to the browser.
 
 === How Ajax support works ===
 
