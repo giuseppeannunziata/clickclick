@@ -2,7 +2,107 @@
 
 === Activate Ajax Support ===
 
-In order to make use of Ajax support you must use the !ClickClickServlet. See GettingStarted on how to setup the !ClickClickServlet.
+To use Ajax you must use the !ClickClickServlet. See GettingStarted on how to setup the !ClickClickServlet.
+
+=== Introduction ===
+
+The !ClickClickServlet allows users to set an !AjaxListener instance on Click Controls that is dispatched when an Ajax request targets the Control.
+
+For example:
+
+public class AjaxDemo extends Page {
+
+    public AjaxDemo() {
+        // Define a link with a name, description and id
+        AjaxActionLink link = new AjaxActionLink("link", "Click here", "link-id");
+
+        // Set an AjaxListener instance on the link control
+        link.setActionListener(new AjaxAdapter(){
+
+            // The onAjaxAction method is invoked when the link is clicked
+            public Partial onAjaxAction(Control source) {
+
+                // A Partial response is returned to the browser
+                Partial partial = new Partial();
+                partial.append("<h2>Hello world!</h2>");
+                return partial;
+            }
+        });
+
+        addControl(link);
+    }
+}
+}}}
+
+In the example above an Ajax aware !ActionLink is created and an !AjaxAdapter listener is registered on the link that is dispatched when the link is clicked.
+
+Inside the listener a !Partial instance is created (Partial represents a partial page response) that returns the markup "<h2>Hello world!</h2>" to the browser.
+
+=== How Ajax support works ===
+
+When !ClickClickServlet receives a request it first checks if the request is an Ajax request or not. An Ajax request contains the special header "X_REQUESTED_WITH" which most Ajax libraries such as JQuery, Prototype etc sets for you.
+
+If the request is indeed an Ajax request, ClickClickServlet tries to find the target Control of the Ajax request. There are three requirements to make a Control the target of an Ajax request.
+
+ # The Control must be registered with AjaxControlRegistry
+ # The Control must have an ID attribute defined (ActionLink is an exception and doesn't need an ID attribute. Its name is enough to identify it)
+ # The Control must have an AjaxListener instance set
+
+The above three requirements are the necessary steps to take on the server side. On the client side (browser) where the Ajax request is initiated, the only requirement is to include the ID of the target Control as a request parameter name. The value of the ID attribute can be an arbitrary value and is in fact ignored by Click. (For ActionLink the parameter "actionLink" is used to target the link).
+
+For example, here we create a new AjaxActionLink and set the ID "linkId".
+
+{{{
+public class AjaxDemo extends Page {
+
+    public AjaxDemo() {
+        // Define a link with a name, description and id
+        AjaxActionLink link = new AjaxActionLink("link", "Click here", "link-id");
+
+        // Set an AjaxListener instance on the link control
+        link.setActionListener(new AjaxAdapter(){
+
+            // The onAjaxAction method is invoked when the link is clicked
+            public Partial onAjaxAction(Control source) {
+
+                // A Partial response is returned to the browser
+                Partial partial = new Partial();
+                partial.append("<h2>Hello world!</h2>");
+                return partial;
+            }
+        });
+
+        addControl(link);
+    }
+}}}
+
+To target the link the Ajax request must include the parameter "linkId".
+
+Here is a jQuery example:
+
+{{{
+ $.ajax({
+   type: "POST",
+   url: "/ajax-demo.htm",
+   data: "linkId=1", // Note: linkId is set as parameter
+   success: function(msg){
+     alert( "Data Saved: " + msg );
+   }
+ });
+}}}
+
+Here is a Prototype example:
+
+{{{
+new Ajax.Request("/ajax-demo.htm", {
+     method: 'POST',
+     parameters: {linkId: '1'}, // Note: linkId is set as parameter
+     onSuccess: function(transport){
+       alert("Data Saved: " + transport.responseText);
+     }
+  });
+}}}
+
 
 === The Ajax request cycle ===
 
