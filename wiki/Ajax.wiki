@@ -10,6 +10,7 @@ The !ClickClickServlet allows users to set an !AjaxListener instance on Click Co
 
 For example:
 
+{{{
 public class AjaxDemo extends Page {
 
     public AjaxDemo() {
