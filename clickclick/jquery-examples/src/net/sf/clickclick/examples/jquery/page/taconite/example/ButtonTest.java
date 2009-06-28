@@ -6,8 +6,6 @@ import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import net.sf.clickclick.jquery.util.Taconite;
 import org.apache.click.Control;
-import org.apache.click.MockContext;
-import org.apache.click.control.ActionLink;
 import org.apache.click.control.Submit;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -56,12 +54,5 @@ public class ButtonTest extends BorderPage {
                 return partial;
             }
         });
-    }
-
-    public static void main(String[] args) {        
-        MockContext context = MockContext.initContext();
-        
-        ActionLink link = new ActionLink("link");
-        System.out.println(link.getHref());
     }
 }

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.click.Control;
-import org.apache.click.MockContext;
 import org.apache.click.control.Column;
 import org.apache.click.control.Table;
 import net.sf.clickclick.util.AjaxAdapter;
@@ -75,13 +74,5 @@ public class TableTest extends BorderPage {
         list.add(map);
         map.put("name", "Sue");
         return list;
-    }
-
-    public static void main(String[] args) {        
-        MockContext context = MockContext.initContext();
-        
-        Table table = createTable();
-        System.out.println(table.getHtmlImports());
-        System.out.println(table);
     }
 }

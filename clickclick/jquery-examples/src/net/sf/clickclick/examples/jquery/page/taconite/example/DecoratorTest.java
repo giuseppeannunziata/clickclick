@@ -1,7 +1,6 @@
 package net.sf.clickclick.examples.jquery.page.taconite.example;
 
 import org.apache.click.Control;
-import org.apache.click.MockContext;
 import org.apache.click.control.ActionLink;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
@@ -44,12 +43,5 @@ public class DecoratorTest extends BorderPage {
                 return partial;
             }
         });
-    }
-
-    public static void main(String[] args) {        
-        MockContext context = MockContext.initContext();
-        
-        ActionLink link = new ActionLink("link");
-        System.out.println(link.getHref());
     }
 }
