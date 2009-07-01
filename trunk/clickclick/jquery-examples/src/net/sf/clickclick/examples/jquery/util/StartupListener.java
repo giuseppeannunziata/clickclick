@@ -13,11 +13,12 @@ import java.util.StringTokenizer;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import net.sf.clickclick.examples.jquery.domain.Customer;
+import net.sf.clickclick.examples.jquery.domain.PostCode;
 import org.apache.click.util.ClickUtils;
+import org.apache.commons.lang.WordUtils;
 
 /**
- *
- * @author Bob Schellink
+ * Initializes application data upon startup.
  */
 public class StartupListener implements ServletContextListener {
 
@@ -27,6 +28,8 @@ public class StartupListener implements ServletContextListener {
 
     public static final List<Customer> CUSTOMERS = new ArrayList();
 
+    public static final List<PostCode> POST_CODES = new ArrayList();
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -35,6 +38,7 @@ public class StartupListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         try {
             loadCustomers();
+            loadPostCodes();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,6 +84,27 @@ public class StartupListener implements ServletContextListener {
                 }
 
                 CUSTOMERS.add(customer);
+            }
+        });
+    }
+
+    private void loadPostCodes() throws IOException {
+        loadFile("post-codes-australian.csv", new LineProcessor() {
+            public void processLine(String line) {
+                if (!line.startsWith("Pcode")) {
+                    StringTokenizer tokenizer = new StringTokenizer(line, ",");
+
+                    String postcode = next(tokenizer);
+                    String locality = WordUtils.capitalizeFully(next(tokenizer));
+                    String state = next(tokenizer);
+
+                    PostCode postCode = new PostCode();
+                    postCode.setPostCode(postcode);
+                    postCode.setLocality(locality);
+                    postCode.setState(state);
+
+                    POST_CODES.add(postCode);
+                }
             }
         });
     }

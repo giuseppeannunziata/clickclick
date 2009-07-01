@@ -2,6 +2,7 @@ package net.sf.clickclick.examples.jquery.page;
 
 import net.sf.clickclick.examples.jquery.services.ApplicationRegistry;
 import net.sf.clickclick.examples.jquery.services.CustomerService;
+import net.sf.clickclick.examples.jquery.services.PostCodeService;
 import net.sf.clickclick.jquery.util.UIUtils;
 import org.apache.click.extras.control.Menu;
 import org.apache.click.util.ClickUtils;
@@ -33,5 +34,9 @@ public class BorderPage extends BasePage {
 
     public CustomerService getCustomerService() {
         return ApplicationRegistry.getInstance().getCustomerService();
+    }
+
+    public PostCodeService getPostCodeService() {
+        return ApplicationRegistry.getInstance().getPostCodeService();
     }
 }

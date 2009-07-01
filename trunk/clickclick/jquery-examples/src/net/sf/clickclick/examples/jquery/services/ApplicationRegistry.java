@@ -10,6 +10,8 @@ public class ApplicationRegistry {
 
     private CustomerService customerService;
 
+    private PostCodeService postCodeService;
+
     // -------------------------------------------------------- Constructors
 
     private ApplicationRegistry() {
@@ -26,6 +28,13 @@ public class ApplicationRegistry {
             customerService = new CustomerService();
         }
         return customerService;
+    }
+
+    public PostCodeService getPostCodeService() {
+        if (postCodeService == null) {
+            postCodeService = new PostCodeService();
+        }
+        return postCodeService;
     }
 
     // ---------------------------------------------------------- Inner Classes
