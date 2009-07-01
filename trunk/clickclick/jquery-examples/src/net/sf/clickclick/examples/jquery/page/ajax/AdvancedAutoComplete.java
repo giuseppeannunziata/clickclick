@@ -13,8 +13,9 @@
  */
 package net.sf.clickclick.examples.jquery.page.ajax;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.controls.ajax.JQAutoCompleteTextField;
 import net.sf.clickclick.jquery.helper.JQAutoCompleteHelper;
@@ -24,12 +25,11 @@ import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
-import org.apache.click.extras.control.IntegerField;
+import org.apache.click.control.TextField;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
  *
- * @author Bob Schellink
  */
 public class AdvancedAutoComplete extends BorderPage {
 
@@ -38,40 +38,59 @@ public class AdvancedAutoComplete extends BorderPage {
     public AdvancedAutoComplete() {
         addControl(form);
 
-        final JQAutoCompleteTextField autoField = new JQAutoCompleteTextField("autoField") {
+        final JQAutoCompleteTextField suburbField = new JQAutoCompleteTextField("suburb", "Select your suburb") {
 
             public List getAutoCompleteList(String criteria) {
-                List suggestions = new ArrayList();
-                suggestions.add("one");
-                suggestions.add("two");
-                suggestions.add("three");
+                List suggestions = getPostCodeService().getPostCodeLocations(criteria);
                 return suggestions;
             }
         };
+        suburbField.setWidth("200px");
 
-        final IntegerField integerField = new IntegerField("integerField");
-        JQAutoCompleteHelper jquery = new JQAutoCompleteHelper(integerField);
+        // Set formatResult option to set the field value to the suburb
+        suburbField.getJQueryHelper().setOptions("formatResult: function(data) {"
+            + " var values = data[0].split(' ');"
+            + " var result = '';"
+            + " for(var i = 0; i < values.length - 2; i++){"
+            + "   result+=values[i]+' '"
 
-        // Decorate the integerField with Ajax functionality
+            // Trim whitespaces and left over ','
+            + " } return result.replace(/^\\s*/, '').replace(/,\\s*$/, '');"
+            + "}");
+
+        final TextField postCodeField = new TextField("postalCode", "Select your postal code");
+        JQAutoCompleteHelper jquery = new JQAutoCompleteHelper(postCodeField);
+
+        // Decorate the textField with Autocomplete functionality
         jquery.ajaxify();
 
-        integerField.setActionListener(new AjaxAdapter(){
+        postCodeField.setActionListener(new AjaxAdapter(){
             public Partial onAjaxAction(Control source) {
-                System.out.println("Ajax 2");
+                String criteria = postCodeField.getValue();
 
-                String criteria = integerField.getValue();
-
-                // Create a Partial to contains the auto complete suggestions
+                // Create a Partial to contain the auto complete suggestions
                 Partial partial = new Partial();
 
                 HtmlStringBuffer buffer = new HtmlStringBuffer();
-                buffer.append("601020\n");
-                buffer.append("101020\n");
-                buffer.append("100\n");
+
+                // Retrieve suggestions
+                List<String> suggestions = getPostCodeService().getPostCodeLocations(criteria);
+
+                // Remove duplicates
+                Set<String> unique = new LinkedHashSet(suggestions);
+                for (String code : unique) {
+                    buffer.append(code).append("\n");
+                }
                 partial.setContent(buffer.toString());
                 return partial;
             }
         });
+        postCodeField.setWidth("200px");
+
+        // Set formatResult option to set the field value to the post code
+        jquery.setOptions("formatResult: function(data) {"
+            + " var values = data[0].split(' ');"
+            + " return values[values.length - 1];}");
 
         Submit submit = new Submit("submit");
         submit.setActionListener(new ActionListener() {
@@ -84,7 +103,7 @@ public class AdvancedAutoComplete extends BorderPage {
         });
 
         form.add(submit);
-        form.add(autoField);
-        form.add(integerField);
+        form.add(suburbField);
+        form.add(postCodeField);
     }
 }
