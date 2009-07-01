@@ -36,7 +36,7 @@ public abstract class JQAutoCompleteTextField extends TextField {
     // -------------------------------------------------------------- Variables
 
     /** The JQuery helper object. */
-    private JQHelper jqHelper = new JQAutoCompleteHelper(this);
+    private JQAutoCompleteHelper jqHelper = new JQAutoCompleteHelper(this);
 
     // ----------------------------------------------------------- Constructors
 
@@ -111,7 +111,7 @@ public abstract class JQAutoCompleteTextField extends TextField {
      *
      * @return the jqHelper instance
      */
-    public JQHelper getJQueryHelper() {
+    public JQAutoCompleteHelper getJQueryHelper() {
         return jqHelper;
     }
 
@@ -120,7 +120,7 @@ public abstract class JQAutoCompleteTextField extends TextField {
      *
      * @param jqHelper the JQuery Helper instance
      */
-    public void setJQueryHelper(JQHelper jqHelper) {
+    public void setJQueryHelper(JQAutoCompleteHelper jqHelper) {
         this.jqHelper = jqHelper;
     }
 

@@ -21,5 +21,6 @@ jQuery(document).ready(function(){
 
     jQuery("$selector").autocomplete("$url?$parameters", {
         extraParams: params
+        #if($options),$options #end
     });
 });

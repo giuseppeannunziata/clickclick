@@ -14,6 +14,7 @@
 package net.sf.clickclick.jquery.helper;
 
 import java.util.List;
+import java.util.Map;
 import org.apache.click.Control;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
@@ -128,6 +129,12 @@ public class JQAutoCompleteHelper extends JQHelper {
      */
     private String template = "/clickclick/jquery/template/jquery.autocomplete.template.js";
 
+    /**
+     * The Autocomplete options. Autocomplete options are outlined
+     * <a href="http://docs.jquery.com/Plugins/Autocomplete/autocomplete#url_or_dataoptions">here</a>.
+     */
+    private String options;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -154,6 +161,57 @@ public class JQAutoCompleteHelper extends JQHelper {
         super(control, select);
         setTemplate(template);
         setShowIndicator(false);
+    }
+
+    // ------------------------------------------------------ Public Properties
+
+    /**
+     * Return the Autocomplete options.
+     *
+     * @see #setOptions(java.lang.String)
+     *
+     * @return the autocomplete options
+     */
+    public String getOptions() {
+        return options;
+    }
+
+    /**
+     * Set the Autocomplete options.
+     * <p/>
+     * The Autocomplete options are outlined
+     * <a href="http://docs.jquery.com/Plugins/Autocomplete/autocomplete#url_or_dataoptions">here</a>.
+     * <p/>
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public MyPage extends Page {
+     *     public void onInit() {
+     *
+     *         JQAutoCompleteTextField field = new JQAutoCompleteTextField("field");
+     *
+     *         // Specify the 'max', 'width' and 'formatResult' options
+     *         String options = "max: 6, width: 400, formatResult: function(row, data){return data.split(',')[0];}";
+     *
+     *         field.getJQueryHelper().setOptions(options);
+     *     }
+     * } </pre>
+     *
+     * @param options the Autocomplete options
+     */
+    public void setOptions(String options) {
+        this.options = options;
+    }
+
+    /**
+     * Create a default data model for the Autocomplete {@link #template}.
+     *
+     * @return the default data model for the Ajax template
+     */
+    public Map createDefaultModel() {
+        Map model = super.createDefaultModel();
+        model.put("options", getOptions());
+        return model;
     }
 
     // ------------------------------------------------------ Protected Methods
