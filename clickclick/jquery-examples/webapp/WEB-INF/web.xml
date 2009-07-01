@@ -4,6 +4,11 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
 
+  <!-- Listener which enables Google App Engine functionality -->
+    <listener>
+        <listener-class>net.sf.clickclick.examples.jquery.util.GoogleAppListener</listener-class>
+    </listener>
+
 	<!--
 	Provides an in-memory domain.
 	-->
@@ -11,6 +16,45 @@
 		<listener-class>net.sf.clickclick.examples.jquery.util.StartupListener</listener-class>
 	</listener>
 
+
+<filter>
+    <filter-name>PerformanceFilter</filter-name>
+    <filter-class>org.apache.click.extras.filter.PerformanceFilter</filter-class>
+    <init-param>
+        <param-name>cachable-paths</param-name>
+        <param-value>/assets/*, /clickclick/*</param-value>
+    </init-param>
+    <init-param>
+        <param-name>application-version</param-name>
+        <param-value>0.1</param-value>
+    </init-param>
+</filter>
+
+ <filter-mapping>
+  <filter-name>PerformanceFilter</filter-name>
+  <url-pattern>*.css</url-pattern>
+ </filter-mapping>
+
+ <filter-mapping>
+  <filter-name>PerformanceFilter</filter-name>
+  <url-pattern>*.js</url-pattern>
+ </filter-mapping>
+
+ <filter-mapping>
+  <filter-name>PerformanceFilter</filter-name>
+  <url-pattern>*.gif</url-pattern>
+ </filter-mapping>
+
+ <filter-mapping>
+  <filter-name>PerformanceFilter</filter-name>
+  <url-pattern>*.png</url-pattern>
+ </filter-mapping>
+
+ <filter-mapping>
+  <filter-name>PerformanceFilter</filter-name>
+  <servlet-name>ClickClickServlet</servlet-name>
+ </filter-mapping>
+ 
 	<servlet>
 		<servlet-name>ClickClickServlet</servlet-name>
 		<servlet-class>net.sf.clickclick.ClickClickServlet</servlet-class>
