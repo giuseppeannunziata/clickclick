@@ -17,6 +17,9 @@
         <menu label="Action Demo" path="ajax/action-demo.htm"/>
         <menu separator="true"/>
         <menu label="Form Demo" path="ajax/form-demo.htm"/>
+        <menu label="Form Validation Demo" path="ajax/validation/form-validation-demo.htm"/>
+        <menu label="JQuery Inline Validation Demo" path="ajax/validation/jquery-validation1-demo.htm"/>
+        <menu label="JQuery Validation Demo" path="ajax/validation/jquery-validation2-demo.htm"/>
         <menu separator="true"/>
         <menu label="Table Demo" path="ajax/table-demo.htm"/>
         <menu label="Stateful Table Demo" path="ajax/stateful-table-demo.htm"/>
