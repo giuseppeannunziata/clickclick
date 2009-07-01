@@ -6,7 +6,7 @@ To use Ajax you must use the !ClickClickServlet. See GettingStarted on how to se
 
 === Introduction ===
 
-The !ClickClickServlet allows users to set an !AjaxListener instance on Click Controls that is dispatched when an Ajax request targets the Control.
+The !ClickClickServlet allows you to set an !AjaxListener instance on Click Controls that is dispatched when an Ajax request targets the Control.
 
 For example:
 
@@ -41,17 +41,21 @@ Inside the listener a !Partial instance is created (Partial represents a partial
 
 === How Ajax support works ===
 
-When !ClickClickServlet receives a request it first checks if the request is an Ajax request or not. An Ajax request contains the special header "X_REQUESTED_WITH" which most Ajax libraries such as JQuery, Prototype etc sets for you.
+When !ClickClickServlet receives a request it first checks if the request is an Ajax request or not. An Ajax request contains the special header "X_REQUESTED_WITH" which most Ajax libraries such as JQuery, Prototype etc specifies on the request.
 
-If the request is indeed an Ajax request, ClickClickServlet tries to find the target Control of the Ajax request. There are three requirements to make a Control the target of an Ajax request.
+If the request is an Ajax request, ClickClickServlet tries to find the target Control of the Ajax request. On the server side there are three requirements that must be fulfilled in order to target a Control. (*Note:* some of these steps are performed by Ajax aware Controls or Ajax helper classes, however for completeness all steps are listed):
 
- # The Control must be registered with AjaxControlRegistry
+ # The Control must be registered with AjaxControlRegistry (Registration is normally performed in the _onInit_ event of Ajax enabled Controls. Unless you are writing your own Ajax aware Controls, you don't have to worry about this step)
  # The Control must have an ID attribute defined (ActionLink is an exception and doesn't need an ID attribute. Its name is enough to identify it)
  # The Control must have an AjaxListener instance set
 
-The above three requirements are the necessary steps to take on the server side. On the client side (browser) where the Ajax request is initiated, the only requirement is to include the ID of the target Control as a request parameter name. The value of the ID attribute can be an arbitrary value and is in fact ignored by Click. (For ActionLink the parameter "actionLink" is used to target the link).
+The above three requirements are the necessary steps to take on the server side. On the client side (browser) where the Ajax request is initiated, the following requirements are necessary:
 
-For example, here we create a new AjaxActionLink and set the ID "linkId".
+ # The ID of the target Control must be specified as a request parameter.
+
+The value of the ID attribute can be an arbitrary value and is in fact ignored by Click. (Sometimes ActionLinks (&lt;a href="..."&gt;) do not specify an ID parameter. For example when a Table row is decorated with an ActionLink, specifying the ID attribute will result in each Table row rendering an ActionLink with the same ID, which isn't allowed by the HTML spec. To work around this problem !ClickClickServlet will also check for the presence of the "actionLink" parameter).
+
+Below is an example where we create a new AjaxActionLink and set the ID value to "linkId".
 
 {{{
 public class AjaxDemo extends Page {
@@ -104,6 +108,7 @@ new Ajax.Request("/ajax-demo.htm", {
   });
 }}}
 
+Both of the examples above set the value of _linkId_ to 1, however this value is ignored by Click. As long as the request parameter _linkId_ is present, Click will know which Control is the target.
 
 === The Ajax request cycle ===
 
