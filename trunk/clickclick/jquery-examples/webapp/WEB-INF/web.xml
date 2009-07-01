@@ -5,9 +5,9 @@
     version="2.4">
 
   <!-- Listener which enables Google App Engine functionality -->
-    <listener>
-        <listener-class>net.sf.clickclick.examples.jquery.util.GoogleAppListener</listener-class>
-    </listener>
+  <listener>
+    <listener-class>org.apache.click.extras.gae.GoogleAppEngineListener</listener-class>
+  </listener>
 
 	<!--
 	Provides an in-memory domain.
