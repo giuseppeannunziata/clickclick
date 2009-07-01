@@ -5,4 +5,9 @@
 
   <mode value="trace"/>
 
+  <file-upload-service classname="org.apache.click.extras.gae.MemoryFileUploadService">
+    <property name="sizeMax" value="2000"/>
+    <property name="fileSizeMax" value="1000"/>
+  </file-upload-service>
+
 </click-app> 
