@@ -14,7 +14,9 @@ import org.apache.click.control.TextField;
 
 public class SelectDemo extends BorderPage {
 
-    public String title = "Select Demo";
+	private static final long serialVersionUID = 1L;
+
+	public String title = "Select Demo";
 
     // Create a JQuery Select control.
     private JQSelect provinceSelect = new JQSelect("provinceSelect", "Select a Province:", true);
