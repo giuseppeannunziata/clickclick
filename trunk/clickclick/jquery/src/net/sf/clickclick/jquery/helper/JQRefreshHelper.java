@@ -157,6 +157,8 @@ public class JQRefreshHelper extends JQHelper {
 
     // -------------------------------------------------------------- Variables
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The path of the template to render:
      * "<tt>/clickclick/jquery/template/jquery.refresh.template.js</tt>".

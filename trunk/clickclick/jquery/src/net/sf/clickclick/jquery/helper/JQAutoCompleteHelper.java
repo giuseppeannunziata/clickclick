@@ -107,6 +107,8 @@ public class JQAutoCompleteHelper extends JQHelper {
 
     // -------------------------------------------------------------- Constants
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The JQuery Autocomplete plugin JavaScript import (http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/):
      * "<tt>/clickclick/jquery/autocomplete/jquery.autocomplete.js</tt>".

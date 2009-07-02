@@ -13,6 +13,7 @@
  */
 package net.sf.clickclick.jquery.helper;
 
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -114,9 +115,11 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Bob Schellink
  */
-public class JQHelper {
+public class JQHelper implements Serializable {
 
     // -------------------------------------------------------------- Constants
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * The JQuery library (http://jquery.com/):
