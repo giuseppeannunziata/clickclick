@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <menu>
     <menu label=" Home" path="home.htm" imageSrc="/assets/images/home.png"/>
-    <menu label="Basic" path="basic/basic.htm"/>
+    <menu label="Basics" path="#">
+        <menu label="Effects" path="basic/effects.htm"/>
+        <menu label="Tooltip - clueTip" path="basic/tooltip1/tooltip.htm"/>
+        <menu label="Tooltip - jQuery Tools" path="basic/tooltip2/tooltip.htm"/>
+    </menu>
     <menu label="Controls" path="#">
         <menu label="JQuery UI Calendar" path="controls/calendar-demo.htm"/>
         <menu label="JQuery UI Slider" path="controls/slider-demo.htm"/>
