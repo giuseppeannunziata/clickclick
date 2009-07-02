@@ -93,6 +93,8 @@ public class JQFormHelper extends JQHelper {
 
     // -------------------------------------------------------------- Constants
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * The JQuery Form plugin (http://www.malsup.com/jquery/form/):
      * "<tt>/clickclick/jquery/form/jquery-form.js</tt>".
