@@ -18,7 +18,7 @@ public class BarChart extends BorderPage {
     public void onGet() {
         // Render BarChart Page JavaScript
         Map model = new HashMap();
-        model.put("data", getPieData());
+        model.put("data", getChartData());
         model.put("label", "Browser usage %");
         getHeadElements().add(new JsScript("/charts/bar/bar-chart.js", model));
     }
@@ -44,7 +44,7 @@ public class BarChart extends BorderPage {
         return headElements;
     }
 
-    private String getPieData() {
+    private String getChartData() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(20);
         buffer.append("[[2006,69],[2007,55], [2008,40], [2009,35]],");
         buffer.append("[[2006,25],[2007,35], [2008,45], [2009,50]],");
