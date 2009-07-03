@@ -36,4 +36,11 @@
         <menu label="Lazy Load Demo" path="ajax/lazy-load-demo.htm"/>
         <menu label="Ajax Refresh Demo" path="ajax/refresh-demo.htm"/>
     </menu>
+     <menu label="Charts" path="#">
+        <menu label="Line Chart" path="charts/line/line-chart.htm"/>
+        <menu label="Revenue Demo" path="charts/line/revenue-chart.htm"/>
+        <menu label="Interactive Line Chart" path="charts/line/interactive-chart.htm"/>
+        <menu label="Pie Chart" path="charts/pie/pie-chart.htm"/>
+        <menu label="Bar Chart" path="charts/bar/bar-chart.htm"/>
+    </menu>
 </menu>
