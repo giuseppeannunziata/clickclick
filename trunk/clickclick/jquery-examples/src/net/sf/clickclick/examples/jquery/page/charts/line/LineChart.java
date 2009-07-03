@@ -19,7 +19,7 @@ public class LineChart extends BorderPage {
     public void onGet() {
         // Render LineChart Page JavaScript
         Map model = new HashMap();
-        model.put("data", getPieData());
+        model.put("data", getChartData());
         model.put("label", "Employee count");
         getHeadElements().add(new JsScript("/charts/line/line-chart.js", model));
     }
@@ -43,7 +43,7 @@ public class LineChart extends BorderPage {
         return headElements;
     }
 
-    private String getPieData() {
+    private String getChartData() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(20);
         buffer.append("[2006,50],");
         buffer.append("[2007,53],");

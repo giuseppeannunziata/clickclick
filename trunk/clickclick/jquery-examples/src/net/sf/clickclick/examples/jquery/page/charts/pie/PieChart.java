@@ -19,7 +19,7 @@ public class PieChart extends BorderPage {
     public void onGet() {
         // Render PieChart Page JavaScript
         Map model = new HashMap();
-        model.put("data", getPieData());
+        model.put("data", getChartData());
         model.put("label", "Browser usage % for " + Calendar.getInstance().get(Calendar.YEAR));
         getHeadElements().add(new JsScript("/charts/pie/pie-chart.js", model));
     }
@@ -44,7 +44,7 @@ public class PieChart extends BorderPage {
         return headElements;
     }
 
-    private String getPieData() {
+    private String getChartData() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
         buffer.append("['Internet Explorer',40],");
         buffer.append("['Firefox',45],");

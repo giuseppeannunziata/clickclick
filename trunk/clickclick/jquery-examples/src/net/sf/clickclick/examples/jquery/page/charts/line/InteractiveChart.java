@@ -18,7 +18,7 @@ public class InteractiveChart extends BorderPage {
     public void onGet() {
         // Render Chart Page JavaScript
         Map model = new HashMap();
-        model.put("data", getPieData());
+        model.put("data", getChartData());
         model.put("label", "Interactive demo");
         getHeadElements().add(new JsScript("/charts/line/interactive-chart.js", model));
     }
@@ -49,7 +49,7 @@ public class InteractiveChart extends BorderPage {
         return headElements;
     }
 
-    private String getPieData() {
+    private String getChartData() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(20);
         buffer.append("['2009-01-1', 400000],");
         buffer.append("['2009-02-1', 420000],");
