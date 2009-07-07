@@ -10,7 +10,6 @@ ul#horizontalMenu {
   margin: 0;
   border: 0 none;
   padding: 0;
-  width: 500px; /* For KHTML.*/
   list-style: none;
   height: 24px;
 }
