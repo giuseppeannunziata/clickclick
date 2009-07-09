@@ -47,7 +47,7 @@ If the request is an Ajax request, ClickClickServlet tries to find the target Co
 
  # The Control must be registered with AjaxControlRegistry (Registration is normally performed in the _onInit_ event of Ajax enabled Controls. Unless you are writing your own Ajax aware Controls, you don't have to worry about this step)
  # The Control must have an ID attribute defined (ActionLink is an exception and doesn't need an ID attribute. Its name is enough to identify it)
- # The Control must have an AjaxListener instance set
+ # The Control must have an AjaxListener set (AjaxListener is a subclass of ActionListener).
 
 The above three requirements are the necessary steps to take on the server side. On the client side (browser) where the Ajax request is initiated, the following requirements are necessary:
 
