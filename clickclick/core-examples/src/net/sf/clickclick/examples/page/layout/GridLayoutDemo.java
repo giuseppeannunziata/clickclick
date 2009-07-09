@@ -2,7 +2,6 @@ package net.sf.clickclick.examples.page.layout;
 
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
-import org.apache.click.MockContext;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.extras.control.HtmlForm;
@@ -83,15 +82,5 @@ public class GridLayoutDemo extends BorderPage {
                 grid.insert(new TextField(name), row, column);
             }
         }
-    }
-
-    /**
-     * Internal test
-     */
-    public static void main(String[] args) {
-        MockContext.initContext();
-        GridLayoutDemo demo = new GridLayoutDemo();
-        demo.onInit();
-        System.out.println(demo.form);
     }
 }
