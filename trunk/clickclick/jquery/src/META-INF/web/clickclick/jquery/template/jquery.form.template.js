@@ -48,7 +48,7 @@ jQuery(document).ready(function() {
 // pre-submit callback
 function preSubmit(formData, jqForm, options) {
      #if($javascriptValidate)
-       if(!on_form_submit()) return false;
+       if(!on_$!{control.id}_submit()) return false;
      #end
 
      #if($showIndicator == "true")
