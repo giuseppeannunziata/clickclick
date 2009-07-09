@@ -12,6 +12,7 @@
         <menu label="JQuery UI Dialog" path="controls/dialog/dialog-demo.htm"/>
         <menu label="Menu" path="controls/menu.htm"/>
         <menu label="Color Picker" path="controls/color-picker.htm"/>
+        <menu label="File Upload Demo" path="controls/file-upload-demo.htm"/>
     </menu>
     <menu label="Ajax" path="#">
         <menu label="Text Update Demo" path="ajax/text-demo.htm"/>
