@@ -1,6 +1,5 @@
 package net.sf.clickclick.examples.page.control;
 
-import org.apache.click.MockContext;
 import net.sf.clickclick.control.Text;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.control.html.Span;
@@ -14,7 +13,6 @@ import net.sf.clickclick.examples.page.BorderPage;
 
 /**
  *
- * @author Bob Schellink
  */
 public class HtmlBasicsPage extends BorderPage {
 
@@ -95,15 +93,5 @@ public class HtmlBasicsPage extends BorderPage {
             // Add random text to cell
             cell.setText(Integer.toString(i + 1));
         }
-    }
-
-    /**
-     * Inline test
-     */
-    public static void main(String[] args) {        
-        MockContext.initContext();
-        HtmlBasicsPage page = new HtmlBasicsPage();
-        page.onInit();
-        System.out.println(page.table);
     }
 }
