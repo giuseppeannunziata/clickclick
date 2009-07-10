@@ -10,7 +10,6 @@ import net.sf.clickclick.examples.services.CustomerService;
 
 /**
  *
- * @author Bob Schellink
  */
 public class BorderPage extends Page {
 
@@ -19,56 +18,23 @@ public class BorderPage extends Page {
     private Breadcrumb breadcrumb;
 
     public BorderPage() {
-        try {
-            String className = getClass().getName();
+        String className = getClass().getName();
 
-            String shortName = className.substring(className.lastIndexOf('.') +
-                1);
-            String title = ClickUtils.toLabel(shortName);
-            addModel("title", title);
+        String shortName = className.substring(className.lastIndexOf('.') + 1);
+        String title = ClickUtils.toLabel(shortName);
+        addModel("title", title);
 
-            breadcrumb = new Breadcrumb("breadcrumb", 4);
-            breadcrumb.setSeperator(" | ");
-            breadcrumb.getExcludedPaths().add("login");
-            addControl(breadcrumb);
-            setTemplate("border-template.htm");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        breadcrumb = new Breadcrumb("breadcrumb", 4);
+        breadcrumb.setSeperator(" | ");
+        breadcrumb.getExcludedPaths().add("login");
+        addControl(breadcrumb);
     }
 
     public String getTemplate() {
         return "/border-template.htm";
     }
 
-    // ------------------------------------------------------ Protected Methods
-
-    protected Object getSessionObject(Class aClass) {
-        if (aClass == null) {
-            throw new IllegalArgumentException("Null class parameter.");
-        }
-        Object object = getContext().getSessionAttribute(aClass.getName());
-        if (object == null) {
-            try {
-                object = aClass.newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return object;
-    }
-
-    protected void setSessionObject(Object object) {
-        if (object != null) {
-            getContext().setSessionAttribute(object.getClass().getName(), object);
-        }
-    }
-
-    protected void removeSessionObject(Class aClass) {
-        if (getContext().hasSession() && aClass != null) {
-            getContext().getSession().removeAttribute(aClass.getName());
-        }
-    }
+    // -------------------------------------------------------- Service Methods
 
     public CustomerService getCustomerService() {
         return ApplicationRegistry.getInstance().getCustomerService();

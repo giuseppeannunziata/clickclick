@@ -1,16 +1,14 @@
 package net.sf.clickclick.examples.page.repeat;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import net.sf.clickclick.control.Text;
 import net.sf.clickclick.control.html.table.Cell;
-import net.sf.clickclick.control.html.table.HeaderCell;
+import net.sf.clickclick.control.html.table.HeaderRow;
 import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
 import net.sf.clickclick.control.repeater.RepeaterRow;
 import net.sf.clickclick.control.repeater.Repeater;
+import net.sf.clickclick.examples.domain.Customer;
 import net.sf.clickclick.examples.page.BorderPage;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
@@ -19,18 +17,16 @@ import org.apache.click.control.FieldSet;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Submit;
-import org.apache.click.control.Table;
 import org.apache.click.control.TextField;
+import org.apache.click.extras.control.DateField;
+import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.IntegerField;
 import org.apache.commons.lang.StringUtils;
 
 /**
  *
- * @author bob
  */
 public class TableRepeaterPage extends BorderPage {
-
-    public ActionLink reset = new ActionLink("reset", this, "reset");
 
     private Form form = new Form("form");
 
@@ -51,35 +47,33 @@ public class TableRepeaterPage extends BorderPage {
         }
     }
 
-    public boolean reset() {
-        getContext().setSessionAttribute("items", null);
-        setRedirect(TableRepeaterPage.class);
-        return false;
-    }
-
     void createMasterView() {
 
         final HtmlTable table = new HtmlTable("table");
-        table.setAttribute("border", "1");
+        table.setAttribute("class", "gray");
+        table.setBorder(0);
 
         // Set Header Row
-        Row row = new Row();
-        row.add(new HeaderCell("id"));
-        row.add(new HeaderCell("firstname"));
-        row.add(new HeaderCell("lastname"));
-        row.add(new HeaderCell("age"));
-        row.add(new HeaderCell("action"));
+        Row row = new HeaderRow();
+        row.add("id");
+        row.add("name");
+        row.add("age");
+        row.add("dateJoined");
+        row.add("holdings");
+        row.add("action");
         table.add(row);
 
         Repeater repeater = new Repeater() {
 
             public void buildRow(final Object item, final RepeaterRow row, final int index) {
-                Map data = (Map) item;
+                Customer customer = (Customer) item;
+
                 Row tableRow = new Row();
-                tableRow.add(data.get("id"));
-                tableRow.add(data.get("firstname"));
-                tableRow.add(data.get("lastname"));
-                tableRow.add(data.get("age"));
+                tableRow.add(customer.getId());
+                tableRow.add(customer.getName());
+                tableRow.add(customer.getAge());
+                tableRow.add(getFormat().date(customer.getDateJoined()));
+                tableRow.add(getFormat().currency(customer.getHoldings()));
 
                 ActionLink delete = new ActionLink("delete");
                 delete.setActionListener(new ActionListener() {
@@ -114,7 +108,7 @@ public class TableRepeaterPage extends BorderPage {
 
         table.add(repeater);
 
-        repeater.setItems(getItems());
+        repeater.setItems(getTopCustomers());
 
         addControl(table);
     }
@@ -122,28 +116,37 @@ public class TableRepeaterPage extends BorderPage {
     void createDetailView() {
         // Setup customers form
         FieldSet fieldSet = new FieldSet("customer");
-        final HiddenField idField = new HiddenField("id", String.class);
+
+        final HiddenField idField = new HiddenField("id", Long.class);
         fieldSet.add(idField);
-        fieldSet.add(new TextField("firstname"));
-        fieldSet.add(new TextField("lastname"));
+
+        fieldSet.add(new TextField("name"));
+        fieldSet.add(new DateField("dateJoined"));
         fieldSet.add(new IntegerField("age"));
+        fieldSet.add(new DoubleField("holdings"));
+
         form.add(fieldSet);
+
         Submit submit = new Submit("save");
         submit.setActionListener(new ActionListener() {
             public boolean onAction(Control source) {
                 if (form.isValid()) {
                     String id = idField.getValue();
-                    Map data = findItem(id);
-                    form.copyTo(data);
+                    System.out.println("ID : " + id);
+                    Customer customer = getCustomerService().findCustomer(id);
+                    form.copyTo(customer);
+
+                    // In real world app we would save to DB
 
                     // Perform redirect to ensure the form changes are reflected
                     // by the Repeater
-                    // setRedirect(TableRepeaterPage.class);
+                    setRedirect(TableRepeaterPage.class);
                 }
                 return true;
             }
         });
         form.add(submit);
+
         Submit cancel = new Submit("cancel");
         cancel.setActionListener(new ActionListener(){
             public boolean onAction(Control source) {
@@ -153,48 +156,15 @@ public class TableRepeaterPage extends BorderPage {
             }
         });
         form.add(cancel);
-        form.add(new HiddenField(Table.PAGE, String.class));
-        form.add(new HiddenField(Table.COLUMN, String.class));
 
         addControl(form);
     }
 
+    public List<Customer> getTopCustomers() {
+        return getCustomerService().getCustomers().subList(0, 5);
+    }
+
     // -------------------------------------------------------- Private Methods
-
-    private Map findItem(String id) {
-        List items = getItems();
-        Map item = null;
-        for (int i = 0; i < items.size(); i++) {
-            Map tmp = (Map) items.get(i);
-            if (tmp.get("id").equals(id)) {
-                item = tmp;
-                break;
-            }
-        }
-        return item;
-    }
-
-    private List getItems() {
-        List items = (List) getContext().getSessionAttribute("items");
-        if (items == null) {
-            items = createItems();
-            getContext().setSessionAttribute("items", items);
-        }
-        return items;
-    }
-
-    private List createItems() {
-        List list = new ArrayList();
-        for (int i = 0; i < 10; i++) {
-            Map data = new HashMap();
-            data.put("firstname", "one");
-            data.put("lastname", "two");
-            data.put("age", Integer.toString(i));
-            data.put("id", Integer.toString(i * 100));
-            list.add(data);
-        }
-        return list;
-    }
 
     private boolean isEditMode() {
         String formName = getContext().getRequestParameter(Form.FORM_NAME);
