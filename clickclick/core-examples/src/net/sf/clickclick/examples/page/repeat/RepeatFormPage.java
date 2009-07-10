@@ -1,6 +1,5 @@
 package net.sf.clickclick.examples.page.repeat;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
@@ -12,6 +11,7 @@ import net.sf.clickclick.control.panel.HorizontalPanel;
 import net.sf.clickclick.control.panel.VerticalPanel;
 import net.sf.clickclick.control.repeater.RepeaterRow;
 import net.sf.clickclick.control.repeater.Repeater;
+import net.sf.clickclick.examples.domain.Customer;
 import net.sf.clickclick.examples.domain.Product;
 import org.apache.click.extras.control.SubmitLink;
 
@@ -26,8 +26,8 @@ public class RepeatFormPage extends AbstractRepeatPage {
         add.setActionListener(new ActionListener() {
 
             public boolean onAction(Control source) {
-                Product product = new Product();
-                repeater.addItem(product);
+                Customer customer = new Customer();
+                repeater.addItem(customer);
                 return true;
             }
         });
@@ -103,46 +103,27 @@ public class RepeatFormPage extends AbstractRepeatPage {
                 form.copyFrom(item);
             }
         };
-        repeater.setItems(getProducts());
+        repeater.setItems(getTopCustomers());
 
         addControl(repeater);
     }
 
     public boolean onSubmit(Object item, int index) {
-        List products = getProducts();
         RepeaterRow row = (RepeaterRow) repeater.getControls().get(index);
         Form form = (Form) row.getControl("form");
         if (form.isValid()) {
-            System.out.println("**** Form valid **** ");
             repeater.copyTo(item);
-            System.out.println("Product after copy -> " + products.get(index));
-        } else {
-            System.out.println("WARNING: Form invalid");
         }
         return true;
     }
 
     public void onRender() {
-        toggleLinks(getProducts().size());
+        toggleLinks(getTopCustomers().size());
     }
 
     // -------------------------------------------------------- Private Methods
 
-    private List getProducts() {
-        List products = (List) getContext().getSessionAttribute("products");
-        if (products == null) {
-            products = createProducts();
-            getContext().setSessionAttribute("products", products);
-        }
-        return products;
+    private List getTopCustomers() {
+        return getCustomerService().getCustomers().subList(0, 5);
     }
-
-    private List createProducts() {
-        List list = new ArrayList();
-        list.add(new Product("Ham"));
-        list.add(new Product("Cheese"));
-        list.add(new Product("Meat"));
-        return list;
-    }
-
 }
