@@ -65,6 +65,9 @@ public class MenuBuilder {
         menu = createMenu("Repeater");
         rootMenu.add(menu);
 
+        subMenu = createMenu("Basic Repeater", "repeat/basic-repeater.htm");
+        menu.add(subMenu);
+
         subMenu = createMenu("Repeat Form", "repeat/repeat-form.htm");
         menu.add(subMenu);
 
