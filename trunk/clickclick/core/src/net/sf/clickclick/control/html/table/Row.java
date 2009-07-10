@@ -19,8 +19,6 @@ import org.apache.click.control.AbstractControl;
 
 /**
  * Provide a table row control: &lt;tr&gt;.
- *
- * @author Bob Schellink
  */
 public class Row extends AbstractContainer {
 
@@ -110,6 +108,9 @@ public class Row extends AbstractContainer {
      * object. The text object will be added to the given column. If the column
      * does not exist, the row will {@link #expandCells(int) expand} until
      * enough columns are available to add the control.
+     * <p/>
+     * This method delegates to {@link #createCell()} to instantiate new Cell
+     * objects.
      *
      * @param text the text to add to the row
      * @param column the column to add the text to
@@ -122,7 +123,7 @@ public class Row extends AbstractContainer {
         if (text == null) {
             text = "";
         }
-        Cell cell = new Cell();
+        Cell cell = createCell();
         cell.setText(text.toString());
         return insert(cell, column);
     }
@@ -133,6 +134,9 @@ public class Row extends AbstractContainer {
      * enough columns are available to add the control. If the column does
      * exist the new Cell will be inserted at the given column and all cells
      * to the right will move one column up.
+     * <p/>
+     * This method delegates to {@link #createCell()} to instantiate new Cell
+     * objects.
      *
      * @param column the column to add the new Cell to
      * @return the newly created Cell object
@@ -145,7 +149,7 @@ public class Row extends AbstractContainer {
             expandCells(column);
             return getCell(column);
         } else {
-            Cell newCell = new Cell();
+            Cell newCell = createCell();
             insert(newCell, column);
             return newCell;
         }
@@ -193,7 +197,10 @@ public class Row extends AbstractContainer {
     }
 
     /**
-     * Adds cells to the row up to and including the specified column.
+     * Add cells to the row up to and including the specified column.
+     * <p/>
+     * This method delegates to {@link #createCell()} to instantiate new Cell
+     * objects.
      *
      * @param column specifies number of cells the row should have
      */
@@ -208,9 +215,20 @@ public class Row extends AbstractContainer {
         int columnCount = getColumnCount();
         Cell newCell = null;
         while(columnCount < column) {
-            newCell = new Cell();
+            newCell = createCell();
             add(newCell);
             columnCount++;
         }
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Create and return a new {@link Cell} instance.
+     *
+     * @return a newly created Cell instance
+     */
+    protected Cell createCell() {
+        return new Cell();
     }
 }
