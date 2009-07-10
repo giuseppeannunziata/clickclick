@@ -55,12 +55,12 @@ public class TableRepeaterPage extends BorderPage {
 
         // Set Header Row
         Row row = new HeaderRow();
-        row.add("id");
-        row.add("name");
-        row.add("age");
-        row.add("dateJoined");
-        row.add("holdings");
-        row.add("action");
+        row.add("Id");
+        row.add("Name");
+        row.add("Age");
+        row.add("Date Joined");
+        row.add("Holdings");
+        row.add("Action");
         table.add(row);
 
         Repeater repeater = new Repeater() {
