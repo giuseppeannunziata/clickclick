@@ -12,7 +12,6 @@ import net.sf.clickclick.control.panel.VerticalPanel;
 import net.sf.clickclick.control.repeater.RepeaterRow;
 import net.sf.clickclick.control.repeater.Repeater;
 import net.sf.clickclick.examples.domain.Customer;
-import net.sf.clickclick.examples.domain.Product;
 import org.apache.click.extras.control.SubmitLink;
 
 public class RepeatFormPage extends AbstractRepeatPage {
@@ -52,7 +51,7 @@ public class RepeatFormPage extends AbstractRepeatPage {
                 Form form = new Form("form");
                 row.add(form);
 
-                FieldSet fieldSet = new FieldSet("product");
+                FieldSet fieldSet = new FieldSet("customer");
                 form.add(horizontalPanel);
                 horizontalPanel.add(fieldSet);
                 horizontalPanel.add(verticalPanel);
@@ -70,8 +69,8 @@ public class RepeatFormPage extends AbstractRepeatPage {
                 Submit insert = new Submit("insert");
                 insert.setActionListener(new ActionListener() {
                     public boolean onAction(Control source) {
-                        Product product = new Product();
-                        repeater.insertItem(product, index);
+                        Customer customer = new Customer();
+                        repeater.insertItem(customer, index);
                         return true;
                     }
                 });
