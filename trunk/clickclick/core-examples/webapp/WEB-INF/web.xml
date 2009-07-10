@@ -5,6 +5,14 @@
         <param-name>config-service-class</param-name>
         <param-value>org.apache.click.service.ClickClickConfigService</param-value>
     </context-param>
+
+  	<!--
+    	Provides an in-memory domain.
+    -->
+    <listener>
+    		<listener-class>net.sf.clickclick.examples.util.StartupListener</listener-class>
+    </listener>
+
     <filter>
         <filter-name>reload-filter</filter-name>
         <filter-class>net.sf.clickclick.reload.ReloadClassFilter</filter-class>
@@ -21,7 +29,8 @@
                 excludes
             </param-name>
             <param-value>
-                net.sf.clickclick.examples.domain
+                net.sf.clickclick.examples.domain, net.sf.clickclick.examples.services,
+                net.sf.clickclick.examples.util
             </param-value>
         </init-param>
     </filter>

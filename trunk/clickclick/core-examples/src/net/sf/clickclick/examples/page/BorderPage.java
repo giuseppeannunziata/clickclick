@@ -5,6 +5,8 @@ import org.apache.click.extras.control.Menu;
 import org.apache.click.util.ClickUtils;
 import net.sf.clickclick.control.breadcrumb.Breadcrumb;
 import net.sf.clickclick.examples.nav.MenuBuilder;
+import net.sf.clickclick.examples.services.ApplicationRegistry;
+import net.sf.clickclick.examples.services.CustomerService;
 
 /**
  *
@@ -66,5 +68,9 @@ public class BorderPage extends Page {
         if (getContext().hasSession() && aClass != null) {
             getContext().getSession().removeAttribute(aClass.getName());
         }
+    }
+
+    public CustomerService getCustomerService() {
+        return ApplicationRegistry.getInstance().getCustomerService();
     }
 }
