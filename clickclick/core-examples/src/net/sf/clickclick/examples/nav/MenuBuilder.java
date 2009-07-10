@@ -1,10 +1,15 @@
 package net.sf.clickclick.examples.nav;
 
-import org.apache.click.Context;
-import org.apache.click.extras.control.Menu;
 import net.sf.clickclick.control.menu.FlexiMenu;
 
+import org.apache.click.Context;
+import org.apache.click.extras.control.Menu;
+import org.apache.click.util.HtmlStringBuffer;
+
 public class MenuBuilder {
+
+	private MenuBuilder() {
+	}
 
     private static class MenuHolder {
         private static Menu INSTANCE = createMenus();
@@ -80,21 +85,13 @@ public class MenuBuilder {
         menu = createMenu("Reload", "reload/resource-bundle.htm");
         rootMenu.add(menu);
 
-        Context context = Context.getThreadLocalContext();
-        Class pageClass = context.getPageClass(context.getResourcePath());
+        menu = createJavaSourceMenu("Page Java");
+        menu.setAttribute("target", "_blank");
+        rootMenu.add(menu);
 
-        if (pageClass != null) {
-            String pageClassName = pageClass.getName();
-            String srcPath = pageClassName.replace('.', '/') + ".java";
-
-            menu = createMenu("Page Java", "source-viewer.htm?filename=WEB-INF/classes/" + srcPath);
-            menu.setAttribute("target", "_blank");
-            rootMenu.add(menu);
-
-            menu = createMenu("Page HTML", "source-viewer.htm?filename=" + context.getPagePath(pageClass));
-            menu.setAttribute("target", "_blank");
-            rootMenu.add(menu);
-        }
+        menu = createPageHtmlMenu("Page HTML");
+        menu.setAttribute("target", "_blank");
+        rootMenu.add(menu);
 
         return rootMenu;
     }
@@ -110,6 +107,40 @@ public class MenuBuilder {
         FlexiMenu menu = new FlexiMenu();
         menu.setLabel(label);
         menu.setPath(path);
+        menu.setTitle(label);
+        return menu;
+    }
+
+    private static FlexiMenu createJavaSourceMenu(String label) {
+        FlexiMenu menu = new FlexiMenu() {
+
+            public String getHref() {
+                Context context = Context.getThreadLocalContext();
+                Class pageClass =
+                    context.getPageClass(context.getResourcePath());
+                String pageClassName = pageClass.getName();
+                String srcPath = pageClassName.replace('.', '/') + ".java";
+                setPath("source-viewer.htm?filename=WEB-INF/classes/" + srcPath);
+                return super.getHref();
+            }
+        };
+        menu.setLabel(label);
+        menu.setTitle(label);
+        return menu;
+    }
+
+    private static FlexiMenu createPageHtmlMenu(String label) {
+        FlexiMenu menu = new FlexiMenu() {
+
+            public String getHref() {
+                Context context = Context.getThreadLocalContext();
+                Class pageClass =
+                    context.getPageClass(context.getResourcePath());
+                setPath("source-viewer.htm?filename=" + context.getPagePath(pageClass));
+                return super.getHref();
+            }
+        };
+        menu.setLabel(label);
         menu.setTitle(label);
         return menu;
     }
