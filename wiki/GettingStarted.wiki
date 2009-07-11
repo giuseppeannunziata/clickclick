@@ -1,6 +1,6 @@
 #summary How to get started with ClickClick
 
-Most of the components shipped with !ClickClick are dependent on features provided by the [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/core/src/net/sf/clickclick/ClickClickServlet.java ClickClickServlet].
+Most of the components shipped with !ClickClick are dependent on features provided by the [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/ClickClickServlet.html ClickClickServlet].
 
 Some features provided by !ClickClickServlet incldues:
 
