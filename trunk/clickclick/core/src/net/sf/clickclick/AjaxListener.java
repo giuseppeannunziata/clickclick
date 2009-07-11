@@ -52,7 +52,7 @@ import org.apache.click.Control;
  *
  *    public Partial onLinkClick() {
  *       Partial partial = new Partial();
- *       partial.setContent("<script>alert('Hello World');</script>");
+ *       partial.setContent("&lt;script&gt;alert('Hello World');&lt;/script&gt;");
  *       return partial;
  *    }
  * }
