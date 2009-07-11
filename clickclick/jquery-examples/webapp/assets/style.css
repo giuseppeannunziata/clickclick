@@ -26,6 +26,12 @@ input, label, td {
 	top: 10px;
 }
 
+#link, #link a {
+	position: absolute;
+	right: 5px;
+	bottom: 3px;
+}
+
 #container { 
 	padding-top: 1.5em;
 	padding-left: 1.5em;
