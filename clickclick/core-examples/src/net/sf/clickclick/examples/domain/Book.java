@@ -1,12 +1,15 @@
 package net.sf.clickclick.examples.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A book class.
  */
-public class Book {
+public class Book implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
     private String name;
     
