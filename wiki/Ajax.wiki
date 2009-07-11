@@ -1,6 +1,6 @@
 #summary Outlines Ajax support in ClickClick
 
-!ClickClick provides out-of-the-box server side Ajax support through [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/core/src/net/sf/clickclick/ClickClickServlet.java ClickClickServlet].
+!ClickClick provides out-of-the-box server side Ajax support through [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/ClickClickServlet.html ClickClickServlet].
 
 === Activate Ajax Support ===
 
@@ -8,7 +8,7 @@ To use Ajax you must use the !ClickClickServlet. See GettingStarted on how to se
 
 === Introduction ===
 
-The !ClickClickServlet allows you to set an !AjaxListener instance on Click Controls that is dispatched when an Ajax request targets the Control.
+The !ClickClickServlet allows you to set an [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/AjaxListener.html AjaxListener] instance on Click Controls that is dispatched when an Ajax request targets the Control.
 
 For example:
 
@@ -37,9 +37,9 @@ public class AjaxDemo extends Page {
 }
 }}}
 
-In the example above an Ajax aware !ActionLink is created and an !AjaxAdapter listener is registered on the link that is dispatched when the link is clicked.
+In the example above an [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/control/AjaxActionLink.html AjaxActionLink] is created and an [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/util/AjaxAdapter.html AjaxAdapter] is registered on the link that is dispatched when the link is clicked.
 
-Inside the listener a !Partial instance is created (Partial represents a partial page response) that returns the markup "{{{<h2>Hello world!</h2>}}}" to the browser.
+Inside the listener a [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/util/Partial.html Partial] instance is created (Partial represents a partial page response) that returns the markup "{{{<h2>Hello world!</h2>}}}" to the browser.
 
 === How Ajax support works ===
 
@@ -47,7 +47,7 @@ When !ClickClickServlet receives a request it first checks if the request is an 
 
 If the request is an Ajax request, ClickClickServlet tries to find the target Control of the Ajax request. On the server side there are three requirements that must be fulfilled in order to target a Control. (*Note:* some of these steps are performed by Ajax aware Controls or Ajax helper classes, however for completeness all steps are listed):
 
- # The Control must be registered with AjaxControlRegistry (Registration is normally performed in the _onInit_ event of Ajax enabled Controls. Unless you are writing your own Ajax aware Controls, you don't have to worry about this step)
+ # The Control must be registered with [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/AjaxControlRegistry.html AjaxControlRegistry] (Registration is normally performed in the _onInit_ event of Ajax enabled Controls. Unless you are writing your own Ajax aware Controls, you don't have to worry about this step)
  # The Control must have an ID attribute defined (ActionLink is an exception and doesn't need an ID attribute. Its name is enough to identify it)
  # The Control must have an AjaxListener set (AjaxListener is a subclass of ActionListener).
 
