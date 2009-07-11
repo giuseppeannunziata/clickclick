@@ -55,7 +55,7 @@ The above three requirements are the necessary steps to take on the server side.
 
  # The ID of the target Control must be specified as a request parameter.
 
-The value of the ID attribute can be an arbitrary value and is in fact ignored by Click. (Sometimes !ActionLinks (&lt;a href="..."&gt;) do not specify an ID parameter. For example when a Table row is decorated with an !ActionLink, specifying the ID attribute will result in each Table row rendering an !ActionLink with the same ID, which isn't allowed by the HTML spec. To work around this problem !ClickClickServlet will also check for the presence of the "actionLink" parameter).
+The value of the ID attribute can be an arbitrary value and is in fact ignored by Click. (Sometimes !ActionLinks (<a href="...">) do not specify an ID parameter. For example when a Table row is decorated with an !ActionLink, specifying the ID attribute will result in each Table row rendering an !ActionLink with the same ID, which isn't allowed by the HTML spec. To work around this problem !ClickClickServlet will also check for the presence of the "actionLink" parameter).
 
 Below is an example where we create a new !AjaxActionLink and set the ID value to "linkId".
 
