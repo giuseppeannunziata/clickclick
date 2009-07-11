@@ -1,10 +1,13 @@
 package net.sf.clickclick.examples.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Customer {
+public class Customer implements Serializable {
 
-    private Boolean active;
+	private static final long serialVersionUID = 1L;
+
+	private Boolean active;
     private Integer age;
     private Date dateJoined;
     private String email;
