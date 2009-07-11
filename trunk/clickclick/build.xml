@@ -313,7 +313,14 @@
         <copy file="documentation/javadoc-stylesheet.css"
             overwrite="true"
             tofile="documentation/mootools-api/stylesheet.css"/>
-        
+
+        <delete quiet="false" failonerror="false">
+             <fileset dir="../site/javadoc" includes="**/*"/>
+        </delete>
+
+        <copy todir="../site/javadoc" overwrite="true">
+            <fileset dir="documentation"/>
+        </copy>
 
     </target>
 
@@ -387,8 +394,9 @@ Please ensure you have configured build.properties</echo>
                      doctitle="@{doctitle}">
                 <classpath refid="@{classpath}"/>
                 <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
-                <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
-                <link href="http://click.sourceforge.net/docs/click-api/"/>
+                <link href="http://java.sun.com/j2ee/1.4/docs/api/"/>
+                <link href="http://incubator.apache.org/click/docs/click-api/"/>
+                <link href="http://incubator.apache.org/click/docs/extras-api/"/>
                 <bottom>${root.properties.highlighter}</bottom>
             </javadoc>
 
