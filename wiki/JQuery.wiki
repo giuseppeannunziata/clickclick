@@ -1,6 +1,6 @@
 #summary Outlines jQuery support in ClickClick
 
-Please see the section [Ajax], for details on the Ajax support provided by !ClickClick
+Please see the section [Ajax], for details on Ajax support provided by !ClickClick
 
 ===  JQuery Subproject ===
 
