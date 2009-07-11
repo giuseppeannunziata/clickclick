@@ -47,11 +47,17 @@
                 background: url(${context}/assets/images/header.gif);
                 background-color: #000080;
                 height: 109px;
+                position: relative;
             }
+
+            #link, #link a {
+                color: white;
+                right: 5px;
+                bottom: 5px;
+                position: absolute;
+            }
+
             #footer {
-                /*background-color: #FF9933;
-                color: #ffffff;
-                height: 7px;*/
                 margin-top: 5px;
             }
         </style>
@@ -59,7 +65,9 @@
     <body>
         <div class="container">
             <div id="header" class="span-24">
-                
+                <span id="link">
+                    <a target="_blank" href="http://code.google.com/p/clickclick/">ClickClick</a>
+                </span>
             </div>
             <div id="navbar" class="span-24">
                 ${breadcrumb}
