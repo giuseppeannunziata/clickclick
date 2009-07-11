@@ -37,7 +37,7 @@ public class AjaxDemo extends Page {
 }
 }}}
 
-In the example above an [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/control/AjaxActionLink.html AjaxActionLink] is created and an [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/util/AjaxAdapter.html AjaxAdapter] is registered on the link that is dispatched when the link is clicked.
+In the example above an [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/control/ajax/AjaxActionLink.html AjaxActionLink] is created and an [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/util/AjaxAdapter.html AjaxAdapter] is registered on the link that is dispatched when the link is clicked.
 
 Inside the listener a [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/util/Partial.html Partial] instance is created (Partial represents a partial page response) that returns the markup "{{{<h2>Hello world!</h2>}}}" to the browser.
 
@@ -45,19 +45,19 @@ Inside the listener a [http://clickclick.googlecode.com/svn/trunk/site/javadoc/c
 
 When !ClickClickServlet receives a request it first checks if the request is an Ajax request or not. An Ajax request contains the special header "X_REQUESTED_WITH" which most Ajax libraries such as JQuery, Prototype etc specifies on the request.
 
-If the request is an Ajax request, ClickClickServlet tries to find the target Control of the Ajax request. On the server side there are three requirements that must be fulfilled in order to target a Control. (*Note:* some of these steps are performed by Ajax aware Controls or Ajax helper classes, however for completeness all steps are listed):
+If the request is an Ajax request, !ClickClickServlet tries to find the target Control of the Ajax request. On the server side there are three requirements that must be fulfilled in order to target a Control. (*Note:* some of these steps are performed by Ajax aware Controls or Ajax helper classes, however for completeness all steps are listed):
 
  # The Control must be registered with [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/AjaxControlRegistry.html AjaxControlRegistry] (Registration is normally performed in the _onInit_ event of Ajax enabled Controls. Unless you are writing your own Ajax aware Controls, you don't have to worry about this step)
- # The Control must have an ID attribute defined (ActionLink is an exception and doesn't need an ID attribute. Its name is enough to identify it)
- # The Control must have an AjaxListener set (AjaxListener is a subclass of ActionListener).
+ # The Control must have an ID attribute defined (!ActionLink is an exception and doesn't need an ID attribute. Its name is enough to identify it)
+ # The Control must have an !AjaxListener set (!AjaxListener is a subclass of !ActionListener).
 
 The above three requirements are the necessary steps to take on the server side. On the client side (browser) where the Ajax request is initiated, the following requirements are necessary:
 
  # The ID of the target Control must be specified as a request parameter.
 
-The value of the ID attribute can be an arbitrary value and is in fact ignored by Click. (Sometimes ActionLinks (&lt;a href="..."&gt;) do not specify an ID parameter. For example when a Table row is decorated with an ActionLink, specifying the ID attribute will result in each Table row rendering an ActionLink with the same ID, which isn't allowed by the HTML spec. To work around this problem !ClickClickServlet will also check for the presence of the "actionLink" parameter).
+The value of the ID attribute can be an arbitrary value and is in fact ignored by Click. (Sometimes !ActionLinks (&lt;a href="..."&gt;) do not specify an ID parameter. For example when a Table row is decorated with an !ActionLink, specifying the ID attribute will result in each Table row rendering an !ActionLink with the same ID, which isn't allowed by the HTML spec. To work around this problem !ClickClickServlet will also check for the presence of the "actionLink" parameter).
 
-Below is an example where we create a new AjaxActionLink and set the ID value to "linkId".
+Below is an example where we create a new !AjaxActionLink and set the ID value to "linkId".
 
 {{{
 public class AjaxDemo extends Page {
@@ -128,9 +128,9 @@ Stepping through the Ajax request sequence, a Page is created and its `onSecurit
 
 The next event handler is `onInit()` where Page Controls are created such as Forms, Fields and Tables.
 
-Next, the target Ajax control is processed and if the control action listener is set, it is invoked. ClickClick provides an AjaxListener, subclass of ActionListener, that returns a Partial object.
+Next, the target Ajax control is processed and if the control action listener is set, it is invoked. !ClickClick provides an !AjaxListener, subclass of !ActionListener, that returns a Partial object.
 
-Finally ClickClickServlet renders the Partial response to the browser.
+Finally !ClickClickServlet renders the Partial response to the browser.
 
 A Partial can be described as a fragment (of a Page) sent back to the browser. For example a Partial can be used to return new Controls, or add rows to a Table.
 
