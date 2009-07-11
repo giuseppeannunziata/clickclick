@@ -132,8 +132,18 @@ public class TableRepeaterPage extends BorderPage {
             public boolean onAction(Control source) {
                 if (form.isValid()) {
                     String id = idField.getValue();
-                    System.out.println("ID : " + id);
-                    Customer customer = getCustomerService().findCustomer(id);
+                    Customer customer = null;
+                    if (StringUtils.isBlank(id)) {
+                        // Create new customer. This call assigs a unique ID value
+                        customer = getCustomerService().createCustomer();
+
+                        // Update the idField value to the new customer ID value
+                        idField.setValueObject(customer.getId());
+
+                        getCustomerService().getCustomers().add(0, customer);
+                    } else {
+                        customer = getCustomerService().findCustomer(id);
+                    }
                     form.copyTo(customer);
 
                     // In real world app we would save to DB

@@ -21,4 +21,12 @@ public class CustomerService {
         }
         return null;
     }
+
+    public Customer createCustomer() {
+        Customer customer = new Customer();
+        List<Customer> customers = getCustomers();
+        Long prevId = customers.get(customers.size() - 1).getId();
+        customer.setId(prevId + 1);
+        return customer;
+    }
 }
