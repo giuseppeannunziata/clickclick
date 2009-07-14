@@ -4,11 +4,6 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
     version="2.4">
 
-  <!-- Listener which enables Google App Engine functionality -->
-  <listener>
-    <listener-class>org.apache.click.extras.gae.GoogleAppEngineListener</listener-class>
-  </listener>
-
 	<!--
 	Provides an in-memory domain.
 	-->
