@@ -6,7 +6,53 @@ Please see the section [Ajax], for details on Ajax support provided by !ClickCli
 
 The jQuery sub-project provides tight integration between Click and the [http://jquery.com/ jQuery] !JavaScript library.
 
-JQuery support centers around the jQuery [http://malsup.com/jquery/taconite/ Taconite plugin], which allows for specifying a list of command to execute as the result of an Ajax request.
+JQuery support centers around the jQuery [http://malsup.com/jquery/taconite/ Taconite plugin]. Taconite is a plugin that allows you to make multiple DOM updates with a single Ajax request. With Taconite you specify a list of commands to be executed as the result of an Ajax request.
+
+Taconite commands are built as a single XML document, which is returned to the browser where the commands are executed one by one.
+
+The jQuery-Click subproject provides a Java wrapper for the Taconite plugin so you don't have to write any XML code yourself.
+
+To see this in action here is an example:
+
+{{{
+public class MyPage extends Page {
+
+    // Create a new jQuery ActionLink control called "link"
+    private JQActionLink link = new JQActionLink("link");
+
+    public void onInit() {
+        addControl(link);
+
+        link.setActionListener(new OnClickListner());
+    }
+
+    class OnClickListener extends AjaxAdapter {
+
+        // When the link is clicked, this method is invoked that returns a Taconite
+        // instance
+        public Partial onAjaxAction(Control source) {
+
+            // Create a new Taconite partial instance
+            Taconite partial = new Taconite();
+
+            // Insert a Table after the link
+            partial.after(link, new Table("table"));
+
+            return partial;
+        }
+    }
+}
+}}}
+
+The Taconite instance above will render the following XML document:
+{{{
+<taconite>
+    <after select="#link">
+        <table name="table" id="table">
+        </table>
+    </after> 
+</taconite> 
+}}}
 
 === Features ===
 
