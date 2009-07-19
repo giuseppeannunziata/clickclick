@@ -10,7 +10,7 @@ JQuery support centers around the jQuery [http://malsup.com/jquery/taconite/ Tac
 
 Taconite commands are built as a single XML document, which is returned to the browser where the commands are executed one by one.
 
-The jQuery-Click subproject provides the [[http://clickclick.googlecode.com/svn/trunk/site/javadoc/jquery-api/net/sf/clickclick/jquery/util/Taconite.html Taconite] Java class to wrap the Taconite plugin so you don't have to write any XML code yourself.
+The jQuery-Click subproject provides the [http://clickclick.googlecode.com/svn/trunk/site/javadoc/jquery-api/net/sf/clickclick/jquery/util/Taconite.html Taconite] Java class to wrap the Taconite plugin so you don't have to write any XML code yourself.
 
 To see this in action here is an example:
 
