@@ -85,7 +85,7 @@ public class MyPage extends Page {
             Span span = new Span();
             span.setText("Hello World!");
 
-            // Insert a Div element before the table
+            // Insert a Span element before the table
             partial.before(table, span);
 
             return partial;
