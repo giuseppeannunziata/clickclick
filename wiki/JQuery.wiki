@@ -116,7 +116,7 @@ Here are the list of this project features:
 
  * Ajax actions can return any Click control to the browser. For example, one can submit a Form using Ajax and allow the Partial to only return the updated Form, which may or may not contain validation errors
  * When Ajax actions return a Click Control, the Control's CSS and !JavaScript resources must be returned as well, otherwise the Control won't function correctly
- * If CSS and JavaScript resources are already available to the browser, they must be ignored. For example if an Ajax action returns a Form, the Form's resources (control.js, control.css) will also be returned and added to the browser's DOM. However if a second Ajax action again returns a Form, it will detect that the resources (control.js and control.css) are already available to the browser and won't add them again. For those interested if the resources are added again, the browser will download the control.js JavaScript again, which is unnecessary.
+ * If CSS and JavaScript resources are already available to the browser, they must be ignored. For example if an Ajax action returns a Form, the Form's resources (control.js, control.css) will also be returned and added to the browser's DOM. However if a second Ajax action again returns a Form, it will detect that the resources (control.js and control.css) are already available to the browser and won't add them again.
 
 === Infrastructure ===
 
