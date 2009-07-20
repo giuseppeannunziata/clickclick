@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.clickclick.jquery.controls.ajax;
+package net.sf.clickclick.jquery.control.ajax;
 
 import java.util.List;
 import net.sf.clickclick.control.ajax.AjaxForm;

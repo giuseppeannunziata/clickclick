@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.clickclick.jquery.controls;
+package net.sf.clickclick.jquery.control;
 
 import java.util.HashMap;
 import java.util.List;
