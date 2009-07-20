@@ -2,8 +2,8 @@ package net.sf.clickclick.examples.jquery.page.controls;
 
 import java.util.HashMap;
 import java.util.List;
+import net.sf.clickclick.examples.jquery.control.ui.UISliderField;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.ui.UISliderField;
 import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Submit;

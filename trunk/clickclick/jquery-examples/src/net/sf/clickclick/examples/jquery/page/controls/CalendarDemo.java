@@ -2,8 +2,8 @@ package net.sf.clickclick.examples.jquery.page.controls;
 
 import java.util.List;
 import java.util.Map;
+import net.sf.clickclick.examples.jquery.control.ui.UICalendarField;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.ui.UICalendarField;
 import org.apache.click.control.Form;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;

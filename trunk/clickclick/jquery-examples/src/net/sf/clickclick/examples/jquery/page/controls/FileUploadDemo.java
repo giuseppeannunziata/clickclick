@@ -2,7 +2,7 @@ package net.sf.clickclick.examples.jquery.page.controls;
 
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.control.ajax.JQForm;
-import net.sf.clickclick.jquery.util.Taconite;
+import net.sf.clickclick.jquery.Taconite;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
 import org.apache.click.Control;
