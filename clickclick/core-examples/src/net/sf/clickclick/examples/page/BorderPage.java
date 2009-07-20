@@ -25,7 +25,7 @@ public class BorderPage extends Page {
         addModel("title", title);
 
         breadcrumb = new Breadcrumb("breadcrumb", 4);
-        breadcrumb.setSeperator(" | ");
+        breadcrumb.setSeparator(" | ");
         breadcrumb.getExcludedPaths().add("login");
         addControl(breadcrumb);
     }
