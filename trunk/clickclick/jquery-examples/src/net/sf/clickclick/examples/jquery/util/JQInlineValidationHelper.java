@@ -2,7 +2,7 @@ package net.sf.clickclick.examples.jquery.util;
 
 import java.util.Iterator;
 import java.util.List;
-import net.sf.clickclick.jquery.controls.JQColorPicker;
+import net.sf.clickclick.jquery.control.JQColorPicker;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Field;
 import org.apache.click.control.FileField;

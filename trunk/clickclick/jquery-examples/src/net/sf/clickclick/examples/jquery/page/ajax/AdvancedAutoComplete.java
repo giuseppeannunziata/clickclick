@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.ajax.JQAutoCompleteTextField;
+import net.sf.clickclick.jquery.control.ajax.JQAutoCompleteTextField;
 import net.sf.clickclick.jquery.helper.JQAutoCompleteHelper;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;

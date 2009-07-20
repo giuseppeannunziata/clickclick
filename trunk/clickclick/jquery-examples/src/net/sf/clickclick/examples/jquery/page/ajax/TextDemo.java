@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import net.sf.clickclick.control.html.HtmlLabel;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.ajax.JQActionLink;
+import net.sf.clickclick.jquery.control.ajax.JQActionLink;
 import net.sf.clickclick.jquery.util.Taconite;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;

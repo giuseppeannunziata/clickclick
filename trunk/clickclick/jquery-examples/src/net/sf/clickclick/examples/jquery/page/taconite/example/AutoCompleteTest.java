@@ -3,7 +3,7 @@ package net.sf.clickclick.examples.jquery.page.taconite.example;
 import java.util.ArrayList;
 import java.util.List;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.ajax.JQAutoCompleteTextField;
+import net.sf.clickclick.jquery.control.ajax.JQAutoCompleteTextField;
 import net.sf.clickclick.jquery.helper.JQAutoCompleteHelper;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
