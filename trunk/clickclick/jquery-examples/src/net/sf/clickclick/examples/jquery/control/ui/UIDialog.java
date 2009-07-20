@@ -15,8 +15,8 @@ package net.sf.clickclick.examples.jquery.control.ui;
 
 import java.util.List;
 import net.sf.clickclick.control.html.Div;
+import net.sf.clickclick.examples.jquery.util.UIUtils;
 import net.sf.clickclick.jquery.helper.JQHelper;
-import net.sf.clickclick.jquery.util.UIUtils;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
 
