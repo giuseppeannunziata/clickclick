@@ -121,7 +121,7 @@
                 <classpath refid="@{cp}"/>
                 <packageset dir="@{name}-examples/src"/>
                 <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
-                <link href="http://click.sourceforge.net/docs/click-api/"/>
+                <link href="http://incubator.apache.org/click/docs/click-api/"/>
                 <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
             </javadoc>
             <copy file="documentation/javadoc-stylesheet.css"
@@ -290,7 +290,7 @@
                     destdir="documentation/jquery-api"
                     windowtitle="ClickClick jQuery Extensions API"
                     doctitle="ClickClick jQuery API"
-                    classpath="classpath"
+                    classpath="jquery.classpath"
                     overview="documentation/jquery-overview.html"/>
         <copy file="documentation/javadoc-stylesheet.css" overwrite="true"
             tofile="documentation/jquery-api/stylesheet.css"/>
@@ -308,7 +308,7 @@
                     destdir="documentation/mootools-api"
                     windowtitle="ClickClick MooTools Extensions API"
                     doctitle="ClickClick MooTools API"
-                    classpath="classpath"
+                    classpath="mootools.classpath"
                     overview="documentation/mootools-overview.html"/>
         <copy file="documentation/javadoc-stylesheet.css"
             overwrite="true"

@@ -793,7 +793,7 @@ public class JQHelper implements Serializable {
      * <p/>
      * The following values are added:
      * <ul>
-     * <li>"{@link #context}" - the request context path e.g: '/myapp'</li>
+     * <li>"context" - the request context path e.g: '/myapp'</li>
      * <li>"{@link #control}" - the target control</li>
      * <li>"{@link #selector}" - the CSS selector</li>
      * <li>"{@link #event}" - the event that initiates the Ajax request</li>
@@ -858,7 +858,7 @@ public class JQHelper implements Serializable {
      * <p/>
      * This method does the following:
      * <ul>
-     * <li>Regsiters the target {@link control} on the {@link net.sf.clickclick.AjaxControlRegistry}
+     * <li>Regsiters the target {@link #control} on the {@link net.sf.clickclick.AjaxControlRegistry}
      * by invoking {@link net.sf.clickclick.AjaxControlRegistry#registerAjaxControl(Control)}</li>
      * <li>invokes {@link #addHeadElements(java.util.List)} which adds the necessary
      * JavaScript imports and scripts to enable Ajax requests</li>

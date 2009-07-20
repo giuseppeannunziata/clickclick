@@ -121,7 +121,7 @@ import org.apache.click.Control;
  * <li>Click.refresh.update(refreshId, interval); - updates to the new interval</li>
  * </ul>
  *
- * In order to invoke these methods use the {@link net.sf.clickclick.jquery.util.Taconite#eval(java.lang.String)}
+ * In order to invoke these methods use the {@link net.sf.clickclick.jquery.Taconite#eval(java.lang.String)}
  * command to execute raw JavaScript in the browser. For example:
  *
  * <pre class="prettyprint">
@@ -150,8 +150,6 @@ import org.apache.click.Control;
  *         return partial;
  *     }
  * }); </pre>
- *
- * @author Bob Schellink
  */
 public class JQRefreshHelper extends JQHelper {
 

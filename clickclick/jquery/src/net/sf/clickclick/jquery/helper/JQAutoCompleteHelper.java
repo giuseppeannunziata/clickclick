@@ -159,8 +159,8 @@ public class JQAutoCompleteHelper extends JQHelper {
      * @param control the helper target control
      * @param selector the CSS selector
      */
-    public JQAutoCompleteHelper(Control control, String select) {
-        super(control, select);
+    public JQAutoCompleteHelper(Control control, String selector) {
+        super(control, selector);
         setTemplate(template);
         setShowIndicator(false);
     }
