@@ -121,7 +121,7 @@ public abstract class FieldRepeater extends Repeater {
     /**
      * Set the name of the field that is contained in the repeater.
      *
-     * @param the name of the field that is contained in the repeater
+     * @param fieldName the name of the field that is contained in the repeater
      */
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;

@@ -117,11 +117,11 @@ public class Grid extends HtmlTable {
      * @param numRows the number of rows
      * @param numCols the number of columns
      */
-    public Grid(String name, int numRows, int numColumns) {
+    public Grid(String name, int numRows, int numCols) {
         super(name);
-        ensureCapacity(numRows, numColumns);
+        ensureCapacity(numRows, numCols);
         this.numRows = numRows;
-        this.numColumns = numColumns;
+        this.numColumns = numCols;
     }
 
     // --------------------------------------------------------- Public Methods

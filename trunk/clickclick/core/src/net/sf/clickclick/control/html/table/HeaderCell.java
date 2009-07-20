@@ -62,7 +62,7 @@ public class HeaderCell extends Cell {
     /**
      * Return the HeaderCell html tag: <tt>th</tt>.
      *
-     * @see AbstractControl#getTag()
+     * @see org.apache.click.control.AbstractControl#getTag()
      *
      * @return this controls html tag
      */

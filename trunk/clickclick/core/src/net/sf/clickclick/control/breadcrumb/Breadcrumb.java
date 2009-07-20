@@ -50,7 +50,7 @@ public class Breadcrumb extends AbstractControl {
     protected int trailLength = 5;
 
     /** The separator between breadcrumbs, defaults to <tt>"/"</tt>. */
-    protected String seperator = " / ";
+    protected String separator = " / ";
 
     /** Tracks the page paths the user visits. */
     protected transient Trail trail;
@@ -119,11 +119,11 @@ public class Breadcrumb extends AbstractControl {
      * @param trailLength the number of breadcrumbs to render
      * @param separator the separator to render between breadcrumbs
      */
-    public Breadcrumb(String name, String label, int trailLength, String seperator) {
+    public Breadcrumb(String name, String label, int trailLength, String separator) {
         setName(name);
         setLabel(label);
         setTrailLength(trailLength);
-        setSeperator(seperator);
+        setSeparator(separator);
     }
 
     // ------------------------------------------------------ Public Properties
@@ -151,17 +151,17 @@ public class Breadcrumb extends AbstractControl {
      *
      * @return the separator to render between breadcrumbs
      */
-    public String getSeperator() {
-        return seperator;
+    public String getSeparator() {
+        return separator;
     }
 
     /**
      * Set the separator to render between breadcrumbs.
      *
-     * @param seperator the separator to render between breadcrumbs
+     * @param separator the separator to render between breadcrumbs
      */
-    public void setSeperator(String seperator) {
-        this.seperator = seperator;
+    public void setSeparator(String separator) {
+        this.separator = separator;
     }
 
     /**
@@ -205,8 +205,8 @@ public class Breadcrumb extends AbstractControl {
     /**
      * The onInit event handler performs the following operations:
      * <ul>
-     * <li>Invokes {@link #restoreState()} to retrieve the stored
-     * {@link Trail} instance between requests.</li>
+     * <li>Invokes {@link #restoreState(org.apache.click.Context)} to retrieve
+     * the stored {@link Trail} instance between requests.</li>
      * <li>Stores the {@link org.apache.click.util.ClickUtils#getResourcePath(javax.servlet.http.HttpServletRequest) path}
      * of the parent Page in the {@link Trail} instance.</li>
      * </ul>
@@ -330,7 +330,7 @@ public class Breadcrumb extends AbstractControl {
 
                 if (it.hasNext()) {
                     buffer.append("<span style=\"padding:0 2px;\">");
-                    buffer.append(getSeperator());
+                    buffer.append(getSeparator());
                     buffer.append("</span>");
                 }
             }

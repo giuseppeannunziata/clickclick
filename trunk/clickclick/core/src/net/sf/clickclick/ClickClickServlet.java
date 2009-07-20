@@ -108,7 +108,7 @@ public class ClickClickServlet extends ClickServlet {
     /**
      * Perform specialized Ajax processing namely:
      * <ul>
-     * <li>delegate to {@link #processAjaxControls(org.apache.click.Context, net.sf.clickclick.AjaxControlRegistry)}
+     * <li>delegate to {@link #processAjaxControls(net.sf.clickclick.AjaxControlRegistry, org.apache.click.Context)}
      * to find target Ajax controls and perform their onProcess event callback
      * </li>
      * <li>fire any action listener registered for the

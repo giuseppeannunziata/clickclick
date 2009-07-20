@@ -25,7 +25,7 @@ import org.apache.click.util.HtmlStringBuffer;
  * Provides a menu with the following features:
  * <ul>
  * <li>FlexiMenu contains two predefined styles to layout the menus either
- * {@link #HORIZONTAL vertically} or {@link #VERTICAL horizontally}.</li>
+ * {@link #HORIZONTAL horizontally} or {@link #VERTICAL vertically}.</li>
  * <li>FlexiMenus are constructed programmatically, thus the application menu
  * can be specified in a relational database.</li>
  * </ul>
@@ -179,7 +179,15 @@ public class FlexiMenu extends Menu {
     }
 
     /**
-     * Return the list of head element as defined by {@link #MENU_IMPORTS}.
+     * Return the FlexiMenu resources:
+     *
+     * <ul>
+     * <li><tt>/clickclick/core/menu/{orientation}-menu.css</tt> - where
+     * {orientation} is the Menu {@link #orientation}: {@link #HORIZONTAL}
+     * or {@link #VERTICAL}</li>
+     * <li><tt>/click/control.js</tt></li>
+     * <li><tt>/clickclick/core/menu/menu.js</tt></li>
+     * </ul>
      *
      * @return the list of html imports
      */
