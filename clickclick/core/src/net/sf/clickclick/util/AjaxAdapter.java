@@ -21,8 +21,6 @@ import org.apache.click.Control;
 
 /**
  * Provides an abstract adapter for receiving Ajax callbacks.
- *
- * @author Bob Schellink
  */
 public class AjaxAdapter implements AjaxListener {
 
@@ -43,7 +41,7 @@ public class AjaxAdapter implements AjaxListener {
 
     /**
      * This method is invoked for ajax requests and returns a
-     * {@link net.sf.click.util.Partial} response.
+     * {@link net.sf.clickclick.util.Partial} response.
      * <p/>
      * A Partial instance represents a partial response to a user request.
      *

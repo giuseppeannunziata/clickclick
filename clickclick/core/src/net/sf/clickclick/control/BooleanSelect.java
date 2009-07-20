@@ -349,7 +349,7 @@ public class BooleanSelect extends Select {
      * <li>{@link #ONOFF} (on/off)</li>
      * <li>{@link #ACTIVEINACTIVE} (active/inactive)</li>
      * <li>{@link #OPENCLOSED} (open/closed)</li>
-     * <li> {@link CUSTOM} (this option is automatically set when you provide
+     * <li>{@link #CUSTOM} (this option is automatically set when you provide
      * custom labels with: <tt>setOptionLabels()</tt>)</li>
      * </ul>
      *

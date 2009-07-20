@@ -64,7 +64,7 @@ public interface AjaxListener extends ActionListener {
 
     /**
      * This method is invoked for ajax requests and returns a
-     * {@link net.sf.click.util.Partial} response.
+     * {@link net.sf.clickclick.util.Partial} response.
      * <p/>
      * A Partial instance represents a partial response to a user request.
      *

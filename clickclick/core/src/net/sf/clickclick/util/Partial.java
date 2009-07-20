@@ -36,7 +36,7 @@ import org.apache.click.util.ClickUtils;
  * bytes for example jpg, gif, png, pdf, excel spreadsheets etc.
  *
  * <h3>Ajax</h3>
- * {@link net.sf.click.AjaxListener#onAjaxAction(net.sf.click.Control)}
+ * {@link net.sf.clickclick.AjaxListener#onAjaxAction(org.apache.click.Control)}
  * returns a Partial instance which represents the listener response to the
  * Ajax request.
  *

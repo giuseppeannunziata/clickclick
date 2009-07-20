@@ -96,9 +96,6 @@ import org.apache.commons.lang.Validate;
  * Registering the listener in MyForm constructor guarantees that the
  * listener will be registered even if MyForm is subclassed because the compiler
  * forces subclasses to invoke their super constructor.
- *
- * @author Bob Schellink
- * @author Malcolm Edgar
  */
 public class AjaxControlRegistry extends ActionEventDispatcher {
 
@@ -354,7 +351,6 @@ public class AjaxControlRegistry extends ActionEventDispatcher {
          *
          * @param source the action event source
          * @param listener the event action listener
-         * @param event the specific event to trigger the action event
          */
         public void registerActionEvent(Control source, ActionListener listener) {
             super.registerActionEvent(source, listener);

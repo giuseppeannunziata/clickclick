@@ -44,7 +44,7 @@ public class ListItem extends AbstractContainer {
     /**
      * Return the ListItem html tag: <tt>li</tt>.
      *
-     * @see AbstractControl#getTag()
+     * @see org.apache.click.control.AbstractControl#getTag()
      *
      * @return this controls html tag
      */

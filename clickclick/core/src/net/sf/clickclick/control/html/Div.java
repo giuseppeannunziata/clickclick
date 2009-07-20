@@ -90,7 +90,7 @@ public class Div extends AbstractContainer {
     /**
      * Return the div's html tag: <tt>div</tt>.
      *
-     * @see AbstractControl#getTag()
+     * @see org.apache.click.control.AbstractControl#getTag()
      *
      * @return this controls html tag
      */
