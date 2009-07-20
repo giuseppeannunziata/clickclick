@@ -13,8 +13,8 @@ import net.sf.clickclick.control.html.table.Cell;
 import net.sf.clickclick.control.html.table.HeaderCell;
 import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
+import net.sf.clickclick.examples.jquery.control.ui.UIDialog;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.ui.UIDialog;
 import org.apache.click.element.CssStyle;
 import org.apache.click.element.JsScript;
 
