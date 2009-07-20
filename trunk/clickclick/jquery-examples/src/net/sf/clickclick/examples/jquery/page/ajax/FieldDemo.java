@@ -4,7 +4,7 @@ import net.sf.clickclick.control.Text;
 import net.sf.clickclick.control.html.Span;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
-import net.sf.clickclick.jquery.util.Taconite;
+import net.sf.clickclick.jquery.Taconite;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
 import org.apache.click.Control;

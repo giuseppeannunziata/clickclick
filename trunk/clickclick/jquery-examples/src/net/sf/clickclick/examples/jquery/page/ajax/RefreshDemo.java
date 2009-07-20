@@ -7,7 +7,7 @@ import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.control.ajax.JQActionLink;
 import net.sf.clickclick.jquery.helper.JQRefreshHelper;
-import net.sf.clickclick.jquery.util.Taconite;
+import net.sf.clickclick.jquery.Taconite;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
 import org.apache.click.Control;

@@ -8,7 +8,7 @@ import net.sf.clickclick.control.panel.SimplePanel;
 import net.sf.clickclick.examples.jquery.control.Window;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
-import net.sf.clickclick.jquery.util.Taconite;
+import net.sf.clickclick.jquery.Taconite;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
 import org.apache.click.Control;

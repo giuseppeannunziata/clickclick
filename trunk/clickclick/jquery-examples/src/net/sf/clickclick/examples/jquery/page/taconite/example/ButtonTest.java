@@ -4,7 +4,7 @@ import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
-import net.sf.clickclick.jquery.util.Taconite;
+import net.sf.clickclick.jquery.Taconite;
 import org.apache.click.Control;
 import org.apache.click.control.Submit;
 import org.apache.commons.lang.math.NumberUtils;
