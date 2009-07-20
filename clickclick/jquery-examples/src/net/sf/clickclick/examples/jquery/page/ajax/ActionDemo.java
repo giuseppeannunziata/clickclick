@@ -10,7 +10,7 @@ import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.control.ajax.JQActionButton;
 import net.sf.clickclick.jquery.control.ajax.JQActionLink;
-import net.sf.clickclick.jquery.util.Taconite;
+import net.sf.clickclick.jquery.Taconite;
 import org.apache.commons.lang.math.RandomUtils;
 
 /**

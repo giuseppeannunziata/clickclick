@@ -9,7 +9,7 @@ import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.examples.jquery.util.JQValidationHelper;
 import net.sf.clickclick.jquery.control.JQColorPicker;
 import net.sf.clickclick.jquery.control.ajax.JQForm;
-import net.sf.clickclick.jquery.util.Taconite;
+import net.sf.clickclick.jquery.Taconite;
 import net.sf.clickclick.util.AjaxAdapter;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.FieldSet;
