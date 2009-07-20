@@ -27,8 +27,6 @@ import org.apache.click.element.JsScript;
 /**
  * Provides a ColorPicker control based on the JQuery ColorPicker plugin:
  * http://www.eyecon.ro/colorpicker/.
- *
- * @author Bob Schellink
  */
 public class JQColorPicker extends TextField {
 
@@ -38,14 +36,14 @@ public class JQColorPicker extends TextField {
      * The ColorPicker JS library:
      * "<tt>/clickclick/jquery/colorpicker/js/colorpicker.js</tt>".
      */
-    public static String colorpickerJsImport =
+    public static String colorPickerJsImport =
         "/clickclick/jquery/colorpicker/js/colorpicker.js";
 
     /**
      * The ColorPicker default CSS:
      * "<tt>/clickclick/jquery/colorpicker/css/colorpicker.css</tt>".
      */
-    public static String colorpickerCssImport =
+    public static String colorPickerCssImport =
         "/clickclick/jquery/colorpicker/css/colorpicker.css";
 
     /**
@@ -153,11 +151,11 @@ public class JQColorPicker extends TextField {
     }
 
     /**
-     * Return the JQColorPicker resources: {@link #colorpickerCssImport},
-     * {@link net.sf.clickclick.jquery.helper.JQHelper#JQUERY_IMPORTS},
-     * {@link #colorpickerJsImport},
-     * {@link #COLORPICKER_CSS_TEMPLATE} and
-     * {@link #COLORPICKER_JS_TEMPLATE}.
+     * Return the JQColorPicker resources: {@link #colorPickerCssImport},
+     * {@link net.sf.clickclick.jquery.helper.JQHelper#jqueryImport},
+     * {@link #colorPickerJsImport},
+     * {@link #template} and
+     * {@link #colorPickerStyleImport}.
      *
      * @return the list of head elements
      */
@@ -165,9 +163,9 @@ public class JQColorPicker extends TextField {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
-            headElements.add(new CssImport(colorpickerCssImport));
+            headElements.add(new CssImport(colorPickerCssImport));
             headElements.add(new JsImport(JQHelper.jqueryImport));
-            headElements.add(new JsImport(colorpickerJsImport));
+            headElements.add(new JsImport(colorPickerJsImport));
         }
 
         addJsTemplate(headElements);
@@ -232,7 +230,7 @@ public class JQColorPicker extends TextField {
     /**
      * Add the JQColorPicker CSS style import to the list of head elements.
      * <p/>
-     * The CSS style import is: <tt>{@link #colorPickerStyleImport</tt>.
+     * The CSS style import is: <tt>{@link #colorPickerStyleImport}</tt>.
      * <p/>
      * You can override this method to add your own custom import.
      *
