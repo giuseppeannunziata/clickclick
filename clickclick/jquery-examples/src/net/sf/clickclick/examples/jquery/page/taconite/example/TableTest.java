@@ -10,7 +10,7 @@ import org.apache.click.control.Table;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.ajax.JQActionLink;
+import net.sf.clickclick.jquery.control.ajax.JQActionLink;
 import net.sf.clickclick.jquery.util.Command;
 import net.sf.clickclick.jquery.util.Taconite;
 import org.apache.commons.lang.math.NumberUtils;

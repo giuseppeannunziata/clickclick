@@ -82,7 +82,7 @@ public class Window extends SimplePanel {
     public List getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
-            headElements.add(new CssImport("/clickclick/window/window.css"));
+            headElements.add(new CssImport("/clickclick/example/window/window.css"));
         }
         return headElements;
     }

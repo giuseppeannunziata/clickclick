@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.clickclick.jquery.util;
+package net.sf.clickclick.examples.jquery.util;
 
 /**
  * Utility class for JQuery IU.

@@ -2,7 +2,7 @@ package net.sf.clickclick.examples.jquery.page.ajax;
 
 import java.util.List;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.ajax.JQAutoCompleteTextField;
+import net.sf.clickclick.jquery.control.ajax.JQAutoCompleteTextField;
 import org.apache.click.ActionListener;
 import org.apache.click.Control;
 import org.apache.click.control.Form;

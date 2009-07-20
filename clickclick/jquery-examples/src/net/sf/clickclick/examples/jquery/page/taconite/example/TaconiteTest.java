@@ -10,7 +10,7 @@ import org.apache.click.extras.control.DateField;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
 import net.sf.clickclick.control.html.Div;
-import net.sf.clickclick.jquery.controls.ajax.JQActionLink;
+import net.sf.clickclick.jquery.control.ajax.JQActionLink;
 import net.sf.clickclick.jquery.util.Taconite;
 
 /**

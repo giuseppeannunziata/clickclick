@@ -7,7 +7,7 @@ import org.apache.click.control.Option;
 import org.apache.click.control.Select;
 import net.sf.clickclick.util.Partial;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
-import net.sf.clickclick.jquery.controls.ajax.JQSelect;
+import net.sf.clickclick.jquery.control.ajax.JQSelect;
 import net.sf.clickclick.jquery.util.Taconite;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
