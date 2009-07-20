@@ -112,16 +112,16 @@ If you know jQuery you might have realized that Taconite XML commands map direct
 
 === Features ===
 
-Here are the list of this project features:
+Here are some of the features:
 
- * Ajax actions can return any Click control to the browser. For example, one can submit a Form using Ajax and allow the Partial to only return the updated Form, which may or may not contain validation errors
- * When Ajax actions return a Click Control, the Control's CSS and !JavaScript resources must be returned as well, otherwise the Control won't function correctly
- * If CSS and JavaScript resources are already available to the browser, they must be ignored. For example if an Ajax action returns a Form, the Form's resources (control.js, control.css) will also be returned and added to the browser's DOM. However if a second Ajax action again returns a Form, it will detect that the resources (control.js and control.css) are already available to the browser and won't add them again.
+ * Ajax actions can return any Click control to the browser. For example, one can submit a Form using Ajax that returns a new Form instance
+ * When Ajax actions return a Click Control, the Control's CSS and !JavaScript resources must be returned as well
+ * If CSS and JavaScript resources are already available to the browser, they will be ignored. For example if an Ajax action returns a Form, the Form's resources (control.js, control.css) will also be returned and added to the browser's HEAD section. If the Ajax action is invoked a second time the Form will be returned again. Click will detect that the resources (control.js and control.css) are already available to the browser and won't add them to the HEAD section again.
 
 === Infrastructure ===
 
-One of the main pieces is the !JavaScript file [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/jquery/src/META-INF/web/clickclick/jquery/jquery.click.js jquery.click.js]. This script combines the plugins [http://malsup.com/jquery/taconite/ jQuery Taconite], [http://docs.jquery.com/Plugins/livequery jQuery LiveQuery] and custome Click specific code to handle some of the advanced features necessary to seamlessly support Ajax.
+One of the main pieces is the !JavaScript file [http://code.google.com/p/clickclick/source/browse/trunk/clickclick/jquery/src/META-INF/web/clickclick/jquery/jquery.click.js jquery.click.js]. This script combines the plugins [http://malsup.com/jquery/taconite/ jQuery Taconite], [http://docs.jquery.com/Plugins/livequery jQuery LiveQuery] and custome Click specific code to handle some of the advanced features necessary to seamlessly support Ajax. (Please note that [http://docs.jquery.com/Plugins/livequery jQuery LiveQuery plugin] will be removed in a future version once jQuery [http://docs.jquery.com/Events/live live()] supports more events.)
 
-Please note that [http://docs.jquery.com/Plugins/livequery jQuery LiveQuery plugin] will be removed in a future version once jQuery [http://docs.jquery.com/Events/live live()] supports more events.
+
 
 TODO
