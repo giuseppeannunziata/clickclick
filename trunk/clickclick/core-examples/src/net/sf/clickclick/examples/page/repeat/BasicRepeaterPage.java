@@ -18,7 +18,7 @@ public class BasicRepeaterPage extends BorderPage {
 
     public void onInit() {
 
-        final HtmlTable table = new HtmlTable();
+        final HtmlTable table = new HtmlTable("table");
         table.setAttribute("class", "gray");
         table.setBorder(0);
         HeaderRow header = new HeaderRow();
@@ -28,7 +28,7 @@ public class BasicRepeaterPage extends BorderPage {
         header.add("Age");
         header.add("Holdings");
 
-        repeater = new Repeater("repeater") {
+        repeater = new Repeater() {
 
             @Override
             public void buildRow(Object item, RepeaterRow row, int index) {
@@ -40,13 +40,12 @@ public class BasicRepeaterPage extends BorderPage {
                 tableRow.add(customer.getName());
                 tableRow.add(customer.getAge());
                 tableRow.add(getFormat().currency(customer.getHoldings()));
-
-                row.add(table);
             }
         };
 
-        addControl(repeater);
         repeater.setItems(getTopCustomers());
+
+        addControl(table);
     }
 
     public List<Customer> getTopCustomers() {
