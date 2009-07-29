@@ -73,6 +73,11 @@ public class Image extends AbstractControl {
 
     /**
      * Create an Image with the given name and src attribute.
+     * <p/>
+     * If the src value begins with a <tt class="wr">"/"</tt>
+     * character the src attribute will be prefixed with the web applications
+     * <tt>context path</tt>. Note if the given src value is already prefixed
+     * with the <tt>context path</tt>, Click won't add it a second time.
      *
      * @param name the name of the image
      * @param src the src attribute of the image

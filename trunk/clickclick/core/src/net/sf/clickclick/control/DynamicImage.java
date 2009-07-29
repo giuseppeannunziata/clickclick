@@ -265,10 +265,45 @@ public abstract class DynamicImage extends Image {
      * Set the target uri where the image data will be served from.
      * <p/>
      * If no value is specified, the target defaults to the current Page.
+     * <p/>
+     * If the target begins with a <tt class="wr">"/"</tt>
+     * character the target will be prefixed with the web applications
+     * <tt>context path</tt>. Note if the given target is already prefixed
+     * with the <tt>context path</tt>, Click won't add it a second time.
      *
      * @param target the target uri where the image data will be served from
      */
     public void setTarget(String target) {
+        Context context = getContext();
+        if (StringUtils.isNotBlank(target)) {
+            if (target.charAt(0) == '/') {
+                String contextPath = context.getRequest().getContextPath();
+
+                // Guard against adding duplicate context path
+                if (!target.startsWith(contextPath + '/')) {
+                    target = contextPath + target;
+                }
+            }
+        }
+        this.target = target;
+    }
+
+    /**
+     * Set the target Page class where the image data will be served from.
+     * <p/>
+     * If no value is specified, the target defaults to the current Page.
+     *
+     * @param pageClass the target Page class where the image data will be served
+     * from
+     */
+    public void setTarget(Class pageClass) {
+        String target = getContext().getPagePath(pageClass);
+
+        // If page class maps to a jsp, convert to htm which allows ClickServlet
+        // to process the target
+        if (target != null && target.endsWith(".jsp")) {
+            target = StringUtils.replaceOnce(target, ".jsp", ".htm");
+        }
         this.target = target;
     }
 
