@@ -46,6 +46,12 @@ public class MenuBuilder {
         subMenu = createMenu("Rich Editor", "control/email-form.htm");
         menu.add(subMenu);
 
+        subMenu = createMenu("Image", "control/image.htm");
+        menu.add(subMenu);
+
+        subMenu = createMenu("Dynamic Image", "control/dynamic-image.htm");
+        menu.add(subMenu);
+
         menu = createMenu("Layout");
         rootMenu.getChildren().add(menu);
 
