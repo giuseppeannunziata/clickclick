@@ -80,7 +80,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * See also W3C HTML reference
  * <a class="external" target="_blank" title="W3C HTML 4.01 Specification"
- *    href="http://www.w3.org/TR/html401/interact/forms.html#h-17.4">INPUT</a>
+ *    href="http://www.w3.org/TR/html401/struct/objects.html#edef-IMG">IMG</a>
  *
  * @see DynamicImage
  */
