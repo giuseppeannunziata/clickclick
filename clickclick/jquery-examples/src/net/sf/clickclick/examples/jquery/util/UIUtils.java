@@ -19,8 +19,6 @@ package net.sf.clickclick.examples.jquery.util;
  * All JQuery UI components are styled through {@link #style}. If you want to
  * change the look of JQuery UI components, set the value of {@link #style}
  * to a different style.
- *
- * @author Bob Schellink
  */
 public class UIUtils {
 
