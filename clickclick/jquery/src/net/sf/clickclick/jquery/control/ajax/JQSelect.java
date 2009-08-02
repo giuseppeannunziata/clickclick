@@ -20,9 +20,35 @@ import org.apache.click.control.Select;
  * Provide an Ajax enabled Select control.
  * <p/>
  * <b>Please note:</b> JQSelect uses {@link net.sf.clickclick.jquery.helper.JQHelper}
- * for Ajax functionality.
+ * to provide the Ajax functionality.
+ * <p/>
+ * Below is an example showing how to use a JQSelect:
  *
- * @author Bob Schellink
+ * <pre class="prettyprint">
+ * private Form form = new Form("form");
+ *
+ * public MyPage() {
+ *     addControl(form);
+ *
+ *     JQSelect select = new JQSelect("select");
+ *
+ *     // Set an Ajax listener on the select that return a Taconite (Partial)
+ *     // instance
+ *     select.setActionListener(new AjaxAdapter() {
+ *         public Partial onAjaxAction(Control source) {
+ *             Taconite partial = new Taconite();
+ *
+ *             // When a select option is changed, we simply print the value.
+ *             // Taconite allows one to execute any JavaScript code using the
+ *             // method "eval".
+ *             partial.eval("$('#myTarget').html('You have picked " + select.getValue() + "');");
+ *
+ *             return partial;
+ *         }
+ *     });
+ *
+ *     form.add(select);
+ * } </pre>
  */
 public class JQSelect extends Select {
 

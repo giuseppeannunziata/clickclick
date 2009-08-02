@@ -25,9 +25,42 @@ import org.apache.commons.lang.StringUtils;
  * Provide an Ajax enabled Form control.
  * <p/>
  * <b>Please note:</b> JQForm uses {@link net.sf.clickclick.jquery.helper.JQHelper}
- * for Ajax functionality.
+ * to provide the Ajax functionality.
+ * <p/>
+ * Below is an example showing how to use the JQForm:
  *
- * @author Bob Schellink
+ * <pre class="prettyprint">
+ * private JQForm form = new JQForm("form");
+ *
+ * public MyPage() {
+ *
+ *     addControl(form);
+ *
+ *     // Setup fields
+ *     form.add(new TextField("firstName", true));
+ *     form.add(new TextField("lastName", true));
+ *     form.add(new EmailField("email", "E-Mail"));
+ *
+ *     Submit submit = new Submit("submit");
+ *     form.add(submit);
+ *
+ *     // Set an Ajax listener on the Submit button, which will be invoked when
+ *     // form is submitted
+ *     submit.setActionListener(new AjaxAdapter() {
+ *
+ *        public Partial onAjaxAction(Control source) {
+ *            Taconite partial = new Taconite();
+ *
+ *            if (form.isValid()) {
+ *                // Save the form data to the database
+ *                saveForm();
+ *            }
+ *
+ *            // Update the form
+ *            partial.replace(form);
+ *        }
+ *    });
+ * } </pre>
  */
 public class JQForm extends AjaxForm {
 

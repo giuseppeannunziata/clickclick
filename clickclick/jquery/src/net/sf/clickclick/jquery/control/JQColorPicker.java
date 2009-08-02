@@ -27,6 +27,20 @@ import org.apache.click.element.JsScript;
 /**
  * Provides a ColorPicker control based on the JQuery ColorPicker plugin:
  * http://www.eyecon.ro/colorpicker/.
+ * <p/>
+ * Example usage:
+ *
+ * <pre class="prettyprint">
+ * private Form form = new Form("form");
+ *
+ * public MyPage() {
+ *     JQColorPicker colorPicker = new JQColorPicker("colorPicker");
+ *     colorPicker.setValue("#FFFFFF"); // Set color to white
+ *     form.add(colorPicker);
+ *
+ *     form.add(new Submit("submit"));
+ *     addControl(form);
+ * } </pre>
  */
 public class JQColorPicker extends TextField {
 
