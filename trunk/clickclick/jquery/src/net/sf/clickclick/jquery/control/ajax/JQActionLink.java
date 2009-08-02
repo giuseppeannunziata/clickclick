@@ -21,9 +21,34 @@ import net.sf.clickclick.jquery.helper.JQHelper;
  * Provide an Ajax enabled ActionLink control.
  * <p/>
  * <b>Please note:</b> JQActionLink uses {@link net.sf.clickclick.jquery.helper.JQHelper}
- * for Ajax functionality.
+ * to provide the Ajax functionality.
+ * <p/>
+ * Below is an example showing how to refresh a Table when the link is clicked:
  *
- * @author Bob Schellink
+ * <pre class="prettyprint">
+ * private JQActionLink link = new JQActionLink("link");
+ *
+ * public MyPage() {
+ *     addControl(link);
+ *
+ *     // Set an Ajax listener on the link that return a Taconite (Partial)
+ *     // instance
+ *     link.setActionListener(new AjaxAdapter() {
+ *
+ *         public Partial onAjaxAction(Control source) {
+ *             Taconite partial = new Taconite();
+ *
+ *             // Create a table instance
+ *             Table table = createTable();
+ *
+ *             // Refresh the table by replacing it with the latest data on the server
+ *             partial.replace(table);
+ *
+ *             return partial;
+ *         }
+ *     });
+ *
+ * } </pre>
  */
 public class JQActionLink extends AjaxActionLink {
 
@@ -125,7 +150,7 @@ public class JQActionLink extends AjaxActionLink {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Initialize the JQActionButton Ajax functionality.
+     * Initialize the JQActionLink Ajax functionality.
      */
     public void onInit() {
         super.onInit();

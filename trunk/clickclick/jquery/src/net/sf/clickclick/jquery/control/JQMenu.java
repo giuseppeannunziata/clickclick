@@ -28,8 +28,33 @@ import org.apache.click.element.JsScript;
 /**
  * Provide a drop-down Menu control based on the JQuery Superfish plugin:
  * http://users.tpg.com.au/j_birch/plugins/superfish/.
+ * <p/>
+ * Example usage:
  *
- * @author Bob Schellink
+ * <pre class="prettyprint">
+ * JQMenu menu = new JQMenu("horizontalMenu");
+ *
+ * public MyPage() {
+ *     menu.setOrientation(JQMenu.HORIZONTAL);
+ *
+ *     JQMenu subMenu = createMenu("Client", "client.htm");
+ *     menu.add(subMenu);
+ *     JQMenu addressMenu = createMenu("Address", "address.htm");
+ *     subMenu.add(addressMenu);
+ *     addressMenu.add(createMenu("Physical", "physical-address.htm"));
+ *     addressMenu.add(createMenu("Postal", "postal-address.htm"));
+ *     subMenu = createMenu("Products", "product.htm");
+ *     menu.add(subMenu);
+ *
+ *     addControl(menu);
+ * }
+ *
+ * public JQMenu createMenu(String label, String path) {
+ *     JQMenu menu = new JQMenu();
+ *     menu.setLabel(label);
+ *     menu.setPath(path);
+ *     return menu;
+ * } </pre>
  */
 public class JQMenu extends FlexiMenu {
 

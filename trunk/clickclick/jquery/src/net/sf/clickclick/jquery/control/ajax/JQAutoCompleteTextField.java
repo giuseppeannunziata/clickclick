@@ -27,9 +27,26 @@ import org.apache.click.util.HtmlStringBuffer;
  * Provide an AutoCompleteTextField control.
  * <p/>
  * <b>Please note:</b> JQAutoCompleteTextField uses {@link net.sf.clickclick.jquery.helper.JQHelper}
- * for Ajax functionality.
+ * to provide the Ajax functionality.
+ * <p/>
+ * Below is an example showing how to use the auto-complete text field:
  *
- * @author Bob Schellink
+ * <pre class="prettyprint">
+ * private Form form = new Form("form");
+ *
+ * public MyPage() {
+ *     addControl(form);
+ *
+ *     final JQAutoCompleteTextField autoField = new JQAutoCompleteTextField("autoField") {
+ *
+ *         // When the user enters text into the field, this method is called,
+ *         // passing in the current value of the text field
+ *         public List getAutoCompleteList(String criteria) {
+ *             List suggestions = getPostCodeService().getPostCodeLocations(criteria);
+ *             return suggestions;
+ *         }
+ *     };
+ * } </pre>
  */
 public abstract class JQAutoCompleteTextField extends TextField {
 
@@ -158,6 +175,12 @@ public abstract class JQAutoCompleteTextField extends TextField {
 
     /**
      * Return the list of auto complete suggestions for the given criteria.
+     * <p/>
+     * When the user enters text into the text field, this method is invoked,
+     * passing in the current value of the text field.
+     * <p/>
+     * This method must be implemented by users to return the list of suggestions
+     * based on the current text field value, the criteria.
      *
      * @param criteria the search criteria
      * @return the list of auto complete suggestions

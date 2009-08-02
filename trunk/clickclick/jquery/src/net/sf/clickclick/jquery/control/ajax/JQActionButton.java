@@ -21,9 +21,34 @@ import net.sf.clickclick.jquery.helper.JQHelper;
  * Provide an Ajax enabled ActionButton control.
  * <p/>
  * <b>Please note:</b> JQActionButton uses {@link net.sf.clickclick.jquery.helper.JQHelper}
- * for Ajax functionality.
+ * to provide the Ajax functionality.
+ * <p/>
+ * Below is an example showing how to add a Login Form after the button:
  *
- * @author Bob Schellink
+ * <pre class="prettyprint">
+ * private JQActionButton button = new JQActionButton("button");
+ *
+ * public MyPage() {
+ *     addControl(button);
+ *
+ *     // Set an Ajax listener on the button that return a Taconite (Partial)
+ *     // instance
+ *     button.setActionListener(new AjaxAdapter() {
+ *
+ *         public Partial onAjaxAction(Control source) {
+ *             Taconite partial = new Taconite();
+ *
+ *             // Create a login form
+ *             Form form = createLoginForm();
+ *
+ *             // Add the login form after the button
+ *             partial.after(button, form);
+ *
+ *             return partial;
+ *         }
+ *     });
+ *
+ * } </pre>
  */
 public class JQActionButton extends AjaxActionButton {
 
