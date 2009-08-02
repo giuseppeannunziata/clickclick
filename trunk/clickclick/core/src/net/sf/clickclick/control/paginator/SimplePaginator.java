@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,7 +14,6 @@
 package net.sf.clickclick.control.paginator;
 
 import java.util.List;
-import org.apache.click.MockContext;
 import org.apache.click.control.AbstractControl;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
@@ -26,9 +23,9 @@ import org.apache.click.element.CssImport;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
- * Provides an independant paginator control.
+ * Provides a simple independent paginator control.
  * <p/>
- * The Paginator is based on this article:
+ * The Paginator is based on the following article:
  * http://woork.blogspot.com/2008/03/perfect-pagination-style-using-css.html.
  *
  * <h3>Pre defined styles</h3>
@@ -39,8 +36,6 @@ import org.apache.click.util.HtmlStringBuffer;
  *  <li>pagination-clean</li>
  *  <li>pagination-flickr</li>
  * </ul>
- *
- * @author Bob Schellink
  */
 public class SimplePaginator extends AbstractControl implements Renderable {
 
