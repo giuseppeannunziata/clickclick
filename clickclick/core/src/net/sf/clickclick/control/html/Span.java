@@ -53,8 +53,6 @@ import org.apache.click.control.AbstractControl;
  * Hello World
  * </span>
  * </div>
- *
- * @author Bob Schellink
  */
 public class Span extends AbstractContainer {
 

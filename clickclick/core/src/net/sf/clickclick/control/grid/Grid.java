@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -70,8 +68,6 @@ import net.sf.clickclick.control.html.table.Row;
  *   </tr>
  * </table>
  * </div>
- *
- * @author Bob Schellink
  */
 public class Grid extends HtmlTable {
 

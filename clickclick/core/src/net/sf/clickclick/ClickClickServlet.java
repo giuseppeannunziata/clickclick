@@ -32,8 +32,6 @@ import org.apache.click.util.PageImports;
  * <ul>
  *   <li>Full Ajax support</li>
  * </ul>
- *
- * @author Bob Schellink
  */
 public class ClickClickServlet extends ClickServlet {
 

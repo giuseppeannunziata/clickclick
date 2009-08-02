@@ -88,7 +88,6 @@ import org.apache.commons.lang.StringUtils;
  * reflected in the final result.
  *
  * @see Select
- * @author Christopher Highway
  */
 public class BooleanSelect extends Select {
 

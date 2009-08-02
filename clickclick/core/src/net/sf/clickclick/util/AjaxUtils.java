@@ -21,8 +21,6 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Provide Ajax utility methods.
- *
- * @author Bob Schellink
  */
 public class AjaxUtils {
 

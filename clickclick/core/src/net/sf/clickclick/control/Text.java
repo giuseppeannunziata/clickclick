@@ -52,8 +52,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * Hello World
  * </div>
  * </div>
- *
- * @author Bob Schellink
  */
 public class Text extends AbstractControl {
 

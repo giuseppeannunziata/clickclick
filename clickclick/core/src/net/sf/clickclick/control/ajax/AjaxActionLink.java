@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -24,8 +22,6 @@ import org.apache.click.control.ActionLink;
  * <p/>
  * <b>Please note:</b> AjaxActionLink does not work out-of-the-box since no
  * client-side Ajax support is provided.
- *
- * @author Bob Schellink
  */
 public class AjaxActionLink extends ActionLink {
 

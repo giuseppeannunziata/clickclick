@@ -29,8 +29,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * <li>FlexiMenus are constructed programmatically, thus the application menu
  * can be specified in a relational database.</li>
  * </ul>
- *
- * @author Bob Schellink
  */
 public class FlexiMenu extends Menu {
 

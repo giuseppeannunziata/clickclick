@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -33,8 +31,6 @@ import org.w3c.dom.Element;
 /**
  * This class provides a ConfigService that does not cache Page metadata
  * and enables hot reloading of Page classes.
- *
- * @author Bob Schellink
  */
 public class ClickClickConfigService extends XmlConfigService {
 
