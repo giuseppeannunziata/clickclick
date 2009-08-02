@@ -25,8 +25,6 @@ import org.apache.click.util.HtmlStringBuffer;
 /**
  * Provide a Calendar field based on the JQuery UI Datepicker widget:
  * http://docs.jquery.com/UI/Datepicker.
- *
- * @author Bob Schellink
  */
 public class UICalendarField extends DateField {
 

@@ -26,8 +26,6 @@ import org.apache.click.util.HtmlStringBuffer;
 /**
  * Provide a Slider field based on the JQuery UI Slider widget:
  * http://docs.jquery.com/UI/Slider.
- *
- * @author Bob Schellink
  */
 public class UISliderField extends Field {
 

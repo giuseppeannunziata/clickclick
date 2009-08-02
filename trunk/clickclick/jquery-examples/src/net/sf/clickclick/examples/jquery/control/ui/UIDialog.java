@@ -23,8 +23,6 @@ import org.apache.click.element.JsImport;
 /**
  * Provide a Dialog control based on the JQuery UI Dialog widget:
  * http://docs.jquery.com/UI/Dialog.
- *
- * @author Bob Schellink
  */
 public class UIDialog extends Div {
 
