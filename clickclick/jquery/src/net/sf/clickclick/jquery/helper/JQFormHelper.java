@@ -86,8 +86,6 @@ import org.apache.click.element.JsImport;
  *         addControl(form);
  *     }
  * } </pre>
- *
- * @author Bob Schellink
  */
 public class JQFormHelper extends JQHelper {
 

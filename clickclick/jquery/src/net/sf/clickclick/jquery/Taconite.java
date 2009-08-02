@@ -184,8 +184,6 @@ import org.apache.commons.lang.StringUtils;
  * those situations simply ignore the ID attribute.
  * </li>
  * </ul>
- *
- * @author Bob Schellink
  */
 public class Taconite extends Partial {
 
