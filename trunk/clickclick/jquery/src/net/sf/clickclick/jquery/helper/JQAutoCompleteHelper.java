@@ -100,8 +100,6 @@ import org.apache.click.element.JsImport;
  *         });
  *     }
  * } </pre>
- *
- * @author Bob Schellink
  */
 public class JQAutoCompleteHelper extends JQHelper {
 

@@ -112,8 +112,6 @@ import org.apache.commons.lang.StringUtils;
  *         addControl(label);
  *     }
  * } </pre>
- *
- * @author Bob Schellink
  */
 public class JQHelper implements Serializable {
 
