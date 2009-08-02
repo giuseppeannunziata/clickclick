@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,8 +25,6 @@ import net.sf.clickclick.control.html.table.Row;
  * Provides a dock panel where controls can be docked to either the
  * {@link #NORTH}, {@link #SOUTH}, {@link #EAST}, {@link #WEST} or
  * {@link #CENTER}.
- *
- * @author Bob Schellink
  */
 public class DockPanel extends AbstractTablePanel {
 

@@ -40,8 +40,6 @@ import org.apache.commons.lang.StringUtils;
  * wish (see samplepage).
  * <p/>
  * See the samplepage for inspiration.
- *
- * @author Christopher Highway
  */
 public class StyledOption extends Option {
 

@@ -105,8 +105,6 @@ import org.apache.click.util.ContainerUtils;
  * <pre class="prettyprint">
  * &lt;input type="text" name="name_0" id="name_0" ... /&gt;
  * &lt;input type="text" name="name_1" id="name_1" ... /&gt;</pre>
- *
- * @author Bob Schellink
  */
 public abstract class Repeater extends AbstractContainer {
 

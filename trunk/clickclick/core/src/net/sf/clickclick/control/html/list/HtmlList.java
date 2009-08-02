@@ -81,8 +81,6 @@ import org.apache.click.control.AbstractControl;
  * The above example still needs to be style with CSS. Please see the
  * <a target="_blank" class="external" href="http://www.avoka.com/click-examples/form/contact-details.htm">Contact Details Demo</a>
  * for an example on how to style an HtmlList.
- *
- * @author Bob Schellink
  */
 public class HtmlList extends AbstractContainer {
 

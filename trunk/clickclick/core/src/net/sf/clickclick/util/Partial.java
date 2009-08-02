@@ -61,8 +61,6 @@ import org.apache.click.util.ClickUtils;
  *     });
  * }
  * </pre>
- *
- * @author Bob Schellink
  */
 public class Partial {
 

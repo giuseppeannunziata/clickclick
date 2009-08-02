@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,8 +20,6 @@ import net.sf.clickclick.control.html.table.Row;
 
 /**
  * Provides an abstract Panel that layout its controls inside an HTML table.
- *
- * @author Bob Schellink
  */
 public abstract class AbstractTablePanel extends SimplePanel {
 

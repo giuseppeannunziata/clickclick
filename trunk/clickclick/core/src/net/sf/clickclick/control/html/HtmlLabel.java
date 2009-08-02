@@ -52,8 +52,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * <div class="border">
  * <label for="my-field-label">My Field: </label><input type="text" name="my-field" id="my-field"/>
  * </div>
- *
- * @author Bob Schellink
  */
 public class HtmlLabel extends Label {
 

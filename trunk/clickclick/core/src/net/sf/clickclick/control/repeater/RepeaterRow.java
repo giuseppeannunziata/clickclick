@@ -22,8 +22,6 @@ import org.apache.click.control.AbstractContainer;
  * <p/>
  * <b>Please note:</b> RepeaterRows are automatically created by the Repeater
  * as needed, and is generally not managed by users.
- *
- * @author Bob Schellink
  */
 public class RepeaterRow extends AbstractContainer {
 

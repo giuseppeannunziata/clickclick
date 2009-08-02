@@ -69,8 +69,6 @@ import org.apache.click.util.ContainerUtils;
  * <input type="text" name="name_0" id="name_0" value="one" size="20"/>
  * <input type="text" name="name_1" id="name_1" value="two" size="20"/>
  * </div>
- *
- * @author Bob Schellink
  */
 public abstract class FieldRepeater extends Repeater {
 

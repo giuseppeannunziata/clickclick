@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
  * You may obtain a copy of the License at
@@ -44,8 +42,6 @@ import org.apache.click.service.ConfigService;
  *      <li>http://www.javaworld.com/javaworld/javaqa/2003-06/01-qa-0606-load.html</li>
  *      <li>http://www.javalobby.org/java/forums/t18345.html</li>
  * </ul>
- *
- * @author Bob Schellink
  */
 public class ReloadClassLoader extends URLClassLoader {
 

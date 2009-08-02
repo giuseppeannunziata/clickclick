@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,8 +26,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * <p/>
  * <b>Please note:</b> AjaxActionButton does not work out-of-the-box since no
  * client-side Ajax support is provided.
- *
- * @author Bob Schellink
  */
 public class AjaxActionButton extends ActionButton {
 

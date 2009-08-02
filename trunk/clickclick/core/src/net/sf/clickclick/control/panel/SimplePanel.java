@@ -1,6 +1,4 @@
 /*
- * Copyright 2008 Bob Schellink
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,7 +14,6 @@
 package net.sf.clickclick.control.panel;
 
 import java.net.MalformedURLException;
-import org.apache.click.ActionListener;
 import org.apache.click.Context;
 import org.apache.click.control.Panel;
 import org.apache.click.util.ClickUtils;
@@ -30,8 +27,6 @@ import org.apache.click.util.HtmlStringBuffer;
  * SimplePanel first checks if the template is available on the servlet context
  * path or the classpath and if a template is not found, the panel controls are
  * rendered in the order they were added.
- *
- * @author Bob Schellink
  */
 public class SimplePanel extends Panel {
 
