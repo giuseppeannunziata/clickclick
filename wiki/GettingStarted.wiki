@@ -1,5 +1,9 @@
 #summary How to get started with ClickClick
 
+== Intro ==
+To get started, first build the latest !ClickClick sources from the trunk. See `trunk/clickclick/readme.html` for details.
+
+== General ==
 Most of the components shipped with !ClickClick are dependent on features provided by the [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/ClickClickServlet.html ClickClickServlet].
 
 Some features provided by !ClickClickServlet incldues:
@@ -7,7 +11,7 @@ Some features provided by !ClickClickServlet incldues:
   * Ajax Support
   * Dynamic class reloading (view changes to Pages without restarting your application)
 
-To use !ClickClickServlet simply include clickclick.jar on your classpath and replace 'net.sf.click.!ClickServlet' with 'net.sf.clickclick.!ClickClickServlet' in your web.xml. See the example below:
+To use !ClickClickServlet simply include clickclick-0.1.jar on your classpath and replace 'net.sf.click.!ClickServlet' with 'net.sf.clickclick.!ClickClickServlet' in your web.xml. See the example below:
 
 {{{
 <?xml version="1.0" encoding="ISO-8859-1"?>
