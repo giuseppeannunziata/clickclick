@@ -16,6 +16,7 @@ package net.sf.clickclick.control.panel;
 import org.apache.click.Control;
 import org.apache.click.control.AbstractContainer;
 import net.sf.clickclick.control.html.Div;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a panel where controls flow from left to right. Controls will
@@ -25,8 +26,8 @@ public class FlowPanel extends SimplePanel {
 
     // -------------------------------------------------------------- Variables
 
-    /** Internal div used for rendering the layout. */
-    protected Div div = new Div();
+    /** Internal container used for rendering the layout. */
+    protected Div container = new Div();
 
     // ----------------------------------------------------------- Constructors
 
@@ -48,8 +49,8 @@ public class FlowPanel extends SimplePanel {
      */
     public FlowPanel(String name) {
         super(name);
-        super.insert(div, 0);
-        div.setAttribute("class", "c-flowpanel");
+        super.insert(container, 0);
+        container.setAttribute("class", "c-flowpanel");
     }
 
     // --------------------------------------------------------- Public Methods
@@ -64,12 +65,12 @@ public class FlowPanel extends SimplePanel {
      * @return the added control
      */
     public Control add(Control control) {
-        // Wrap the control in a div element
+        // Wrap the control in a container element
         Div div = new Div();
         div.setAttribute("class", "c-flowpanel-section");
         div.setStyle("display", "inline");
         div.add(control);
-        div.add(div);
+        container.add(div);
         return control;
     }
 
@@ -88,7 +89,7 @@ public class FlowPanel extends SimplePanel {
      */
     public boolean remove(Control control) {
         AbstractContainer container = getContainer(control);
-        return div.remove(container);
+        return this.container.remove(container);
     }
 
     /**
@@ -118,7 +119,7 @@ public class FlowPanel extends SimplePanel {
      * @param height the height of the panel
      */
     public void setHeight(String height) {
-        div.setHeight(height);
+        container.setHeight(height);
     }
 
     /**
@@ -127,6 +128,17 @@ public class FlowPanel extends SimplePanel {
      * @param width the width of the panel
      */
     public void setWidth(String width) {
-        div.setWidth(width);
+        container.setWidth(width);
+    }
+
+    /**
+     * @see org.apache.click.control.Panel#render(org.apache.click.util.HtmlStringBuffer)
+     *
+     * @param buffer the specified buffer to render the Panel's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
+        container.getAttributes().putAll(getAttributes());
+        container.setId(getId());
+        super.render(buffer);
     }
 }
