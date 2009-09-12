@@ -124,22 +124,27 @@ public class Window extends SimplePanel {
             if (windowStyle.length() > 0) {
                 windowStyle.append("; ");
                 titlebarStyle.append("; ");
+                contentStyle.append("; ");
             }
             windowStyle.append("height:").append(getHeight()).append("px");
             titlebarStyle.append("height:").append(titlebarHeight).append("px");
-            int contentHeight = getHeight() - (titlebarHeight + 7);
+            int contentHeight = getHeight() - (titlebarHeight + 17);
             contentStyle.append("height:").append(contentHeight).append("px");
         }
         setAttribute("style", windowStyle.toString());
 
+        String id = getId();
         buffer.elementStart("div");
         buffer.appendAttribute("name", getName());
-        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("id", id);
         buffer.appendAttribute("class", "window");
         appendAttributes(buffer);
         buffer.closeTag();
 
         buffer.elementStart("div");
+        if (id != null) {
+            buffer.appendAttribute("id", id + "-titlebar");
+        }
         buffer.appendAttribute("class", "titlebar");
         buffer.appendAttribute("style", titlebarStyle);
         buffer.closeTag();
@@ -147,6 +152,9 @@ public class Window extends SimplePanel {
         buffer.elementEnd("div");
 
         buffer.elementStart("div");
+        if (id != null) {
+            buffer.appendAttribute("id", id + "-content");
+        }
         buffer.appendAttribute("class", "content");
         buffer.appendAttribute("style", contentStyle);
         buffer.closeTag();
