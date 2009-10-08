@@ -219,11 +219,14 @@ public class FlexiMenu extends Menu {
      */
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("ul");
-        buffer.appendAttribute("class", "menu");
-        buffer.appendAttribute("id", getOrientation() + "Menu");
+        int depth = 0;
+        renderMenuClassAttribute(buffer, this, depth);
+        String id = getAttribute("id");
+        id = (id != null) ? id : getName();
+        buffer.appendAttribute("id", id);
         buffer.closeTag();
         buffer.append("\n");
-        renderMenu(buffer, this);
+        renderMenu(buffer, this, depth);
         buffer.elementEnd("ul");
     }
 
@@ -238,35 +241,45 @@ public class FlexiMenu extends Menu {
         return buffer.toString();
     }
 
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return the menu css class that is applied to the &lt;ul&gt; element.
+     *
+     * @param buffer the buffer to render the class attribute to
+     * @param menu the menu to render
+     * @param depth the depth of the menu in the hierarchy
+     */
+    protected void renderMenuClassAttribute(HtmlStringBuffer buffer, Menu menu, int depth) {
+        if (depth == 0) {
+            buffer.append(" class=\"");
+            buffer.append(getOrientation()).append("FlexiMenu");
+            buffer.append("\" ");
+        }
+    }
+
     /**
      * Render the given menu.
      *
      * @param buffer the buffer to render to
      * @param menu the menu to render
+     * @param depth the depth of the menu in the hierarchy
      */
-    protected void renderMenu(HtmlStringBuffer buffer, Menu menu) {
+    protected void renderMenu(HtmlStringBuffer buffer, Menu menu, int depth) {
         Iterator it = menu.getChildren().iterator();
         while (it.hasNext()) {
             Menu child = (Menu) it.next();
             if (child.isUserInRoles()) {
                 buffer.elementStart("li");
-                HtmlStringBuffer sb = new HtmlStringBuffer().append("menuItem");
-                if (child.getChildren().size() == 0) {
-                    buffer.appendAttribute("class", sb.toString());
-                    buffer.closeTag();
-                    buffer.append("\n");
-                    renderMenuLink(buffer, child);
-                } else {
-                    sb.append(" ").append("menuItemBullet");
-                    buffer.appendAttribute("class", sb.toString());
-                    buffer.closeTag();
-                    buffer.append("\n");
-                    renderMenuLink(buffer, child);
+                renderMenuItemClassAttribute(buffer, child, depth);
+                buffer.closeTag();
+                renderMenuLink(buffer, child);
+                if (child.getChildren().size() > 0) {
                     buffer.elementStart("ul");
-                    buffer.appendAttribute("class", "submenu");
+                    renderMenuClassAttribute(buffer, child, depth + 1);
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenu(buffer, child);
+                    renderMenu(buffer, child, depth + 1);
                     buffer.elementEnd("ul");
                     buffer.append("\n");
                 }
@@ -277,12 +290,34 @@ public class FlexiMenu extends Menu {
     }
 
     /**
+     * Return the menu item css class that is applied to the &lt;li&gt; element.
+     *
+     * @param buffer the buffer to render the class attribute to
+     * @param menu the menu to render
+     * @param depth the depth of the menu in the hierarchy
+     */
+    protected void renderMenuItemClassAttribute(HtmlStringBuffer buffer, Menu menu, int depth) {
+        buffer.append(" class=\"");
+        buffer.append("menuItem");
+
+        if (menu.getChildren().size() > 0) {
+             buffer.append(" menuItemBullet");
+        }
+
+        buffer.append("\" ");
+    }
+
+    /**
      * Render the given menu as a link.
      *
      * @param buffer the buffer to render to
      * @param menu the menu to render as a link
      */
     protected void renderMenuLink(HtmlStringBuffer buffer, Menu menu) {
+        if (menu.isSeparator()) {
+            renderSeparator(buffer, menu);
+            return;
+        }
 
         buffer.elementStart("a");
 
@@ -302,5 +337,9 @@ public class FlexiMenu extends Menu {
         buffer.append(menu.getLabel());
         buffer.elementEnd("a");
         buffer.append("\n");
+    }
+
+    protected void renderSeparator(HtmlStringBuffer buffer, Menu menu) {
+        buffer.append("<hr/>");
     }
 }

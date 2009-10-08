@@ -6,7 +6,7 @@
 */
 
 /* Root = Horizontal, Secondary = Vertical */
-ul#horizontalMenu {
+ul.horizontalFlexiMenu {
   margin: 0;
   border: 0 none;
   padding: 0;
@@ -14,7 +14,7 @@ ul#horizontalMenu {
   height: 24px;
 }
 
-ul#horizontalMenu li {
+ul.horizontalFlexiMenu li {
    /*For Gecko*/
   display: inline;
    border: 0 none;
@@ -26,7 +26,7 @@ ul#horizontalMenu li {
    width: 190px
 }
 
-ul#horizontalMenu ul {
+ul.horizontalFlexiMenu ul {
   margin: 0;
   border: 0 none;
   padding: 0;
@@ -38,7 +38,7 @@ ul#horizontalMenu ul {
   left: 0;
 }
 
-ul#horizontalMenu ul li {
+ul.horizontalFlexiMenu ul li {
    /*For Gecko*/
   display: block !important;
    display: inline;
@@ -47,7 +47,7 @@ ul#horizontalMenu ul li {
 
 /* Root Menu */
 
-ul#horizontalMenu a {
+ul.horizontalFlexiMenu a {
   border: 1px solid #FFF;
   border-right-color: #FF6600;
   border-bottom-color: #FF6600;
@@ -65,68 +65,68 @@ ul#horizontalMenu a {
   height: 1%; /*For IE*/
 }
 
-ul#horizontalMenu :hover {
+ul.horizontalFlexiMenu :hover {
     z-index: 9999;
 }
 
 /* Root Menu Hover Persistence */
-ul#horizontalMenu a:hover,
-ul#horizontalMenu li:hover a,
-ul#horizontalMenu li.iehover a {
+ul.horizontalFlexiMenu a:hover,
+ul.horizontalFlexiMenu li:hover a,
+ul.horizontalFlexiMenu li.iehover a {
   background: #FF6600;
   color: #FFF;
 }
 
 /* 2nd Menu */
-ul#horizontalMenu li:hover li a,
-ul#horizontalMenu li.iehover li a {
+ul.horizontalFlexiMenu li:hover li a,
+ul.horizontalFlexiMenu li.iehover li a {
   float: none;
   background: #FF9933;
   color: #333;
 }
 
 /* 2nd Menu Hover Persistence */
-ul#horizontalMenu li:hover li a:hover,
-ul#horizontalMenu li:hover li:hover a,
-ul#horizontalMenu li.iehover li a:hover,
-ul#horizontalMenu li.iehover li.iehover a {
+ul.horizontalFlexiMenu li:hover li a:hover,
+ul.horizontalFlexiMenu li:hover li:hover a,
+ul.horizontalFlexiMenu li.iehover li a:hover,
+ul.horizontalFlexiMenu li.iehover li.iehover a {
   background: #FF6600;
   color: #FFF;
 }
 
 /* 3rd Menu */
-ul#horizontalMenu li:hover li:hover li a,
-ul#horizontalMenu li.iehover li.iehover li a {
+ul.horizontalFlexiMenu li:hover li:hover li a,
+ul.horizontalFlexiMenu li.iehover li.iehover li a {
   background: #FF9933;
   color: #333;
 }
 
 /* 3rd Menu Hover Persistence */
-ul#horizontalMenu li:hover li:hover li a:hover,
-ul#horizontalMenu li:hover li:hover li:hover a,
-ul#horizontalMenu li.iehover li.iehover li a:hover,
-ul#horizontalMenu li.iehover li.iehover li.iehover a {
+ul.horizontalFlexiMenu li:hover li:hover li a:hover,
+ul.horizontalFlexiMenu li:hover li:hover li:hover a,
+ul.horizontalFlexiMenu li.iehover li.iehover li a:hover,
+ul.horizontalFlexiMenu li.iehover li.iehover li.iehover a {
   background: #FF6600;
   color: #FFF;
 }
 
 /* 4th Menu */
-ul#horizontalMenu li:hover li:hover li:hover li a,
-ul#horizontalMenu li.iehover li.iehover li.iehover li a {
+ul.horizontalFlexiMenu li:hover li:hover li:hover li a,
+ul.horizontalFlexiMenu li.iehover li.iehover li.iehover li a {
   background: #FF9933;
   color: #333;
 }
 
 /* 4th Menu Hover */
-ul#horizontalMenu li:hover li:hover li:hover li a:hover,
-ul#horizontalMenu li.iehover li.iehover li.iehover li a:hover {
+ul.horizontalFlexiMenu li:hover li:hover li:hover li a:hover,
+ul.horizontalFlexiMenu li.iehover li.iehover li.iehover li a:hover {
   background: #FF6600;
   color: #FFF;
 }
 
 /* Applies to all ul elements. Note the display:none which will hide the <ul> */
-ul#horizontalMenu ul ul,
-ul#horizontalMenu ul ul ul {
+ul.horizontalFlexiMenu ul ul,
+ul.horizontalFlexiMenu ul ul ul {
   display: none;
   position: absolute;
   top: 0;
@@ -134,10 +134,10 @@ ul#horizontalMenu ul ul ul {
 }
 
 /* Do Not Move - Must Come Before display:block for Gecko */
-ul#horizontalMenu li:hover ul ul,
-ul#horizontalMenu li:hover ul ul ul,
-ul#horizontalMenu li.iehover ul ul,
-ul#horizontalMenu li.iehover ul ul ul {
+ul.horizontalFlexiMenu li:hover ul ul,
+ul.horizontalFlexiMenu li:hover ul ul ul,
+ul.horizontalFlexiMenu li.iehover ul ul,
+ul.horizontalFlexiMenu li.iehover ul ul ul {
   display: none;
 }
 
@@ -145,12 +145,12 @@ ul#horizontalMenu li.iehover ul ul ul {
  The following will enable the displaying of the <ul> elements as the user
  navigates the menu.
 */
-ul#horizontalMenu li:hover ul,
-ul#horizontalMenu ul li:hover ul,
-ul#horizontalMenu ul ul li:hover ul,
-ul#horizontalMenu li.iehover ul,
-ul#horizontalMenu ul li.iehover ul,
-ul#horizontalMenu ul ul li.iehover ul {
+ul.horizontalFlexiMenu li:hover ul,
+ul.horizontalFlexiMenu ul li:hover ul,
+ul.horizontalFlexiMenu ul ul li:hover ul,
+ul.horizontalFlexiMenu li.iehover ul,
+ul.horizontalFlexiMenu ul li.iehover ul,
+ul.horizontalFlexiMenu ul ul li.iehover ul {
   display: block;
 }
 
@@ -158,20 +158,20 @@ ul#horizontalMenu ul ul li.iehover ul {
 /*Add bullets to the menus*/
 
 
-ul#horizontalMenu li:hover.menuItemBullet > a {
+ul.horizontalFlexiMenu li:hover.menuItemBullet > a {
     background: #FF6600 url('menu_indicators.png') no-repeat -1514px 50%;
 }
 
-ul#horizontalMenu li:hover.menuItemBullet > ul li:hover.menuItemBullet > a {
+ul.horizontalFlexiMenu li:hover.menuItemBullet > ul li:hover.menuItemBullet > a {
     background: #FF6600 url('menu_indicators.png') no-repeat -1284px 50%;
 }
 
-ul#horizontalMenu .menuItemBullet a {
+ul.horizontalFlexiMenu .menuItemBullet a {
     background: #FF9933 url('menu_indicators.png') no-repeat -570px 50%;
 }
 
-ul#horizontalMenu .menuItemBullet ul .menuItemBullet a,
-ul#horizontalMenu .menuItemBullet ul .menuItemBullet .menuItemBullet a {
+ul.horizontalFlexiMenu .menuItemBullet ul .menuItemBullet a,
+ul.horizontalFlexiMenu .menuItemBullet ul .menuItemBullet .menuItemBullet a {
     background: #FF9933 url('menu_indicators.png') no-repeat -340px 50%;
 }
 
@@ -180,15 +180,15 @@ ul#horizontalMenu .menuItemBullet ul .menuItemBullet .menuItemBullet a {
   Only IE browsers will have the 'iehover' class injected
   on the LI elements. 'iehover' is added as a class in the menu.js script
   I do not have IE 5.5 anymore so perhaps this applies to 5.5 as well.*/
-ul#horizontalMenu .menuItemBullet a:hover,
-ul#horizontalMenu li.iehover a {
+ul.horizontalFlexiMenu .menuItemBullet a:hover,
+ul.horizontalFlexiMenu li.iehover a {
     background: #FF6600 url('menu_indicators.png') no-repeat -570px 50%;
 }
 
-ul#horizontalMenu .menuItemBullet .menuItemBullet a:hover,
-ul#horizontalMenu li.iehover li.iehover a,
-ul#horizontalMenu .menuItemBullet .menuItemBullet .menuItemBullet a:hover,
-ul#horizontalMenu li.iehover li.iehover li.iehover a {
+ul.horizontalFlexiMenu .menuItemBullet .menuItemBullet a:hover,
+ul.horizontalFlexiMenu li.iehover li.iehover a,
+ul.horizontalFlexiMenu .menuItemBullet .menuItemBullet .menuItemBullet a:hover,
+ul.horizontalFlexiMenu li.iehover li.iehover li.iehover a {
     background: #FF6600 url('menu_indicators.png') no-repeat -340px 50%;
 }
 /*IE 6 Specific end*/
