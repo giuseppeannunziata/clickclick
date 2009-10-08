@@ -230,19 +230,35 @@ public class JQMenu extends FlexiMenu {
      */
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("ul");
-        String cssClass = "sf-menu";
-        if (VERTICAL.equals(getOrientation())) {
-            cssClass += " sf-vertical";
-        }
-        buffer.appendAttribute("class", cssClass);
+        int depth = 0;
+        renderMenuClassAttribute(buffer, this, depth);
         appendAttributes(buffer);
         buffer.closeTag();
         buffer.append("\n");
-        renderMenu(buffer, this);
+        renderMenu(buffer, this, depth);
         buffer.elementEnd("ul");
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * @see net.sf.clickclick.control.menu.FlexiMenu#renderMenuClassAttribute(org.apache.click.util.HtmlStringBuffer, org.apache.click.extras.control.Menu, int)
+     *
+     * @param buffer the buffer to render the class attribute to
+     * @param menu the menu to render
+     * @param depth the depth of the menu in the hierarchy
+     */
+    @Override
+    protected void renderMenuClassAttribute(HtmlStringBuffer buffer, Menu menu, int depth) {
+        buffer.append(" class=\"");
+        if (depth == 0) {
+            buffer.append("sf-menu");
+            if (VERTICAL.equals(getOrientation())) {
+                buffer.append(" sf-vertical");
+            }
+        }
+        buffer.append("\" ");
+    }
 
     /**
      * Add the JQMenu JavaScript {@link #template} to the list of head elements.
@@ -275,8 +291,10 @@ public class JQMenu extends FlexiMenu {
      *
      * @param buffer the buffer to render to
      * @param menu the menu to render
+     * @param depth the depth of the menu in the hierarchy
      */
-    protected void renderMenu(HtmlStringBuffer buffer, Menu menu) {
+    @Override
+    protected void renderMenu(HtmlStringBuffer buffer, Menu menu, int depth) {
         Iterator it = menu.getChildren().iterator();
         while (it.hasNext()) {
             Menu child = (Menu) it.next();
@@ -293,7 +311,7 @@ public class JQMenu extends FlexiMenu {
                     buffer.elementStart("ul");
                     buffer.closeTag();
                     buffer.append("\n");
-                    renderMenu(buffer, child);
+                    renderMenu(buffer, child, ++depth);
                     buffer.elementEnd("ul");
                     buffer.append("\n");
                 }
