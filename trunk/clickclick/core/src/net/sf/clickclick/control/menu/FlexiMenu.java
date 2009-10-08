@@ -190,6 +190,12 @@ public class FlexiMenu extends Menu {
      * @return the list of html imports
      */
     public List getHeadElements() {
+        String id = getAttribute("id");
+        id = (id != null) ? id : getName();
+        if (id == null) {
+            throw new IllegalStateException("Menu name is not set");
+        }
+
         if (headElements == null) {
             headElements = super.getHeadElements();
 
@@ -200,10 +206,20 @@ public class FlexiMenu extends Menu {
             JsImport jsImport = new JsImport("/click/control.js");
             headElements.add(jsImport);
 
-            jsImport = new JsImport("/clickclick/core/menu/menu.js");
+            jsImport = new JsImport("/clickclick/core/menu/menu-fix-ie6.js");
+            jsImport.setConditionalComment(JsImport.IF_LESS_THAN_IE7);
             headElements.add(jsImport);
 
-            JsScript jsScript = new JsScript("addLoadEvent( function() { initMenu() } );");
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append("addLoadEvent( function() {\n");
+            buffer.append(" if(typeof Click != 'undefined' && typeof Click.menu != 'undefined') {\n");
+            buffer.append("   if(typeof Click.menu.fixHiddenMenu != 'undefined') {\n");
+            buffer.append("     Click.menu.fixHiddenMenu(\"").append(id).append("\");\n");
+            buffer.append("     Click.menu.fixHover(\"").append(id).append("\");\n");
+            buffer.append("   }\n");
+            buffer.append(" }\n");
+            buffer.append("});\n");
+            JsScript jsScript = new JsScript(buffer.toString());
             headElements.add(jsScript);
         }
 
