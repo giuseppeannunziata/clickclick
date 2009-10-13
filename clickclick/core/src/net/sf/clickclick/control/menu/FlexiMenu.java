@@ -109,16 +109,7 @@ public class FlexiMenu extends Menu {
         } else if (hasChildren() && "".equals(getPath())) {
             setPath("#");
         }
-        if (isExternal()) {
-            return getPath();
-
-        } else if ("#".equals(getPath())) {
-            return getContext().getResponse().encodeURL(getPath());
-
-        } else {
-            return getContext().getResponse().encodeURL(getContext().getRequest().
-                getContextPath() + "/" + getPath());
-        }
+        return super.getHref();
     }
 
     // --------------------------------------------------------- Public Methods
