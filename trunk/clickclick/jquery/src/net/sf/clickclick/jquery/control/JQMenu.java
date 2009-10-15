@@ -13,6 +13,7 @@
  */
 package net.sf.clickclick.jquery.control;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -202,7 +203,7 @@ public class JQMenu extends FlexiMenu {
      */
     public List getHeadElements() {
         if (headElements == null) {
-            headElements = super.getHeadElements();
+            headElements = new ArrayList();
 
             headElements.add(new CssImport(menuCssImport));
 
