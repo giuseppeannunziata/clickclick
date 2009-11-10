@@ -23,7 +23,7 @@ public class MyPage extends Page {
     public void onInit() {
         addControl(link);
 
-        link.setActionListener(new OnClickListner());
+        link.setActionListener(new OnClickListener());
     }
 
     class OnClickListener extends AjaxAdapter {
@@ -65,7 +65,7 @@ public class MyPage extends Page {
     public void onInit() {
         addControl(link);
 
-        link.setActionListener(new OnClickListner());
+        link.setActionListener(new OnClickListener());
     }
 
     class OnClickListener extends AjaxAdapter {
@@ -246,7 +246,7 @@ public class HelloButton extends Button {
     }
 
     public void onInit() {
-        // Ajaxify the button by add the hello.js to the Button's head elements
+        // Ajaxify the button by adding the hello.js to the Button's head elements
         helper.ajaxify();
     }
 }
