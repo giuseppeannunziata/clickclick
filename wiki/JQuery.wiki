@@ -115,7 +115,7 @@ If you know jQuery you might have realized that Taconite XML commands map direct
 Here are some of the features:
 
  * Ajax actions can return any Click control to the browser. For example, one can submit a Form using Ajax that returns a new Form instance
- * When Ajax actions return a Click Control, the Control's CSS and !JavaScript resources must be returned as well
+ * When Ajax actions return a Click Control, the Control's CSS and !JavaScript resources are automatically added to the HTML page.
  * If CSS and JavaScript resources are already available to the browser, they will be ignored. For example if an Ajax action returns a Form, the Form's resources (control.js, control.css) will also be returned and added to the browser's HEAD section. If the Ajax action is invoked a second time the Form will be returned again. Click will detect that the resources (control.js and control.css) are already available to the browser and won't add them to the HEAD section again.
 
 === Infrastructure ===
