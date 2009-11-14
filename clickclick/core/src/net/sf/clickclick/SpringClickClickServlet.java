@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.click.*;
+import org.apache.click.extras.spring.SpringClickServlet;
 import org.apache.click.util.ErrorPage;
 import org.apache.click.util.PageImports;
 
@@ -28,7 +29,7 @@ import org.apache.click.util.PageImports;
  *   <li>Full Ajax support</li>
  * </ul>
  */
-public class ClickClickServlet extends ClickServlet {
+public class SpringClickClickServlet extends SpringClickServlet {
 
     ClickClickHelper helper;
 
