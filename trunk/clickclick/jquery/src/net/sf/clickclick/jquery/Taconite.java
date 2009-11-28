@@ -240,7 +240,7 @@ public class Taconite extends Partial {
     // -------------------------------------------------------------- Variables
 
     /** The list of commands to execute. */
-    private List commands = new ArrayList();
+    protected List commands = new ArrayList();
 
     // ----------------------------------------------------------- Constructors
 
@@ -286,6 +286,18 @@ public class Taconite extends Partial {
      */
     public Taconite add(Command command) {
         commands.add(command);
+        return this;
+    }
+
+    /**
+     * Add the given command to the list of commands at the given index.
+     *
+     * @param command the command to add
+     * @param index the index to add the command to
+     * @return the Taconite instance
+     */
+    public Taconite insert(Command command, int index) {
+        commands.add(index, command);
         return this;
     }
 
