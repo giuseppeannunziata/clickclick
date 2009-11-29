@@ -237,6 +237,13 @@ public class Taconite extends Partial {
      */
     public static final String ADD_HEADER = "addHeader";
 
+    /**
+     * The "<tt>CUSTOM</tt>" command constant. This command will be ignored by
+     * taconite and allow users to pass content to other Ajax callbacks on the
+     * browser.
+     */
+    public static final String CUSTOM = "custom";
+
     // -------------------------------------------------------------- Variables
 
     /** The list of commands to execute. */
