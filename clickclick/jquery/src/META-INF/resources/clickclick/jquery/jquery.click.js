@@ -174,6 +174,9 @@ function go(xml) {
                 }
                 continue;
             }
+            if (cmd == 'custom') {
+                continue;
+            }
             //*** CLICK ENDS
             var q = cmdNode.getAttribute('select');
             var jq = $(q);
