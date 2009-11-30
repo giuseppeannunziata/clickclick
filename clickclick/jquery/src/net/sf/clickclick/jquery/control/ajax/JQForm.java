@@ -58,6 +58,8 @@ import org.apache.commons.lang.StringUtils;
  *
  *            // Update the form
  *            partial.replace(form);
+ *
+ *            return partial;
  *        }
  *    });
  * } </pre>
