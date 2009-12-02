@@ -646,6 +646,40 @@ public class Taconite extends Partial {
     }
 
     /**
+     * Create a {@link #CUTOM} command for the given content* and add it to the
+     * list of commands. This method provides a simple way to transfer the
+     * content to the browser, without Taconite processing it.
+     *
+     * @param content the content to add to the command
+     * @return the command that was created
+     */
+    public Command custom(String content) {
+        if (StringUtils.isBlank(content)) {
+            throw new IllegalArgumentException("content is null or blank");
+        }
+        Command command = newCommand(Taconite.CUSTOM);
+        command.add(content);
+        return command;
+    }
+
+    /**
+     * Create a {@link #CUSTOM} command for the given Control and add it to the
+     * list of commands. This method provides a simple way to transfer the
+     * control content to the browser, without Taconite processing it.
+     *
+     * @param content the Control to add to command
+     * @return the command that was created
+     */
+    public Command custom(Control content) {
+        if (content == null) {
+            throw new IllegalArgumentException("content is null");
+        }
+        Command command = newCommand(Taconite.CUSTOM);
+        command.add(content);
+        return command;
+    }
+
+    /**
      * Create an {@link #EMPTY} command for the target Control and add
      * it to the list of commands.
      * <p/>
