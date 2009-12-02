@@ -256,6 +256,18 @@ public class Command {
     }
 
     /**
+     * Add the name/value pair arguments to the Command list of {@link #arguments}.
+     *
+     * @param name the "name" argument to add
+     * @param value the "value" argument to add
+     * @return this command instance
+     */
+    public Command argument(String name, String value) {
+        addArgument(name);
+        return addArgument(value);
+    }
+
+    /**
      * Add the argument to the Command list of {@link #arguments}.
      *
      * @param arg the argument to add
@@ -263,6 +275,19 @@ public class Command {
      */
     public Command addArgument(String arg) {
         getArguments().add(arg);
+        return this;
+    }
+
+    /**
+     * Add the name/value pair arguments to the Command list of {@link #arguments}.
+     *
+     * @param name the "name" argument to add
+     * @param value the "value" argument to add
+     * @return this command instance
+     */
+    public Command addArgument(String name, String value) {
+        getArguments().add(name);
+        getArguments().add(value);
         return this;
     }
 
