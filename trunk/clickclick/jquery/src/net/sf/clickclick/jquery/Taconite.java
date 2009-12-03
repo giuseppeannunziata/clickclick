@@ -1387,9 +1387,17 @@ public class Taconite extends Partial {
         Command jsScriptsCommand = new Command(Taconite.ADD_HEADER);
         splitJavaScriptElements(headElementsCommand, jsScriptsCommand, jsElements);
 
-        // Add headElements at the top of the command list
+        // Add headElements at the top of the command list, but after any CUSTOM
+        // commands
         if(headElementsCommand.getContent().size() > 0) {
-            commands.add(0, headElementsCommand);
+            int i = 0;
+            for(int size = commands.size(); i < size; i++) {
+                Command command = (Command) commands.get(i);
+                if (!CUSTOM.equals(command.getCommand())) {
+                    break;
+                }
+            }
+            commands.add(i, headElementsCommand);
         }
 
         // Add JsScript elements at the bottom of the command list
