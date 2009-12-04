@@ -13,10 +13,10 @@
  */
 (function() {// Execute within a closure
 
-// prepare the form when the DOM is ready
-var formOptions;
+  // prepare the form when the DOM is ready
+  var formOptions;
 
-jQuery(document).ready(function() {
+  jQuery(document).ready(function() {
     formOptions = {
         beforeSubmit:  preSubmit,   // pre-submit callback
         dataType:      'xml',   // must be 'xml' to work with JQuery Taconite support
@@ -43,10 +43,10 @@ jQuery(document).ready(function() {
 
     // bind the form submit event
     jQuery('$selector').ajaxForm(formOptions);
-});
+  });
 
-// pre-submit callback
-function preSubmit(formData, jqForm, options) {
+  // pre-submit callback
+  function preSubmit(formData, jqForm, options) {
      #if($javascriptValidate)
        if(!on_$!{control.id}_submit()) return false;
      #end
@@ -70,9 +70,9 @@ function preSubmit(formData, jqForm, options) {
     // here we could return false to prevent the form from being submitted;
     // returning anything other than false will allow the form submit to continue
     return true;
-}
+  }
 
-function postSubmit(xhr, statusText) {
+  function postSubmit(xhr, statusText) {
     #if($showIndicator == "true")
       #if($indicatorTarget) jQuery('$indicatorTarget').unblock();
       #else jQuery.unblockUI();
@@ -84,14 +84,14 @@ function postSubmit(xhr, statusText) {
     } else {
         onError(statusText, xhr);
     }
-}
+  }
 
-function onSuccess(responseData, statusText, xhr) {
+  function onSuccess(responseData, statusText, xhr) {
     // bind the form submit event
     jQuery('$selector').ajaxForm(formOptions);
-}
+  }
 
-function onError(statusText, xhr) {
+  function onError(statusText, xhr) {
     alert('$errorMessage' #if ($productionMode != "true") + '\n\n' + xhr.responseText #end);
-}
+  }
 })();
