@@ -20,21 +20,12 @@ import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
-import org.apache.click.element.JsScript;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
  *
  */
 public class LineChart extends BorderPage {
-
-    public void onGet() {
-        // Render LineChart Page JavaScript
-        Map model = new HashMap();
-        model.put("data", getChartData());
-        model.put("label", "Employee count");
-        getHeadElements().add(new JsScript("/charts/line/line-chart.js", model));
-    }
 
     public List getHeadElements() {
         if (headElements == null) {
@@ -53,6 +44,15 @@ public class LineChart extends BorderPage {
             headElements.add(new CssImport("/clickclick/example/jqplot/jquery.jqplot.min.css"));
         }
         return headElements;
+    }
+
+    @Override
+    protected Map getJsTemplateModel() {
+        // Render LineChart Page JavaScript
+        Map model = new HashMap();
+        model.put("data", getChartData());
+        model.put("label", "Employee count");
+        return model;
     }
 
     private String getChartData() {
