@@ -15,11 +15,13 @@ package net.sf.clickclick.jquery;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import net.sf.clickclick.util.AjaxUtils;
+import org.apache.click.Context;
 import org.apache.click.Control;
-import org.apache.click.element.CssStyle;
 import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.HtmlStringBuffer;
@@ -662,7 +664,8 @@ public class Command {
      */
     protected void renderContent(HtmlStringBuffer buffer) {
         boolean wrapInCDATA = false;
-        if ((Taconite.EVAL.equals(getCommand()) && getContent().size() > 0)
+        boolean isEval = Taconite.EVAL.equals(getCommand());
+        if ((isEval && getContent().size() > 0)
             || isCharacterData()) {
             wrapInCDATA = true;
         }
@@ -683,7 +686,12 @@ public class Command {
                 if (wrapInCDATA) {
                     script.setCharacterData(false);
                 }
-                script.render(buffer);
+
+                if (isEval) {
+                    renderJsScriptContent(script, buffer);
+                } else {
+                    script.render(buffer);
+                }
             } else if (content instanceof Element) {
                 ((Element) content).render(buffer);
             } else {
@@ -705,5 +713,30 @@ public class Command {
      */
     protected void renderTagEnd(String tagName, HtmlStringBuffer buffer) {
         buffer.elementEnd(tagName);
+    }
+
+    // -------------------------------------------------------- Private Methods
+
+    /**
+     * JsScript doesn't expose a public method to render "only" its content.
+     * This method will render only the content of a JsScript.
+     *
+     * @param script the JsScript to render
+     * @param buffer the buffer to render the JsScript content to
+     */
+    private void renderJsScriptContent(JsScript script, HtmlStringBuffer buffer) {
+        if (script.getTemplate() != null) {
+
+            Map templateModel = script.getModel();
+            if (templateModel == null) {
+                templateModel = new HashMap();
+            }
+            Context context = Context.getThreadLocalContext();
+            buffer.append(context.renderTemplate(script.getTemplate(), templateModel));
+        }
+
+        if (script.getContent() != null) {
+            buffer.append(script.getContent());
+        }
     }
 }
