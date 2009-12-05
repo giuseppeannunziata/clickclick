@@ -20,21 +20,12 @@ import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
-import org.apache.click.element.JsScript;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
  *
  */
 public class InteractiveChart extends BorderPage {
-
-    public void onGet() {
-        // Render Chart Page JavaScript
-        Map model = new HashMap();
-        model.put("data", getChartData());
-        model.put("label", "Interactive demo");
-        getHeadElements().add(new JsScript("/charts/line/interactive-chart.js", model));
-    }
 
     public List getHeadElements() {
         if (headElements == null) {
@@ -60,6 +51,15 @@ public class InteractiveChart extends BorderPage {
 
         }
         return headElements;
+    }
+
+    @Override
+    protected Map getJsTemplateModel() {
+        // Render Chart Page JavaScript
+        Map model = new HashMap();
+        model.put("data", getChartData());
+        model.put("label", "Interactive demo");
+        return model;
     }
 
     private String getChartData() {

@@ -20,21 +20,12 @@ import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.JsImport;
-import org.apache.click.element.JsScript;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
  *
  */
 public class BarChart extends BorderPage {
-
-    public void onGet() {
-        // Render BarChart Page JavaScript
-        Map model = new HashMap();
-        model.put("data", getChartData());
-        model.put("label", "Browser usage %");
-        getHeadElements().add(new JsScript("/charts/bar/bar-chart.js", model));
-    }
 
     public List getHeadElements() {
         if (headElements == null) {
@@ -55,6 +46,15 @@ public class BarChart extends BorderPage {
             headElements.add(new CssImport("/clickclick/example/jqplot/jquery.jqplot.min.css"));
         }
         return headElements;
+    }
+
+    @Override
+    protected Map getJsTemplateModel() {
+        // Render BarChart Page JavaScript
+        Map model = new HashMap();
+        model.put("data", getChartData());
+        model.put("label", "Browser usage %");
+        return model;
     }
 
     private String getChartData() {
