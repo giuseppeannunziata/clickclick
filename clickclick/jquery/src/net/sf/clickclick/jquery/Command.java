@@ -19,7 +19,9 @@ import java.util.Iterator;
 import java.util.List;
 import net.sf.clickclick.util.AjaxUtils;
 import org.apache.click.Control;
+import org.apache.click.element.CssStyle;
 import org.apache.click.element.Element;
+import org.apache.click.element.JsScript;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -676,6 +678,12 @@ public class Command {
             Object content = it.next();
             if (content instanceof Control) {
                 ((Control) content).render(buffer);
+            } else if (content instanceof JsScript) {
+                JsScript script = (JsScript) content;
+                if (wrapInCDATA) {
+                    script.setCharacterData(false);
+                }
+                script.render(buffer);
             } else if (content instanceof Element) {
                 ((Element) content).render(buffer);
             } else {

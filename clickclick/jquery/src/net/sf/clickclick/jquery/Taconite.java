@@ -763,6 +763,25 @@ public class Taconite extends Partial {
     }
 
     /**
+     * Create an {@link #EVAL} command for the given
+     * {@link org.apache.click.element.JsScript} and add it to the list of
+     * commands.
+     * <p/>
+     * The given JsScript content will evaluated in the browser.
+     *
+     * @param content the JsScript content to be evaluated in the browser
+     * @return the command that was created
+     */
+    public Command eval(JsScript script) {
+        if (script == null) {
+            throw new IllegalArgumentException("Script cannot be null.");
+        }
+        Command command = newCommand(Taconite.EVAL);
+        command.add(script);
+        return command;
+    }
+
+    /**
      * Create a {@link #PREPEND} command for the given CSS selector and content
      * and add it to the list of commands.
      * <p/>
