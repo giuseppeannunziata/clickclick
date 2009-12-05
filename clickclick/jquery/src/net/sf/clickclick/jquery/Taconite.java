@@ -1380,7 +1380,20 @@ public class Taconite extends Partial {
         Iterator it = commands.iterator();
         while (it.hasNext()) {
             Command command = (Command) it.next();
+
+            if (EVAL.equals(command.getCommand())) {
+                // Eval commands are not added to the head section of the taconite
+                // response. These commands are processed in the order they were
+                // added
+                continue;
+            }
             processHeadElements(command, pageImports);
+
+            // Ensure the addHeader commands are removed since they were already
+            // processed by the line above
+            if (ADD_HEADER.equals(command.getCommand())) {
+                it.remove();
+            }
         }
 
         List headElements = pageImports.getHeadElements();
