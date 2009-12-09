@@ -10,7 +10,8 @@
         <menu label="JQuery UI Calendar" path="controls/calendar-demo.htm"/>
         <menu label="JQuery UI Slider" path="controls/slider-demo.htm"/>
         <menu label="JQuery UI Dialog" path="controls/dialog/dialog-demo.htm"/>
-        <menu label="Menu" path="controls/menu.htm"/>
+        <menu label="Desktop Menu" path="controls/desktop-menu.htm"/>
+        <menu label="Superfish Menu" path="controls/superfish-menu.htm"/>
         <menu label="Color Picker" path="controls/color-picker.htm"/>
         <menu label="File Upload Demo" path="controls/file-upload-demo.htm"/>
     </menu>
