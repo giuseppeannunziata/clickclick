@@ -756,16 +756,6 @@ $.prototype.init.prototype = $.prototype;
             } else {
                 append = canAddScript(element);
                 shouldAppendScriptPlaceHolder = true;
-
-                // If the id starts with the special marker "replace_" do not
-                // add marker element since we want to reevaluate this element
-                /*
-                if (!id || id.indexOf("replace_") < 0) {
-                    shouldAppendScriptPlaceHolder = false;
-                } else {
-                    shouldAppendScriptPlaceHolder = true;
-                }
-                 */
             }
         }
         if(append) {
@@ -836,14 +826,6 @@ $.prototype.init.prototype = $.prototype;
         if (id) {
             // If an element exists with same id, the element exists
             if($('#'+id).length) {
-                // If the id starts with the special marker "replace_" we remove
-                // the element, and return false
-                /*
-                if (id.indexOf("replace_") >= 0) {
-                    $('#'+id).remove();
-                    return false;
-                }
-                */
                 Click.log(element.nodeName+' with id: "'+id+'" already exists in the page');
                 return true;
             }

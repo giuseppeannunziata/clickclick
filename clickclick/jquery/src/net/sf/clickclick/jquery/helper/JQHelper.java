@@ -997,7 +997,6 @@ public class JQHelper implements Serializable {
             if (StringUtils.isBlank(id)) {
                  id = control.getName();
             }
-            //jsScript.setId("replace_" + id + "_jquery_template");
             jsScript.setId(id + "_jquery_template");
 
             // remove previous script in case of stateful pages
