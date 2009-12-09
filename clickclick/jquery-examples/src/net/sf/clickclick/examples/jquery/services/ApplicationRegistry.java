@@ -24,6 +24,8 @@ public class ApplicationRegistry {
 
     private PostCodeService postCodeService;
 
+    private FileSystemService fileSystemService;
+
     // -------------------------------------------------------- Constructors
 
     private ApplicationRegistry() {
@@ -47,6 +49,13 @@ public class ApplicationRegistry {
             postCodeService = new PostCodeService();
         }
         return postCodeService;
+    }
+
+    public FileSystemService getFileSystemService() {
+        if (fileSystemService == null) {
+            fileSystemService = new FileSystemService();
+        }
+        return fileSystemService;
     }
 
     // ---------------------------------------------------------- Inner Classes
