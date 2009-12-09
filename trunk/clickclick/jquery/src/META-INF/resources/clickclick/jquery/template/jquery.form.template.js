@@ -13,6 +13,18 @@
  */
 (function() {// Execute within a closure
 
+  // Make sure that the Click namespace exists
+  if( typeof Click == 'undefined' )
+    Click = {};
+
+  // Make sure that the Click.jquery namespace exists
+  if( typeof Click.jquery == 'undefined' )
+    Click.jquery = {};
+
+  // Make sure that the Click.jquery.form namespace exists
+  if( typeof Click.jquery.form == 'undefined' )
+    Click.jquery.form = {};
+
   // prepare the form when the DOM is ready
   var formOptions;
 
@@ -40,6 +52,8 @@
         // jQuery.ajax options can be used here too, for example:
         //timeout:   3000
     };
+
+    Click.jquery.form['$selector'] = formOptions;
 
     // bind the form submit event
     jQuery('$selector').ajaxForm(formOptions);
