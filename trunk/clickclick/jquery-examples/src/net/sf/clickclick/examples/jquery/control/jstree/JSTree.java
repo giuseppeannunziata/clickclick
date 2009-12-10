@@ -64,12 +64,7 @@ public class JSTree extends AbstractControl {
      */
     protected boolean rootNodeDisplayed = false;
 
-    /** The JQuery helper object. */
-    //protected JQHelper jqHelper = new JQHelper(this);
-
     protected boolean contextMenuEnabled = false;
-
-    //protected JSTreeListener treeListener;
 
     protected ChangeListener changeListener;
 
@@ -154,26 +149,6 @@ public class JSTree extends AbstractControl {
     public void setContextMenuEnabled(boolean contextMenuEnabled) {
         this.contextMenuEnabled = contextMenuEnabled;
     }
-
-    /**
-     * Return the JQuery Helper instance.
-     *
-     * @return the jqHelper instance
-     */
-    /*
-    public JQHelper getJQueryHelper() {
-        return jqHelper;
-    }*/
-
-    /**
-     * Set the JQuery Helper instance.
-     *
-     * @param jqHelper the JQuery Helper instance
-     */
-    /*
-    public void setJQueryHelper(JQHelper jqHelper) {
-        this.jqHelper = jqHelper;
-    }*/
 
     public JSTreeNode getRootNode() {
         //Calculate the root node dynamically by finding the node where parent == null.
@@ -508,7 +483,7 @@ public class JSTree extends AbstractControl {
         model.put("context", context.getRequest().getContextPath());
         model.put("path", getPage().getPath());
         model.put("id", id);
-        model.put("tree", this);
+        model.put("jstree", this);
         model.put("selector", '#' + id);
         JsScript jsScript = new JsScript("/clickclick/example/template/jquery.jstree.template.js", model);
         return jsScript;
