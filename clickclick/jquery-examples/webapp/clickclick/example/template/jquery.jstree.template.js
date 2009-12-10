@@ -24,7 +24,6 @@ jQuery(document).ready(function(){
            "file" : {
                     creatable : true,
                     valid_children : [ "none" ],
-                    //max_children    : -1,
                     icon : {
                         image : "$context/clickclick/example/jstree/images/file.png"
                     }
@@ -32,7 +31,6 @@ jQuery(document).ready(function(){
            "drive" : {
                     creatable : true,
                     valid_children : [ "driver" ],
-                    //max_children    : ,
                     icon : {
                         image : "$context/clickclick/example/jstree/images/drive.png"
                     }
@@ -43,15 +41,22 @@ jQuery(document).ready(function(){
 
         data : {
            type : "html",
-           async : true,
            opts : {
-             //url : callbackUrl
            }
         },
 
         selected : ['n_2_1', 'n_2_3_1'],
 
         callback : {
+
+          /*
+           * Used for passing custom parameters to the server. Receives two
+           * parameters - a node (if applicable) and a reference to the tree
+           * instance.
+           */
+          beforedata: function(NODE, TREE){
+              return { nodeId : $(NODE).attr("id") || 0 };
+          }
 
           /*
            * Triggered when a node is created. Receives five parameters - the node
@@ -71,39 +76,55 @@ jQuery(document).ready(function(){
           */
 
           /*
+           * Triggered when a node is closed. Receives two parameters
+           *  - the node that was closed and a reference to the tree instance.
+           */
+          #if ($jstree.closeListener)
+            ,onclose: function(NODE, TREE){
+              var nodeId = $(NODE).attr("id");
+              var parameters = 'nodeId='+nodeId;
+              notifyServer('CLOSE', parameters);
+            }
+          #end
+
+          /*
            * Triggered when a node is deleted. Receives three parameters
            * - the node that was deleted, a reference to the tree instance and a
            * rollback object that you can use with jQuery.tree.rollback(RB).
            */
-          ondelete: function(NODE, TREE, RB){
+          #if ($jstree.deleteListener)
+            ,ondelete: function(NODE, TREE, RB){
               var nodeId = $(NODE).attr("id");
               var parameters = 'nodeId='+nodeId;
               notifyServer('DELETE', parameters);
-          }
+            }
+          #end
 
           /**
            * Triggered when selection is changed in any way (select or deselect).
            * Receives two parameters - the node involved and a reference to the
            * tree instance.
            */
-          ,onchange : function (NODE) {
-            // guard against infinite loop
-            if(!applyPreSelect) {
+          #if ($jstree.changeListener)
+            ,onchange : function (NODE) {
+              // guard against infinite loop
+              if(!applyPreSelect) {
                 return;
-            }
-            var nodeId = $(NODE).attr("id");
-            var href = $(NODE).children("a:eq(0)").attr("href");
-            if (nodeId==null || nodeId=="undefined" || nodeId=="") {
+              }
+              var nodeId = $(NODE).attr("id");
+              var href = $(NODE).children("a:eq(0)").attr("href");
+              if (nodeId==null || nodeId=="undefined" || nodeId=="") {
                 // Probably a newly created node - do nothing
-            } else if (href==null||href=="undefined"||href==""||href=='#') {
+              } else if (href==null||href=="undefined"||href==""||href=='#') {
                 // Notify server of selection
                 var parameters = 'nodeId='+nodeId;
                 notifyServer('CHANGE', parameters);
-            } else {
+              } else {
                 // If an href is specified, follow the link
                 document.location.href = href;
+              }
             }
-          }
+          #end
 
           /*
            * Triggered when a node is moved. Receives five parameters - the node
@@ -112,20 +133,28 @@ jQuery(document).ready(function(){
            * a reference to the tree instance and a rollback object that you can
            * use with jQuery.tree.rollback(RB).
            */
-          ,onmove: function(NODE, REF_NODE, TYPE, TREE, RB){
+          #if ($jstree.moveListener)
+            ,onmove: function(NODE, REF_NODE, TYPE, TREE, RB){
               var nodeId = $(NODE).attr("id");
               var refNodeId = $(REF_NODE).attr("id");
               var parameters = 'nodeId='+nodeId+'&type='+TYPE+'&refNodeId='+refNodeId;
               notifyServer('MOVE', parameters);
-          }
+            }
+          #end
 
           /*
            * Triggered when the tree is loaded with data for the first time or
            * refreshed. Receives one parameter - a reference to the tree instance.
            */
           ,onload : function(TREE) {
-              TREE.settings.data.opts.url = callbackUrl;
+
+              #if ($jstree.openListener)
+                TREE.settings.data.async = true;
+                TREE.settings.data.opts.url = callbackUrl;
+              #end
+
               applyPreSelect = true;
+
               // Clear the float:left CSS style
               TREE.container.append($("<div>").css({ "clear" : "both" }));
           }
@@ -135,7 +164,8 @@ jQuery(document).ready(function(){
            * - the renamed node, a reference to the tree instance and a rollback
            *  object that you can use with jQuery.tree.rollback(RB).
            */
-          ,onrename: function(NODE, TREE, RB){
+          #if ($jstree.renameListener)
+            ,onrename: function(NODE, TREE, RB){
               var nodeId = $(NODE).attr("id");
               var nodeValue = TREE.get_text(NODE);
               var parameters = 'nodeId='+nodeId+'&nodeValue='+nodeValue;
@@ -144,16 +174,8 @@ jQuery(document).ready(function(){
               } else {
                 notifyServer('RENAME', parameters);
               }
-          }
-
-          /*
-           * Used for passing custom parameters to the server. Receives two
-           * parameters - a node (if applicable) and a reference to the tree
-           * instance.
-           */
-          ,beforedata: function(NODE, TREE){
-              return { nodeId : $(NODE).attr("id") || 0 };
-          }
+            }
+          #end
 
           // -------------------------------------------------- Unused callbacks
 
@@ -161,42 +183,42 @@ jQuery(document).ready(function(){
            * Triggered when a node is selected. Receives two parameters
            * - the selected node and a reference to the tree instance.
            */
-          /*
-          ,onselect : function(NODE, TREE) {
-            // guard against infinite loop
-            if(!applyPreSelect) {
+          #if ($jstree.selectListener)
+            ,onselect : function(NODE, TREE) {
+              // guard against infinite loop
+              if(!applyPreSelect) {
                 return;
-            }
-            var href = $(NODE).children("a:eq(0)").attr("href");
-            if (href==null || href=="undefined" || href=="") {
+              }
+              var href = $(NODE).children("a:eq(0)").attr("href");
+              if (href==null || href=="undefined" || href=="") {
                 // Probably a newly created node - do nothing
-            } else if (href=='#') {
+              } else if (href=='#') {
                 // Notify server of selection
                 var nodeId = $(NODE).attr("id");
                 var parameters = 'nodeId='+nodeId;
                 notifyServer('SELECT', parameters);
-            } else {
+              } else {
                 // If an href is specified, follow the link
                 document.location.href = href;
+              }
             }
-          }
-          */
+          #end
 
           /*
            * Triggered when a node is deselected. Receives two parameters
            * - the deselected node and a reference to the tree instance.
            */
-          /*
-          ,ondeselect : function(NODE, TREE) {
-            var href = $(NODE).children("a:eq(0)").attr("href");
-            if (href=='#') {
+          #if ($jstree.deselectListener)
+            ,ondeselect : function(NODE, TREE) {
+              var href = $(NODE).children("a:eq(0)").attr("href");
+              if (href=='#') {
                 // Notify server of deselection
                 var nodeId = $(NODE).attr("id");
                 var parameters = 'nodeId='+nodeId;
                 notifyServer('DESELECT', parameters);
+              }
             }
-          }
-          */
+          #end
 
           /*
            * Used for passing custom parameters to the server. Receives two
