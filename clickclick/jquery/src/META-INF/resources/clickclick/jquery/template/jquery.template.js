@@ -18,8 +18,17 @@ jQuery(document).ready(function(){
         params.push(defaultParams);
     }
 
+    // Is input checkbox/radio etc
+    var twoState = false;
+    var selected = false;
+    var type=jQuery(this).attr("type");
+    if(type=="checkbox" || type=="radio") {
+        selected=jQuery(this).attr('checked');
+        twoState=true;
+    }
+
     // Add the Control attributes 'name', 'value' and 'id' as parameters
-    Click.addNameValueIdPairs(this, params);
+    Click.addNameValueIdPairs(this, params, twoState && !selected);
 
     // Invoke the Ajax request
     jQuery.ajax({
@@ -46,7 +55,9 @@ jQuery(document).ready(function(){
         alert('$errorMessage' #if ($productionMode != "true") + '\n\n' + xhr.responseText #end);
       }
     });
-    // Return false to override default event behavior
+    // Return false to override default event behavior, unless its a checkbox or radio
+    if(twoState)
+        return true;
     return false;
   };
 });
