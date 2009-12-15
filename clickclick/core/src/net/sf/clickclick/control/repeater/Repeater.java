@@ -430,13 +430,6 @@ public abstract class Repeater extends AbstractContainer {
         if (items == null) {
             return;
         }
-        for (int i = 0; i < items.size(); i++ ) {
-            createRow(i);
-        }
-
-        // TODO should the names be changed here or in a Pre onProcess phase callback???
-        // Update control name indexes to match incoming request parameters
-        addIndexToControlNames();
 
         // Register a callback to add the index to child control names
         AjaxControlRegistry.dispatchActionEvent(this, new ActionListener() {
@@ -448,6 +441,14 @@ public abstract class Repeater extends AbstractContainer {
             }
 
         }, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+
+        for (int i = 0; i < items.size(); i++ ) {
+            createRow(i);
+        }
+
+        // TODO should the names be changed here or in a Pre onProcess phase callback???
+        // Update control name indexes to match incoming request parameters
+        addIndexToControlNames();
     }
 
     /**
