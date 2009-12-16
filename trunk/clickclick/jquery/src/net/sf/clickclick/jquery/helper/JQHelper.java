@@ -15,7 +15,6 @@ package net.sf.clickclick.jquery.helper;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
