@@ -15,6 +15,7 @@ package net.sf.clickclick.jquery.helper;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -279,6 +280,12 @@ public class JQHelper implements Serializable {
     private String indicatorOptions;
 
     // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a new JQHelper.
+     */
+    public JQHelper() {
+    }
 
     /**
      * Create a new JQHelper for the given target control.
@@ -851,6 +858,41 @@ public class JQHelper implements Serializable {
     }
 
     /**
+     * Add the necessary JavaScript imports and scripts to the given
+     * headElements list to enable Ajax requests.
+     *
+     * @param headElements the list which to add all JavaScript imports and
+     * scripts to enable Ajax requests
+     */
+    public void addHeadElements(List headElements) {
+        JsImport jsImport = new JsImport(jqueryImport);
+        if (!headElements.contains(jsImport)) {
+            headElements.add(0, jsImport);
+        }
+
+        jsImport = new JsImport(jqueryClickImport);
+        if (!headElements.contains(jsImport)) {
+            headElements.add(1, jsImport);
+        }
+
+        if (isShowIndicator()) {
+            jsImport = new JsImport(blockUIImport);
+            if (!headElements.contains(jsImport)) {
+                headElements.add(2, jsImport);
+            }
+        }
+
+        ServletContext servletContext = getContext().getServletContext();
+        ConfigService configService = ClickUtils.getConfigService(servletContext);
+
+        // If Click is running in development modes, enable JavaScript debugging
+        if (!configService.isProductionMode() && !configService.isProfileMode()) {
+            addJSDebugScript(headElements);
+        }
+        addTemplate(headElements);
+    }
+
+    /**
      * Ajaxifies the the target {@link #control} so that its registered
      * {@link net.sf.clickclick.AjaxListener} can be invoked for Ajax requests.
      * <p/>
@@ -861,22 +903,43 @@ public class JQHelper implements Serializable {
      * <li>invokes {@link #addHeadElements(java.util.List)} which adds the necessary
      * JavaScript imports and scripts to enable Ajax requests</li>
      * </ul>
+     * <b>Please note</b>: when invoking this method before or from the
+     * onInit event, it will only be executed after the onInit event.
+     * If this method is called after the onInit method, it will be executed
+     * immediately.
      */
     public void ajaxify() {
         // Reason we register a callback below is that the control ID might only
-        // be fuly set after #ajaxify is invoked. By using the special
+        // be fully set after #ajaxify is invoked. By using the special
         // ON_AJAX_EVENT callback which is triggered before onProcess, we
-        // ensure that the control ID will be available. Also by adding HEAD
-        // elements in this event, Controls inside containers such as Repeaters
-        // can still be Ajax targets because their names, at this stage, still
-        // have the Repeater index applied.
+        // ensure that the control ID will be available.
         AjaxControlRegistry.dispatchActionEvent(getControl(), new ActionListener() {
             public boolean onAction(Control source) {
                 AjaxControlRegistry.registerAjaxControl(source);
-                addHeadElements(getControl().getHeadElements());
                 return true;
             }
         }, AjaxControlRegistry.ON_AJAX_EVENT);
+
+        // Register a POST_ON_RENDER_EVENT callback to add the helper head
+        // elements to the control. By adding HEAD elements in this event,
+        // Controls inside containers such as Repeaters can still be Ajax
+        // targets because their names, at this stage, should have the Repeater
+        // index applied. Repeaters also apply indexes to their child names during
+        // the POST_ON_RENDER_EVENT, but normally the Repeater will have registered
+        // its POST_ON_RENDER_EVENT before any child control have been created,
+        // thus the Repeater event would have fired by the time the control head
+        // elements is applied.
+        // PLEASE NOTE: Ajax enabled controls shouldn't have this issue, as their
+        // HEAD elements should be applied inside the getHeadElements method which is
+        // invoked after the POST_ON_RENDER_EVENT
+        AjaxControlRegistry.dispatchActionEvent(getControl(), new ActionListener() {
+            public boolean onAction(Control source) {
+                addHeadElements(getControl().getHeadElements());
+                return true;
+            }
+
+        }, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -922,41 +985,6 @@ public class JQHelper implements Serializable {
     }
 
     /**
-     * Add the necessary JavaScript imports and scripts to the given
-     * headElements list to enable Ajax requests.
-     *
-     * @param headElements the list which to add all JavaScript imports and
-     * scripts to enable Ajax requests
-     */
-    protected void addHeadElements(List headElements) {
-        JsImport jsImport = new JsImport(jqueryImport);
-        if (!headElements.contains(jsImport)) {
-            headElements.add(0, jsImport);
-        }
-
-        jsImport = new JsImport(jqueryClickImport);
-        if (!headElements.contains(jsImport)) {
-            headElements.add(1, jsImport);
-        }
-
-        if (isShowIndicator()) {
-            jsImport = new JsImport(blockUIImport);
-            if (!headElements.contains(jsImport)) {
-                headElements.add(2, jsImport);
-            }
-        }
-
-        ServletContext servletContext = getContext().getServletContext();
-        ConfigService configService = ClickUtils.getConfigService(servletContext);
-
-        // If Click is running in development modes, enable JavaScript debugging
-        if (!configService.isProductionMode() && !configService.isProfileMode()) {
-            addJSDebugScript(headElements);
-        }
-        addTemplate(headElements);
-    }
-
-    /**
      * Add a special {@link org.apache.click.element.JsScript} which enables
      * detailed JavaScript log output to the given headElements list.
      * <p/>
@@ -967,6 +995,12 @@ public class JQHelper implements Serializable {
      * @param headElements list which to add the debug script to
      */
     protected void addJSDebugScript(List headElements) {
+        JsScript jsScript = new JsScript();
+        jsScript.setId("enable_js_debugging");
+        if (headElements.contains(jsScript)) {
+            return;
+        }
+
         HtmlStringBuffer buffer = new HtmlStringBuffer(100);
         buffer.append("if (typeof jQuery != 'undefined') {\n");
         buffer.append("  if (typeof jQuery.taconite != 'undefined') {\n");
@@ -976,11 +1010,7 @@ public class JQHelper implements Serializable {
         buffer.append("    Click.debug = true;\n");
         buffer.append("  }\n");
         buffer.append("}");
-
-        JsScript jsScript = new JsScript();
         jsScript.setContent(buffer.toString());
-
-        jsScript.setId("enable_js_debugging");
         headElements.add(jsScript);
     }
 
