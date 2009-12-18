@@ -57,8 +57,13 @@ public class AjaxUtils {
      *
      * @param control the control which CSS selector to return
      * @return the control CSS selector or null if no selector can be found
+     * @throws IllegalArgumentException if control is null
      */
     public static String getSelector(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Control cannot be null");
+        }
+
         String id = control.getId();
         String name = control.getName();
         String select = null;
