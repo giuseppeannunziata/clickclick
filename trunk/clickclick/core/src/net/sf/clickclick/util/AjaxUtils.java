@@ -86,7 +86,7 @@ public class AjaxUtils {
 
             // Handle ActionLink controls differently as they don't render
             // the name attribute. Instead we set the class attribute to the
-            // link's name and target than.
+            // link's name and target that.
             if (control instanceof ActionLink) {
                 ActionLink link = (ActionLink) control;
                 if (!link.hasAttribute("class")) {
