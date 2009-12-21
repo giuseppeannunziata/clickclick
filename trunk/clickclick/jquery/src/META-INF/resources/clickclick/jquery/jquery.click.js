@@ -1025,21 +1025,25 @@ $.prototype.init.prototype = $.prototype;
      *
      * Copied from here: http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
      */
-    Click.debounce=function(func, threshold) {
+    Click.debounce=function(func, delay) {
+        if(delay<= 0){
+            return func;
+        }
         var timeout;
         return function debounced () {
             var obj = this, args = arguments;
             function delayed () {
-                if (threshold > 0)
+                if (delay > 0)
                     func.apply(obj, args);
                 timeout = null;
             };
 
-            if (timeout)
+            if (timeout) {
                 clearTimeout(timeout);
-            else if (threshold <= 0)
+            } else if (delay <= 0) {
                 func.apply(obj, args);
-            timeout = setTimeout(delayed, threshold || 100);
+            }
+            timeout = setTimeout(delayed, delay || 100);
         };
     }
 
