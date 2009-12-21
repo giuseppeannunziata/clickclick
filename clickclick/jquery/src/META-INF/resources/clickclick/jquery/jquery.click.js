@@ -27,7 +27,7 @@
 
 (function($) {
 
-$.taconite = function(xml) { processDoc(xml); };
+$.taconite = function(xml) {processDoc(xml);};
 
 $.taconite.debug = 0;  // set to true to enable debug logging to Firebug
 $.taconite.version = '3.06';
@@ -37,11 +37,11 @@ $.taconite.defaults = {
 
 // add 'replace' and 'replaceContent' plugins (conditionally)
 if (typeof $.fn.replace == 'undefined')
-    $.fn.replace = function(a) { return this.after(a).remove(); };
+    $.fn.replace = function(a) {return this.after(a).remove();};
 if (typeof $.fn.replaceContent == 'undefined')
-    $.fn.replaceContent = function(a) { return this.empty().append(a); };
+    $.fn.replaceContent = function(a) {return this.empty().append(a);};
 
-$.expr[':'].taconiteTag = function(a) { return a.taconiteTag === 1; };
+$.expr[':'].taconiteTag = function(a) {return a.taconiteTag === 1;};
 
 $.taconite._httpData = $.httpData; // original jQuery httpData function
 
@@ -137,7 +137,7 @@ function convert(s) {
 
 
 function go(xml) {
-    var trimHash = { wrap: 1 };
+    var trimHash = {wrap: 1};
 
     try {
         var t = new Date().getTime();
@@ -561,7 +561,7 @@ $.extend($.livequery, {
 $.livequery.registerPlugin('append', 'prepend', 'after', 'before', 'wrap', 'attr', 'removeAttr', 'addClass', 'removeClass', 'toggleClass', 'empty', 'remove');
 
 // Run Live Queries when the Document is ready
-$(function() { $.livequery.play(); });
+$(function() {$.livequery.play();});
 
 
 // Save a reference to the original init method
@@ -907,6 +907,9 @@ $.prototype.init.prototype = $.prototype;
      */
     Click.url = function(el) {
         var attr;
+        if (!el.attributes) {
+            return null;
+        }
         if(attr = el.attributes.href) {
         } else if(attr = el.attributes.src) {
         } else if(attr = el.attributes.action) {
@@ -1019,16 +1022,25 @@ $.prototype.init.prototype = $.prototype;
      * Merge multiple callbacks into a single callback if they are invoked
      * within the given delay. Useful when binding to mouse or key events.
      * A delay of less than or equal to 0 executes immediately.
+     *
+     * Copied from here: http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
      */
-    Click.debounce=function(callback, delay){
-        if(delay <= 0){
-            return callback;
-        }
+    Click.debounce=function(func, threshold) {
         var timeout;
-        return function() {
-            clearTimeout(timeout);
-            timeout = setTimeout(callback, delay);
-        }
+        return function debounced () {
+            var obj = this, args = arguments;
+            function delayed () {
+                if (threshold > 0)
+                    func.apply(obj, args);
+                timeout = null;
+            };
+
+            if (timeout)
+                clearTimeout(timeout);
+            else if (threshold <= 0)
+                func.apply(obj, args);
+            timeout = setTimeout(delayed, threshold || 100);
+        };
     }
 
 // Close function and execute it, passing JQuery object as argument
