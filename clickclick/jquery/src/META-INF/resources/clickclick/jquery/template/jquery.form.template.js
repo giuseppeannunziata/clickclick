@@ -106,6 +106,7 @@
   }
 
   function onError(statusText, xhr) {
+    if(xhr.status != 4) return;
     alert('$errorMessage' #if ($productionMode != "true") + '\n\n' + xhr.responseText #end);
   }
 })();
