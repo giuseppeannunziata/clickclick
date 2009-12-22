@@ -156,7 +156,7 @@ $.blockUI.defaults = {
 	timeout: 0,
 
 	// disable if you don't want to show the overlay
-	showOverlay: true,
+	showOverlay: false,
 
 	// if true, focus will be placed in the first available input field when
 	// page blocking
