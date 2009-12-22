@@ -46,7 +46,8 @@ Click.refresh.$refreshId = function() {
       url: '$!{url}',
       data: params,
       error: function (xhr, textStatus, errorThrown) {
-        if(xhr.status != 4) return;
+        if(xhr.readyState != 4) return;
+        if(xhr.status == 0) return;
         alert('$errorMessage' #if ($productionMode != "true") + '\n\n' + xhr.responseText #end);
       }
     });
