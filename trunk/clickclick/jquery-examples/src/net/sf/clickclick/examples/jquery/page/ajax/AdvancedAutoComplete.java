@@ -64,7 +64,9 @@ public class AdvancedAutoComplete extends BorderPage {
         // Decorate the textField with Autocomplete functionality
         jquery.ajaxify();
 
-        postCodeField.setActionListener(new AjaxAdapter(){
+        postCodeField.setActionListener(new AjaxAdapter() {
+
+            @Override
             public Partial onAjaxAction(Control source) {
                 String criteria = postCodeField.getValue();
 
@@ -94,6 +96,7 @@ public class AdvancedAutoComplete extends BorderPage {
 
         Submit submit = new Submit("submit");
         submit.setActionListener(new ActionListener() {
+
             public boolean onAction(Control source) {
                 if (form.isValid()) {
                     // save form data

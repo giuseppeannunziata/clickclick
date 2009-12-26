@@ -35,7 +35,7 @@ public class RefreshDemo extends BorderPage {
     private JQActionLink start = new JQActionLink("start", "Start refresh (5 second intervals)");
     private JQActionLink stop = new JQActionLink("stop", "Stop refresh");
 
-    private String refreshId = "refresh";
+    private String refreshId = "id";
 
     private SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 

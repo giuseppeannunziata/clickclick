@@ -36,21 +36,38 @@ import org.apache.click.Control;
  * public class Heartbeat extends Div {
  *
  *     // The embedded JQuery helper object.
- *     private JQHelper jqHelper = new JQRefreshHelper(this);
+ *     private JQHelper jqHelper;
  *
  *     // Constructor
  *     public Heartbeat(String name, int interval) {
  *         super(name);
- *         jqHelper.setInterval(interval);
+ *         getJQueryHelper().setInterval(interval);
  *
  *         // The div name will be used as the refreshId
- *         jqHelper.setRefreshId(name);
+ *         getJQueryHelper().setRefreshId(name);
  *     }
  *
  *     // Initialize the Ajax functionality
+ *     &#64;Override
  *     public void onInit() {
  *         super.onInit();
-           jqHelper.ajaxify();
+ *         AjaxControlRegistry.registerAjaxControl(this);
+ *     }
+ *
+ *     &#64;Override
+ *     public List getHeadElements() {
+ *         if (headElements == null) {
+ *             headElements = super.getHeadElements();
+ *             getJQueryHelper().addHeadElements(headElements);
+ *         }
+ *         return headElements;
+ *     }
+ *
+ *     public JQHelper getJQueryHelper() {
+ *         if (jqHelper == null) {
+ *             jqHelper = new JQRefreshHelper(this);
+ *         }
+ *         return jqHelper;
  *     }
  * } </pre>
  *
@@ -68,7 +85,7 @@ import org.apache.click.Control;
  *
  *     // RefreshID is used by the JQRefreshHelper to interact with JavaScript
  *     // functions added by the helper JavaScript template.
- *     private String refreshId = "refresh";
+ *     private String refreshId = "id";
  *
  *     private SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
  *
@@ -91,12 +108,14 @@ import org.apache.click.Control;
  *         });
  *
  *         stop.setActionListener(new AjaxAdapter(){
+ *
+ *            &#64;Override
  *            public Partial onAjaxAction(Control source) {
  *                Taconite partial = new Taconite();
  *
  *                 // Note the eval statement below. This executes raw JavaScript
  *                 // on the browser, in this case a function from this helper's
- *                 // template: Click.refresh.stop('refresh');
+ *                 // template: Click.refresh.stop('id');
  *                 partial.eval("Click.refresh.stop('" + refreshId + "');");
  *
  *                return partial;
@@ -125,11 +144,13 @@ import org.apache.click.Control;
  * command to execute raw JavaScript in the browser. For example:
  *
  * <pre class="prettyprint">
- * String refreshId = "refresh";
+ * String refreshId = "id";
  *
  * JQActionLink start = new JQActionLink("start", "Start refresh (5 second intervals)");
  *
- * start.setActionListener(new AjaxAdapter(){
+ * start.setActionListener(new AjaxAdapter() {
+ *
+ *     &#64;Override
  *     public Partial onAjaxAction(Control source) {
  *         Taconite partial = new Taconite();
  *
@@ -141,7 +162,9 @@ import org.apache.click.Control;
  *
  * JQActionLink update = new JQActionLink("update", "Update refresh rate (2 second intervals)");
  *
- * update.setActionListener(new AjaxAdapter(){
+ * update.setActionListener(new AjaxAdapter() {
+ *
+ *     &#64;Override
  *     public Partial onAjaxAction(Control source) {
  *         Taconite partial = new Taconite();
  *
@@ -161,11 +184,17 @@ public class JQRefreshHelper extends JQHelper {
      * The path of the template to render:
      * "<tt>/clickclick/jquery/template/jquery.refresh.template.js</tt>".
      */
-    private String template = "/clickclick/jquery/template/jquery.refresh.template.js";
+    protected String template = "/clickclick/jquery/template/jquery.refresh.template.js";
 
-    private String refreshId;
+    /**
+     * The unique refresh id.
+     */
+    protected String refreshId;
 
-    private int interval;
+    /**
+     * The interval (in milliseconds) between requests.
+     */
+    protected int interval;
 
     // ----------------------------------------------------------- Constructors
 
@@ -173,7 +202,7 @@ public class JQRefreshHelper extends JQHelper {
      * Create a JQRefreshHelper for the given target control.
      * <p/>
      * You need to set an {@link #interval} and {@link #refreshId} for
-     * Ajax request to be executed.
+     * Ajax requests to be executed.
      *
      * @param control the helper target control
      */
@@ -183,9 +212,9 @@ public class JQRefreshHelper extends JQHelper {
     }
 
     /**
-     * Create a JQRefreshHelper for the given target control and refreshID.
+     * Create a JQRefreshHelper for the given target control and refreshId.
      * <p/>
-     * You need to set an {@link #interval} for the Ajax request to be executed.
+     * You need to set an {@link #interval} for Ajax requests to be executed.
      *
      * @param control the helper target control
      * @param refreshId the refresh ID
@@ -197,7 +226,7 @@ public class JQRefreshHelper extends JQHelper {
     }
 
     /**
-     * Create a JQRefreshHelper for the given target control and refreshID.
+     * Create a JQRefreshHelper for the given target control, refreshIdnd interval.
      *
      * @param control the helper target control
      * @param refreshId the refresh ID
@@ -210,6 +239,19 @@ public class JQRefreshHelper extends JQHelper {
         setTemplate(template);
     }
 
+    /**
+     * Create a default data model for the Ajax {@link #template}.
+     * <p/>
+     * Besides the default {@link net.sf.clickclick.jquery.helper.JQHelper#createDefaultModel() values},
+     * the following values are also added:
+     * <ul>
+     * <li>"refreshId" - the ID of the element to refresh</li>
+     * <li>"interval" - the interval (in milliseconds) between requests</li>
+     * </ul>
+     *
+     * @return the default data model for the Ajax template
+     */
+    @Override
     public Map createDefaultModel() {
         Map map = super.createDefaultModel();
         map.put("refreshId", getRefreshId());
@@ -217,18 +259,38 @@ public class JQRefreshHelper extends JQHelper {
         return map;
     }
 
+    /**
+     * Return the unique refresh id.
+     *
+     * @return the unique refresh id
+     */
     public String getRefreshId() {
         return refreshId;
     }
 
+    /**
+     * Set the unique refresh id.
+     *
+     * @param refreshId the unique refresh id
+     */
     public void setRefreshId(String refreshId) {
         this.refreshId = refreshId;
     }
 
+    /**
+     * Return the interval (in milliseconds) between requests.
+     *
+     * @return the interval (in milliseconds) between requests
+     */
     public int getInterval() {
         return interval;
     }
 
+    /**
+     * Set the interval (in milliseconds) between requests.
+     *
+     * @param interval the interval (in milliseconds) between requests
+     */
     public void setInterval(int interval) {
         this.interval = interval;
     }

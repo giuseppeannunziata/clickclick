@@ -44,21 +44,61 @@ import org.apache.click.element.JsImport;
  * that enables Ajax behavior:
  *
  * <pre class="prettyprint">
- * public class JQAutoCompleteTextField extends TextField {
+ * public abstract class JQAutoCompleteTextField extends TextField {
  *
  *     // The embedded JQuery AutoComplete helper object.
- *     private JQHelper jqHelper = new JQAutoCompleteHelper(this);
+ *     private JQHelper jqHelper;
  *
  *     // Constructor
  *     public JQAutoCompleteTextField(String name) {
  *         super(name);
  *     }
  *
- *     // Initialize the Ajax functionality
+ *     &#64;Override
  *     public void onInit() {
  *         super.onInit();
-           jqHelper.ajaxify();
+ *         AjaxControlRegistry.registerAjaxControl(this);
+ *
+ *         // Register an Ajax listener which returns the list of suggestions
+ *         setActionListener(new AjaxAdapter() {
+ *
+ *             &#64;Override
+ *             public Partial onAjaxAction(Control source) {
+ *                 Partial partial = new Partial();
+ *                 List autocompleteList = getAutoCompleteList(getValue());
+ *                 if (autocompleteList != null) {
+ *                     HtmlStringBuffer buffer = new HtmlStringBuffer(autocompleteList.size() * 5);
+ *                     for (Iterator it = autocompleteList.iterator(); it.hasNext(); ) {
+ *                         buffer.append(it.next());
+ *                         if (it.hasNext()) {
+ *                             buffer.append("\n");
+ *                         }
+ *                     }
+ *                     partial.setContent(buffer.toString());
+ *                 }
+ *                 return partial;
+ *             }
+ *         });
  *     }
+ *
+ *     &#64;Override
+ *     public List getHeadElements() {
+ *         if (headElements == null) {
+ *             headElements = super.getHeadElements();
+ *
+ *             getJQueryHelper().addHeadElements(headElements);
+ *         }
+ *         return headElements;
+ *     }
+ *
+ *     public JQAutoCompleteHelper getJQueryHelper() {
+ *         if(jqHelper == null) {
+ *             jqHelper = new JQAutoCompleteHelper(this);
+ *         }
+ *         return jqHelper;
+ *     }
+ *
+ *     protected abstract List getAutoCompleteList(String criteria);
  * } </pre>
  *
  * Below is an example how to decorate a TextField to retrieve suggestions every
@@ -82,6 +122,8 @@ import org.apache.click.element.JsImport;
  *         // Register an Ajax listener on the form which is invoked when the
  *         // form is submitted.
  *         countryField.setActionListener(new AjaxAdapter() {
+ *
+ *             &#64;Override
  *             public Partial onAjaxAction(Control source) {
  *
  *                 // Create a Partial to contains the auto complete suggestions
@@ -127,13 +169,13 @@ public class JQAutoCompleteHelper extends JQHelper {
      * The path of the AutoComplete template to render:
      * "<tt>/clickclick/jquery/template/jquery.autocomplete.template.js</tt>".
      */
-    private String template = "/clickclick/jquery/template/jquery.autocomplete.template.js";
+    protected String template = "/clickclick/jquery/template/jquery.autocomplete.template.js";
 
     /**
      * The Autocomplete options. Autocomplete options are outlined
      * <a href="http://docs.jquery.com/Plugins/Autocomplete/autocomplete#url_or_dataoptions">here</a>.
      */
-    private String options;
+    protected String options;
 
     // ----------------------------------------------------------- Constructors
 
@@ -208,13 +250,12 @@ public class JQAutoCompleteHelper extends JQHelper {
      *
      * @return the default data model for the Ajax template
      */
+    @Override
     public Map createDefaultModel() {
         Map model = super.createDefaultModel();
         model.put("options", getOptions());
         return model;
     }
-
-    // ------------------------------------------------------ Protected Methods
 
     /**
      * Add the necessary JavaScript imports and scripts to the given
@@ -223,7 +264,8 @@ public class JQAutoCompleteHelper extends JQHelper {
      * @param headElements the list which to add all JavaScript imports and
      * scripts to enable AutoComplete functionality
      */
-    protected void addHeadElements(List headElements) {
+    @Override
+    public void addHeadElements(List headElements) {
         JsImport jsImport = new JsImport(jqueryImport);
         if (!headElements.contains(jsImport)) {
             headElements.add(0, jsImport);

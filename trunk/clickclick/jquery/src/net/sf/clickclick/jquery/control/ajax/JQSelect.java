@@ -13,7 +13,11 @@
  */
 package net.sf.clickclick.jquery.control.ajax;
 
+import java.util.List;
+import net.sf.clickclick.AjaxControlRegistry;
 import net.sf.clickclick.jquery.helper.JQHelper;
+import net.sf.clickclick.jquery.util.JQEvent;
+import net.sf.clickclick.util.AjaxUtils;
 import org.apache.click.control.Select;
 
 /**
@@ -35,6 +39,8 @@ import org.apache.click.control.Select;
  *     // Set an Ajax listener on the select that return a Taconite (Partial)
  *     // instance
  *     select.setActionListener(new AjaxAdapter() {
+ *
+ *         &#64;Override
  *         public Partial onAjaxAction(Control source) {
  *             Taconite partial = new Taconite();
  *
@@ -55,7 +61,7 @@ public class JQSelect extends Select {
     // -------------------------------------------------------------- Variables
 
     /** The JQuery helper object. */
-    private JQHelper jqHelper = new JQHelper(this);
+    protected JQHelper jqHelper;
 
     // ------------------------------------------------------------ Constructor
 
@@ -113,6 +119,9 @@ public class JQSelect extends Select {
      * @return the jqHelper instance
      */
     public JQHelper getJQueryHelper() {
+        if (jqHelper == null) {
+            jqHelper = new JQHelper(this);
+        }
         return jqHelper;
     }
 
@@ -130,9 +139,24 @@ public class JQSelect extends Select {
     /**
      * Initialize the JQSelect Ajax functionality.
      */
+    @Override
     public void onInit() {
         super.onInit();
-        jqHelper.setEvent("change");
-        jqHelper.ajaxify();
+        AjaxControlRegistry.registerAjaxControl(this);
+    }
+
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            bind(JQEvent.CHANGE);
+            getJQueryHelper().addHeadElements(headElements);
+        }
+        return headElements;
+    }
+
+    public void bind(JQEvent event) {
+        getJQueryHelper().bind(AjaxUtils.getSelector(this), event);
     }
 }

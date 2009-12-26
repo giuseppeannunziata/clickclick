@@ -13,9 +13,13 @@
  */
 package net.sf.clickclick.jquery.control.ajax;
 
+import java.util.List;
+import net.sf.clickclick.AjaxControlRegistry;
 import net.sf.clickclick.AjaxListener;
 import net.sf.clickclick.control.ajax.AjaxActionButton;
 import net.sf.clickclick.jquery.helper.JQHelper;
+import net.sf.clickclick.jquery.util.JQEvent;
+import net.sf.clickclick.util.AjaxUtils;
 
 /**
  * Provide an Ajax enabled ActionButton control.
@@ -35,6 +39,7 @@ import net.sf.clickclick.jquery.helper.JQHelper;
  *     // instance
  *     button.setActionListener(new AjaxAdapter() {
  *
+ *         &#64;Override
  *         public Partial onAjaxAction(Control source) {
  *             Taconite partial = new Taconite();
  *
@@ -55,7 +60,7 @@ public class JQActionButton extends AjaxActionButton {
     // -------------------------------------------------------------- Variables
 
     /** The JQuery helper object. */
-    private JQHelper jqHelper = new JQHelper(this);
+    protected JQHelper jqHelper;
 
     // ----------------------------------------------------------- Constructors
 
@@ -124,6 +129,9 @@ public class JQActionButton extends AjaxActionButton {
      * @return the jqHelper instance
      */
     public JQHelper getJQueryHelper() {
+        if (jqHelper == null) {
+            jqHelper = new JQHelper(this);
+        }
         return jqHelper;
     }
 
@@ -141,8 +149,24 @@ public class JQActionButton extends AjaxActionButton {
     /**
      * Initialize the JQActionButton Ajax functionality.
      */
+    @Override
     public void onInit() {
         super.onInit();
-        jqHelper.ajaxify();
+        AjaxControlRegistry.registerAjaxControl(this);
+    }
+
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            bind(JQEvent.CLICK);
+            getJQueryHelper().addHeadElements(headElements);
+        }
+        return headElements;
+    }
+
+    public void bind(JQEvent event) {
+        getJQueryHelper().bind(AjaxUtils.getSelector(this), event);
     }
 }
