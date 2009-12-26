@@ -22,11 +22,6 @@
         <menu label="Action Button Demo" path="ajax/action-button-demo.htm"/>
         <menu label="Action Demo" path="ajax/action-demo.htm"/>
         <menu separator="true"/>
-        <menu label="Form Demo" path="ajax/form-demo.htm"/>
-        <menu label="Form Validation Demo" path="ajax/validation/form-validation-demo.htm"/>
-        <menu label="JQuery Inline Validation Demo" path="ajax/validation/jquery-validation1-demo.htm"/>
-        <menu label="JQuery Validation Demo" path="ajax/validation/jquery-validation2-demo.htm"/>
-        <menu separator="true"/>
         <menu label="Table Demo" path="ajax/table-demo.htm"/>
         <menu label="Stateful Table Demo" path="ajax/stateful-table-demo.htm"/>
         <menu separator="true"/>
@@ -42,7 +37,17 @@
         <menu label="CRUD Tree Demo" path="ajax/editable-tree-on-server.htm"/>
         <menu label="Context Menu Tree Demo" path="ajax/tree-with-context-menu.htm"/>
     </menu>
-     <menu label="Charts" path="#">
+    <menu label="Form" path="#">
+        <menu label="Form Demo" path="ajax/form-demo.htm"/>
+        <menu separator="true"/>
+        <menu label="Dynamic Form Basic Demo" path="ajax/form/dynamic-form-basic.htm"/>
+        <menu label="Dynamic Form Ajax Demo" path="ajax/form/dynamic-form-ajax.htm"/>
+        <menu separator="true"/>
+        <menu label="Form Validation Demo" path="ajax/validation/form-validation-demo.htm"/>
+        <menu label="JQuery Inline Validation Demo" path="ajax/validation/jquery-validation1-demo.htm"/>
+        <menu label="JQuery Validation Demo" path="ajax/validation/jquery-validation2-demo.htm"/>
+    </menu>
+    <menu label="Charts" path="#">
         <menu label="Line Chart" path="charts/line/line-chart.htm"/>
         <menu label="Revenue Demo" path="charts/line/revenue-chart.htm"/>
         <menu label="Interactive Line Chart" path="charts/line/interactive-chart.htm"/>
