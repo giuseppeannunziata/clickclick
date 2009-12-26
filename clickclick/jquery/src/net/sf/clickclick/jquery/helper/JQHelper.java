@@ -13,8 +13,12 @@
  */
 package net.sf.clickclick.jquery.helper;
 
+import net.sf.clickclick.jquery.util.JQBinding;
+import net.sf.clickclick.jquery.util.JQEvent;
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -33,41 +37,106 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provide a JQuery helper that Ajax enables a target control object.
+ * Provide a JQuery helper that Ajax enables a target Control/s.
  * <p/>
  * This helper has an associated JavaScript template that can be modified
  * according to your needs. Click <a href="../../../../../js/template/jquery.template.js.txt">here</a>
- * to view the template.
+ * to view the JQHelper template. You can set your own custom template using the
+ * method {@link #setTemplate(java.lang.String)}.
  * <p/>
- * JQHelper can either be embedded inside Click controls or used to decorate
- * the control.
+ * The default template is suited for Link based controls and most Field such
+ * as Buttons, TextFields, Selects, Checkboxes and Radio buttons. Sophisticated
+ * controls such as Forms, Tables and Trees would require customized templates
+ * eg: {@link JQFormHelper}.
+ * <p/>
+ * JQHelper has two primary use cases:
+ * <ul>
+ * <li>To Embed JQHelper inside custom Controls. The custom Control then delegates
+ * to JQHelper to add the necessary JavaScript and Ajax behavior.</li>
+ * <li>To Ajax enable non-ajax Controls in a Page. Here JQHelper is used to "decorate"
+ * target Controls with the necessary JavaScript and Ajax behavior.</li>
+ * </ul>
+ *
+ * Here are two examples of using embedding as well as decorating JQHelper.
  *
  * <h3>Embedded example</h3>
  *
  * Below is an example of a custom control with an embedded JQHelper that
- * enables Ajax behavior:
+ * provides Ajax behavior:
  *
  * <pre class="prettyprint">
- * public class JQActionLink extends AjaxActionLink {
+ * public class JQSubmit extends Submit {
  *
  *     // The embedded JQuery helper object.
- *     private JQHelper jqHelper = new JQHelper(this);
+ *     protected JQHelper jqHelper;
  *
  *     // Constructor
- *     public JQActionLink(String name) {
+ *     public JQSubmit(String name) {
  *         super(name);
  *     }
  *
- *     // Initialize the Ajax functionality
+ *     public JQHelper getJQueryHelper() {
+ *         if (jqHelper == null) {
+ *             jqHelper = new JQHelper(this);
+ *         }
+ *         return jqHelper;
+ *     }
+ *
+ *     // During onInit event the control is registered as an Ajax control
+ *     &#64;Override
  *     public void onInit() {
  *         super.onInit();
-           jqHelper.ajaxify();
+ *
+ *         // 1. Register the control with Click so it can handle Ajax requests.
+ *         // Registration should occur within the "onInit" event. This ensures
+ *         // the Ajax Control can be used within stateful Pages
+ *         jqHelper.registerAjaxControl(this);
+ *     }
+ *
+ *     &#64;Override
+ *     public List getHeadElements() {
+ *         if (headElements == null) {
+ *             headElements = super.getHeadElements();
+ *
+ *             // 2. Bind the submit button ID attribute for "click" events.
+ *             // From this binding the JQHelper template will render the
+ *             // following JavaScript code: "jQuery.live('#form_submit', 'onclick', someFunction)
+ *             // where "someFunction" is defined in the JQHelper template
+ *             getJQueryHelper().bind(getId(), JQEvent.CLICK);
+ *
+ *             // 3. Add the JavaScript template and other supporting libraries
+ *             // to the control HEAD elements
+ *             getJQueryHelper().addHeadElements(headElements);
+ *         }
+ *         return headElements;
+ *     }
+ * } </pre>
+ *
+ * To use JQSubmit to receive Ajax requests you need to set an {@link net.sf.clickclick.AjaxListener}
+ * on JQSubmit:
+ *
+ * <pre class="prettyprint">
+ * public class AjaxDemo extends BorderPage {
+ *
+ *     public AjaxDemo() {
+ *         JQSubmit submit = new JQSubmit("mysubmit");
+ *
+ *         // Register an Ajax listener on the submit (JQAjaxAdapter is an AjaxListener subclass)
+ *         submit.setActionListener(new JQAjaxAdapter() {
+ *
+ *             &#64;Override
+ *             public Partial onAjaxAction(Control source, JQEvent event) {
+ *                 Taconite partial = new Taconite();
+ *                 ...
+ *                 return partial;
+ *             }
+ *         }
  *     }
  * } </pre>
  *
  * <h3>Decorate example</h3>
  *
- * Below is an example how to decorate a TextField control to update a span
+ * Below is an example how to decorate a non-ajax TextField to update a span
  * element when the user types into the textfield:
  *
  * <pre class="prettyprint">
@@ -81,6 +150,8 @@ import org.apache.commons.lang.StringUtils;
  *         // Register an Ajax listener on the field which is invoked on every
  *         // "keyup" event.
  *         field.setActionListener(new AjaxAdapter() {
+ *
+ *             &#64;Override
  *             public Partial onAjaxAction(Control source) {
  *                 Taconite partial = new Taconite();
  *
@@ -98,14 +169,14 @@ import org.apache.commons.lang.StringUtils;
  *         // Switch off the Ajax busy indicator
  *         helper.setShowIndicator(false);
  *
- *         // Delay Ajax invoke for 350 millis, otherwise too many calls are made
- *         // to the server
+ *         // Delay Ajax invoke for 350 millis, otherwise too many Ajax requests
+ *         // are made to the server
  *         helper.setThreshold(350);
  *
  *         // Set Ajax to fire on keyup events
- *         helper.setEvent("keyup");
+ *         helper.setEvent(JQEvent.KEYUP);
  *
- *         // Ajaxify the the Field
+ *         // Ajaxify the Field
  *         helper.ajaxify();
  *
  *         addControl(field);
@@ -142,148 +213,132 @@ public class JQHelper implements Serializable {
      */
     public static String blockUIImport = "/clickclick/jquery/blockui/jquery.blockUI.js";
 
-    /** The "<tt>onblur</tt>" event constant. */
-    public static final String ON_BLUR = "blur";
-
-    /** The "<tt>onchange</tt>" event constant. Ideal for Select controls. */
-    public static final String ON_CHANGE = "change";
-
-    /** The "<tt>click</tt>" event constant. */
-    public static final String ON_CLICK = "click";
+    // -------------------------------------------------------------- Variables
 
     /**
-     * The custom "<tt>domready</tt> event. This event is fired as soon as the
-     * dom is ready.
+     * List of JQuery bindings. Each binding consists of a CSS Selector and Event.
      */
-    public static final String ON_DOMREADY = null;
-
-    /** The "<tt>ondblclick</tt>" event constant. */
-    public static final String ON_DOUBLE_CLICK = "dblclick";
-
-    /** The "<tt>onfocus</tt>" event constant. */
-    public static final String ON_FOCUS = "focus";
-
-    /** The "<tt>onkeydown</tt>" event constant. */
-    public static final String ON_KEYDOWN = "keydown";
-
-    /** The "<tt>onkeypress</tt>" event constant. */
-    public static final String ON_KEYPRESS = "keypress";
-
-    /** The "<tt>onkeyup</tt>" event constant. */
-    public static final String ON_KEYUP = "keyup";
-
-    /** The "<tt>onload</tt>" event constant. */
-    public static final String ON_LOAD = "load";
-
-    /** The "<tt>onmousedown</tt>" event constant. */
-    public static final String ON_MOUSEDOWN = "mousedown";
-
-    /** The "<tt>onmouseenter</tt>" event constant. */
-    public static final String ON_MOUSEENTER = "mouseenter";
-
-    /** The "<tt>onmouseleave</tt>" event constant. */
-    public static final String ON_MOUSELEAVE = "mouseleave";
-
-    /** The "<tt>onmousemove</tt>" event constant. */
-    public static final String ON_MOUSEMOVE = "mousemove";
-
-    /** The "<tt>onmouseout</tt>" event constant. */
-    public static final String ON_MOUSEOUT = "mouseout";
-
-    /** The "<tt>onmouseover</tt>" event constant. */
-    public static final String ON_MOUSEOVER = "mouseover";
-
-    /** The "<tt>onmouseup</tt>" event constant. */
-    public static final String ON_MOUSEUP = "mouseup";
-
-    /** The "<tt>onresize</tt>" event constant. */
-    public static final String ON_RESIZE = "resize";
-
-    /** The "<tt>onscroll</tt>" event constant. */
-    public static final String ON_SCROLL = "scroll";
-
-    /** The "<tt>onselect</tt>" event constant. */
-    public static final String ON_SELECT = "select";
-
-    /** The "<tt>onsubmit</tt>" event constant. */
-    public static final String ON_SUBMIT = "submit";
-
-    /** The "<tt>onunload</tt>" event constant. */
-    public static final String ON_UNLOAD = "unload";
-
-    // -------------------------------------------------------------- Variables
+    protected List<JQBinding> bindings;
 
     /**
      * The path of the default template to render:
      * "<tt>/clickclick/jquery/template/jquery.template.js</tt>".
      */
-    private String template = "/clickclick/jquery/template/jquery.template.js";
+    protected String template = "/clickclick/jquery/template/jquery.template.js";
 
     /**
      * The event which initiates an Ajax request, default value:
-     * {@link #ON_CLICK}.
+     * {@link net.sf.clickclick.util.JQEvent#CLICK}.
      */
-    private String event = ON_CLICK;
+    protected JQEvent event = JQEvent.CLICK;
 
     /** The data model for the JavaScript {@link #template}. */
-    private Map model;
+    protected Map model;
 
     /** The Ajax request parameters. */
-    private Map parameters;
+    protected Map parameters;
 
     /** The target control. */
-    private Control control;
+    protected Control control;
 
     /** The type request (POST / GET), default value is GET. */
-    private String type = "GET";
+    protected String type = "GET";
 
     /** The Ajax request url. */
-    private String url;
+    protected String url;
 
     /** The CSS selector for selecting the target element to Ajaxify. */
-    private String selector;
+    protected String selector;
 
     /**
      * The threshold within which multiple Ajax requests are merged into a
      * single request.
      */
-    private int threshold = 0;
+    protected int threshold = 0;
 
     /**
-     * The message to display if an Ajax error occurs, default value:
-     * "<tt>Error occurred</tt>".
+     * The message to display if an Ajax error occurs.
+     *
+     * @see #getErrorMessage()
      */
-    private String errorMessage = "Error occurred";
+    protected String errorMessage;
 
     /**
      * Flag indicating whether an Ajax indicator (busy indicator) must be shown,
      * default value is true.
      */
-    private boolean showIndicator = true;
+    protected boolean showIndicator = true;
 
     /**
      * The message to display when an Ajax indicator (busy indicator) is shown.
+     *
+     * @see #getIndicatorMessage()
      */
-    private String indicatorMessage;
+    protected String indicatorMessage;
 
     /**
      * The Ajax indicator (busy indicator) target.
      */
-    private String indicatorTarget;
+    protected String indicatorTarget;
 
     /**
      * The Ajax indicator (busy indicator) options. See the JQuery
      * <a href="http://malsup.com/jquery/block/">BlockUI</a> plugin for
      * available options.
      */
-    private String indicatorOptions;
+    protected String indicatorOptions;
+
+    /**
+     * The JavaScript template ID attribute
+     * (&lt;script <span class="blue">id</span>="someid" &gt;).
+     * If no ID attribute is specified (which is normally the case) the associated
+     * {@link #control}'s ID will be used as the script element ID attribute.
+     */
+    protected String id;
+
+    /**
+     * Indicates whether the HEAD elements for this helper has been added to
+     * or not.
+     */
+    protected boolean headElementsAdded = false;
+
+    /**
+     * Flag indicating whether bindings can be added to this helper. This allows
+     * you to dissalow Ajax aware controls from adding their bindings to a
+     * helper instance.
+     */
+    protected boolean bindingDisabled = false;
 
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a new JQHelper.
+     * Create a new JQHelper for the given ID.
+     *
+     * @param the id attribute of the script element
      */
-    public JQHelper() {
+    public JQHelper(String id) {
+        setId(id);
+    }
+
+    /**
+     * Create a new JQHelper for the given target control.
+     *
+     * @param control the helper target control
+     */
+    public JQHelper(String id, String selector) {
+        setId(id);
+        setSelector(selector);
+    }
+
+    /**
+     * Create a new JQHelper for the given target control.
+     *
+     * @param control the helper target control
+     */
+    public JQHelper(String id, String selector, JQEvent event) {
+        setId(id);
+        setSelector(selector);
+        setEvent(event);
     }
 
     /**
@@ -292,7 +347,7 @@ public class JQHelper implements Serializable {
      * @param control the helper target control
      */
     public JQHelper(Control control) {
-        this.control = control;
+        setControl(control);
     }
 
     /**
@@ -306,18 +361,49 @@ public class JQHelper implements Serializable {
      * @param selector the CSS selector
      */
     public JQHelper(Control control, String selector) {
-        this.control = control;
+        setControl(control);
         setSelector(selector);
     }
 
+    /**
+     * Create a new JQHelper for the given target control, CSS selector and event.
+     * <p/>
+     * Although any valid CSS selector can be specified, the CSS selector
+     * usually specifies the HTML ID attribute of a target element on the page
+     * eg: "<tt>#form-id</tt>".
+     *
+     * @param control the helper target control
+     * @param selector the CSS selector
+     * @param event the HTML event
+     */
+    public JQHelper(Control control, String selector, JQEvent event) {
+        setControl(control);
+        setSelector(selector);
+        setEvent(event);
+    }
+
     // ------------------------------------------------------ Public Properties
+
+    /**
+     * Return the list of JQuery bindings.
+     *
+     * @see #bind(java.lang.String, net.sf.clickclick.jquery.util.JQEvent)
+     *
+     * @return the list of JQuery bindings
+     */
+    public List<JQBinding> getBindings() {
+        if (bindings == null) {
+            bindings = new ArrayList<JQBinding>();
+        }
+        return bindings;
+    }
 
     /**
      * Return the message to display when an error occurs during an Ajax request.
      * If no value is set, this method will try and lookup a localized message
      * using the target control for the key "<tt>ajax-error-message</tt>".
      * If a message cannot be found a default value is set:
-     * "<tt>&;lt;h1&gt;Please wait...&lt;/h1&gt;</tt>".
+     * "<tt>&;lt;h1&gt;Error occurred!&lt;/h1&gt;</tt>".
      *
      * @return the message to display wnen an error occurs during an Ajax request
      */
@@ -325,9 +411,9 @@ public class JQHelper implements Serializable {
         if (errorMessage == null) {
             errorMessage = getMessage("ajax-error-message");
 
-            if (indicatorMessage == null) {
+            if (errorMessage == null) {
                 // Set a default message
-                indicatorMessage = "Error occurred!";
+                errorMessage = "Error occurred!";
             }
         }
         return errorMessage;
@@ -529,20 +615,20 @@ public class JQHelper implements Serializable {
     }
 
     /**
-     * Return the JavaScript event that fires the Ajax request.
+     * Return the JavaScript event that fire the Ajax request.
      *
-     * @return the JavaScript event that fires the Ajax request.
+     * @return the JavaScript event that fire the Ajax request.
      */
-    public String getEvent() {
+    public JQEvent getEvent() {
         return event;
     }
 
     /**
-     * Set the JavaScript event that fires the Ajax request.
+     * Set the JavaScript event that fire the Ajax request.
      *
-     * @param event the JavaScript event that fires the Ajax request.
+     * @param event the JavaScript event that fire the Ajax request.
      */
-    public void setEvent(String event) {
+    public void setEvent(JQEvent event) {
         this.event = event;
     }
 
@@ -565,6 +651,37 @@ public class JQHelper implements Serializable {
      */
     public void setModel(Map model) {
         this.model = model;
+    }
+
+    /**
+     * Return the JavaScript template ID attribute
+     * (&lt;script <span class="blue">id</span>="someid" &gt;).
+     * If no ID attribute is specified (which is normally the case) the associated
+     * {@link #control}'s ID will be used as the script element ID attribute.
+     *
+     * @return the ID attribute of the JavaScript template
+     */
+    public String getId() {
+        if (id == null) {
+            Control control = getControl();
+            if (control != null) {
+                id = control.getId();
+                if (StringUtils.isBlank(id)) {
+                    id = control.getName();
+                }
+            }
+        }
+        return id;
+    }
+
+    /**
+     * Set the JavaScript template ID attribute
+     * (&lt;script <span class="blue">id</span>="someid" &gt;).
+     *
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -681,16 +798,11 @@ public class JQHelper implements Serializable {
     }
 
     /**
-     * Return the CSS selector for selecting the target element to Ajaxify,
-     * defaults to the ID attribute of the target {@link #control}.
+     * Return the CSS selector for selecting the target element to Ajaxify.
      *
      * @return the CSS selector for selecting the target element to Ajaxify
      */
     public String getSelector() {
-        if (selector == null) {
-            Control control = getControl();
-            selector = AjaxUtils.getSelector(control);
-        }
         return selector;
     }
 
@@ -705,6 +817,29 @@ public class JQHelper implements Serializable {
      */
     public void setSelector(String selector) {
         this.selector = selector;
+    }
+
+    /**
+     * Return true if {@link #bind(java.lang.String, net.sf.clickclick.jquery.util.JQEvent) bindings}
+     * can be added to this instance.
+     *
+     * @return true if bindings can added, false otherwide
+     */
+    public boolean isBindingDisabled() {
+        return bindingDisabled;
+    }
+
+    /**
+     * Set whether {@link #bind(java.lang.String, net.sf.clickclick.jquery.util.JQEvent) bindings}
+     * can be added to this instance.
+     * <p/>
+     * This property allows you to disable Ajax aware controls from adding their
+     * bindings to a helper in case you need to explicitly control the bindings.
+     *
+     * @param bindingDisabled true if bindings should be disabled, false otherwise
+     */
+    public void setBindingDisabled(boolean bindingDisabled) {
+        this.bindingDisabled = bindingDisabled;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -732,10 +867,14 @@ public class JQHelper implements Serializable {
 
         String message = null;
 
-        message = ClickUtils.getParentMessage(getControl(), name);
+        Control control = getControl();
 
-        if (message == null && getMessages().containsKey(name)) {
-            message = (String) getMessages().get(name);
+        if (control != null) {
+            message = ClickUtils.getParentMessage(control, name);
+
+            if (message == null && getMessages().containsKey(name)) {
+                message = (String) getMessages().get(name);
+            }
         }
 
         return message;
@@ -789,7 +928,12 @@ public class JQHelper implements Serializable {
      * @throws IllegalStateException if the context for the control has not be set
      */
     public Map getMessages() {
-        return getControl().getMessages();
+        Control control = getControl();
+        if (control == null) {
+            return Collections.EMPTY_MAP;
+        } else {
+            return getControl().getMessages();
+        }
     }
 
     /**
@@ -798,6 +942,7 @@ public class JQHelper implements Serializable {
      * The following values are added:
      * <ul>
      * <li>"context" - the request context path e.g: '/myapp'</li>
+     * <li>"{@link #bindings}" - the JavaScript bindings for events</li>
      * <li>"{@link #control}" - the target control</li>
      * <li>"{@link #selector}" - the CSS selector</li>
      * <li>"{@link #event}" - the event that initiates the Ajax request</li>
@@ -832,7 +977,7 @@ public class JQHelper implements Serializable {
             buffer.append("message:'").append(message).append("'");
         }
 
-        if (options != null) {
+        if (StringUtils.isNotBlank(options)) {
             if (buffer.length() > 0) {
                 buffer.append(",");
             }
@@ -840,9 +985,12 @@ public class JQHelper implements Serializable {
         }
 
         Map model = new HashMap();
+        model.put("bindings", getBindings());
         model.put("context", context.getRequest().getContextPath());
         model.put("control", getControl());
-        model.put("selector", getSelector());
+
+        model.put("selector", getSelectorOrControlId());
+
         model.put("event", getEvent());
         model.put("productionMode", productionMode ? "true" : "false");
         model.put("url", getUrl());
@@ -864,6 +1012,9 @@ public class JQHelper implements Serializable {
      * scripts to enable Ajax requests
      */
     public void addHeadElements(List headElements) {
+        // Indicate head elements have been added for this helper
+        headElementsAdded = true;
+
         JsImport jsImport = new JsImport(jqueryImport);
         if (!headElements.contains(jsImport)) {
             headElements.add(0, jsImport);
@@ -892,8 +1043,15 @@ public class JQHelper implements Serializable {
     }
 
     /**
-     * Ajaxifies the the target {@link #control} so that its registered
+     * Ajaxifies the the given control so that its registered
      * {@link net.sf.clickclick.AjaxListener} can be invoked for Ajax requests.
+     * <p/>
+     * If the helper's default {@link #control} is not set, the given control
+     * will be set as the new default control.
+     * <p/>
+     * The given control cannot be null, however if the given CSS selector is null
+     * it will default to the value returned by
+     * {@link net.sf.clickclick.util.AjaxUtils#getSelector(org.apache.click.Control)}.
      * <p/>
      * This method does the following:
      * <ul>
@@ -906,14 +1064,34 @@ public class JQHelper implements Serializable {
      * onInit event, it will only be executed after the onInit event.
      * If this method is called after the onInit method, it will be executed
      * immediately.
+     *
+     * @param control the control to ajaxify
+     * @param selector the CSS selector
+     * @param event the JavaScript event
+     * @throws IllegalArgumentException if control is null
      */
-    public void ajaxify() {
+    public void ajaxify(final Control control, final String selector, final JQEvent event) {
+        if (control == null) {
+            throw new IllegalArgumentException("Control cannot be null");
+        }
+
+        // Set the given control as the default control if no control has been set
+        if (getControl() == null) {
+            setControl(control);
+        }
+
         // Reason we register a callback below is that the control ID might only
         // be fully set after #ajaxify is invoked. By using the special
         // ON_AJAX_EVENT callback which is triggered before onProcess, we
         // ensure that the control ID will be available.
-        AjaxControlRegistry.dispatchActionEvent(getControl(), new ActionListener() {
+        AjaxControlRegistry.dispatchActionEvent(control, new ActionListener() {
             public boolean onAction(Control source) {
+                if (selector != null) {
+                    bind(selector, event);
+                } else {
+                    bind(AjaxUtils.getSelector(source), event);
+                }
+
                 AjaxControlRegistry.registerAjaxControl(source);
                 return true;
             }
@@ -929,16 +1107,145 @@ public class JQHelper implements Serializable {
         // thus the Repeater event would have fired by the time the control head
         // elements is applied.
         // PLEASE NOTE: Ajax enabled controls shouldn't have this issue, as their
-        // HEAD elements should be applied inside the getHeadElements method which is
-        // invoked after the POST_ON_RENDER_EVENT
-        AjaxControlRegistry.dispatchActionEvent(getControl(), new ActionListener() {
-            public boolean onAction(Control source) {
-                addHeadElements(getControl().getHeadElements());
-                return true;
-            }
+        // HEAD elements should be applied inside the getHeadElements method which
+        // is invoked after the POST_ON_RENDER_EVENT
+        if (!headElementsAdded) {
+            headElementsAdded = true;
+            AjaxControlRegistry.dispatchActionEvent(control, new ActionListener() {
 
-        }, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+                public boolean onAction(Control source) {
+                    addHeadElements(source.getHeadElements());
 
+                    // Stateful Page note: reset headElements flag
+                    headElementsAdded = false;
+                    return true;
+                }
+            }, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+        }
+    }
+
+    /**
+     * Ajaxifies the the given control so that its registered
+     * {@link net.sf.clickclick.AjaxListener} can be invoked for Ajax requests.
+     *
+     * @see #ajaxify(org.apache.click.Control, java.lang.String, net.sf.clickclick.jquery.util.JQEvent)
+     *
+     * @param control the control to ajaxify
+     * @param event the JavaScript event
+     */
+    public void ajaxify(Control control, JQEvent event) {
+        ajaxify(control, getSelector(), event);
+    }
+
+    /**
+     * Ajaxifies the the given control so that its registered
+     * {@link net.sf.clickclick.AjaxListener} can be invoked for Ajax requests.
+     *
+     * @see #ajaxify(org.apache.click.Control, java.lang.String, net.sf.clickclick.jquery.util.JQEvent)
+     *
+     * @param control the control to ajaxify
+     */
+    public void ajaxify(Control control) {
+        ajaxify(control, getSelector(), getEvent());
+    }
+
+    /**
+     * Ajaxifies the the target {@link #control} so that its registered
+     * {@link net.sf.clickclick.AjaxListener} can be invoked for Ajax requests.
+     *
+     * @see #ajaxify(org.apache.click.Control, java.lang.String, net.sf.clickclick.jquery.util.JQEvent)
+     */
+    public void ajaxify() {
+        ajaxify(getControl(), getSelector(), getEvent());
+    }
+
+    /**
+     * Register the given control to be processed by the ClickServlet for Ajax
+     * requests.
+     * <p/>
+     * This method delegates to
+     * {@link net.sf.clickclick.AjaxControlRegistry#registerAjaxControl(org.apache.click.Control)}.
+     *
+     * @param control the control to register as an Ajax target
+     * @throws IllegalArgumentException if control is null
+     */
+    public void registerAjaxControl(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Control cannot be null");
+        }
+
+        AjaxControlRegistry.registerAjaxControl(control);
+    }
+
+    /**
+     * Synonymous to JQuery <a href="http://docs.jquery.com/Events/bind">bind</a>
+     * / <a href="http://docs.jquery.com/Events/live">live</a> functionality.
+     *
+     * @see #bind(java.lang.String, net.sf.clickclick.jquery.util.JQEvent)
+     *
+     * @param event the JavaScript event to bind
+     */
+    public void bind(JQEvent event) {
+        bind(getSelectorOrControlId(), event);
+    }
+
+    /**
+     * Synonymous to JQuery <a href="http://docs.jquery.com/Events/bind">bind</a>
+     * / <a href="http://docs.jquery.com/Events/live">live</a> functionality.
+     *
+     * @see #bind(java.lang.String, net.sf.clickclick.jquery.util.JQEvent)
+     *
+     * @param selector the CSS selector to bind
+     */
+    public void bind(String selector) {
+        bind(selector, getEvent());
+    }
+
+    /**
+     * Synonymous to JQuery <a href="http://docs.jquery.com/Events/bind">bind</a>
+     * / <a href="http://docs.jquery.com/Events/live">live</a> functionality.
+     * <p/>
+     * This method provides an easy way to bind a CSS selector and JavaScript
+     * {@link net.sf.clickclick.jquery.util.JQEvent}.
+     * <p/>
+     * For example the following snippet:
+     *
+     * <pre class="prettyprint">
+     * Form form = new Form("form");
+     * Submit submit = new Submit("ok");
+     *
+     * // NOTE: Add button to parent form before invoking #bind (see below for details)
+     * form.add(submit);
+     *
+     * jqHelper.bind('#' + submit.getId(), JQEvent.CLICK);
+     * </pre>
+     *
+     * will render as follows:
+     *
+     * <pre class="prettyprint">
+     * jQuery('#form_ok').live('click', template);
+     * </pre>
+     *
+     * <b>Note:</b> if the CSS selector passed to the #bind method is a Control's
+     * ID, ensure the Control is attached to its parent Container so that the
+     * full ID is passed in.
+     *
+     * @param selector the CSS selector to bind
+     * @param event the JavaScript event to bind
+     */
+    public void bind(String selector, JQEvent event) {
+        if (isBindingDisabled()) {
+            return;
+        }
+
+        JQBinding binding = new JQBinding(selector, event);
+
+        List<JQBinding> bindingList = getBindings();
+        if (bindingList.contains(binding)) {
+            return;
+        }
+
+        bindingList.add(binding);
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -1022,10 +1329,12 @@ public class JQHelper implements Serializable {
 
         if (StringUtils.isNotBlank(getTemplate())) {
             JsScript jsScript = new JsScript(getTemplate(), getModel());
-            String id = control.getId();
-            if (StringUtils.isBlank(id)) {
-                 id = control.getName();
+
+            String id = getId();
+            if (id == null) {
+                throw new IllegalArgumentException("JQHelper id is null");
             }
+
             jsScript.setId(id + "_jquery_template");
 
             // remove previous script in case of stateful pages
@@ -1033,5 +1342,22 @@ public class JQHelper implements Serializable {
             // add script
             headElements.add(jsScript);
         }
+    }
+
+    /**
+     * Return the {@link #selector} or the Control ID/name attribute if the
+     * selector is not set.
+     *
+     * @return return selector or Control ID/name attribute
+     */
+    protected String getSelectorOrControlId() {
+        String cssSelector = getSelector();
+        if (cssSelector == null) {
+            Control control = getControl();
+            if (control != null) {
+                cssSelector = AjaxUtils.getSelector(control);
+            }
+        }
+        return cssSelector;
     }
 }

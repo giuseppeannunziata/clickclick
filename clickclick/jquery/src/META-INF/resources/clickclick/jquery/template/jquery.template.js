@@ -4,13 +4,20 @@ jQuery(document).ready(function(){
   // rebind the event if the Control is replaced since LiveQuery does this for you.
   // Also note the method Click.debounce which merge multiple callbacks if they
   // are invoked too many times within a specified threshold
-  jQuery('$selector').livequery(#if($event) "$event", #end Click.debounce(template, $threshold));
-  // $threshold is the number of milliseconds within which multiple function
+  #foreach($binding in $bindings)
+    jQuery('$binding.selector').livequery(#if($binding.event && $binding.event.toString()) "$binding.event",#end Click.debounce(template, $threshold));
+  #end
+  // threshold is the number of milliseconds within which multiple function
   // callbacks will be merged into one function callback
 
-  function template() {
+  function template(event) {
     // Extract parameters from element href/src/target
     var params = Click.params(this);
+
+    // Add event
+    if(Click.isNotBlank(event)) {
+        params.push({ name:'event', value: event.type });
+    }
 
     // Add any parameters passed in from the Page
     var defaultParams = Click.urlPairs('$!{parameters}');

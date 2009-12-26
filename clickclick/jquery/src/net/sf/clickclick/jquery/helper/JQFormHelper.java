@@ -37,7 +37,7 @@ import org.apache.click.element.JsImport;
  * public class JQForm extends AjaxForm {
  *
  *     // The embedded JQuery Form helper object.
- *     private JQFormHelper jqFormHelper = new JQFormHelper(this);
+ *     private JQFormHelper jqFormHelper;
  *
  *     // Constructor
  *     public JQForm(String name) {
@@ -45,9 +45,26 @@ import org.apache.click.element.JsImport;
  *     }
  *
  *     // Initialize the Ajax functionality
+ *     &#64;Override
  *     public void onInit() {
  *         super.onInit();
-           jqFormHelper.ajaxify();
+ *         AjaxControlRegistry.registerAjaxControl(this);
+ *     }
+ *
+ *     &#64;Override
+ *     public List getHeadElements() {
+ *         if (headElements == null) {
+ *             headElements = super.getHeadElements();
+ *             getJQueryHelper().addHeadElements(headElements);
+ *         }
+ *         return headElements;
+ *     }
+ *
+ *     public JQHelper getJQueryHelper() {
+ *         if (jqHelper == null) {
+ *             jqHelper = new JQFormHelper(this);
+ *         }
+ *         return jqHelper;
  *     }
  * } </pre>
  *
@@ -105,7 +122,7 @@ public class JQFormHelper extends JQHelper {
      * The path of the template to render:
      * "<tt>/clickclick/jquery/template/jquery.form.template.js</tt>".
      */
-    private String template = "/clickclick/jquery/template/jquery.form.template.js";
+    protected String template = "/clickclick/jquery/template/jquery.form.template.js";
 
     // ----------------------------------------------------------- Constructors
 
@@ -119,8 +136,6 @@ public class JQFormHelper extends JQHelper {
         setTemplate(template);
     }
 
-    // ------------------------------------------------------ Protected Methods
-
     /**
      * Add the necessary JavaScript imports and scripts to the given
      * headElements list to enable the target Form to submit Ajax requests.
@@ -128,15 +143,21 @@ public class JQFormHelper extends JQHelper {
      * @param headElements the list which to add all JavaScript imports and
      * scripts to enable the target Form to submit Ajax requests
      */
-    protected void addHeadElements(List headElements) {
+    @Override
+    public void addHeadElements(List headElements) {
         super.addHeadElements(headElements);
         JsImport jsImport = new JsImport(jqueryFormImport);
         if (!headElements.contains(jsImport)) {
             headElements.add(jsImport);
         }
 
-        // Add the Form ID as a HiddeField to trigger Ajax callback
+        // Add the Form ID as a HiddenField to trigger Ajax callback
         Form form = (Form) getControl();
+
+        if (form == null) {
+            throw new IllegalStateException("The JQFormHelper#control cannot be null");
+        }
+
         if (form.getField(form.getId()) == null) {
             form.add(new HiddenField(form.getId(), "1"));
         }

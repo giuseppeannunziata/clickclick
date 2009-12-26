@@ -75,11 +75,11 @@ jQuery(document).ready(function(){
           }
           */
 
+          #if ($jstree.closeListener)
           /*
            * Triggered when a node is closed. Receives two parameters
            *  - the node that was closed and a reference to the tree instance.
            */
-          #if ($jstree.closeListener)
             ,onclose: function(NODE, TREE){
               var nodeId = $(NODE).attr("id");
               var parameters = 'nodeId='+nodeId;
@@ -87,12 +87,12 @@ jQuery(document).ready(function(){
             }
           #end
 
+          #if ($jstree.deleteListener)
           /*
            * Triggered when a node is deleted. Receives three parameters
            * - the node that was deleted, a reference to the tree instance and a
            * rollback object that you can use with jQuery.tree.rollback(RB).
            */
-          #if ($jstree.deleteListener)
             ,ondelete: function(NODE, TREE, RB){
               var nodeId = $(NODE).attr("id");
               var parameters = 'nodeId='+nodeId;
@@ -100,12 +100,12 @@ jQuery(document).ready(function(){
             }
           #end
 
+          #if ($jstree.changeListener)
           /**
            * Triggered when selection is changed in any way (select or deselect).
            * Receives two parameters - the node involved and a reference to the
            * tree instance.
            */
-          #if ($jstree.changeListener)
             ,onchange : function (NODE) {
               // guard against infinite loop
               if(!applyPreSelect) {
@@ -126,6 +126,7 @@ jQuery(document).ready(function(){
             }
           #end
 
+          #if ($jstree.moveListener)
           /*
            * Triggered when a node is moved. Receives five parameters - the node
            * that was moved, the reference node in the move, the new position
@@ -133,7 +134,6 @@ jQuery(document).ready(function(){
            * a reference to the tree instance and a rollback object that you can
            * use with jQuery.tree.rollback(RB).
            */
-          #if ($jstree.moveListener)
             ,onmove: function(NODE, REF_NODE, TYPE, TREE, RB){
               var nodeId = $(NODE).attr("id");
               var refNodeId = $(REF_NODE).attr("id");
@@ -159,12 +159,12 @@ jQuery(document).ready(function(){
               TREE.container.append($("<div>").css({ "clear" : "both" }));
           }
 
+          #if ($jstree.renameListener)
           /*
            * Triggered when a node is renamed. Receives three parameters
            * - the renamed node, a reference to the tree instance and a rollback
            *  object that you can use with jQuery.tree.rollback(RB).
            */
-          #if ($jstree.renameListener)
             ,onrename: function(NODE, TREE, RB){
               var nodeId = $(NODE).attr("id");
               var nodeValue = TREE.get_text(NODE);
@@ -179,11 +179,11 @@ jQuery(document).ready(function(){
 
           // -------------------------------------------------- Unused callbacks
 
+          #if ($jstree.selectListener)
           /**
            * Triggered when a node is selected. Receives two parameters
            * - the selected node and a reference to the tree instance.
            */
-          #if ($jstree.selectListener)
             ,onselect : function(NODE, TREE) {
               // guard against infinite loop
               if(!applyPreSelect) {
@@ -204,11 +204,11 @@ jQuery(document).ready(function(){
             }
           #end
 
+          #if ($jstree.deselectListener)
           /*
            * Triggered when a node is deselected. Receives two parameters
            * - the deselected node and a reference to the tree instance.
            */
-          #if ($jstree.deselectListener)
             ,ondeselect : function(NODE, TREE) {
               var href = $(NODE).children("a:eq(0)").attr("href");
               if (href=='#') {

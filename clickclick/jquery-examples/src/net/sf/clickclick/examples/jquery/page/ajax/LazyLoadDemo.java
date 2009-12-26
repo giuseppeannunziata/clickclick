@@ -21,6 +21,7 @@ import net.sf.clickclick.examples.jquery.control.Window;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import net.sf.clickclick.jquery.Taconite;
+import net.sf.clickclick.jquery.util.JQEvent;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
 import org.apache.click.Control;
@@ -93,9 +94,9 @@ public class LazyLoadDemo extends BorderPage {
     // -------------------------------------------------------- Private Methods
 
     private void setupHelper(JQHelper helper, Control indicatorTarget) {
-        // Set the event to ON_DOMREADY, meaning the Ajax request is invoked
+        // Set the event to DOMREADY, meaning the Ajax request is invoked
         // as soon as the browser DOM is available
-        helper.setEvent(JQHelper.ON_DOMREADY);
+        helper.setEvent(JQEvent.DOMREADY);
 
         // Set the target of the Ajax indicator (busy indicator)
         helper.setIndicatorTarget(indicatorTarget);
@@ -109,6 +110,7 @@ public class LazyLoadDemo extends BorderPage {
 
         // Set indicator options to align the message box in the upper right
         // hand corner
+        buffer.append("showOverlay: true,");
         buffer.append("centerX: false,");
         buffer.append("centerY: false,");
         buffer.append("css: {");

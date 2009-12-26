@@ -18,7 +18,8 @@ import net.sf.clickclick.control.html.Span;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import net.sf.clickclick.jquery.Taconite;
-import net.sf.clickclick.util.AjaxAdapter;
+import net.sf.clickclick.jquery.util.JQAjaxAdapter;
+import net.sf.clickclick.jquery.util.JQEvent;
 import net.sf.clickclick.util.Partial;
 import org.apache.click.Control;
 import org.apache.click.control.Field;
@@ -39,8 +40,10 @@ public class FieldDemo extends BorderPage {
 
         // Register an Ajax listener on the field which is invoked on every
         // "keyup" event.
-        field.setActionListener(new AjaxAdapter() {
-            public Partial onAjaxAction(Control source) {
+        field.setActionListener(new JQAjaxAdapter() {
+
+            @Override
+            public Partial onAjaxAction(Control source, JQEvent event) {
                 Taconite partial = new Taconite();
 
                 // Set the label content to the latest field value
@@ -57,12 +60,12 @@ public class FieldDemo extends BorderPage {
         // Switch off the Ajax busy indicator
         helper.setShowIndicator(false);
 
-        // Delay Ajax invoke for 350 millis, otherwise too many calls are made
-        // to the server
+        // Delay Ajax invoke for 350 millis, otherwise too many Ajax requests
+        // are made to the server
         helper.setThreshold(350);
 
         // Set Ajax to fire on keyup events
-        helper.setEvent("keyup");
+        helper.setEvent(JQEvent.KEYUP);
 
         // Ajaxify the the Field
         helper.ajaxify();

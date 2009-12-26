@@ -15,9 +15,12 @@ package net.sf.clickclick.jquery.control.ajax;
 
 import java.util.Iterator;
 import java.util.List;
+import net.sf.clickclick.AjaxControlRegistry;
 import net.sf.clickclick.jquery.helper.JQAutoCompleteHelper;
 import net.sf.clickclick.jquery.helper.JQHelper;
+import net.sf.clickclick.jquery.util.JQEvent;
 import net.sf.clickclick.util.AjaxAdapter;
+import net.sf.clickclick.util.AjaxUtils;
 import net.sf.clickclick.util.Partial;
 import org.apache.click.Control;
 import org.apache.click.control.TextField;
@@ -41,6 +44,7 @@ import org.apache.click.util.HtmlStringBuffer;
  *
  *         // When the user enters text into the field, this method is called,
  *         // passing in the current value of the text field
+ *         &#64;Override
  *         public List getAutoCompleteList(String criteria) {
  *             List suggestions = getPostCodeService().getPostCodeLocations(criteria);
  *             return suggestions;
@@ -53,7 +57,7 @@ public abstract class JQAutoCompleteTextField extends TextField {
     // -------------------------------------------------------------- Variables
 
     /** The JQuery helper object. */
-    private JQAutoCompleteHelper jqHelper = new JQAutoCompleteHelper(this);
+    protected JQAutoCompleteHelper jqHelper;
 
     // ----------------------------------------------------------- Constructors
 
@@ -129,6 +133,9 @@ public abstract class JQAutoCompleteTextField extends TextField {
      * @return the jqHelper instance
      */
     public JQAutoCompleteHelper getJQueryHelper() {
+        if(jqHelper == null) {
+            jqHelper = new JQAutoCompleteHelper(this);
+        }
         return jqHelper;
     }
 
@@ -146,12 +153,15 @@ public abstract class JQAutoCompleteTextField extends TextField {
     /**
      * Initialize the JQAutoCompleteTextField Ajax functionality.
      */
+    @Override
     public void onInit() {
         super.onInit();
-        jqHelper.ajaxify();
+        AjaxControlRegistry.registerAjaxControl(this);
 
         // Register an Ajax listener which returns the list of suggestions
         setActionListener(new AjaxAdapter() {
+
+            @Override
             public Partial onAjaxAction(Control source) {
                 Partial partial = new Partial();
                 List autocompleteList = getAutoCompleteList(getValue());
@@ -169,6 +179,25 @@ public abstract class JQAutoCompleteTextField extends TextField {
                 return partial;
             }
         });
+    }
+
+    /**
+     * Return control HEAD elements.
+     *
+     * @return the control HEAD elements
+     */
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+
+            getJQueryHelper().addHeadElements(headElements);
+        }
+        return headElements;
+    }
+
+    public void bind(JQEvent event) {
+        getJQueryHelper().bind(AjaxUtils.getSelector(this), event);
     }
 
     // ------------------------------------------------------ Protected Methods

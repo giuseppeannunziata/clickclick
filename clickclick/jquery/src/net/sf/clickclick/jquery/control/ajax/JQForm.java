@@ -14,6 +14,7 @@
 package net.sf.clickclick.jquery.control.ajax;
 
 import java.util.List;
+import net.sf.clickclick.AjaxControlRegistry;
 import net.sf.clickclick.control.ajax.AjaxForm;
 import net.sf.clickclick.jquery.helper.JQFormHelper;
 import net.sf.clickclick.jquery.helper.JQHelper;
@@ -48,6 +49,7 @@ import org.apache.commons.lang.StringUtils;
  *     // form is submitted
  *     submit.setActionListener(new AjaxAdapter() {
  *
+ *        &#64;Override
  *        public Partial onAjaxAction(Control source) {
  *            Taconite partial = new Taconite();
  *
@@ -69,10 +71,10 @@ public class JQForm extends AjaxForm {
     // -------------------------------------------------------------- Variables
 
     /** The JQuery helper object. */
-    private JQHelper jqHelper = new JQFormHelper(this);
+    protected JQHelper jqHelper;
 
     /** The JavaScript focus function HEAD element. */
-    private JsScript focusScript;
+    protected JsScript focusScript;
 
     // ----------------------------------------------------------- Constructors
 
@@ -99,6 +101,9 @@ public class JQForm extends AjaxForm {
      * @return the jqHelper instance
      */
     public JQHelper getJQueryHelper() {
+        if (jqHelper == null) {
+             jqHelper = new JQFormHelper(this);
+        }
         return jqHelper;
     }
 
@@ -116,19 +121,10 @@ public class JQForm extends AjaxForm {
     /**
      * Initialize the JQForm Ajax functionality.
      */
+    @Override
     public void onInit() {
         super.onInit();
-        jqHelper.ajaxify();
-    }
-
-    /**
-     * Set the JavaScript client side form validation flag.
-     *
-     * @param validate the JavaScript client side validation flag
-     */
-    public void setJavaScriptValidation(boolean validate) {
-        super.setJavaScriptValidation(validate);
-        jqHelper.getModel().put("javascriptValidate", validate);
+        AjaxControlRegistry.registerAjaxControl(this);
     }
 
     /**
@@ -136,18 +132,30 @@ public class JQForm extends AjaxForm {
      *
      * @return the JQForm HEAD elements
      */
+    @Override
     public List getHeadElements() {
-        if (!getContext().isAjaxRequest()) {
-            return super.getHeadElements();
-        } else {
-            if (headElements == null) {
-                headElements = super.getHeadElements();
+        if (headElements == null) {
+            headElements = super.getHeadElements();
 
+            getJQueryHelper().addHeadElements(headElements);
+
+            if (getContext().isAjaxRequest()) {
                 focusScript = new JsScript();
                 headElements.add(focusScript);
             }
-            return headElements;
         }
+        return headElements;
+    }
+
+    /**
+     * Set the JavaScript client side form validation flag.
+     *
+     * @param validate the JavaScript client side validation flag
+     */
+    @Override
+    public void setJavaScriptValidation(boolean validate) {
+        super.setJavaScriptValidation(validate);
+        getJQueryHelper().getModel().put("javascriptValidate", validate);
     }
 
     /**
@@ -156,8 +164,8 @@ public class JQForm extends AjaxForm {
      * @param buffer the StringBuffer to render to
      * @param formFields the list of form fields
      */
-    protected void renderFocusJavaScript(HtmlStringBuffer buffer,
-        List formFields) {
+    @Override
+    protected void renderFocusJavaScript(HtmlStringBuffer buffer, List formFields) {
         if (!getContext().isAjaxRequest()) {
             super.renderFocusJavaScript(buffer, formFields);
         } else {
@@ -183,6 +191,7 @@ public class JQForm extends AjaxForm {
      * @param buffer the HTML string buffer to render to
      * @param formFields the list of form fields
      */
+    @Override
     protected void renderHeader(HtmlStringBuffer buffer, List formFields) {
         if (getJavaScriptValidation()) {
             // The default implementation renders an inline onsubmit handler on form.
