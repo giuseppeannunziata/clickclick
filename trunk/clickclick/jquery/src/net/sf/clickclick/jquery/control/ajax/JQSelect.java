@@ -145,6 +145,11 @@ public class JQSelect extends Select {
         AjaxControlRegistry.registerAjaxControl(this);
     }
 
+    /**
+     * Return control HEAD elements.
+     *
+     * @return the control HEAD elements
+     */
     @Override
     public List getHeadElements() {
         if (headElements == null) {
@@ -156,6 +161,14 @@ public class JQSelect extends Select {
         return headElements;
     }
 
+    /**
+     * Synonymous to JQuery <a href="http://docs.jquery.com/Events/bind">bind</a>
+     * / <a href="http://docs.jquery.com/Events/live">live</a> functionality.
+     *
+     * @see net.sf.clickclick.jquery.helper.JQHelper#bind(java.lang.String, net.sf.clickclick.jquery.util.JQEvent)
+     *
+     * @param event the event to bind the control to
+     */
     public void bind(JQEvent event) {
         getJQueryHelper().bind(AjaxUtils.getSelector(this), event);
     }

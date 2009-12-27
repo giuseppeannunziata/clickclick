@@ -15,121 +15,100 @@ package net.sf.clickclick.jquery.control.ajax;
 
 import java.util.List;
 import net.sf.clickclick.AjaxControlRegistry;
-import net.sf.clickclick.AjaxListener;
-import net.sf.clickclick.control.ajax.AjaxActionLink;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import net.sf.clickclick.jquery.util.JQEvent;
 import net.sf.clickclick.util.AjaxUtils;
+import org.apache.click.control.Checkbox;
 
 /**
- * Provide an Ajax enabled ActionLink control.
+ * Provide an Ajax enabled Checkbox control.
  * <p/>
- * <b>Please note:</b> JQActionLink uses {@link net.sf.clickclick.jquery.helper.JQHelper}
+ * <b>Please note:</b> JQCheckbox uses {@link net.sf.clickclick.jquery.helper.JQHelper}
  * to provide the Ajax functionality.
  * <p/>
- * Below is an example showing how to refresh a Table when the link is clicked:
+ * Below is an example showing how to use a JQCheckbox:
  *
  * <pre class="prettyprint">
- * private JQActionLink link = new JQActionLink("link");
+ * private Form form = new Form("form");
  *
  * public MyPage() {
- *     addControl(link);
+ *     addControl(form);
  *
- *     // Set an Ajax listener on the link that return a Taconite (Partial)
+ *     JQCheckbox checkbox = new JQCheckbox("check");
+ *
+ *     // Set an Ajax listener on the checkbox that return a Taconite (Partial)
  *     // instance
- *     link.setActionListener(new AjaxAdapter() {
+ *     checkbox.setActionListener(new AjaxAdapter() {
  *
  *         &#64;Override
  *         public Partial onAjaxAction(Control source) {
  *             Taconite partial = new Taconite();
  *
- *             // Create a table instance
- *             Table table = createTable();
- *
- *             // Refresh the table by replacing it with the latest data on the server
- *             partial.replace(table);
+ *             // When a checkbox is clicked, we print the isChecked value to
+ *             // the element with the ID '#myTarget'.
+ *             partial.prepend("#myTarget", "<p>You have " + (checkbox.isChecked() ? "checked" : "unchecked") + " the checkbox.</p>");
  *
  *             return partial;
  *         }
  *     });
  *
+ *     form.add(select);
  * } </pre>
  */
-public class JQActionLink extends AjaxActionLink {
+public class JQCheckbox extends Checkbox {
 
     // -------------------------------------------------------------- Variables
 
     /** The JQuery helper object. */
     protected JQHelper jqHelper;
 
-    // ----------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructor
 
     /**
-     * Create a JQActionLink with the given name.
+     * Create a default JQSelect field.
+     */
+    public JQCheckbox() {
+    }
+
+    /**
+     * Create a JQSelect field with the given name.
      *
      * @param name the name of the control
      */
-    public JQActionLink(String name) {
+    public JQCheckbox(String name) {
         super(name);
     }
 
     /**
-     * Create a JQActionLink with the given name and label.
+     * Create a JQSelect field with the given name and label.
      *
      * @param name the name of the control
      * @param label the label of the control
      */
-    public JQActionLink(String name, String label) {
+    public JQCheckbox(String name, String label) {
         super(name, label);
     }
 
     /**
-     * Create a JQActionLink with the given name, label and id.
+     * Create a JQSelect field with the given name and required status.
      *
-     * @param name the name of the control
-     * @param label the label of the control
-     * @param id the id of the control
+     * @param name the name of the field
+     * @param required the field required status
      */
-    public JQActionLink(String name, String label, String id) {
-        super(name, label, id);
+    public JQCheckbox(String name, boolean required) {
+        super(name, required);
     }
 
     /**
-     * Create a JQActionLink with the given listener.
+     * Create a JQSelect field with the given name, label and required status.
      *
-     * @param ajaxListener the listener of the control
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
      */
-    public JQActionLink(AjaxListener ajaxListener) {
-        super(ajaxListener);
-    }
-
-    /**
-     * Create a JQActionLink with the given name and listener.
-     *
-     * @param name the name of the control
-     * @param ajaxListener the listener of the control
-     */
-    public JQActionLink(String name, AjaxListener ajaxListener) {
-        super(name, ajaxListener);
-    }
-
-    /**
-     * Create a JQActionLink with the given name, label and listener.
-     *
-     * @param name the name of the control
-     * @param label the label of the control
-     * @param ajaxListener the listener of the control
-     */
-    public JQActionLink(String name, String label, AjaxListener ajaxListener) {
-        super(name, label, ajaxListener);
-    }
-
-    /**
-     * Create a default JQActionLink.
-     * <p/>
-     * <b>Please note</b> the control's name must be defined before it is valid.
-     */
-    public JQActionLink() {
+    public JQCheckbox(String name, String label, boolean required) {
+        super(name, label);
+        setRequired(required);
     }
 
     // ------------------------------------------------------ Public Properties
@@ -158,7 +137,7 @@ public class JQActionLink extends AjaxActionLink {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Initialize the JQActionLink Ajax functionality.
+     * Initialize the JQSelect Ajax functionality.
      */
     @Override
     public void onInit() {
