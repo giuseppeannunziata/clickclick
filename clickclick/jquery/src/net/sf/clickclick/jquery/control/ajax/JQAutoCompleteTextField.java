@@ -196,6 +196,14 @@ public abstract class JQAutoCompleteTextField extends TextField {
         return headElements;
     }
 
+    /**
+     * Synonymous to JQuery <a href="http://docs.jquery.com/Events/bind">bind</a>
+     * / <a href="http://docs.jquery.com/Events/live">live</a> functionality.
+     *
+     * @see net.sf.clickclick.jquery.helper.JQHelper#bind(java.lang.String, net.sf.clickclick.jquery.util.JQEvent)
+     *
+     * @param event the event to bind the control to
+     */
     public void bind(JQEvent event) {
         getJQueryHelper().bind(AjaxUtils.getSelector(this), event);
     }
