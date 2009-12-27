@@ -47,7 +47,8 @@ public class TreeWithContextMenu extends BorderPage {
 
         programs.add(new JSTreeNode("program 1", "n_2_3_1"));
         JSTreeNode program2 = new JSTreeNode("program 2", "n_2_3_2", programs);
-        program2.setLoadLazy(true);
+        program2.setLoadLazily(true);
+        program2.setSelected(true);
         programs.add(new JSTreeNode("program 3", "n_2_3_3"));
         programs.add(new JSTreeNode("program 4", "n_2_3_4"));
 
