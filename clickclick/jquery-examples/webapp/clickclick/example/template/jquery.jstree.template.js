@@ -45,7 +45,7 @@ jQuery(document).ready(function(){
            }
         },
 
-        selected : ['n_2_1', 'n_2_3_1'],
+        selected: [$selected],
 
         callback : {
 
