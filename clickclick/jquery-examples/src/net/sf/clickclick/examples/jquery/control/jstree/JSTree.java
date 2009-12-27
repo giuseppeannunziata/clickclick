@@ -31,6 +31,7 @@ import net.sf.clickclick.jquery.Taconite;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import net.sf.clickclick.util.AjaxAdapter;
 import net.sf.clickclick.util.Partial;
+import org.apache.click.ActionEventDispatcher;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.control.AbstractControl;
@@ -335,113 +336,7 @@ public class JSTree extends AbstractControl {
     public void onInit() {
         super.onInit();
         AjaxControlRegistry.registerAjaxControl(this);
-        setActionListener(new AjaxAdapter() {
-
-            @Override
-            public Partial onAjaxAction(Control source) {
-                Context context = getContext();
-
-                String callbackParam = context.getRequestParameter(CALLBACK);
-                TreeCallback callback = TreeCallback.lookup(callbackParam);
-                if (callback == null) {
-                    return null;
-                }
-
-                Partial partial = null;
-
-                switch (callback) {
-                    case OPEN : {
-                        OpenListener listener = getOpenListener();
-                        if (listener != null) {
-                            String nodeId = context.getRequestParameter(NODE_ID);
-                            partial = new Partial();
-                            HtmlStringBuffer buffer = new HtmlStringBuffer();
-                            listener.open(nodeId, buffer);
-                            partial.setContent(buffer.toString());
-                        }
-                        break;
-                    }
-                    case CLOSE : {
-                        CloseListener listener = getCloseListener();
-                        if (listener != null) {
-                            String nodeId = context.getRequestParameter(NODE_ID);
-                            partial = listener.close(nodeId);
-                        }
-                        break;
-                    }
-                    case CREATE : {
-                        CreateListener listener = getCreateListener();
-                        if (listener != null) {
-                            String newValue = context.getRequestParameter(VALUE);
-                            partial = listener.create(newValue);
-                            String newNodeId = listener.getId();
-
-                            // Send created nodeId to browser
-                            Command command = new Command(Taconite.CUSTOM);
-                            command.setName(NODE_ID);
-                            command.setValue(newNodeId);
-                            ((Taconite) partial).insert(command, 0);
-                        }
-                        break;
-                    }
-                    case DELETE : {
-                        DeleteListener listener = getDeleteListener();
-                        if (listener != null) {
-                            String nodeId = context.getRequestParameter(NODE_ID);
-                            partial = listener.delete(nodeId);
-                        }
-                        break;
-                    }
-                    case RENAME : {
-                        RenameListener listener = getRenameListener();
-                        if (listener != null) {
-                            String nodeId = context.getRequestParameter(NODE_ID);
-                            String newValue = context.getRequestParameter(VALUE);
-                            partial = listener.rename(nodeId, newValue);
-                        }
-                        break;
-                    }
-                    case MOVE : {
-                        MoveListener listener = getMoveListener();
-                        if (listener != null) {
-                            String nodeId = context.getRequestParameter(NODE_ID);
-                            String refNodeId = context.getRequestParameter(
-                                REFERENCE_NODE_ID);
-                            String type = context.getRequestParameter(TYPE);
-                            partial = new Taconite();
-                            partial = listener.move(nodeId, refNodeId, type);
-                        }
-                        break;
-                    }
-                    case CHANGE : {
-                        ChangeListener listener = getChangeListener();
-                        if (listener != null) {
-                            String nodeId = context.getRequestParameter(NODE_ID);
-                            partial = listener.change(nodeId);
-                        }
-                        break;
-                    }
-                    case SELECT : {
-                        SelectListener listener = getSelectListener();
-                        if (listener != null) {
-                            String nodeId = context.getRequestParameter(NODE_ID);
-                            partial = listener.select(nodeId);
-                        }
-                        break;
-                    }
-                    case DESELECT : {
-                        DeselectListener listener = getDeselectListener();
-                        if (listener != null) {
-                            String nodeId = context.getRequestParameter(NODE_ID);
-                            partial = listener.deselect(nodeId);
-                        }
-                        break;
-                    }
-                }
-
-                return partial;
-            }
-        });
+        ActionEventDispatcher.dispatchActionEvent(this, new JSTreeListener(), ActionEventDispatcher.POST_ON_PROCESS_EVENT);
     }
 
     @Override
@@ -506,6 +401,114 @@ public class JSTree extends AbstractControl {
 
         public static TreeCallback lookup(String callback) {
             return TreeCallback.valueOf(callback);
+        }
+    }
+
+    private class JSTreeListener extends AjaxAdapter {
+
+        @Override
+        public Partial onAjaxAction(Control source) {
+            Context context = getContext();
+
+            String callbackParam = context.getRequestParameter(CALLBACK);
+            TreeCallback callback = TreeCallback.lookup(callbackParam);
+            if (callback == null) {
+                return null;
+            }
+
+            Partial partial = null;
+
+            switch (callback) {
+                case OPEN: {
+                    OpenListener listener = getOpenListener();
+                    if (listener != null) {
+                        String nodeId = context.getRequestParameter(NODE_ID);
+                        partial = new Partial();
+                        HtmlStringBuffer buffer = new HtmlStringBuffer();
+                        listener.open(nodeId, buffer);
+                        partial.setContent(buffer.toString());
+                    }
+                    break;
+                }
+                case CLOSE: {
+                    CloseListener listener = getCloseListener();
+                    if (listener != null) {
+                        String nodeId = context.getRequestParameter(NODE_ID);
+                        partial = listener.close(nodeId);
+                    }
+                    break;
+                }
+                case CREATE: {
+                    CreateListener listener = getCreateListener();
+                    if (listener != null) {
+                        String newValue = context.getRequestParameter(VALUE);
+                        partial = listener.create(newValue);
+                        String newNodeId = listener.getId();
+
+                        // Send created nodeId to browser
+                        Command command = new Command(Taconite.CUSTOM);
+                        command.setName(NODE_ID);
+                        command.setValue(newNodeId);
+                        ((Taconite) partial).insert(command, 0);
+                    }
+                    break;
+                }
+                case DELETE: {
+                    DeleteListener listener = getDeleteListener();
+                    if (listener != null) {
+                        String nodeId = context.getRequestParameter(NODE_ID);
+                        partial = listener.delete(nodeId);
+                    }
+                    break;
+                }
+                case RENAME: {
+                    RenameListener listener = getRenameListener();
+                    if (listener != null) {
+                        String nodeId = context.getRequestParameter(NODE_ID);
+                        String newValue = context.getRequestParameter(VALUE);
+                        partial = listener.rename(nodeId, newValue);
+                    }
+                    break;
+                }
+                case MOVE: {
+                    MoveListener listener = getMoveListener();
+                    if (listener != null) {
+                        String nodeId = context.getRequestParameter(NODE_ID);
+                        String refNodeId = context.getRequestParameter(
+                            REFERENCE_NODE_ID);
+                        String type = context.getRequestParameter(TYPE);
+                        partial = new Taconite();
+                        partial = listener.move(nodeId, refNodeId, type);
+                    }
+                    break;
+                }
+                case CHANGE: {
+                    ChangeListener listener = getChangeListener();
+                    if (listener != null) {
+                        String nodeId = context.getRequestParameter(NODE_ID);
+                        partial = listener.change(nodeId);
+                    }
+                    break;
+                }
+                case SELECT: {
+                    SelectListener listener = getSelectListener();
+                    if (listener != null) {
+                        String nodeId = context.getRequestParameter(NODE_ID);
+                        partial = listener.select(nodeId);
+                    }
+                    break;
+                }
+                case DESELECT: {
+                    DeselectListener listener = getDeselectListener();
+                    if (listener != null) {
+                        String nodeId = context.getRequestParameter(NODE_ID);
+                        partial = listener.deselect(nodeId);
+                    }
+                    break;
+                }
+            }
+
+            return partial;
         }
     }
 }
