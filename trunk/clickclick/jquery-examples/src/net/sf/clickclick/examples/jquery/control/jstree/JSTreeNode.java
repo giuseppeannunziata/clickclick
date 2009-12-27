@@ -59,7 +59,7 @@ public class JSTreeNode {
     /**
      * Indicates if the treeNode child nodes should be loaded lazily or eagerly.
      */
-    protected boolean loadLazy;
+    protected boolean loadLazily;
 
     /** User provided value of this node. */
     protected Object value;
@@ -325,17 +325,21 @@ public class JSTreeNode {
     }
 
     /**
-     * @return the loadLazy
+     * Return true if the node is to be loaded lazily, false otherwise.
+     *
+     * @return true if the node is to be loaded lazily, false otherwise.
      */
-    public boolean isLoadLazy() {
-        return loadLazy;
+    public boolean isLoadLazily() {
+        return loadLazily;
     }
 
     /**
-     * @param loadLazy the loadLazy to set
+     * Set whether the node should be loaded lazily or eagerly.
+     *
+     * @param loadLazily true if the node should loaded lazily, false otherwise
      */
-    public void setLoadLazy(boolean loadLazy) {
-        this.loadLazy = loadLazy;
+    public void setLoadLazily(boolean loadLazily) {
+        this.loadLazily = loadLazily;
     }
 
     /**
@@ -436,7 +440,7 @@ public class JSTreeNode {
         if (node.isExpanded()) {
             buffer.append("open");
         } else {
-            if (node.hasChildren() || node.isLoadLazy()) {
+            if (node.hasChildren() || node.isLoadLazily()) {
                 buffer.append("closed");
             }
         }

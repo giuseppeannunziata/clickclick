@@ -380,8 +380,29 @@ public class JSTree extends AbstractControl {
         model.put("id", id);
         model.put("jstree", this);
         model.put("selector", '#' + id);
+        StringBuilder sb = new StringBuilder();
+        addSelectedNodeIds(getRootNode(), sb);
+        model.put("selected", sb.toString());
         JsScript jsScript = new JsScript("/clickclick/example/template/jquery.jstree.template.js", model);
         return jsScript;
+    }
+
+    private void addSelectedNodeIds(JSTreeNode node, StringBuilder sb) {
+        if(node.isSelected()) {
+            if (sb.length() != 0) {
+                sb.append(',');
+            }
+            sb.append("'");
+            sb.append(node.getId());
+            sb.append("'");
+        }
+
+        if (node.hasChildren()) {
+            List<JSTreeNode> children = node.getChildren();
+            for (JSTreeNode child : children) {
+                addSelectedNodeIds(child, sb);
+            }
+        }
     }
 
     enum TreeCallback {
