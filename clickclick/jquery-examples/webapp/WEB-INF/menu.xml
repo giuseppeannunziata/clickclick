@@ -33,9 +33,6 @@
         <menu label="Lazy Load Demo" path="ajax/lazy-load-demo.htm"/>
         <menu label="Ajax Refresh Demo" path="ajax/refresh-demo.htm"/>
         <menu separator="true"/>
-        <menu label="Tree Demo" path="ajax/tree-demo.htm"/>
-        <menu label="CRUD Tree Demo" path="ajax/editable-tree-on-server.htm"/>
-        <menu label="Context Menu Tree Demo" path="ajax/tree-with-context-menu.htm"/>
     </menu>
     <menu label="Form" path="#">
         <menu label="Form Demo" path="ajax/form-demo.htm"/>
@@ -46,6 +43,11 @@
         <menu label="Form Validation Demo" path="ajax/validation/form-validation-demo.htm"/>
         <menu label="JQuery Inline Validation Demo" path="ajax/validation/jquery-validation1-demo.htm"/>
         <menu label="JQuery Validation Demo" path="ajax/validation/jquery-validation2-demo.htm"/>
+    </menu>
+    <menu label="Tree" path="#">
+        <menu label="Tree Demo" path="ajax/tree-demo.htm"/>
+        <menu label="CRUD Tree Demo" path="ajax/editable-tree-on-server.htm"/>
+        <menu label="Context Menu Tree Demo" path="ajax/tree-with-context-menu.htm"/>
     </menu>
     <menu label="Charts" path="#">
         <menu label="Line Chart" path="charts/line/line-chart.htm"/>
