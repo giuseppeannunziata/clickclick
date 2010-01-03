@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
     //Generic function to make Ajax requests to a url on the server
-    function ajax(url, vars, callbackFunction) {
+    function ajax(url, payload, callbackFunction) {
         // Create Ajax object for IE or standards browser
         var request = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
         request.open("POST", url, true);
@@ -30,7 +30,7 @@
                 }
             }
         };
-        request.send(vars);
+        request.send(payload);
     }
 
     function updateLog(response) {
