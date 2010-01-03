@@ -43,7 +43,7 @@ Inside the listener a [http://clickclick.googlecode.com/svn/trunk/site/javadoc/c
 
 === How Ajax support works ===
 
-When !ClickClickServlet receives a request it first checks if the request is an Ajax request or not. An Ajax request contains the special header "X_REQUESTED_WITH" which most Ajax libraries such as JQuery, Prototype etc specifies on the request.
+When !ClickClickServlet receives a request it first checks if the request is an Ajax request or not. An Ajax request contains the special header "X_REQUESTED_WITH" which Ajax libraries such as JQuery and Prototype sets for each request.
 
 If the request is an Ajax request, !ClickClickServlet tries to find the target Control of the Ajax request. On the server side there are three requirements that must be fulfilled in order to target a Control. (*Note:* some of these steps are performed by Ajax aware Controls or Ajax helper classes, however for completeness all steps are listed):
 
