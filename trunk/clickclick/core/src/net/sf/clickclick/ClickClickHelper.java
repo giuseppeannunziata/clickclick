@@ -219,9 +219,9 @@ class ClickClickHelper {
                         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
                         // TODO: use return an ErrorReport instance instead
-                        writer.write("<error>\n");
+                        writer.write("<div>\n");
                         exception.printStackTrace(writer);
-                        writer.write("\n</error>");
+                        writer.write("\n</div>");
                     } finally {
                         if (writer != null) {
                             writer.flush();
