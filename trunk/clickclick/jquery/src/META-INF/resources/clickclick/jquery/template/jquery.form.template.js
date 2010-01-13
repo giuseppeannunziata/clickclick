@@ -106,8 +106,12 @@
   }
 
   function onError(statusText, xhr) {
-    if(xhr.readyState != 4) return;
-    if(xhr.status == 0) return;
-    alert('$errorMessage' #if ($productionMode != "true") + '\n\n' + xhr.responseText #end);
+    if(xhr.readyState == 4) {
+      try {
+        if(xhr.status != 0) {
+          alert('$errorMessage' #if ($productionMode != "true") + '\n\n' + xhr.responseText #end);
+        }
+      } catch (e) { alert("Network error"); }
+    }
   }
 })();
