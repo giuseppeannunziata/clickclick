@@ -59,9 +59,13 @@ jQuery(document).ready(function(){
         #end
       },
       error: function (xhr, textStatus, errorThrown) {
-        if(xhr.readyState != 4) return;
-        if(xhr.status == 0) return;
-        alert('$errorMessage' #if ($productionMode != "true") + '\n\n' + xhr.responseText #end);
+        if(xhr.readyState == 4) {
+          try {
+            if(xhr.status != 0) {
+                alert('$errorMessage' #if ($productionMode != "true") + '\n\n' + xhr.responseText #end);
+            }
+          } catch (e) { alert("Network error"); }
+        }
       }
     });
     // Return false to override default event behavior, unless its a checkbox or radio
