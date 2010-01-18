@@ -335,7 +335,7 @@ public abstract class Repeater extends AbstractContainer {
 
         // Unwind control name indexes here so that new RepeaterRows added or
         // inserted after onProcess (e.g. listener callbacks) won't end up with
-        // indexes which is out of order.
+        // indexes which are out of order.
         removeIndexFromControlNames();
         return result;
     }
