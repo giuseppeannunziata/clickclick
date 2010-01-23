@@ -76,17 +76,16 @@ public class AjaxUtils {
             // Try and create a more specific selector by retrieving the
             // control's tag
             if (control instanceof AbstractControl) {
-                tag = ((AbstractControl) control).getTag();
-                if (tag == null) {
-                    tag = "";
-                }
+                tag = StringUtils.defaultString(((AbstractControl) control).getTag());
             }
 
             HtmlStringBuffer buffer = new HtmlStringBuffer(20);
 
-            // Handle ActionLink controls differently as they don't render
-            // the name attribute. Instead we set the class attribute to the
-            // link's name and target that.
+            // Handle ActionLink (perhaps other link controls too?) controls
+            // differently as they don't render the "name" attribute, since
+            // "name" is used by links for bookmarking purposes. Instead we set
+            // the class attribute to the link's name and use that as the
+            // selector.
             if (control instanceof ActionLink) {
                 ActionLink link = (ActionLink) control;
                 if (!link.hasAttribute("class")) {
