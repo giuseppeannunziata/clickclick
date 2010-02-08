@@ -121,7 +121,7 @@
                 <classpath refid="@{cp}"/>
                 <packageset dir="@{name}-examples/src"/>
                 <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
-                <link href="http://incubator.apache.org/click/docs/click-api/"/>
+                <link href="http://click.apache.org/docs/click-api/"/>
                 <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
             </javadoc>
             <copy file="documentation/javadoc-stylesheet.css"
@@ -210,7 +210,7 @@
             </or>
         </condition>
         <fail if="failed">
-            Click JARs can't be downloaded automatically. This is probably due to the fact that ClickClick depends on an unreleased Click version, so you need to build the Click JARs yourself and copy them to this 'lib' directory. See http://incubator.apache.org/click/docs/developer-guide/building.html for more details on how to build the Click JARs.
+            Click JARs can't be downloaded automatically. This is probably due to the fact that ClickClick depends on an unreleased Click version, so you need to build the Click JARs yourself and copy them to this 'lib' directory. See http://click.apache.org/docs/developer-guide/building.html for more details on how to build the Click JARs.
         </fail>
     </target>
 
@@ -395,8 +395,8 @@ Please ensure you have configured build.properties</echo>
                 <classpath refid="@{classpath}"/>
                 <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
                 <link href="http://java.sun.com/j2ee/1.4/docs/api/"/>
-                <link href="http://incubator.apache.org/click/docs/click-api/"/>
-                <link href="http://incubator.apache.org/click/docs/extras-api/"/>
+                <link href="http://click.apache.org/docs/click-api/"/>
+                <link href="http://click.apache.org/docs/extras-api/"/>
                 <bottom>${root.properties.highlighter}</bottom>
             </javadoc>
 
