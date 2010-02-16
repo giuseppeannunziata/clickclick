@@ -12,15 +12,7 @@
  * limitations under the License.
  */
 jQuery(document).ready(function(){
-    // Add the Control 'id' attribute as parameters
-    var params = new Object();
-    var controlId = jQuery('$selector').attr('id');
-    if (controlId != null && controlId != "" && typeof(controlId) != "undefined") {
-        params[controlId]='1';
-    }
-
     jQuery("$selector").autocomplete("$url?$parameters", {
-        extraParams: params
-        #if($options),$options #end
+        #if($options)$options #end
     });
 });

@@ -337,6 +337,7 @@ $.Autocompleter = function(input, options) {
       // CLICK STARTS - autocomplete does not sent the name of field to server
       // so we add it here with the field value
       extraParams[input.name] = lastWord(term);
+      extraParams[$(input).attr("id")] = 1;
       // CLICK ENDS
 			$.each(options.extraParams, function(key, param) {
 				extraParams[key] = typeof param == "function" ? param() : param;
