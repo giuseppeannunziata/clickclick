@@ -1378,13 +1378,19 @@ public class Taconite extends Partial {
         PageImports pageImports = new PageImports(null);
 
         Iterator it = commands.iterator();
+        List evalCommands = null;
         while (it.hasNext()) {
             Command command = (Command) it.next();
 
             if (EVAL.equals(command.getCommand())) {
                 // Eval commands are not added to the head section of the taconite
                 // response. These commands are processed in the order they were
-                // added
+                // added, but after all other commands were processed
+                if (evalCommands == null) {
+                    evalCommands = new ArrayList();
+                }
+                evalCommands.add(command);
+                it.remove();
                 continue;
             }
             processHeadElements(command, pageImports);
@@ -1435,6 +1441,10 @@ public class Taconite extends Partial {
         // Add JsScript elements at the bottom of the command list
         if(jsScriptsCommand.getContent().size() > 0) {
             commands.add(jsScriptsCommand);
+        }
+        // Add eval commands last
+        if (evalCommands != null) {
+            commands.addAll(evalCommands);
         }
     }
 
