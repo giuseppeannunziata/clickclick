@@ -498,10 +498,10 @@ public abstract class Repeater extends AbstractContainer {
             if (control instanceof Field) {
                 Field field = (Field) control;
 
-                // Ensure the field label gets cached in case its name is changed
+                // Ensure the field label gets cached in case its index is changed
                 field.getLabel();
                 if (control instanceof FieldSet) {
-                    // Ensure fieldSet legend gets cached in case its name is changed
+                    // Ensure fieldSet legend gets cached in case its index is changed
                     ((FieldSet) field).getLegend();
                 }
             } else if (control instanceof AbstractLink) {
