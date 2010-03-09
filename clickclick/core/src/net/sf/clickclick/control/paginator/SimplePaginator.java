@@ -69,7 +69,7 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      * Create a default SimplePaginator.
      */
     public SimplePaginator() {
-
+        setAttribute("class", styleClass);
     }
 
     /**
@@ -79,6 +79,7 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      */
     public SimplePaginator(String name) {
         setName(name);
+        setAttribute("class", styleClass);
     }
 
     // ------------------------------------------------------ Public Properties
@@ -390,7 +391,7 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      * @param pageNumber the page number of the page link to render
      */
     protected void renderPageLinkContainer(HtmlStringBuffer buffer, int pageNumber) {
-        if (pageNumber == getCurrentPage()) {
+        if (pageNumber - 1 == getCurrentPage()) {
             buffer.append("<li class=\"active\">");
         } else {
             buffer.append("<li>");
@@ -407,7 +408,7 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      * @param pageNumber the page number of the page link to render
      */
     protected void renderPageLink(HtmlStringBuffer buffer, int pageNumber) {
-        if (pageNumber == getCurrentPage()) {
+        if (pageNumber - 1 == getCurrentPage()) {
             buffer.append(pageNumber);
         } else {
             AbstractLink pageLink = getPageLink();
