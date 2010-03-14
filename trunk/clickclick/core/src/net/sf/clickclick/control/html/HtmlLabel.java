@@ -332,7 +332,11 @@ public class HtmlLabel extends Label {
     protected String getRequestValue() {
         String value = getContext().getRequestParameter(getName());
         if (value != null) {
-            return value.trim();
+            if (isTrim()) {
+                return value.trim();
+            } else {
+                return value;
+            }
         } else {
             return getLabel();
         }
