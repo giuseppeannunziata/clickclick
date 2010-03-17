@@ -344,8 +344,8 @@ public class HtmlLabel extends Label {
 
     /**
      * Render the HTML representation of the HtmlLabel. The HtmlLabel is
-     * rendered as an HTML "&ltlabel&gt; element e.g:
-     * "&lt;label for="firstnameId">Firstname:&lt;/label&gt;.
+     * rendered as an HTML <tt>&lt;label&gt;</tt> element e.g:
+     * <tt>&lt;label for="firstnameId">Firstname:&lt;/label&gt;</tt>
      *
      * @param buffer the specified buffer to render the control's output to
      */

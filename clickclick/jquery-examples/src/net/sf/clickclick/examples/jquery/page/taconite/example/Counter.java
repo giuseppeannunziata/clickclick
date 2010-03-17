@@ -40,7 +40,7 @@ public class Counter extends BorderPage {
                 link.setLabel("Counter: " + Integer.toString(count));
                 Command command = new Command("replace", link).characterData(true);
 
-                // link normally contian '&' which breaks XML parsing. TODO update
+                // link normally contains '&' which breaks XML parsing. TODO update
                 // Click Link's to use &amp; instead
 
                 partial.add(command);

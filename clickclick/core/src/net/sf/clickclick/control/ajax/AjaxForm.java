@@ -74,7 +74,7 @@ public class AjaxForm extends Form {
      * from this form can be identified.
      */
     protected void addIdField() {
-        // Add the Form ID as a HiddeField to trigger Ajax callback
+        // Add the Form ID as a HiddenField to trigger Ajax callback
         String id = getId();
         if (getField(id) == null) {
             add(new HiddenField(id, "1"));

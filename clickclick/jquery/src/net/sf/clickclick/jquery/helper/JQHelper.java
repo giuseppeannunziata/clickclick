@@ -304,7 +304,7 @@ public class JQHelper implements Serializable {
 
     /**
      * Flag indicating whether bindings can be added to this helper. This allows
-     * you to dissalow Ajax aware controls from adding their bindings to a
+     * you to disallow Ajax aware controls from adding their bindings to a
      * helper instance.
      */
     protected boolean bindingDisabled = false;
@@ -405,7 +405,7 @@ public class JQHelper implements Serializable {
      * If a message cannot be found a default value is set:
      * "<tt>&;lt;h1&gt;Error occurred!&lt;/h1&gt;</tt>".
      *
-     * @return the message to display wnen an error occurs during an Ajax request
+     * @return the message to display when an error occurs during an Ajax request
      */
     public String getErrorMessage() {
         if (errorMessage == null) {
@@ -485,7 +485,7 @@ public class JQHelper implements Serializable {
      * "<tt>ajax-indicator-message</tt>". If a message cannot be found a
      * default value is set: "<tt>&;lt;h1&gt;Please wait...&lt;/h1&gt;</tt>".
      *
-     * @return the message to display wnen an Ajax indicator is shown
+     * @return the message to display when an Ajax indicator is shown
      */
     public String getIndicatorMessage() {
         if (indicatorMessage == null) {
@@ -590,7 +590,7 @@ public class JQHelper implements Serializable {
      * <b>Please note</b> that the "<tt>message</tt>" option must be specified
      * through {@link #setIndicatorMessage(java.lang.String)} instead.
      *
-     * @param indicatorOptions the Ajax indicator optiosn
+     * @param indicatorOptions the Ajax indicator options
      */
     public void setIndicatorOptions(String indicatorOptions) {
         this.indicatorOptions = indicatorOptions;
@@ -764,7 +764,7 @@ public class JQHelper implements Serializable {
     }
 
     /**
-     * Set the type of the Ajax reques eg GET or POST.
+     * Set the type of the Ajax request eg GET or POST.
      *
      * @param type the type of the Ajax request
      */
@@ -823,7 +823,7 @@ public class JQHelper implements Serializable {
      * Return true if {@link #bind(java.lang.String, net.sf.clickclick.jquery.util.JQEvent) bindings}
      * can be added to this instance.
      *
-     * @return true if bindings can added, false otherwide
+     * @return true if bindings can added, false otherwise
      */
     public boolean isBindingDisabled() {
         return bindingDisabled;
@@ -1055,7 +1055,7 @@ public class JQHelper implements Serializable {
      * <p/>
      * This method does the following:
      * <ul>
-     * <li>Regsiters the target {@link #control} on the {@link net.sf.clickclick.AjaxControlRegistry}
+     * <li>Registers the target {@link #control} on the {@link net.sf.clickclick.AjaxControlRegistry}
      * by invoking {@link net.sf.clickclick.AjaxControlRegistry#registerAjaxControl(Control)}</li>
      * <li>invokes {@link #addHeadElements(java.util.List)} which adds the necessary
      * JavaScript imports and scripts to enable Ajax requests</li>

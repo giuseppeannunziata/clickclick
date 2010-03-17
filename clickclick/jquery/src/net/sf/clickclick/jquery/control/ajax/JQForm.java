@@ -195,7 +195,7 @@ public class JQForm extends AjaxForm {
     protected void renderHeader(HtmlStringBuffer buffer, List formFields) {
         if (getJavaScriptValidation()) {
             // The default implementation renders an inline onsubmit handler on form.
-            // Here we skip rendering that inilne onsubmit handler which is instead
+            // Here we skip rendering that inline onsubmit handler which is instead
             // handled by the jquery.form.template.js
             setJavaScriptValidation(false);
             super.renderHeader(buffer, formFields);

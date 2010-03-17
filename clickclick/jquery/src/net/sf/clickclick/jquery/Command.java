@@ -594,7 +594,7 @@ public class Command {
             buffer.closeTag();
 
             // NOTE: renderContent must start rendering on same line as opening tag
-            // incase an EVAL command is specified and content is wrapped in CDATA.
+            // in case an EVAL command is specified and content is wrapped in CDATA.
             renderContent(buffer);
 
             renderTagEnd(tag, buffer);

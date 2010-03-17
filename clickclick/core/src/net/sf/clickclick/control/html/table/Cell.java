@@ -20,7 +20,7 @@ import net.sf.clickclick.control.Text;
 import org.apache.click.control.AbstractControl;
 
 /**
- * Provide a table Cell control: &lt;td&gt;.
+ * Provide a table Cell control: <tt>&lt;td&gt;</tt> .
  */
 public class Cell extends AbstractContainer {
 

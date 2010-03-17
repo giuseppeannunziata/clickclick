@@ -147,7 +147,7 @@ public class TableRepeaterPage extends BorderPage {
                     String id = idField.getValue();
                     Customer customer = null;
                     if (StringUtils.isBlank(id)) {
-                        // Create new customer. This call assigs a unique ID value
+                        // Create new customer. This call assigns a unique ID value
                         customer = getCustomerService().createCustomer();
 
                         // Update the idField value to the new customer ID value
