@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Select control that can be used as either a simple two-option
- * select (TRUE / FALSE) or as a tristate select (UNSET / TRUE / FALSE).
+ * select (TRUE / FALSE) or as a tri-state select (UNSET / TRUE / FALSE).
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
@@ -36,10 +36,10 @@ import org.apache.commons.lang.StringUtils;
  * </table>
  *
  * <h4>Use</h4>
- * Tristate is handy when you want to confirm that the user made a concious
- * descision and not just accepted the default value.
+ * Tri-state is handy when you want to confirm that the user made a conscious
+ * decision and not just accepted the default value.
  * <p/>
- * Please note that tristate can best be used in combination with
+ * Please note that tri-state can best be used in combination with
  * <i>required</i> and that the <i>required</i> property is useless when used
  * in combination with the two-state (as there will always be an option selected).
  * <p/>
@@ -115,7 +115,7 @@ public class BooleanSelect extends Select {
 
     // -------------------------------------------------------------- Variables
 
-    /** Indicates if tristate is enabled or not, false by default. */
+    /** Indicates if tri-state is enabled or not, false by default. */
     private boolean tristate = false;
 
     /** The default notation, {@link #TRUEFALSE}. */
@@ -151,7 +151,7 @@ public class BooleanSelect extends Select {
     /**
      * Create a Select field with the given name.
      * <p/>
-     * If required is true, tristate will automatically be set to true.
+     * If required is true, tri-state will automatically be set to true.
      *
      * @param name the name of the field
      * @param required the required property
@@ -186,7 +186,7 @@ public class BooleanSelect extends Select {
     /**
      * Create a Select field with the given name and label.
      * <p/>
-     * If required is true, tristate will automatically be set to true.
+     * If required is true, tri-state will automatically be set to true.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -200,11 +200,11 @@ public class BooleanSelect extends Select {
     /**
      * Create a Select field with the given name and label.
      * <p/>
-     * If required is true, tristate will automatically be set to true.
+     * If required is true, tri-state will automatically be set to true.
      *
      * @param name the name of the field
      * @param label the label of the field
-     * @param notation the notation to be used for the optionlabels
+     * @param notation the notation to be used for the option labels
      * @param required the required property
      */
     public BooleanSelect(String name, String label, String notation, boolean required) {
@@ -371,16 +371,16 @@ public class BooleanSelect extends Select {
     }
 
     /**
-     * Return true if the tristate option is enabled, false otherwise.
+     * Return true if the tri-state option is enabled, false otherwise.
      *
-     * @return true if the tristate option is enabled, false otherwise.
+     * @return true if the tri-state option is enabled, false otherwise.
      */
     public boolean isTristate() {
         return tristate;
     }
 
     /**
-     * Set the tristate option of the field. If tristate is set to true this
+     * Set the tri-state option of the field. If tri-state is set to true this
      * indicates that the select field will contain three options, true, false
      * and unset. Otherwise the select will only contain two options, true and
      * false.

@@ -47,7 +47,7 @@ public class DecoratorTest extends BorderPage {
                 button.setLabel("Counter: " + Integer.toString(count));
                 Command command = new Command(Taconite.REPLACE, "a.test",button).characterData(true);
 
-                // link normally contian '&' which breaks XML parsing. TODO update
+                // link normally contains '&' which breaks XML parsing. TODO update
                 // Click Link's to use &amp; instead
 
                 //command.add(button2);

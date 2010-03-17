@@ -193,7 +193,7 @@ public class ClickClickConfigService extends XmlConfigService {
     // ------------------------------------------------ Package Private Methods
 
     /**
-     * In Production modes delegate to the super implementation. In develolpment
+     * In Production modes delegate to the super implementation. In development
      * modes add manually defined Pages to the {@link #manualPageByPathMap}.
      *
      * @param pagesElm the xml element containing manually defined Pages

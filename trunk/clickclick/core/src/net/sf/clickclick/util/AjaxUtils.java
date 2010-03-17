@@ -30,9 +30,9 @@ public class AjaxUtils {
      * <b>Please note:</b> if is highly recommended to set a control's ID
      * attribute when dealing with Ajax requests.
      * <p/>
-     * The algorith returns the selector in the following order:
+     * The algorithm returns the selector in the following order:
      * <ol>
-     *   <li>if control.getId() is set, preprend it with a '#' char
+     *   <li>if control.getId() is set, prepend it with a '#' char
      *   and return the value. An example selector will be: <tt>#field-id</tt></li>
      *   <li>if control.getName() is not null the following checks are made:
      *     <ol>

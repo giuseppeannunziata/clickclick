@@ -153,7 +153,7 @@ import org.apache.commons.lang.StringUtils;
  * Its worth discussing how Control resources (JavaScript and CSS) are handled
  * by Taconite.
  * <p/>
- * Firstly, Taconite ensures that all duplicate JavaScript and CSS resoures are
+ * Firstly, Taconite ensures that all duplicate JavaScript and CSS resources are
  * removed before returning the response. For example if you return two DateFields,
  * Taconite will ensure that only one set of JavaScript and CSS resources are returned.
  * Duplicate resources are identified as follows:

@@ -284,7 +284,7 @@ public class ReloadClassFilter implements Filter {
         if (!(configService instanceof ClickClickConfigService)) {
             throw new IllegalStateException(
                 "ReloadClassFilter can only be used " +
-                "in conjuction with ClickClickConfigService. Please see " +
+                "in conjunction with ClickClickConfigService. Please see " +
                 "ReloadClassFilter JavaDoc on how to setup the ClickClickConfigService.");
         }
         clickClickConfigService = (ClickClickConfigService) configService;

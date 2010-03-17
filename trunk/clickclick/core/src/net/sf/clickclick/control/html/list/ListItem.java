@@ -16,7 +16,7 @@ package net.sf.clickclick.control.html.list;
 import org.apache.click.control.AbstractContainer;
 
 /**
- * Provides an HTML ListItem control: &lt;li&gt;.
+ * Provides an HTML ListItem control: <tt>&lt;li&gt;</tt> .
  */
 public class ListItem extends AbstractContainer {
 

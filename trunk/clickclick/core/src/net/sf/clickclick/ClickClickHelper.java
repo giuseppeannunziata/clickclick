@@ -79,7 +79,7 @@ class ClickClickHelper {
 
             if (ajaxControlRegistry.hasAjaxControls()) {
 
-                // Perform onProcess for regsitered Ajax controls
+                // Perform onProcess for registered Ajax controls
                 processAjaxControls(ajaxControlRegistry, context);
 
                 // Fire listeners registered during the onProcess event. This

@@ -18,7 +18,7 @@ import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provide a table header cell controll: &lt;th&gt;.
+ * Provide a table header cell control: <tt>&lt;th&gt;</tt>.
  */
 public class HeaderCell extends Cell {
 
@@ -71,7 +71,7 @@ public class HeaderCell extends Cell {
     }
 
     /**
-     * Return the HeaderCell html tag: <tt>th</tt>.
+     * Return the HeaderCell html tag: <tt>th</tt> .
      *
      * @see org.apache.click.control.AbstractControl#getTag()
      *
