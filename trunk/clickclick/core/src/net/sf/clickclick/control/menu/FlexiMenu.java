@@ -13,6 +13,7 @@
  */
 package net.sf.clickclick.control.menu;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.click.element.CssImport;
@@ -169,6 +170,7 @@ public class FlexiMenu extends Menu {
      *
      * @return the list of html imports
      */
+    @Override
     public List getHeadElements() {
         String id = getAttribute("id");
         id = (id != null) ? id : getName();
@@ -177,7 +179,7 @@ public class FlexiMenu extends Menu {
         }
 
         if (headElements == null) {
-            headElements = super.getHeadElements();
+            headElements = new ArrayList(3);
 
             String menuStyle = getOrientation() + "-menu.css";
             CssImport cssImport = new CssImport("/clickclick/core/menu/" + menuStyle);
