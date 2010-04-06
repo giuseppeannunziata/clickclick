@@ -13,11 +13,12 @@
  */
 package net.sf.clickclick.examples.control;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.click.control.TextArea;
+import org.apache.click.element.JsImport;
+import org.apache.click.element.JsScript;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -33,10 +34,6 @@ import org.apache.click.util.HtmlStringBuffer;
 public class RichTextArea extends TextArea {
 
     private static final long serialVersionUID = 1L;
-
-    /** The TinyMCE JavaScript import. */
-    protected static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/tiny_mce/tiny_mce.js\"></script>\n";
 
     /**
      * The textarea TinyMCE theme [<tt>simple</tt> | <tt>advanced</tt>],
@@ -76,32 +73,25 @@ public class RichTextArea extends TextArea {
      * Return the JavaScript include: &nbsp; <tt>"tiny_mce/tiny_mce.js"</tt>,
      * and TinyMCE JavaScript initialization code.
      *
-     * @see net.sf.click.control.Field#getHtmlImports()
+     * @see org.apache.click.control.Field#getHeadElements()
      */
-    public String getHtmlImports() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+    @Override
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
+            headElements.add(new JsImport("/tiny_mce/tiny_mce.js"));
+        }
 
-        Object[] args = { getContext().getRequest().getContextPath() };
-        buffer.append(MessageFormat.format(HTML_IMPORTS, args));
+        JsScript script = new JsScript();
+        script.setId(getId() + "_js_setup");
 
-        Map model = new HashMap();
-        model.put("theme", getTheme());
-        model.put("id", getId());
-        renderTemplate(buffer, model);
-
-        return buffer.toString();
+        if (!headElements.contains(script)) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append("tinyMCE.init({theme : '").append(getTheme()).append("',");
+            buffer.append("mode : 'exact', elements : '").append(getId()).append("'})");
+            script.setContent(buffer.toString());
+            headElements.add(script);
+        }
+        return headElements;
     }
-
-    // -------------------------------------------------------- Protected Methods
-
-    /**
-     * Render a Velocity template for the given data model.
-     *
-     * @param buffer the specified buffer to render the template output to
-     * @param model the model data to merge with the template
-     */
-    protected void renderTemplate(HtmlStringBuffer buffer, Map model) {
-        buffer.append(getContext().renderTemplate(RichTextArea.class, model));
-    }
-
 }
