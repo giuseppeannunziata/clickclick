@@ -1496,9 +1496,6 @@ public class Taconite extends Partial {
             if (content instanceof Control) {
                 Control control = (Control) content;
 
-                // Ensure the deprecated HtmlImports are included.
-                pageImports.addImport(control.getHtmlImports());
-
                 // Ensure the head elements are included
                 pageImports.processControl(control);
             } else if (content instanceof Element) {
