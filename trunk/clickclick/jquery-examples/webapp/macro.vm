@@ -9,8 +9,8 @@
 
 <td>
 <div id="searchbar">
-<div class="menustyle" id="menu">
-  <ul class="menubar" id="dmenu">
+ <div class="menustyle" id="$rootMenu.id">
+  <ul class="menubar">
     #foreach ($topMenu in $rootMenu.children)
         #if ($topMenu.children.empty)
 		  <li class="topitem">$topMenu</li>
