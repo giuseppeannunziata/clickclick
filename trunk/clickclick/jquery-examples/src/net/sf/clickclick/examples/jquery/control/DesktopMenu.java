@@ -204,11 +204,6 @@ public class DesktopMenu extends Menu {
     // -------------------------------------------------------- Public Methods
 
     @Override
-    public String getHtmlImports() {
-        return null;
-    }
-
-    @Override
     public List getHeadElements() {
         if (headElements == null) {
             headElements = new ArrayList(3);
@@ -493,7 +488,7 @@ public class DesktopMenu extends Menu {
         return menu;
     }
 
-    private String getLabel(Menu menu) {
+    protected String getLabel(Menu menu) {
         String label = menu.getLabel();
         if (label == null) {
             label = getMessage(menu.getName() + ".label");
@@ -507,7 +502,7 @@ public class DesktopMenu extends Menu {
         return label;
     }
 
-    private String getTitle(Menu menu) {
+    protected String getTitle(Menu menu) {
         String title = menu.getTitle();
         if (title == null) {
             title = getMessage(menu.getName() + ".title");
