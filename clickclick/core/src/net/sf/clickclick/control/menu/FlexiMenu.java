@@ -157,17 +157,6 @@ public class FlexiMenu extends Menu {
     }
 
     /**
-     * Override default implementation and return null.
-     *
-     * @see #getHeadElements()
-     *
-     * @return override default implementation and return null
-     */
-    public String getHtmlImports() {
-        return null;
-    }
-
-    /**
      * Return the FlexiMenu resources:
      *
      * <ul>
