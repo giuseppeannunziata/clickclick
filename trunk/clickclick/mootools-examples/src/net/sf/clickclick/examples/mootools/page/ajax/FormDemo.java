@@ -15,6 +15,7 @@ package net.sf.clickclick.examples.mootools.page.ajax;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import net.sf.clickclick.util.AjaxAdapter;
 import org.apache.click.Context;
 import org.apache.click.Control;
@@ -27,7 +28,6 @@ import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
 import org.apache.click.extras.control.EmailField;
 import org.apache.click.util.HtmlStringBuffer;
-import org.apache.click.util.PageImports;
 import net.sf.clickclick.util.Partial;
 import net.sf.clickclick.examples.mootools.page.BorderPage;
 import net.sf.clickclick.mootools.controls.MTAjaxForm;
@@ -80,21 +80,22 @@ public class FormDemo extends BorderPage {
         });
     }
 
-    public String getHtmlImports() {
-        PageImports pageImports = getPageImports();
+    public List getHeadElements() {
+        if (headElements == null) {
+            headElements = super.getHeadElements();
 
-        Map model = new HashMap();
-        Context context = getContext();
-        String contextPath = context.getRequest().getContextPath();
-        model.put("context", contextPath);
-        
-        String cssTemplate = "/ajax/form-demo.css";
-        pageImports.add(new CssStyle(context.renderTemplate(cssTemplate, model)));
+            Map model = new HashMap();
+            Context context = getContext();
+            String contextPath = context.getRequest().getContextPath();
+            model.put("context", contextPath);
 
-        String jsTemplate = "/ajax/form-demo.js";
-        pageImports.add(new JsScript(context.renderTemplate(jsTemplate, model)));
-        
-        return null;
+            String cssTemplate = "/ajax/form-demo.css";
+            headElements.add(new CssStyle(context.renderTemplate(cssTemplate, model)));
+
+            String jsTemplate = "/ajax/form-demo.js";
+            headElements.add(new JsScript(context.renderTemplate(jsTemplate, model)));
+        }
+        return headElements;
     }
 
     /**
