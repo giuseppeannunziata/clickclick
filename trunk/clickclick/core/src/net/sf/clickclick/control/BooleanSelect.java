@@ -13,6 +13,7 @@
  */
 package net.sf.clickclick.control;
 
+import java.util.List;
 import org.apache.click.control.Select;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.IntegerField;
@@ -219,11 +220,14 @@ public class BooleanSelect extends Select {
      * Options are added to the Select control. Make sure you call
      * super.onInit() if you override this method.
      */
+    @Override
     public void onInit() {
+        List optionList = getOptionList();
+
         // Being called more than once? We could keep the existing options,
         // but they might have changed
-        if (getOptionList().size() > 0) {
-            getOptionList().clear();
+        if (optionList.size() > 0) {
+            optionList.clear();
         }
 
         if (tristate) {
@@ -272,6 +276,7 @@ public class BooleanSelect extends Select {
      *
      * @return the value of the field
      */
+    @Override
     public Object getValueObject() {
         return getBoolean();
     }
@@ -281,6 +286,7 @@ public class BooleanSelect extends Select {
      *
      * @param object the value of the field
      */
+    @Override
     public void setValueObject(Object object) {
         if (object == null) {
             setValue("");
@@ -292,6 +298,7 @@ public class BooleanSelect extends Select {
     /**
      * @throws UnsupportedOperationException if invoked
      */
+    @Override
     public void setMultiple(boolean value) {
         throw new UnsupportedOperationException("This operation is not"
             + " supported.");
