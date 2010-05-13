@@ -18,7 +18,6 @@ package net.sf.clickclick.reload;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.apache.click.service.ConfigService;
 
@@ -48,10 +47,10 @@ public class ReloadClassLoader extends URLClassLoader {
     // -------------------------------------------------------------- Variables
 
     /** The list of classes and folders to be reloaded. */
-    private List includes = new ArrayList();
+    private List<String> includes = new ArrayList<String>();
 
     /** The list of classes and folders to be excluded from reloading. */
-    private List excludes = new ArrayList();
+    private List<String> excludes = new ArrayList<String>();
 
     /** The Click ConfigService. */
     private ConfigService configService;
@@ -142,17 +141,15 @@ public class ReloadClassLoader extends URLClassLoader {
         }
 
         // First check if class is excluded
-        for(Iterator it = excludes.iterator(); it.hasNext(); ) {
-            String packageName = (String) it.next();
-            if(name.startsWith(packageName)) {
+        for (String packageName : excludes) {
+            if (name.startsWith(packageName)) {
                 return false;
             }
         }
 
         // Next check if class is included
-        for(Iterator it = includes.iterator(); it.hasNext(); ) {
-            String packageName = (String) it.next();
-            if(name.startsWith(packageName)) {
+        for (String packageName : includes) {
+            if (name.startsWith(packageName)) {
                 return true;
             }
         }

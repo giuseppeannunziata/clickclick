@@ -22,7 +22,7 @@ import java.util.Map;
  * This class provides a FIFO (First In First Out) cache clearance. Thus the
  * first entry added will be the first entry being removed when necessary.
  */
-public class Trail extends LinkedHashMap {
+public class Trail<K, V> extends LinkedHashMap {
 
     // -------------------------------------------------------------- Variables
 
