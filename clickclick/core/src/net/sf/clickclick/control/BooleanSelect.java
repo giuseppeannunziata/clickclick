@@ -359,7 +359,7 @@ public class BooleanSelect extends Select {
      * custom labels with: <tt>setOptionLabels()</tt>)</li>
      * </ul>
      *
-     * The prefered way of setting the notation is by using the static
+     * The preferred way of setting the notation is by using the static
      * properties of this class:
      * <p/>
      * <code>setNotation(BooleanSelect.YESNO);</code>

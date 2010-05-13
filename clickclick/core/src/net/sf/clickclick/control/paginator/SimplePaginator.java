@@ -20,6 +20,7 @@ import org.apache.click.control.ActionLink;
 import org.apache.click.control.Renderable;
 import org.apache.click.control.Table;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -283,7 +284,7 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      *
      * @return the head elements of the paginator
      */
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
             CssImport cssImport = new CssImport("/clickclick/core/paginator/SimplePaginator.css");

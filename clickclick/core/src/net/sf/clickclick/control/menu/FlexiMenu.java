@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 import org.apache.click.extras.control.Menu;
@@ -171,7 +172,7 @@ public class FlexiMenu extends Menu {
      * @return the list of html imports
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         String id = getAttribute("id");
         id = (id != null) ? id : getName();
         if (id == null) {
@@ -264,9 +265,7 @@ public class FlexiMenu extends Menu {
      * @param depth the depth of the menu in the hierarchy
      */
     protected void renderMenu(HtmlStringBuffer buffer, Menu menu, int depth) {
-        Iterator it = menu.getChildren().iterator();
-        while (it.hasNext()) {
-            Menu child = (Menu) it.next();
+        for (Menu child : menu.getChildren()) {
             if (child.isUserInRoles()) {
                 buffer.elementStart("li");
                 renderMenuItemClassAttribute(buffer, child, depth);

@@ -492,9 +492,8 @@ public abstract class Repeater extends AbstractContainer {
      * @param index the index to apply to child control names
      */
     private void addIndexToControlNames(final Container container, String index) {
-        List controls = container.getControls();
-        for (int i = 0; i < controls.size(); i++) {
-            Control control = (Control) controls.get(i);
+        List<Control> controls = container.getControls();
+        for (Control control : controls) {
             if (control instanceof Field) {
                 Field field = (Field) control;
 
@@ -515,8 +514,8 @@ public abstract class Repeater extends AbstractContainer {
 
             // If control is a container, add the index to its child controls
             if (control instanceof Container) {
-               Container childContainer = (Container) control;
-               addIndexToControlNames(childContainer, index);
+                Container childContainer = (Container) control;
+                addIndexToControlNames(childContainer, index);
             }
         }
     }
@@ -529,13 +528,12 @@ public abstract class Repeater extends AbstractContainer {
      * must be removed from
      */
     private void removeIndexFromControlNames(final Container container) {
-        List controls = container.getControls();
-        for (int i = 0; i < controls.size(); i++) {
-            Control control = (Control) controls.get(i);
+        List<Control> controls = container.getControls();
+        for (Control control : controls) {
             removeIndex(control);
             if (control instanceof Container) {
-               Container childContainer = (Container) control;
-               removeIndexFromControlNames(childContainer);
+                Container childContainer = (Container) control;
+                removeIndexFromControlNames(childContainer);
             }
         }
     }

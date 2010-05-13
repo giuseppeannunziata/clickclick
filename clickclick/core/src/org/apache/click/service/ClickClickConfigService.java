@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.click.Page;
 import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.ClassUtils;
@@ -61,7 +63,7 @@ public class ClickClickConfigService extends XmlConfigService {
      * @param path the page path
      * @return the page class for the given path or null if no class is found
      */
-    public Class getPageClass(String path) {
+    public Class<? extends Page> getPageClass(String path) {
 
         // If in production or profile mode.
         if (isProductionMode() || isProfileMode()) {
@@ -76,7 +78,7 @@ public class ClickClickConfigService extends XmlConfigService {
 
                 if (page != null) {
                     try {
-                        return ClickUtils.classForName(page.getPageClassName());
+                        return (Class<? extends Page>) ClickUtils.classForName(page.getPageClassName());
                     } catch (ClassNotFoundException ex) {
                         // ignore, this class is not available, so try and load
                         // it from the classpath

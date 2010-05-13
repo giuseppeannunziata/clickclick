@@ -53,13 +53,13 @@ public class Breadcrumb extends AbstractControl {
     protected String separator = " / ";
 
     /** Tracks the page paths the user visits. */
-    protected transient Trail trail;
+    protected transient Trail<String, String> trail;
 
     /** The breadcrumb label. */
     protected String label;
 
     /** Set of URL paths that should not be tracked. */
-    protected transient Set excludedPaths = new HashSet();
+    protected transient Set<String> excludedPaths = new HashSet<String>();
 
     // ----------------------------------------------------------- Constructors
 
@@ -187,7 +187,7 @@ public class Breadcrumb extends AbstractControl {
      *
      * @return the set of URL paths that should not be tracked
      */
-    public Set getExcludedPaths() {
+    public Set<String> getExcludedPaths() {
         return excludedPaths;
     }
 
@@ -196,7 +196,7 @@ public class Breadcrumb extends AbstractControl {
      *
      * @param excludedPaths the set of URL paths that should not be tracked
      */
-    public void setLabel(Set excludedPaths) {
+    public void setLabel(Set<String> excludedPaths) {
         this.excludedPaths = excludedPaths;
     }
 
@@ -248,9 +248,8 @@ public class Breadcrumb extends AbstractControl {
      * @param path the path to add to the trail
      */
     public void addTrail(String path) {
-        for(Iterator it = getExcludedPaths().iterator(); it.hasNext(); ) {
-            String excludedPath = (String) it.next();
-            if(path.indexOf(excludedPath) >= 0) {
+        for (String excludedPath : getExcludedPaths()) {
+            if (path.indexOf(excludedPath) >= 0) {
                 return;
             }
         }
@@ -293,11 +292,11 @@ public class Breadcrumb extends AbstractControl {
      *
      * @return the trail of breadcrumb
      */
-    public Map getTrail() {
+    public Map<String, String> getTrail() {
         if (trail == null) {
-            trail = new Trail(this);
+            trail = new Trail<String, String>(this);
         }
-        return trail;
+        return (Map<String, String>) trail;
     }
 
     /**

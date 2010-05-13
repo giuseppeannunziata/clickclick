@@ -369,7 +369,7 @@ public class Partial {
                 response.setDateHeader(name, time);
 
             } else {
-                int intValue = ((Integer) value).intValue();
+                int intValue = (Integer) value;
                 response.setIntHeader(name, intValue);
             }
         }
