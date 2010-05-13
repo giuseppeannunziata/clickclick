@@ -37,6 +37,7 @@ import org.apache.click.control.TextArea;
 import org.apache.click.control.TextField;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.CssStyle;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.extras.control.CreditCardField;
 import org.apache.click.extras.control.DoubleField;
@@ -159,7 +160,7 @@ public class JqueryValidation1Demo extends BorderPage {
         form.setLabelsPosition(Form.POSITION_TOP);
     }
 
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

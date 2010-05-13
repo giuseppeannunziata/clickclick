@@ -223,5 +223,5 @@ public abstract class JQAutoCompleteTextField extends TextField {
      * @param criteria the search criteria
      * @return the list of auto complete suggestions
      */
-    protected abstract List getAutoCompleteList(String criteria);
+    protected abstract List<String> getAutoCompleteList(String criteria);
 }

@@ -40,9 +40,8 @@ public class AdvancedAutoComplete extends BorderPage {
 
         final JQAutoCompleteTextField suburbField = new JQAutoCompleteTextField("suburb", "Select your suburb") {
 
-            public List getAutoCompleteList(String criteria) {
-                List suggestions = getPostCodeService().getPostCodeLocations(criteria);
-                return suggestions;
+            public List<String> getAutoCompleteList(String criteria) {
+                return getPostCodeService().getPostCodeLocations(criteria);
             }
         };
         suburbField.setWidth("200px");

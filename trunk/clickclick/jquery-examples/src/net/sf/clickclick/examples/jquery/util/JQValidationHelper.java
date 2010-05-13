@@ -48,11 +48,9 @@ public class JQValidationHelper {
     }
 
     public String getMessages(Form form) {
-        List fields = ContainerUtils.getFields(form);
+        List<Field> fields = ContainerUtils.getFields(form);
         HtmlStringBuffer buffer = new HtmlStringBuffer(fields.size() * 50);
-        Iterator it = fields.iterator();
-        while(it.hasNext()) {
-            Field field = (Field) it.next();
+        for (Field field : fields) {
             addMessages(buffer, field);
         }
         return buffer.toString();

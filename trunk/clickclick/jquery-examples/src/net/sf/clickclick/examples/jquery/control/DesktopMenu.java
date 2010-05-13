@@ -147,10 +147,7 @@ public class DesktopMenu extends Menu {
      * @return true if the menu contains any child submenus
      */
     public boolean hasChildren() {
-        if (getChildren().size() == 0) {
-            return false;
-        }
-        return true;
+        return getChildren().size() != 0;
     }
 
     /**
@@ -204,9 +201,9 @@ public class DesktopMenu extends Menu {
     // -------------------------------------------------------- Public Methods
 
     @Override
-    public List getHeadElements() {
+    public List<org.apache.click.element.Element> getHeadElements() {
         if (headElements == null) {
-            headElements = new ArrayList(3);
+            headElements = new ArrayList<org.apache.click.element.Element>(3);
 
             headElements.add(new CssImport(cssImport));
 
@@ -313,9 +310,7 @@ public class DesktopMenu extends Menu {
      * @param depth the depth of the menu in the hierarchy
      */
     protected void renderMenu(HtmlStringBuffer buffer, Menu menu, int depth) {
-        Iterator it = menu.getChildren().iterator();
-        while (it.hasNext()) {
-            Menu child = (Menu) it.next();
+        for (Menu child : menu.getChildren()) {
             if (displayMenu(child, depth + 1)) {
                 buffer.elementStart("li");
                 renderMenuItemClassAttribute(buffer, child, depth);

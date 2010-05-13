@@ -131,16 +131,17 @@ public class LazyLoadDemo extends BorderPage {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
+            // ignore
         }
 
-        List list = new ArrayList();
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         list.add(createPerson());
         list.add(createPerson());
         return list;
     }
 
-    private Map createPerson() {
-        Map map = new HashMap();
+    private Map<String, String> createPerson() {
+        Map<String, String> map = new HashMap<String, String>();
         map.put("firstname", "John");
         map.put("lastname", "Smith");
         map.put("age", "30");

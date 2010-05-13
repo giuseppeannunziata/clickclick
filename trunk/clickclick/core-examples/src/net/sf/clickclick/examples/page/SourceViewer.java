@@ -157,13 +157,11 @@ public class SourceViewer extends BorderPage {
         if (isHtml) {
             line = ClickUtils.escapeHtml(line);
 
-            for (int i = 0; i < HTML_KEYWORDS.length; i++) {
-                String keyword = HTML_KEYWORDS[i];
+            for (String keyword : HTML_KEYWORDS) {
                 line = renderHtmlKeywords(line, keyword);
             }
 
-            for (int i = 0; i < VELOCITY_KEYWORDS.length; i++) {
-                String keyword = VELOCITY_KEYWORDS[i];
+            for (String keyword : VELOCITY_KEYWORDS) {
                 line = renderVelocityKeywords(line, keyword);
             }
 
@@ -174,8 +172,7 @@ public class SourceViewer extends BorderPage {
         } else if (isXml) {
             line = ClickUtils.escapeHtml(line);
 
-            for (int i = 0; i < XML_KEYWORDS.length; i++) {
-                String keyword = XML_KEYWORDS[i];
+            for (String keyword : XML_KEYWORDS) {
                 line = renderXmlKeywords(line, keyword);
             }
 

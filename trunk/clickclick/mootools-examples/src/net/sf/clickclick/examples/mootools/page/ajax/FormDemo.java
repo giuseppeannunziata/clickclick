@@ -20,6 +20,7 @@ import net.sf.clickclick.util.AjaxAdapter;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.element.CssStyle;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
 import org.apache.click.control.Checkbox;
 import org.apache.click.control.Option;
@@ -80,7 +81,7 @@ public class FormDemo extends BorderPage {
         });
     }
 
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

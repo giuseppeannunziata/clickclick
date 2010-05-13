@@ -16,6 +16,7 @@ package net.sf.clickclick.examples.jquery.control;
 import java.util.List;
 import net.sf.clickclick.control.panel.SimplePanel;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -90,7 +91,7 @@ public class Window extends SimplePanel {
 
     // --------------------------------------------------------- Public Methods
 
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
             headElements.add(new CssImport("/clickclick/example/window/window.css"));
