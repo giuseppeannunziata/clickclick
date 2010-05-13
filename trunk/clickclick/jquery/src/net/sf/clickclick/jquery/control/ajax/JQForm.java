@@ -18,6 +18,7 @@ import net.sf.clickclick.AjaxControlRegistry;
 import net.sf.clickclick.control.ajax.AjaxForm;
 import net.sf.clickclick.jquery.helper.JQFormHelper;
 import net.sf.clickclick.jquery.helper.JQHelper;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
@@ -133,7 +134,7 @@ public class JQForm extends AjaxForm {
      * @return the JQForm HEAD elements
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

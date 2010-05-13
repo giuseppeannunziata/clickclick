@@ -247,7 +247,7 @@ public class Taconite extends Partial {
     // -------------------------------------------------------------- Variables
 
     /** The list of commands to execute. */
-    protected List commands = new ArrayList();
+    protected List<Command> commands = new ArrayList<Command>();
 
     // ----------------------------------------------------------- Constructors
 
@@ -1337,9 +1337,7 @@ public class Taconite extends Partial {
      * @param buffer the buffer to render to
      */
     protected void renderContent(HtmlStringBuffer buffer) {
-        Iterator it = commands.iterator();
-        while(it.hasNext()) {
-            Command command = (Command) it.next();
+        for (Command command : commands) {
             command.render(buffer);
             buffer.append("\n");
         }
@@ -1387,7 +1385,7 @@ public class Taconite extends Partial {
                 // response. These commands are processed in the order they were
                 // added, but after all other commands were processed
                 if (evalCommands == null) {
-                    evalCommands = new ArrayList();
+                    evalCommands = new ArrayList<Command>();
                 }
                 evalCommands.add(command);
                 it.remove();

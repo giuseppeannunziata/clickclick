@@ -19,6 +19,7 @@ import net.sf.clickclick.jquery.helper.JQHelper;
 import net.sf.clickclick.jquery.util.JQEvent;
 import net.sf.clickclick.util.AjaxUtils;
 import org.apache.click.control.Checkbox;
+import org.apache.click.element.Element;
 
 /**
  * Provide an Ajax enabled Checkbox control.
@@ -151,7 +152,7 @@ public class JQCheckbox extends Checkbox {
      * @return the control HEAD elements
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
