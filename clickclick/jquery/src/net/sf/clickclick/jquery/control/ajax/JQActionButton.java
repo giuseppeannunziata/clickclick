@@ -20,6 +20,7 @@ import net.sf.clickclick.control.ajax.AjaxActionButton;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import net.sf.clickclick.jquery.util.JQEvent;
 import net.sf.clickclick.util.AjaxUtils;
+import org.apache.click.element.Element;
 
 /**
  * Provide an Ajax enabled ActionButton control.
@@ -161,7 +162,7 @@ public class JQActionButton extends AjaxActionButton {
      * @return the control HEAD elements
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

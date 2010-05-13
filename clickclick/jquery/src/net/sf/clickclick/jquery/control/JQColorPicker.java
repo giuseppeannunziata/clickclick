@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.click.control.TextField;
+import org.apache.click.element.Element;
 import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.jquery.helper.JQHelper;
@@ -173,7 +174,7 @@ public class JQColorPicker extends TextField {
      *
      * @return the list of head elements
      */
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
@@ -250,7 +251,7 @@ public class JQColorPicker extends TextField {
      *
      * @param headElements the list of head elements to include for this control
      */
-    protected void addCustomCssImport(List headElements) {
+    protected void addCustomCssImport(List<Element> headElements) {
         headElements.add(new CssImport(colorPickerStyleImport));
     }
 }

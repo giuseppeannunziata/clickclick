@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.click.element.Element;
 import org.apache.click.extras.control.Menu;
 import org.apache.click.util.HtmlStringBuffer;
 import net.sf.clickclick.control.menu.FlexiMenu;
@@ -201,9 +203,9 @@ public class JQMenu extends FlexiMenu {
      *
      * @return the list of head elements
      */
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
-            headElements = new ArrayList();
+            headElements = new ArrayList<Element>();
 
             headElements.add(new CssImport(menuCssImport));
 
@@ -268,7 +270,7 @@ public class JQMenu extends FlexiMenu {
      *
      * @param headElements the list of head elements to include for this control
      */
-    protected void addJsTemplate(List headElements) {
+    protected void addJsTemplate(List<Element> headElements) {
         String name = getName();
         if (name == null) {
             throw new IllegalStateException("Menu name is not set.");
@@ -296,9 +298,7 @@ public class JQMenu extends FlexiMenu {
      */
     @Override
     protected void renderMenu(HtmlStringBuffer buffer, Menu menu, int depth) {
-        Iterator it = menu.getChildren().iterator();
-        while (it.hasNext()) {
-            Menu child = (Menu) it.next();
+        for (Menu child : menu.getChildren()) {
             if (child.isUserInRoles()) {
                 buffer.elementStart("li");
                 if (child.getChildren().size() == 0) {

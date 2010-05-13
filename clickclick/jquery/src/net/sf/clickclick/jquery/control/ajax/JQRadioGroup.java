@@ -21,6 +21,7 @@ import net.sf.clickclick.jquery.util.JQEvent;
 import net.sf.clickclick.util.AjaxUtils;
 import org.apache.click.control.Radio;
 import org.apache.click.control.RadioGroup;
+import org.apache.click.element.Element;
 
 public class JQRadioGroup extends RadioGroup {
 
@@ -111,9 +112,7 @@ public class JQRadioGroup extends RadioGroup {
 
         AjaxControlRegistry.registerAjaxControl(this);
 
-        Iterator<Radio> radios = getRadioList().iterator();
-        while (radios.hasNext()) {
-            Radio radio = radios.next();
+        for (Radio radio : getRadioList()) {
             AjaxControlRegistry.registerAjaxControl(radio);
         }
     }
@@ -136,7 +135,7 @@ public class JQRadioGroup extends RadioGroup {
      * @return the list of HEAD elements to be included in the page
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             StringBuilder builder = new StringBuilder();
             Iterator<Radio> radios = getRadioList().iterator();

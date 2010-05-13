@@ -24,6 +24,7 @@ import net.sf.clickclick.util.AjaxUtils;
 import net.sf.clickclick.util.Partial;
 import org.apache.click.Control;
 import org.apache.click.control.TextField;
+import org.apache.click.element.Element;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
@@ -187,7 +188,7 @@ public abstract class JQAutoCompleteTextField extends TextField {
      * @return the control HEAD elements
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
