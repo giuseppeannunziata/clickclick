@@ -283,10 +283,7 @@ public class JSTreeNode {
      * @return true if this node has any children false otherwise
      */
     public boolean hasChildren() {
-        if (CollectionUtils.isEmpty(children)) {
-            return false;
-        }
-        return true;
+        return !CollectionUtils.isEmpty(children);
     }
 
     /**

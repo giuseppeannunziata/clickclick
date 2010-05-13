@@ -20,6 +20,7 @@ import net.sf.clickclick.jquery.helper.JQHelper;
 import org.apache.click.control.Field;
 import org.apache.click.control.HiddenField;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -77,7 +78,7 @@ public class UISliderField extends Field {
      *
      * @return the list of head elements
      */
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

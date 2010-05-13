@@ -18,6 +18,7 @@ import net.sf.clickclick.control.html.Div;
 import net.sf.clickclick.examples.jquery.util.UIUtils;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 
 /**
@@ -55,7 +56,7 @@ public class UIDialog extends Div {
      *
      * @return the list of head elements
      */
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

@@ -21,6 +21,7 @@ import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
 
 public class SliderDemo extends BorderPage {
@@ -38,7 +39,7 @@ public class SliderDemo extends BorderPage {
         form.add(new Submit("submit"));
     }
 
-     public List getHeadElements() {
+     public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

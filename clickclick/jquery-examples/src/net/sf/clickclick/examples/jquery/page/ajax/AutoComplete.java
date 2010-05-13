@@ -33,9 +33,8 @@ public class AutoComplete extends BorderPage {
 
         final JQAutoCompleteTextField autoField = new JQAutoCompleteTextField("autoField") {
 
-            public List getAutoCompleteList(String criteria) {
-                List suggestions = getPostCodeService().getPostCodeLocations(criteria);
-                return suggestions;
+            public List<String> getAutoCompleteList(String criteria) {
+                return getPostCodeService().getPostCodeLocations(criteria);
             }
         };
         autoField.setWidth("200px");

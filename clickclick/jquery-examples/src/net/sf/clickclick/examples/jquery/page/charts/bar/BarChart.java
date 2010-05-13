@@ -19,6 +19,7 @@ import java.util.Map;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -27,7 +28,7 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class BarChart extends BorderPage {
 
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

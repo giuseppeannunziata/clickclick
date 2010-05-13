@@ -31,7 +31,7 @@ public class PostCodeService {
     }
 
     public List<String> getPostCodeLocations(String location) {
-        List list = new ArrayList();
+        List<String> list = new ArrayList<String>();
 
         for(PostCode postCode : getPostCodes()) {
             if (StringUtils.startsWithIgnoreCase(postCode.getLocality(), location)) {
@@ -41,11 +41,11 @@ public class PostCodeService {
             }
         }
 
-        Collections.sort(list, new Comparator() {
+        Collections.sort(list);/*, new Comparator() {
             public int compare(Object o1, Object o2) {
                 return o1.toString().compareTo(o2.toString());
             }
-        });
+        });*/
         return list;
     }
 }

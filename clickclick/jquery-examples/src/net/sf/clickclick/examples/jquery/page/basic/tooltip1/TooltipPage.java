@@ -20,6 +20,7 @@ import net.sf.clickclick.jquery.helper.JQHelper;
 import org.apache.click.control.Form;
 import org.apache.click.control.TextField;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.element.JsScript;
 
@@ -51,7 +52,7 @@ public class TooltipPage extends BorderPage {
         addControl(form);
     }
 
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 

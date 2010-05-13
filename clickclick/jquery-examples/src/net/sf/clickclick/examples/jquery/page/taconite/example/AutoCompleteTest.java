@@ -38,8 +38,8 @@ public class AutoCompleteTest extends BorderPage {
 
         final JQAutoCompleteTextField field1 = new JQAutoCompleteTextField("field1") {
 
-            public List getAutoCompleteList(String criteria) {
-                List suggestions = new ArrayList();
+            public List<String> getAutoCompleteList(String criteria) {
+                List<String> suggestions = new ArrayList<String>();
                 suggestions.add("one");
                 suggestions.add("two");
                 suggestions.add("three");

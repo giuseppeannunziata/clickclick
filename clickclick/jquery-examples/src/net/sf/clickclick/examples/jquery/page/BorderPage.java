@@ -22,6 +22,7 @@ import net.sf.clickclick.examples.jquery.services.CustomerService;
 import net.sf.clickclick.examples.jquery.services.PostCodeService;
 import net.sf.clickclick.examples.jquery.util.UIUtils;
 import org.apache.click.element.CssStyle;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
 import org.apache.click.extras.control.Menu;
 import org.apache.click.util.ClickUtils;
@@ -62,7 +63,7 @@ public class BorderPage extends BasePage {
      * the methods {@link #getJsTemplateModel()} and {@link #getCssTemplateModel()}.
      */
     @Override
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         JsScript jsScript = new JsScript();
         jsScript.setId("page-js-template");
 

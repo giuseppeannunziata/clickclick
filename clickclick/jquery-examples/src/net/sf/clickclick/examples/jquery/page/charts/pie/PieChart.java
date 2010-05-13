@@ -20,6 +20,7 @@ import java.util.Map;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import net.sf.clickclick.jquery.helper.JQHelper;
 import org.apache.click.element.CssImport;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsImport;
 import org.apache.click.util.HtmlStringBuffer;
 
@@ -28,7 +29,7 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class PieChart extends BorderPage {
 
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
@@ -51,7 +52,7 @@ public class PieChart extends BorderPage {
     @Override
     protected Map getJsTemplateModel() {
         // Render PieChart Page JavaScript
-        Map model = new HashMap();
+        Map<String, String> model = new HashMap<String, String>();
         model.put("data", getChartData());
         model.put("label", "Browser usage % for " + Calendar.getInstance().get(Calendar.YEAR));
         return model;

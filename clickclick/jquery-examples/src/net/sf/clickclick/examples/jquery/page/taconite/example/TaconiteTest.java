@@ -33,7 +33,7 @@ public class TaconiteTest extends Page {
 
     private JQActionLink link = new JQActionLink("link");
 
-    private static final List SORTABLE_OPTIONS = new ArrayList();
+    private static final List<Option> SORTABLE_OPTIONS = new ArrayList<Option>();
 
     static {
         for (int i = 1; i <= 6; i++) {

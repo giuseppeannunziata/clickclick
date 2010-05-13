@@ -29,6 +29,7 @@ import net.sf.clickclick.control.html.table.Row;
 import net.sf.clickclick.examples.jquery.control.ui.UIDialog;
 import net.sf.clickclick.examples.jquery.page.BorderPage;
 import org.apache.click.element.CssStyle;
+import org.apache.click.element.Element;
 import org.apache.click.element.JsScript;
 
 public class DialogDemo extends BorderPage {
@@ -40,7 +41,7 @@ public class DialogDemo extends BorderPage {
         addControl(buildDialog());
     }
 
-    public List getHeadElements() {
+    public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
 
