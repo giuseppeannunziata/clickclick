@@ -160,28 +160,6 @@
         <pathelement location="lib/${jar.log4j}"/>
         <pathelement location="lib/${jar.servlet}"/>
     </path>
-    <path id="jquery.classpath">
-        <!--<pathelement id="classpath"/>-->
-        <pathelement location="jquery/classes"/>
-        <pathelement location="dist/clickclick-core-${version}.jar"/>
-        <pathelement location="lib/${jar.click}"/>
-        <pathelement location="lib/${jar.click-extras}"/>
-        <pathelement location="lib/${jar.click-mock}"/>
-        <pathelement location="lib/${jar.lang}"/>
-        <pathelement location="lib/${jar.log4j}"/>
-        <pathelement location="lib/${jar.servlet}"/>
-    </path>
-    <path id="mootools.classpath">
-        <!--<pathelement id="classpath"/>-->
-        <pathelement location="mootools/classes"/>
-        <pathelement location="dist/clickclick-core-${version}.jar"/>
-        <pathelement location="lib/${jar.click}"/>
-        <pathelement location="lib/${jar.click-extras}"/>
-        <pathelement location="lib/${jar.click-mock}"/>
-        <pathelement location="lib/${jar.lang}"/>
-        <pathelement location="lib/${jar.log4j}"/>
-        <pathelement location="lib/${jar.servlet}"/>        
-    </path>
     
     <!-- Target Definitions -->
     <target name="clean">
@@ -242,28 +220,12 @@
         <!-- build core -->
         <delete file="dist/clickclick-core-${version}.jar" quiet="false"/>
         <buildJarMacro name="core" cp="core.classpath"/>
-        
-        <!-- build jquery -->
-        <delete file="dist/clickclick-jquery-${version}.jar" quiet="false"/>
-        <buildJarMacro name="jquery" cp="jquery.classpath"/>
-
-        <!-- build mootools -->
-        <delete file="dist/clickclick-mootools-${version}.jar" quiet="false"/>
-        <buildJarMacro name="mootools" cp="mootools.classpath"/>
     </target>
 
     <target name="build-examples" depends="build" description="build ClickClick examples">
         <!-- build core examples-->
         <delete file="dist/core-examples.war"/>
         <buildWarMacro name="core" cp="core.classpath"/>
-
-        <!-- build jquery examples -->
-        <delete file="dist/jquery-examples.war"/>
-        <buildWarMacro name="jquery" cp="jquery.classpath"/>
-
-        <!-- build mootools examples -->
-        <delete file="dist/mootools-examples.war"/>
-        <buildWarMacro name="mootools" cp="mootools.classpath"/>
     </target>
     
     <target name="javadoc" description="create Javadoc HTML files">
@@ -281,38 +243,6 @@
         <copy file="documentation/javadoc-stylesheet.css"
             overwrite="true"
             tofile="documentation/core-api/stylesheet.css"/>
-
-        <!-- Javadoc for jquery -->
-        <delete quiet="false" failonerror="false">
-             <fileset dir="documentation/jquery-api" includes="**/*"/>
-        </delete>
-        <javadocMacro src="jquery/src"
-                    destdir="documentation/jquery-api"
-                    windowtitle="ClickClick jQuery Extensions API"
-                    doctitle="ClickClick jQuery API"
-                    classpath="jquery.classpath"
-                    overview="documentation/jquery-overview.html"/>
-        <copy file="documentation/javadoc-stylesheet.css" overwrite="true"
-            tofile="documentation/jquery-api/stylesheet.css"/>
-
-        <copy todir="documentation/jquery-api/js/template" overwrite="true">
-            <fileset dir="jquery/src/META-INF/resources/clickclick/jquery/template"/>
-            <globmapper from="*.js" to="*.js.txt"/>
-        </copy>
-
-        <!-- Javadoc for MooTools -->
-        <delete quiet="false" failonerror="false">
-             <fileset dir="documentation/mootools-api" includes="**/*"/>
-        </delete>
-        <javadocMacro src="mootools/src"
-                    destdir="documentation/mootools-api"
-                    windowtitle="ClickClick MooTools Extensions API"
-                    doctitle="ClickClick MooTools API"
-                    classpath="mootools.classpath"
-                    overview="documentation/mootools-overview.html"/>
-        <copy file="documentation/javadoc-stylesheet.css"
-            overwrite="true"
-            tofile="documentation/mootools-api/stylesheet.css"/>
 
         <delete quiet="false" failonerror="false">
              <fileset dir="../site/javadoc" includes="**/*"/>
@@ -333,20 +263,6 @@
         <zip destfile="dist/clickclick-core-${version}-src.zip">
             <fileset dir="core/src">
                 <exclude name="**/package.html"/>
-                <exclude name="META-INF"/>
-            </fileset>
-        </zip>
-        <!-- zip jquery -->
-        <zip destfile="dist/clickclick-jquery-${version}-src.zip">
-            <fileset dir="jquery/src">
-                <exclude name="**/*.html"/>
-                <exclude name="META-INF"/>
-            </fileset>
-        </zip>
-        <!-- zip mootols -->
-        <zip destfile="dist/clickclick-mootools-${version}-src.zip">
-            <fileset dir="mootools/src">
-                <exclude name="**/*.html"/>
                 <exclude name="META-INF"/>
             </fileset>
         </zip>
