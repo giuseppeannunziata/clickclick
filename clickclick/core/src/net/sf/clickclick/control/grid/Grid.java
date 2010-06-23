@@ -14,6 +14,7 @@
 package net.sf.clickclick.control.grid;
 
 import java.util.List;
+import net.sf.clickclick.control.Text;
 import org.apache.click.Control;
 import org.apache.click.control.Container;
 import net.sf.clickclick.control.html.table.Cell;
@@ -166,6 +167,56 @@ public class Grid extends HtmlTable {
         Cell cell = insertCell(row, column);
         cell.add(control);
         return control;
+    }
+
+    /**
+     * Insert text at the given row and column. If the row or column does
+     * not exist, the grid will {@link #ensureCapacity(int, int) expand} until
+     * there are enough rows and columns to add the text. If the row and
+     * column does exist the text will be added to the Cell at the given
+     * row and column.
+     *
+     * @param text the text to add to the grid
+     * @param row the row to insert the control at
+     * @param column the column to insert the control at
+     * @return the cell to which the text was added
+     */
+    public Cell setText(String text, int row, int column) {
+        if (row <= 0) {
+            throw new IndexOutOfBoundsException("row must be > 0");
+        }
+        if (column <= 0) {
+            throw new IndexOutOfBoundsException("column must be > 0");
+        }
+
+        Cell cell = insertCell(row, column);
+        cell.setText(text);
+        return cell;
+    }
+
+    /**
+     * Insert text at the given row and column. If the row or column does
+     * not exist, the grid will {@link #ensureCapacity(int, int) expand} until
+     * there are enough rows and columns to add the text. If the row and
+     * column does exist the text will be added to the Cell at the given
+     * row and column.
+     *
+     * @param text the text to add to the grid
+     * @param row the row to insert the control at
+     * @param column the column to insert the control at
+     * @return the cell to which the text was added
+     */
+    public Cell setText(Text text, int row, int column) {
+        if (row <= 0) {
+            throw new IndexOutOfBoundsException("row must be > 0");
+        }
+        if (column <= 0) {
+            throw new IndexOutOfBoundsException("column must be > 0");
+        }
+
+        Cell cell = insertCell(row, column);
+        cell.setText(text);
+        return cell;
     }
 
     /**

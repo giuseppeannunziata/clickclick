@@ -173,4 +173,43 @@ public class HtmlTable extends AbstractContainer {
         }
         return 0;
     }
+
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Add the given headers to the table. A new {@link HeaderRow} is created
+     * and for each header a new {@link HeaderCell} is created and added to the
+     * row.
+     * <p/>
+     * This method delegates to {@link #insert(java.lang.Object, int)}.
+     *
+     * @param text the text array to add to the row
+     * @return the header row that was created
+     */
+    public HeaderRow setHeader(Object... textArray) {
+        HeaderRow headerRow = new HeaderRow();
+        add(headerRow);
+        for (Object text : textArray) {
+            headerRow.add(text);
+        }
+        return headerRow;
+    }
+
+    /**
+     * Add the given text array to the table. A new {@link Row} is created and
+     * for each text object a new {@link Cell} is created and added to the row.
+     * <p/>
+     * This method delegates to {@link #insert(java.lang.Object, int)}.
+     *
+     * @param text the text array to add to the row
+     * @return the row that was created
+     */
+    public Row addRow(Object... textArray) {
+        Row row = new Row();
+        add(row);
+        for (Object text : textArray) {
+            row.add(text);
+        }
+        return row;
+    }
 }
