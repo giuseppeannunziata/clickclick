@@ -13,9 +13,12 @@
  */
 package net.sf.clickclick.control.repeater;
 
+import java.util.ArrayList;
 import java.util.List;
-import net.sf.clickclick.AjaxControlRegistry;
-import org.apache.click.ActionListener;
+import net.sf.clickclick.control.paginator.Paginator;
+import net.sf.clickclick.control.paginator.SimplePaginator;
+import org.apache.click.Callback;
+import org.apache.click.CallbackDispatcher;
 import org.apache.click.Control;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.AbstractLink;
@@ -23,18 +26,23 @@ import org.apache.click.control.Container;
 import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Panel;
+import org.apache.click.dataprovider.DataProvider;
+import org.apache.click.dataprovider.PagingDataProvider;
 import org.apache.click.util.ContainerUtils;
+import org.apache.click.util.HtmlStringBuffer;
 
 /**
+ * TODO move paginator to subclass? Properly integrate dataprovider and items
+ *
  * Provides a Repeater control for displaying a list of items. For every item in
  * the list the Repeater will display the same specified components.
  * <p/>
  * <h3>Usage</h3>
  * When creating a Repeater you must implement the abstract method
- * {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+ * {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
  * which is invoked by the Repeater for every item in the {@link #items} list.
  * <p/>
- * In the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+ * In the {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
  * method you setup the components for the given item and the Repeater will
  * display these components for every item in the {@link #items} list.
  * <p/>
@@ -117,6 +125,13 @@ public abstract class Repeater extends AbstractContainer {
     /** The list of items to be rendered. */
     protected List items = null;
 
+    protected DataProvider dataProvider = null;
+
+    /** The paginator used to render the Repeater pagination controls. */
+    protected Paginator paginator;
+
+    protected int pageSize;
+
     /**
      * Create a default Repeater.
      */
@@ -139,20 +154,25 @@ public abstract class Repeater extends AbstractContainer {
      *
      * @return the value of items
      */
-    public List getItems() {
+    List getItems() {
+        // TODO need to replace "getItems()==null" check with getDataProvider check
+        if (items == null) {
+            items = new ArrayList();
+        }
         return items;
     }
 
-    /**
-     * Set the items to render.
-     * <p/>
-     * This method delegates to {@link #buildRows()} to build the controls for
-     * each item in the given list.
-     *
-     * @param items new value of items
-     */
-    public void setItems(List items) {
+    // Consolodate setItems with setDataProvider
+    void setItems(List items) {
         this.items = items;
+    }
+
+    public DataProvider getDataProvider() {
+        return dataProvider;
+    }
+
+    public void setDataProvider(DataProvider dataProvider) {
+        this.dataProvider = dataProvider;
         buildRows();
     }
 
@@ -160,7 +180,7 @@ public abstract class Repeater extends AbstractContainer {
 
     /**
      * @throws UnsupportedOperationException if invoked. Rather add controls
-     * through the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+     * through the {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
      * method.
      */
     public Control add(Control control) {
@@ -170,7 +190,7 @@ public abstract class Repeater extends AbstractContainer {
 
     /**
      * @throws UnsupportedOperationException if invoked. Rather add controls
-     * through the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+     * through the {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
      * method.
      */
     public Control insert(Control control, int index) {
@@ -278,6 +298,46 @@ public abstract class Repeater extends AbstractContainer {
     }
 
     // TODO create actionLinks for moveUp and moveDown ???
+
+    /**
+     * Set the maximum page size in rows. A page size of 0
+     * means there is no maximum page size.
+     *
+     * @param pageSize the maximum page size in rows
+     */
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    /**
+     * Return the paginator for rendering the repeater pagination.
+     *
+     * @return the repeater paginator
+     */
+    public Paginator getPaginator() {
+        if (paginator == null) {
+            String name = getName();
+            if (name == null) {
+                throw new IllegalStateException("Repeater must have a name" +
+                    " defined before Paginator can be used.");
+            }
+            paginator = new SimplePaginator(name);
+        }
+        return paginator;
+    }
+
+    /**
+     * Set the paginator for rendering the table pagination controls.
+     *
+     * @param value the table paginator to set
+     */
+    public void setPaginator(Paginator value) {
+        paginator = value;
+    }
 
     // ------------------------------------------------------ Protected Methods
 
@@ -420,27 +480,53 @@ public abstract class Repeater extends AbstractContainer {
 
     // ------------------------------------------------------ Protected Methods
 
+
     /**
      * Build the rows for every Repeater item.
      * <p/>
-     * This method delegates to {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
+     * This method delegates to {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
      * for every item in the {@link #items} list.
      */
     protected void buildRows() {
-        if (items == null) {
-            return;
+        DataProvider dataProvider = getDataProvider();
+        if (dataProvider == null) {
+            throw new IllegalStateException("No data provider set.");
         }
 
-        // Register a callback to add the index to child control names
-        AjaxControlRegistry.dispatchActionEvent(this, new ActionListener() {
-            public boolean onAction(Control source) {
-                // Before rendering update control name indexes so that each control
-                // will have a unique request parameter when posting to the server
-                addIndexToControlNames();
-                return true;
+        int dataOffset = 0;
+        int pageSize = getPageSize();
+
+        populateItems();
+
+        List items = getItems();
+
+        // Check if paging is necessary
+        if (pageSize > 0) {
+            Paginator paginator = getPaginator();
+
+            int rowCount = items.size();
+            if (dataProvider instanceof PagingDataProvider) {
+                rowCount = ((PagingDataProvider) dataProvider).size();
             }
 
-        }, AjaxControlRegistry.POST_ON_RENDER_EVENT);
+            paginator.calcPageTotal(pageSize, rowCount);
+
+            //int nextPage = paginator.getNextPage();
+            //dataOffset = nextPage * getPageSize();
+        }
+
+        CallbackDispatcher.registerCallback(this, new Callback() {
+
+            public void preDestroy(Control source) {
+            }
+
+            public void preGetHeadElements(Control source) {
+            }
+
+            public void preResponse(Control source) {
+                addIndexToControlNames();
+            }
+        });
 
         for (int i = 0; i < items.size(); i++ ) {
             createRow(i);
@@ -449,6 +535,19 @@ public abstract class Repeater extends AbstractContainer {
         // TODO should the names be changed here or in a Pre onProcess phase callback???
         // Update control name indexes to match incoming request parameters
         addIndexToControlNames();
+    }
+
+    protected void populateItems() {
+        //Iterator it = dataProvider.getData(start, count);
+        Iterable it = getDataProvider().getData();
+        if (it instanceof List) {
+            items = (List) it;
+        } else {
+            List items = getItems();
+            for (Object item : it) {
+                items.add(item);
+            }
+        }
     }
 
     /**
@@ -528,12 +627,13 @@ public abstract class Repeater extends AbstractContainer {
      * must be removed from
      */
     private void removeIndexFromControlNames(final Container container) {
-        List<Control> controls = container.getControls();
-        for (Control control : controls) {
+        List controls = container.getControls();
+        for (int i = 0; i < controls.size(); i++) {
+            Control control = (Control) controls.get(i);
             removeIndex(control);
             if (control instanceof Container) {
-                Container childContainer = (Container) control;
-                removeIndexFromControlNames(childContainer);
+               Container childContainer = (Container) control;
+               removeIndexFromControlNames(childContainer);
             }
         }
     }
@@ -548,8 +648,12 @@ public abstract class Repeater extends AbstractContainer {
         if (control.getName() == null) {
             return;
         }
-        String indexedName = control.getName() + '_' + index;
-        control.setName(indexedName);
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        buffer.append(control.getName());
+        buffer.append('_');
+        buffer.append(index);
+        control.setName(buffer.toString());
+        control.setName(buffer.toString());
     }
 
     /**
