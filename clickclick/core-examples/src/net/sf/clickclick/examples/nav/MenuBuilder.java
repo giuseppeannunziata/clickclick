@@ -77,15 +77,6 @@ public class MenuBuilder {
         subMenu = createMenu("Grid", "layout/grid-layout-demo.htm");
         menu.getChildren().add(subMenu);
 
-        menu = createMenu("Ajax");
-        rootMenu.add(menu);
-
-        subMenu = createMenu("Basic Ajax Demo", "ajax/ajax-demo.htm");
-        menu.add(subMenu);
-
-        subMenu = createMenu("Raw Ajax Demo", "ajax/raw-ajax-demo.htm");
-        menu.add(subMenu);
-
         menu = createMenu("Repeater");
         rootMenu.add(menu);
 

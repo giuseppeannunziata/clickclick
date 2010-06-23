@@ -25,6 +25,7 @@ import net.sf.clickclick.control.panel.HorizontalPanel;
 import net.sf.clickclick.control.repeater.RepeaterRow;
 import net.sf.clickclick.control.repeater.FieldRepeater;
 import net.sf.clickclick.examples.domain.Book;
+import org.apache.click.dataprovider.DataProvider;
 
 public class RepeatFieldPage extends AbstractRepeatPage {
 
@@ -89,7 +90,11 @@ public class RepeatFieldPage extends AbstractRepeatPage {
             }
         };
 
-        repeater.setItems(getBook().getCategories());
+        repeater.setDataProvider(new DataProvider() {
+            public List<Book> getData() {
+                return getBook().getCategories();
+            }
+        });
 
         final Submit add = new Submit("add");
         add.setActionListener(new ActionListener() {
