@@ -25,10 +25,12 @@ import net.sf.clickclick.control.panel.VerticalPanel;
 import net.sf.clickclick.control.repeater.RepeaterRow;
 import net.sf.clickclick.control.repeater.Repeater;
 import net.sf.clickclick.examples.domain.Customer;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.extras.control.SubmitLink;
 
 public class RepeatFormPage extends AbstractRepeatPage {
 
+    @Override
     public void onInit() {
         super.onInit();
 
@@ -115,7 +117,12 @@ public class RepeatFormPage extends AbstractRepeatPage {
                 form.copyFrom(item);
             }
         };
-        repeater.setItems(getTopCustomers());
+
+        repeater.setDataProvider(new DataProvider() {
+        	public List getData() {
+        		return getTopCustomers();
+        	}
+        });
 
         addControl(repeater);
     }
@@ -129,6 +136,7 @@ public class RepeatFormPage extends AbstractRepeatPage {
         return true;
     }
 
+    @Override
     public void onRender() {
         toggleLinks(getTopCustomers().size());
     }
@@ -136,6 +144,8 @@ public class RepeatFormPage extends AbstractRepeatPage {
     // -------------------------------------------------------- Private Methods
 
     private List getTopCustomers() {
-        return getCustomerService().getCustomers().subList(0, 5);
+        List<Customer> customers = getCustomerService().getCustomers();
+        int size = Math.min(5, customers.size());
+        return getCustomerService().getCustomers().subList(0, size);
     }
 }

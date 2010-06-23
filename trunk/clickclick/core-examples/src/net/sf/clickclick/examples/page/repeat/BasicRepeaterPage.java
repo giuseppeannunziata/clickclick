@@ -14,13 +14,18 @@
 package net.sf.clickclick.examples.page.repeat;
 
 import java.util.List;
+
 import net.sf.clickclick.control.html.table.HeaderRow;
 import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
+import net.sf.clickclick.control.paginator.SimplePaginator;
 import net.sf.clickclick.control.repeater.Repeater;
 import net.sf.clickclick.control.repeater.RepeaterRow;
 import net.sf.clickclick.examples.domain.Customer;
 import net.sf.clickclick.examples.page.BorderPage;
+
+import org.apache.click.Context;
+import org.apache.click.dataprovider.DataProvider;
 
 /**
  *
@@ -29,8 +34,19 @@ public class BasicRepeaterPage extends BorderPage {
 
     private Repeater repeater;
 
+    @Override
     public void onInit() {
+        Context context = getContext();
 
+        int currentPage = 0;
+        int pageSize = 10;
+        int rowCount = 3000;
+        SimplePaginator paginator = new SimplePaginator("paginator");
+        //paginator.setCurrentPage(currentPage);
+        paginator.calcPageTotal(pageSize, rowCount);
+
+        addControl(paginator);
+        
         final HtmlTable table = new HtmlTable("table");
         table.setAttribute("class", "gray");
         table.setBorder(0);
@@ -48,7 +64,7 @@ public class BasicRepeaterPage extends BorderPage {
                 Customer customer = (Customer) item;
 
                 Row tableRow = new Row();
-                table.add(tableRow);
+                row.add(tableRow);
 
                 tableRow.add(customer.getName());
                 tableRow.add(customer.getAge());
@@ -56,12 +72,19 @@ public class BasicRepeaterPage extends BorderPage {
             }
         };
 
-        repeater.setItems(getTopCustomers());
+        table.add(repeater);
+        repeater.setDataProvider(new DataProvider() {
+        	public List getData() {
+        		return getTopCustomers();
+        	}
+        });
 
         addControl(table);
     }
 
     public List<Customer> getTopCustomers() {
-        return getCustomerService().getCustomers().subList(0, 5);
+        List<Customer> customers = getCustomerService().getCustomers();
+        int size = Math.min(5, customers.size());
+        return getCustomerService().getCustomers().subList(0, size);
     }
 }

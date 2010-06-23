@@ -15,15 +15,16 @@ package net.sf.clickclick.examples.page.repeat;
 
 import java.util.List;
 import net.sf.clickclick.control.Text;
+import net.sf.clickclick.control.data.DataDecorator;
+import net.sf.clickclick.control.data.DataRow;
 import net.sf.clickclick.control.html.table.Cell;
-import net.sf.clickclick.control.html.table.HeaderRow;
 import net.sf.clickclick.control.html.table.HtmlTable;
-import net.sf.clickclick.control.html.table.Row;
-import net.sf.clickclick.control.repeater.RepeaterRow;
 import net.sf.clickclick.control.repeater.Repeater;
+import net.sf.clickclick.control.repeater.RepeaterRow;
 import net.sf.clickclick.examples.domain.Customer;
 import net.sf.clickclick.examples.page.BorderPage;
 import org.apache.click.ActionListener;
+import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.control.ActionLink;
 import org.apache.click.control.FieldSet;
@@ -31,9 +32,11 @@ import org.apache.click.control.Form;
 import org.apache.click.control.HiddenField;
 import org.apache.click.control.Submit;
 import org.apache.click.control.TextField;
+import org.apache.click.dataprovider.DataProvider;
 import org.apache.click.extras.control.DateField;
 import org.apache.click.extras.control.DoubleField;
 import org.apache.click.extras.control.IntegerField;
+import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -43,21 +46,10 @@ public class TableRepeaterPage extends BorderPage {
 
     private Form form = new Form("form");
 
+    @Override
     public void onInit() {
-        // In non-edit mode, render Master during onInit event in order to
-        // apply incoming parameters.
-        if (!isEditMode()) {
-            createMasterView();
-        }
+        createMasterView();
         createDetailView();
-    }
-
-    public void onRender() {
-        // In edit mode, render Master during onRender event in order to
-        // see any changes made during editing.
-        if (isEditMode()) {
-            createMasterView();
-        }
     }
 
     void createMasterView() {
@@ -66,32 +58,37 @@ public class TableRepeaterPage extends BorderPage {
         table.setAttribute("class", "gray");
         table.setBorder(0);
 
-        // Set Header Row
-        Row row = new HeaderRow();
-        row.add("Id");
-        row.add("Name");
-        row.add("Age");
-        row.add("Date Joined");
-        row.add("Holdings");
-        row.add("Action");
-        table.add(row);
+        table.setHeader("Id", "Name", "Age", "Date Joined", "Holdings", "Action");
 
         Repeater repeater = new Repeater() {
 
             public void buildRow(final Object item, final RepeaterRow row, final int index) {
                 Customer customer = (Customer) item;
 
-                Row tableRow = new Row();
-                tableRow.add(customer.getId());
-                tableRow.add(customer.getName());
-                tableRow.add(customer.getAge());
-                tableRow.add(getFormat().date(customer.getDateJoined()));
-                tableRow.add(getFormat().currency(customer.getHoldings()));
+                DataRow tableRow = new DataRow();
+                tableRow.add(customer, "id");
+                tableRow.add(customer, "name");
+                tableRow.add(customer, "age", new DataDecorator() {
+                    public void render(HtmlStringBuffer buffer, Object object,
+                        Context context) {
+                        Customer customer = (Customer) object;
+                        buffer.append(customer.getAge());
+                    }
+                });
+                tableRow.add(customer, "dateJoined", "{0,date,dd MMM yyyy}");
+                tableRow.add(customer, "holdings", "{0,number,currency}");
+
+                Cell actions = new Cell();
+                tableRow.add(actions);
 
                 ActionLink delete = new ActionLink("delete");
                 delete.setActionListener(new ActionListener() {
                     public boolean onAction(Control source) {
+                        // Remove item from Repeater
                         removeItem(item);
+
+                        // TODO
+                        // delete customer from DB
 
                         // Perform redirect to guard against user hitting refresh
                         // and setting the ActionLink value to the deleted recordId
@@ -99,8 +96,7 @@ public class TableRepeaterPage extends BorderPage {
                         return false;
                     }
                 });
-                Cell actions = new Cell();
-                tableRow.add(actions);
+
                 actions.add(delete);
 
                 ActionLink edit = new ActionLink("edit");
@@ -121,7 +117,11 @@ public class TableRepeaterPage extends BorderPage {
 
         table.add(repeater);
 
-        repeater.setItems(getTopCustomers());
+        repeater.setDataProvider(new DataProvider() {
+        	public List getData() {
+        		return getTopCustomers();
+        	}
+        });
 
         addControl(table);
     }
@@ -184,13 +184,8 @@ public class TableRepeaterPage extends BorderPage {
     }
 
     public List<Customer> getTopCustomers() {
-        return getCustomerService().getCustomers().subList(0, 5);
-    }
-
-    // -------------------------------------------------------- Private Methods
-
-    private boolean isEditMode() {
-        String formName = getContext().getRequestParameter(Form.FORM_NAME);
-        return StringUtils.isNotBlank(formName);
+        List<Customer> customers = getCustomerService().getCustomers();
+        int size = Math.min(5, customers.size());
+        return customers.subList(0, size);
     }
 }
