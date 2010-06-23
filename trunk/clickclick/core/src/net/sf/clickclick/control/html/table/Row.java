@@ -53,6 +53,20 @@ public class Row extends AbstractContainer {
     }
 
     /**
+     * Add the given text array by creating and adding {@link Cell}
+     * instances to the row and setting each Cell content to a text object.
+     * <p/>
+     * This method delegates to {@link #insert(java.lang.Object, int)}.
+     *
+     * @param text the text array to add to the row
+     */
+    public void add(Object... textArray) {
+        for (Object text : textArray) {
+            insert(text, getControls().size());
+        }
+    }
+
+    /**
      * Add the given text object by creating and adding a {@link Cell}
      * instance to the row and setting the Cell content to the given text
      * object.
