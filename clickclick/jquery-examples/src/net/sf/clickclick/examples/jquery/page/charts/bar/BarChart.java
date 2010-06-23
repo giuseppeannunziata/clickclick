@@ -28,6 +28,8 @@ import org.apache.click.util.HtmlStringBuffer;
  */
 public class BarChart extends BorderPage {
 
+    private static final long serialVersionUID = 1L;
+
     public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
