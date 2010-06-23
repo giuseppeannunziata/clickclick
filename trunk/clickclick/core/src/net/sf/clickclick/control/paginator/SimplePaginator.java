@@ -17,11 +17,11 @@ import java.util.List;
 import org.apache.click.control.AbstractControl;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.ActionLink;
-import org.apache.click.control.Renderable;
 import org.apache.click.control.Table;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.Element;
 import org.apache.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.math.NumberUtils;
 
 /**
  * Provides a simple independent paginator control.
@@ -38,11 +38,14 @@ import org.apache.click.util.HtmlStringBuffer;
  *  <li>pagination-flickr</li>
  * </ul>
  */
-public class SimplePaginator extends AbstractControl implements Renderable {
+public class SimplePaginator extends AbstractControl implements Paginator {
 
     // -------------------------------------------------------------- Constants
 
     private static final long serialVersionUID = 1L;
+
+    /** The control ActionLink page number parameter name: <tt>"page"</tt>. */
+    public static final String PAGE = "page";
 
     // -------------------------------------------------------------- Variables
 
@@ -62,7 +65,7 @@ public class SimplePaginator extends AbstractControl implements Renderable {
     protected String styleClass = "pagination-digg";
 
     /** The link to render. */
-    protected AbstractLink pageLink;
+    protected ActionLink controlLink;
 
     // ----------------------------------------------------------- Constructors
 
@@ -198,8 +201,8 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      *
      * @param pageLink the page link
      */
-    public void setPageLink(AbstractLink pageLink) {
-        this.pageLink = pageLink;
+    public void setControlLink(ActionLink controlLink) {
+        this.controlLink = controlLink;
     }
 
     /**
@@ -207,16 +210,16 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      *
      * @return the page link
      */
-    public AbstractLink getPageLink() {
-        if (pageLink == null) {
+    public ActionLink getControlLink() {
+        if (controlLink == null) {
             String name = getName();
-            if (getName() == null) {
+            if (name == null) {
                 throw new RuntimeException("Paginator name is not defined. " +
                     "Please set the Paginator name through #setName(String).");
             }
-            pageLink = new ActionLink(getName());
+            controlLink = new ActionLink(name);
         }
-        return pageLink;
+        return controlLink;
     }
 
     /**
@@ -293,6 +296,28 @@ public class SimplePaginator extends AbstractControl implements Renderable {
         return headElements;
     }
 
+    @Override
+    public boolean onProcess() {
+        boolean continueProcessing = super.onProcess();
+
+        setCurrentPage(getNextPage());
+
+        return continueProcessing;
+    }
+
+    public int getNextPage() {
+        ActionLink controlLink = getControlLink();
+        controlLink.onProcess();
+
+        if (controlLink.isClicked()) {
+            String page = getContext().getRequestParameter(PAGE);
+            if (NumberUtils.isNumber(page)) {
+                return Integer.parseInt(page);
+            }
+        }
+        return getCurrentPage();
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -313,18 +338,18 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      * @param pageSize the number of rows per page
      * @param rows the number of rows to paginate over
      */
-    public void calcPageTotal(int pageSize, int rows) {
+    public void calcPageTotal(int pageSize, int totalRows) {
         // If pageTotal has value, exit early
         if (getPageTotal() > 0) {
             return;
         }
 
-        if (pageSize == 0 || rows == 0) {
+        if (pageSize == 0 || totalRows == 0) {
             setPageTotal(1);
             return;
         }
 
-        double value = (double) rows / (double) pageSize;
+        double value = (double) totalRows / (double) pageSize;
 
         setPageTotal((int) Math.ceil(value));
     }
@@ -358,10 +383,10 @@ public class SimplePaginator extends AbstractControl implements Renderable {
 
         for (int i = lowerBound; i < upperBound; i++) {
             int pageNumber = i + 1;
-            renderPageLinkContainer(buffer, pageNumber);
+            renderPagingLinkContainer(buffer, pageNumber);
 
             if (i < upperBound - 1) {
-                renderPageLinkSeparator(buffer);
+                renderPagingLinkSeparator(buffer);
             }
         }
 
@@ -391,13 +416,13 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      * @param buffer the buffer to render to
      * @param pageNumber the page number of the page link to render
      */
-    protected void renderPageLinkContainer(HtmlStringBuffer buffer, int pageNumber) {
+    protected void renderPagingLinkContainer(HtmlStringBuffer buffer, int pageNumber) {
         if (pageNumber - 1 == getCurrentPage()) {
             buffer.append("<li class=\"active\">");
         } else {
             buffer.append("<li>");
         }
-        renderPageLink(buffer, pageNumber);
+        renderPagingLink(buffer, pageNumber);
         buffer.append("</li>");
         buffer.append("\n");
     }
@@ -408,18 +433,18 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      * @param buffer the buffer to render to
      * @param pageNumber the page number of the page link to render
      */
-    protected void renderPageLink(HtmlStringBuffer buffer, int pageNumber) {
+    protected void renderPagingLink(HtmlStringBuffer buffer, int pageNumber) {
         if (pageNumber - 1 == getCurrentPage()) {
             buffer.append(pageNumber);
         } else {
-            AbstractLink pageLink = getPageLink();
-            pageLink.setLabel(String.valueOf(pageNumber));
+            AbstractLink controlLink = getControlLink();
+            controlLink.setLabel(String.valueOf(pageNumber));
 
             // Cater for zero based indexing and subtract 1 from pageNumber
-            pageLink.setParameter(Table.PAGE, String.valueOf(pageNumber - 1));
-            pageLink.setTitle(getGotoPageTitleMessage()
+            controlLink.setParameter(Table.PAGE, String.valueOf(pageNumber - 1));
+            controlLink.setTitle(getGotoPageTitleMessage()
                 + " " + pageNumber);
-            pageLink.render(buffer);
+            controlLink.render(buffer);
         }
     }
 
@@ -428,7 +453,7 @@ public class SimplePaginator extends AbstractControl implements Renderable {
      *
      * @param buffer the buffer to render to
      */
-    protected void renderPageLinkSeparator(HtmlStringBuffer buffer) {
+    protected void renderPagingLinkSeparator(HtmlStringBuffer buffer) {
     }
 
     /**
@@ -443,11 +468,11 @@ public class SimplePaginator extends AbstractControl implements Renderable {
             buffer.appendAttribute("class", "first");
             buffer.closeTag();
 
-            AbstractLink pageLink = getPageLink();
-            pageLink.setLabel(getFirstLabelMessage());
-            pageLink.setParameter(Table.PAGE, pageValue);
-            pageLink.setTitle(getFirstTitleMessage());
-            pageLink.render(buffer);
+            AbstractLink controlLink = getControlLink();
+            controlLink.setLabel(getFirstLabelMessage());
+            controlLink.setParameter(Table.PAGE, pageValue);
+            controlLink.setTitle(getFirstTitleMessage());
+            controlLink.render(buffer);
         } else {
             buffer.appendAttribute("class", "first-off");
             buffer.closeTag();
@@ -471,11 +496,11 @@ public class SimplePaginator extends AbstractControl implements Renderable {
             buffer.appendAttribute("class", "previous");
             buffer.closeTag();
 
-            AbstractLink pageLink = getPageLink();
-            pageLink.setLabel(getPreviousLabelMessage());
-            pageLink.setParameter(Table.PAGE, pageValue);
-            pageLink.setTitle(getPreviousTitleMessage());
-            pageLink.render(buffer);
+            AbstractLink controlLink = getControlLink();
+            controlLink.setLabel(getPreviousLabelMessage());
+            controlLink.setParameter(Table.PAGE, pageValue);
+            controlLink.setTitle(getPreviousTitleMessage());
+            controlLink.render(buffer);
 
         } else {
             buffer.appendAttribute("class", "previous-off");
@@ -499,11 +524,11 @@ public class SimplePaginator extends AbstractControl implements Renderable {
             buffer.appendAttribute("class", "last");
             buffer.closeTag();
 
-            AbstractLink pageLink = getPageLink();
-            pageLink.setLabel(getLastLabelMessage());
-            pageLink.setParameter(Table.PAGE, pageValue);
-            pageLink.setTitle(getLastTitleMessage());
-            pageLink.render(buffer);
+            AbstractLink controlLink = getControlLink();
+            controlLink.setLabel(getLastLabelMessage());
+            controlLink.setParameter(Table.PAGE, pageValue);
+            controlLink.setTitle(getLastTitleMessage());
+            controlLink.render(buffer);
         } else {
             buffer.appendAttribute("class", "last-off");
             buffer.closeTag();
@@ -526,11 +551,11 @@ public class SimplePaginator extends AbstractControl implements Renderable {
             buffer.appendAttribute("class", "next");
             buffer.closeTag();
 
-            AbstractLink pageLink = getPageLink();
-            pageLink.setLabel(getNextLabelMessage());
-            pageLink.setParameter(Table.PAGE, pageValue);
-            pageLink.setTitle(getNextTitleMessage());
-            pageLink.render(buffer);
+            AbstractLink pagingLink = getControlLink();
+            pagingLink.setLabel(getNextLabelMessage());
+            pagingLink.setParameter(Table.PAGE, pageValue);
+            pagingLink.setTitle(getNextTitleMessage());
+            pagingLink.render(buffer);
         } else {
             buffer.appendAttribute("class", "next-off");
             buffer.closeTag();
