@@ -87,8 +87,7 @@ public class TableRepeaterPage extends BorderPage {
                         // Remove item from Repeater
                         removeItem(item);
 
-                        // TODO
-                        // delete customer from DB
+                        // Here we can delete customer from DB
 
                         // Perform redirect to guard against user hitting refresh
                         // and setting the ActionLink value to the deleted recordId
@@ -159,7 +158,7 @@ public class TableRepeaterPage extends BorderPage {
                     }
                     form.copyTo(customer);
 
-                    // In real world app we would save to DB
+                    // Here we can update customer in db
 
                     // Perform redirect to ensure the form changes are reflected
                     // by the Repeater
