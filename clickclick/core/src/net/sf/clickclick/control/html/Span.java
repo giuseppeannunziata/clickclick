@@ -87,11 +87,11 @@ public class Span extends AbstractContainer {
      * Create a span element with the given name and id.
      *
      * @param name the span name
-     * @param id the span id
+     * @param text the span text
      */
-    public Span(String name, String id) {
+    public Span(String name, String text) {
         this(name);
-        setAttribute("id", id);
+        setText(text);
     }
 
     // ------------------------------------------------------ Public Properties
@@ -103,8 +103,20 @@ public class Span extends AbstractContainer {
      *
      * @return this controls html tag
      */
+    @Override
     public final String getTag() {
         return "span";
+    }
+
+    /**
+     * Set the HTML id attribute for the control with the given value.
+     *
+     * @param id the element HTML id attribute value to set
+     * @return this control instance
+     */
+    public Span id(String id) {
+        setId(id);
+        return this;
     }
 
     /**
@@ -113,14 +125,20 @@ public class Span extends AbstractContainer {
      *
      * @param text the text to set as the span content
      */
-    public void setText(String text) {
-        this.text.setText(text);
-        if (text == null) {
-            remove(this.text);
-        } else {
-            if (!getControls().contains(this.text)) {
-                add(this.text);
+    public void setText(String value) {
+        if (value == null) {
+            if (text == null) {
+                return;
+            } else {
+                remove(text);
             }
+
+        } else {
+            if (text == null) {
+                text = new Text();
+                add(text);
+            }
+            text.setText(value);
         }
     }
 
@@ -130,6 +148,10 @@ public class Span extends AbstractContainer {
      * @return the span text content or null if no text was set
      */
     public String getText() {
+        if (text == null) {
+            text = new Text();
+        }
+
         Object value = text.getText();
         String result = value == null ? null : value.toString();
         return result;
