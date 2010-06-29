@@ -17,35 +17,36 @@ import java.io.IOException;
 import java.io.InputStream;
 import net.sf.clickclick.control.DynamicImage;
 import net.sf.clickclick.examples.page.BorderPage;
+import org.apache.click.Partial;
 import org.apache.click.util.ClickUtils;
 import org.apache.commons.io.IOUtils;
 
 public class DynamicImagePage extends BorderPage {
 
     public DynamicImagePage() {
-        addControl(new DynamicImage("dynamicImage") {
-
-            public byte[] getImageData() {
-                InputStream is = null;
-
-                try {
-                    return generateChart();
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    ClickUtils.close(is);
-                }
-            }
-        });
+        DynamicImage dynamicImage = new DynamicImage("dynamicImage", "renderChart");
+        addControl(dynamicImage);
     }
 
-    private byte[] generateChart() throws IOException {
-        // This method returns a byte array that can be dynamically
-        // retrieved from a database or generated on the fly. In this example
-        // we'll just lookup a static image though
-        InputStream is = getContext().getServletContext().getResourceAsStream("/assets/images/chart.png");
+    public Partial renderChart() {
+        Partial partial = new Partial();
+        String contentType = ClickUtils.getMimeType(".png");
+        byte[] imageData = generateChart();
+        partial.setBytes(imageData, contentType);
+        return partial;
+    }
 
-        return IOUtils.toByteArray(is);
+    private byte[] generateChart() {
+        // This method returns a byte array that can be dynamically retrieved
+        // from a database or generated on the fly. For simplicity sake a static
+        // image is looked up
+
+        try {
+            InputStream is = getContext().getServletContext().getResourceAsStream("/assets/images/chart.png");
+            return IOUtils.toByteArray(is);
+
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
     }
 }
