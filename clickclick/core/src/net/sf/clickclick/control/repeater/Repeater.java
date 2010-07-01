@@ -180,7 +180,7 @@ public abstract class Repeater extends AbstractContainer {
 
     /**
      * @throws UnsupportedOperationException if invoked. Rather add controls
-     * through the {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
+     * through the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
      * method.
      */
     public Control add(Control control) {
@@ -190,7 +190,7 @@ public abstract class Repeater extends AbstractContainer {
 
     /**
      * @throws UnsupportedOperationException if invoked. Rather add controls
-     * through the {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
+     * through the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
      * method.
      */
     public Control insert(Control control, int index) {
@@ -484,7 +484,7 @@ public abstract class Repeater extends AbstractContainer {
     /**
      * Build the rows for every Repeater item.
      * <p/>
-     * This method delegates to {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
+     * This method delegates to {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
      * for every item in the {@link #items} list.
      */
     protected void buildRows() {
