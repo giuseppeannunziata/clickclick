@@ -39,10 +39,10 @@ import org.apache.click.util.HtmlStringBuffer;
  * <p/>
  * <h3>Usage</h3>
  * When creating a Repeater you must implement the abstract method
- * {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
+ * {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
  * which is invoked by the Repeater for every item in the {@link #items} list.
  * <p/>
- * In the {@link #buildRow(java.lang.Object, net.sf.click.jquery.examples.control.repeater.RepeaterRow, int)}
+ * In the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
  * method you setup the components for the given item and the Repeater will
  * display these components for every item in the {@link #items} list.
  * <p/>
