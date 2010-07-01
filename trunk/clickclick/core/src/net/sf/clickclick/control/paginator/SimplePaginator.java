@@ -332,24 +332,23 @@ public class SimplePaginator extends AbstractControl implements Paginator {
      *     SimplePaginator paginator = new SimplePaginator("my-paginator");
      *     paginator.setCurrentPage(currentPage);
      *     paginator.calcPageTotal(pageSize, rowCount);
-     * }
-     * </pre>
+     * } </pre>
      *
      * @param pageSize the number of rows per page
      * @param rows the number of rows to paginate over
      */
-    public void calcPageTotal(int pageSize, int totalRows) {
+    public void calcPageTotal(int pageSize, int totalItems) {
         // If pageTotal has value, exit early
         if (getPageTotal() > 0) {
             return;
         }
 
-        if (pageSize == 0 || totalRows == 0) {
+        if (pageSize == 0 || totalItems == 0) {
             setPageTotal(1);
             return;
         }
 
-        double value = (double) totalRows / (double) pageSize;
+        double value = (double) totalItems / (double) pageSize;
 
         setPageTotal((int) Math.ceil(value));
     }
