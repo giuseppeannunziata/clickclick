@@ -14,7 +14,6 @@
 package net.sf.clickclick.examples.control;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.click.control.TextArea;
 import org.apache.click.element.Element;
@@ -24,7 +23,7 @@ import org.apache.click.util.HtmlStringBuffer;
 
 /**
  * Provides a HTML Rich TextArea editor control using the
- * <a href="http://sourceforge.net/projects/tinymce/">TinyMCE</a>
+ * <a href="http://tinymce.moxiecode.com/">TinyMCE</a>
  * JavaScript library.
  * <p/>
  * To utilize this control in your application include <tt>tiny_mce</tt>
@@ -35,6 +34,10 @@ import org.apache.click.util.HtmlStringBuffer;
 public class RichTextArea extends TextArea {
 
     private static final long serialVersionUID = 1L;
+
+    public static final String THEME_SIMPLE = "simple";
+
+    public static final String THEME_ADVANCED = "advanced";
 
     /**
      * The textarea TinyMCE theme [<tt>simple</tt> | <tt>advanced</tt>],
@@ -71,6 +74,16 @@ public class RichTextArea extends TextArea {
     }
 
     /**
+     * Set the textarea TinyMCE theme: either {@link #THEME_SIMPLE} or
+     * {@link #THEME_ADVANCED}.
+     *
+     * @param the textarea TinyMCE theme
+     */
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
+    /**
      * Return the JavaScript include: &nbsp; <tt>"tiny_mce/tiny_mce.js"</tt>,
      * and TinyMCE JavaScript initialization code.
      *
@@ -87,10 +100,15 @@ public class RichTextArea extends TextArea {
         script.setId(getId() + "_js_setup");
 
         if (!headElements.contains(script)) {
-            HtmlStringBuffer buffer = new HtmlStringBuffer();
-            buffer.append("tinyMCE.init({theme : '").append(getTheme()).append("',");
-            buffer.append("mode : 'exact', elements : '").append(getId()).append("'})");
-            script.setContent(buffer.toString());
+            if (THEME_ADVANCED.equals(getTheme())) {
+                script.setTemplate("/tiny_mce/template.js");
+            } else {
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                buffer.append("tinyMCE.init({theme : '").append(getTheme()).append("',");
+                buffer.append("mode : 'exact', elements : '").append(getId()).append("'})");
+                script.setContent(buffer.toString());
+            }
+
             headElements.add(script);
         }
         return headElements;

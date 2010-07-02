@@ -56,7 +56,10 @@ public class MenuBuilder {
         subMenu = createMenu("Menu", "control/menu.htm");
         menu.add(subMenu);
 
-        subMenu = createMenu("Rich Editor", "control/email-form.htm");
+        subMenu = createMenu("Basic Rich Editor", "control/basic-email-form.htm");
+        menu.add(subMenu);
+
+        subMenu = createMenu("Advanced Rich Editor", "control/advanced-email-form.htm");
         menu.add(subMenu);
 
         subMenu = createMenu("Image", "control/image.htm");
