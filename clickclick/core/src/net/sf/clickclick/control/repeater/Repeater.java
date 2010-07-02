@@ -15,8 +15,6 @@ package net.sf.clickclick.control.repeater;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.sf.clickclick.control.paginator.Paginator;
-import net.sf.clickclick.control.paginator.SimplePaginator;
 import org.apache.click.Callback;
 import org.apache.click.CallbackDispatcher;
 import org.apache.click.Control;
@@ -27,13 +25,10 @@ import org.apache.click.control.Field;
 import org.apache.click.control.FieldSet;
 import org.apache.click.control.Panel;
 import org.apache.click.dataprovider.DataProvider;
-import org.apache.click.dataprovider.PagingDataProvider;
 import org.apache.click.util.ContainerUtils;
 import org.apache.click.util.HtmlStringBuffer;
 
 /**
- * TODO move paginator to subclass? Properly integrate dataprovider and items
- *
  * Provides a Repeater control for displaying a list of items. For every item in
  * the list the Repeater will display the same specified components.
  * <p/>
@@ -126,11 +121,6 @@ public abstract class Repeater extends AbstractContainer {
     protected List items = null;
 
     protected DataProvider dataProvider = null;
-
-    /** The paginator used to render the Repeater pagination controls. */
-    protected Paginator paginator;
-
-    protected int pageSize;
 
     /**
      * Create a default Repeater.
@@ -299,46 +289,6 @@ public abstract class Repeater extends AbstractContainer {
 
     // TODO create actionLinks for moveUp and moveDown ???
 
-    /**
-     * Set the maximum page size in rows. A page size of 0
-     * means there is no maximum page size.
-     *
-     * @param pageSize the maximum page size in rows
-     */
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    /**
-     * Return the paginator for rendering the repeater pagination.
-     *
-     * @return the repeater paginator
-     */
-    public Paginator getPaginator() {
-        if (paginator == null) {
-            String name = getName();
-            if (name == null) {
-                throw new IllegalStateException("Repeater must have a name" +
-                    " defined before Paginator can be used.");
-            }
-            paginator = new SimplePaginator(name);
-        }
-        return paginator;
-    }
-
-    /**
-     * Set the paginator for rendering the table pagination controls.
-     *
-     * @param value the table paginator to set
-     */
-    public void setPaginator(Paginator value) {
-        paginator = value;
-    }
-
     // ------------------------------------------------------ Protected Methods
 
     /**
@@ -480,7 +430,6 @@ public abstract class Repeater extends AbstractContainer {
 
     // ------------------------------------------------------ Protected Methods
 
-
     /**
      * Build the rows for every Repeater item.
      * <p/>
@@ -493,27 +442,9 @@ public abstract class Repeater extends AbstractContainer {
             throw new IllegalStateException("No data provider set.");
         }
 
-        int dataOffset = 0;
-        int pageSize = getPageSize();
-
         populateItems();
 
-        List items = getItems();
-
-        // Check if paging is necessary
-        if (pageSize > 0) {
-            Paginator paginator = getPaginator();
-
-            int rowCount = items.size();
-            if (dataProvider instanceof PagingDataProvider) {
-                rowCount = ((PagingDataProvider) dataProvider).size();
-            }
-
-            paginator.calcPageTotal(pageSize, rowCount);
-
-            //int nextPage = paginator.getNextPage();
-            //dataOffset = nextPage * getPageSize();
-        }
+        List repeaterItems = getItems();
 
         CallbackDispatcher.registerCallback(this, new Callback() {
 
@@ -528,7 +459,7 @@ public abstract class Repeater extends AbstractContainer {
             }
         });
 
-        for (int i = 0; i < items.size(); i++ ) {
+        for (int i = 0; i < repeaterItems.size(); i++ ) {
             createRow(i);
         }
 
@@ -538,7 +469,6 @@ public abstract class Repeater extends AbstractContainer {
     }
 
     protected void populateItems() {
-        //Iterator it = dataProvider.getData(start, count);
         Iterable it = getDataProvider().getData();
         if (it instanceof List) {
             items = (List) it;

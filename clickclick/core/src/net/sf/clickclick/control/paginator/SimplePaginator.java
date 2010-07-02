@@ -20,6 +20,7 @@ import org.apache.click.control.ActionLink;
 import org.apache.click.control.Table;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.Element;
+import org.apache.click.util.ClickUtils;
 import org.apache.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -66,6 +67,12 @@ public class SimplePaginator extends AbstractControl implements Paginator {
 
     /** The link to render. */
     protected ActionLink controlLink;
+
+    protected int totalItems;
+
+    protected int itemsPerPage = 0;
+
+    private boolean processNextPage = true;
 
     // ----------------------------------------------------------- Constructors
 
@@ -256,16 +263,11 @@ public class SimplePaginator extends AbstractControl implements Paginator {
      * @return the current page value
      */
     public int getCurrentPage() {
+        if (processNextPage) {
+            currentPage = processNextPage();
+            processNextPage = false;
+        }
         return currentPage;
-    }
-
-    /**
-     * Set the total number of pages.
-     *
-     * @param pageTotal the total number of pages
-     */
-    public void setPageTotal(int pageTotal) {
-        this.pageTotal = pageTotal;
     }
 
     /**
@@ -278,6 +280,76 @@ public class SimplePaginator extends AbstractControl implements Paginator {
     }
 
     /**
+     * @return the totalItems
+     */
+    public int getTotalItems() {
+        return totalItems;
+    }
+
+    /**
+     * @param totalItems the totalItems to set
+     */
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
+    }
+
+    /**
+     * @return the itemsPerPage
+     */
+    public int getItemsPerPage() {
+        return itemsPerPage;
+    }
+
+    /**
+     * @param itemsPerPage the itemsPerPage to set
+     */
+    public void setItemsPerPage(int itemsPerPage) {
+        this.itemsPerPage = itemsPerPage;
+    }
+
+    /**
+     * Return the index of the first item to display. Index starts from 0.
+     * <p/>
+     * <b>Note:</b> {@link #setItemsPerPage(int) items per page} must be set for
+     * this method to correctly calculate the first item index, otherwise this
+     * method will return 0.
+     *
+     * @return the index of the first item to display
+     */
+    public int getFirstItem() {
+        int firstItem = 0;
+
+        if (getItemsPerPage() > 0) {
+            int currentPage = getCurrentPage();
+            if (currentPage > 0) {
+                firstItem = getItemsPerPage() * currentPage;
+            }
+        }
+
+        return firstItem;
+    }
+
+    /**
+     * Return the index of the last item to display. Index starts from 0.
+     * <p/>
+     * <b>Note:</b> the paginator {@link #setTotalItems(int) total items} and
+     * {@link #setItemsPerPage(int) items per page} must be set for this method to
+     * correctly calculate the last item, otherwise this method will return 0.
+     *
+     * @return the index of the last item to display
+     */
+    public int getLastItem() {
+        int numbItems = getTotalItems();
+        int lastItem = numbItems;
+
+        if (getItemsPerPage() > 0) {
+            lastItem = getFirstItem() + getItemsPerPage();
+            lastItem = Math.min(lastItem, numbItems);
+        }
+        return lastItem;
+    }
+
+    /**
      * Return the following head elements for the paginator:
      * <ul>
      * <li>
@@ -287,6 +359,7 @@ public class SimplePaginator extends AbstractControl implements Paginator {
      *
      * @return the head elements of the paginator
      */
+    @Override
     public List<Element> getHeadElements() {
         if (headElements == null) {
             headElements = super.getHeadElements();
@@ -296,69 +369,46 @@ public class SimplePaginator extends AbstractControl implements Paginator {
         return headElements;
     }
 
+    /*
     @Override
     public boolean onProcess() {
         boolean continueProcessing = super.onProcess();
 
-        setCurrentPage(getNextPage());
+        setCurrentPage(findNextPage());
 
         return continueProcessing;
     }
+    */
 
-    public int getNextPage() {
+    private int processNextPage() {
+        int nextPage = 0;
         ActionLink controlLink = getControlLink();
-        controlLink.onProcess();
+        ClickUtils.bind(controlLink);
 
         if (controlLink.isClicked()) {
             String page = getContext().getRequestParameter(PAGE);
             if (NumberUtils.isNumber(page)) {
-                return Integer.parseInt(page);
+                nextPage = Integer.parseInt(page);
             }
         }
-        return getCurrentPage();
+        return nextPage;
+    }
+
+    @Override
+    public void onDestroy() {
+        processNextPage = true;
     }
 
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Provides a public method that calculates the {@link #pageTotal} from the
-     * given pageSize and total number of rows.
-     *
-     * <pre class="prettyprint">
-     * public MyPage() {
-     *     int currentPage = 1;
-     *     int pageSize = 10;
-     *     int rowCount = 3000;
-     *     SimplePaginator paginator = new SimplePaginator("my-paginator");
-     *     paginator.setCurrentPage(currentPage);
-     *     paginator.calcPageTotal(pageSize, rowCount);
-     * } </pre>
-     *
-     * @param pageSize the number of rows per page
-     * @param rows the number of rows to paginate over
-     */
-    public void calcPageTotal(int pageSize, int totalItems) {
-        // If pageTotal has value, exit early
-        if (getPageTotal() > 0) {
-            return;
-        }
-
-        if (pageSize == 0 || totalItems == 0) {
-            setPageTotal(1);
-            return;
-        }
-
-        double value = (double) totalItems / (double) pageSize;
-
-        setPageTotal((int) Math.ceil(value));
-    }
-
-    /**
-     * Render the paginator's output to the specified buffer.
+     * Render the paginator output to the specified buffer.
      *
      * @param buffer the buffer to render output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
+        calcPageTotal(getItemsPerPage(), getTotalItems());
 
         // If there are no pages to render, exit early
         if (getPageTotal() <= 0) {
@@ -401,7 +451,9 @@ public class SimplePaginator extends AbstractControl implements Paginator {
      *
      * @return the HTML representation of the paginator
      */
+    @Override
     public String toString() {
+        calcPageTotal(getItemsPerPage(), getTotalItems());
         HtmlStringBuffer buffer = new HtmlStringBuffer(getPageTotal() * 70);
         render(buffer);
         return buffer.toString();
@@ -575,5 +627,40 @@ public class SimplePaginator extends AbstractControl implements Paginator {
         if (upperBound - lowerBound < 10) {
             lowerBound = Math.max(upperBound - 10, 0);
         }
+    }
+
+    // Private Methods --------------------------------------------------------
+
+    /**
+     * Set the total number of pages.
+     *
+     * @param pageTotal the total number of pages
+     */
+    private void setPageTotal(int pageTotal) {
+        this.pageTotal = pageTotal;
+    }
+
+    /**
+     * Provides a method that calculates the {@link #pageTotal} from the
+     * given pageSize and total number of rows.
+     *
+     * @param pageSize the number of rows per page
+     * @param rows the number of rows to paginate over
+     */
+    private void calcPageTotal(int itemsPerPage, int totalItems) {
+        // If pageTotal has value, exit early
+        if (getPageTotal() > 0) {
+            return;
+        }
+
+        if (itemsPerPage == 0 || totalItems == 0) {
+            // TODO should pageTotal be set to 1???
+            setPageTotal(1);
+            return;
+        }
+
+        double value = (double) totalItems / (double) itemsPerPage;
+
+        setPageTotal((int) Math.ceil(value));
     }
 }

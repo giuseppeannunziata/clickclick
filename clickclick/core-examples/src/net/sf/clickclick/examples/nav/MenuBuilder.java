@@ -89,11 +89,11 @@ public class MenuBuilder {
         subMenu = createMenu("Repeat Field", "repeat/repeat-field.htm");
         menu.add(subMenu);
 
-        subMenu = createMenu("Table Repeater", "repeat/table-repeater.htm");
+        subMenu = createMenu("Paging Repeater", "repeat/paging-repeater.htm");
         menu.add(subMenu);
 
-        menu = createMenu("Reload", "reload/resource-bundle.htm");
-        rootMenu.add(menu);
+        subMenu = createMenu("Edit Table Repeater", "repeat/edit-table-repeater.htm");
+        menu.add(subMenu);
 
         menu = createJavaSourceMenu("Page Java");
         menu.setAttribute("target", "_blank");

@@ -21,6 +21,21 @@ import org.apache.click.control.Renderable;
 public interface Paginator extends Renderable {
 
     /**
+     * Set the number of items per page. A value of 0 means there is no
+     * items per page.
+     *
+     * @param itemsPerPage the number of items per page
+     */
+    public void setItemsPerPage(int itemsPerPage);
+
+    /**
+     * Set the total number of items the paginator is presenting.
+     *
+     * @param totalItems the total number of items the paginator is presenting
+     */
+    public void setTotalItems(int totalItems);
+
+    /**
      * Set the current page value.
      *
      * @param currentPage the current page value
@@ -33,8 +48,4 @@ public interface Paginator extends Renderable {
      * @return the current page value
      */
     public int getCurrentPage();
-
-    public int getNextPage();
-
-    public void calcPageTotal(int pageSize, int rows);
 }

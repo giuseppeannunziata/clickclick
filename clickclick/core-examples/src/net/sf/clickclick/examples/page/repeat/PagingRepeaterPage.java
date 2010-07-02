@@ -18,6 +18,7 @@ import java.util.List;
 import net.sf.clickclick.control.html.table.HeaderRow;
 import net.sf.clickclick.control.html.table.HtmlTable;
 import net.sf.clickclick.control.html.table.Row;
+import net.sf.clickclick.control.paginator.SimplePaginator;
 import net.sf.clickclick.control.repeater.Repeater;
 import net.sf.clickclick.control.repeater.RepeaterRow;
 import net.sf.clickclick.examples.domain.Customer;
@@ -28,12 +29,18 @@ import org.apache.click.dataprovider.DataProvider;
 /**
  *
  */
-public class BasicRepeaterPage extends BorderPage {
+public class PagingRepeaterPage extends BorderPage {
 
     private Repeater repeater;
+    private SimplePaginator paginator;
 
     @Override
     public void onInit() {
+
+        paginator = new SimplePaginator("paginator");
+        paginator.setItemsPerPage(10);
+        addControl(paginator);
+
         final HtmlTable table = new HtmlTable("table");
         table.setAttribute("class", "gray");
         table.setBorder(0);
@@ -60,15 +67,18 @@ public class BasicRepeaterPage extends BorderPage {
         };
 
         table.add(repeater);
-
         repeater.setDataProvider(new DataProvider() {
 
-            public List<Customer> getData() {
-                List<Customer> customers = getCustomerService().getCustomers();
-                if (customers.size() > 5) {
-                    customers = customers.subList(0, 5);
-                }
-                return customers;
+            public List getData() {
+                int numberOfCustomers = getCustomerService().getCustomers().size();
+
+                // Set totalItems in order to call getFirstItem and getLastItem
+                paginator.setTotalItems(numberOfCustomers);
+
+                int start = paginator.getFirstItem();
+                int end = paginator.getLastItem();
+
+                return getCustomerService().getCustomers().subList(start, end);
             }
         });
 
