@@ -42,7 +42,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  *
  */
-public class TableRepeaterPage extends BorderPage {
+public class EditTableRepeaterPage extends BorderPage {
 
     private Form form = new Form("form");
 
@@ -91,7 +91,7 @@ public class TableRepeaterPage extends BorderPage {
 
                         // Perform redirect to guard against user hitting refresh
                         // and setting the ActionLink value to the deleted recordId
-                        setRedirect(TableRepeaterPage.class);
+                        setRedirect(EditTableRepeaterPage.class);
                         return false;
                     }
                 });
@@ -162,7 +162,7 @@ public class TableRepeaterPage extends BorderPage {
 
                     // Perform redirect to ensure the form changes are reflected
                     // by the Repeater
-                    setRedirect(TableRepeaterPage.class);
+                    setRedirect(EditTableRepeaterPage.class);
                 }
                 return true;
             }
