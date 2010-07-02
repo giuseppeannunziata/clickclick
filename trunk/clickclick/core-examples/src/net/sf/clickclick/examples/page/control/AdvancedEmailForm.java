@@ -27,11 +27,11 @@ import net.sf.clickclick.examples.page.HomePage;
  *
  * @see RichTextArea
  */
-public class EmailForm extends BorderPage {
+public class AdvancedEmailForm extends BorderPage {
 
     public Form form = new Form();
 
-    public EmailForm() {
+    public AdvancedEmailForm() {
         form.setLabelsPosition(Form.POSITION_TOP);
         form.setErrorsPosition(Form.POSITION_TOP);
 
@@ -46,9 +46,12 @@ public class EmailForm extends BorderPage {
         form.add(subjectField);
 
         RichTextArea messageTextArea = new RichTextArea("message");
+        messageTextArea.setTheme(RichTextArea.THEME_ADVANCED);
+        messageTextArea.setStyle("visibility", "hidden");
+
         messageTextArea.setLabel("Message:");
-        messageTextArea.setCols(45);
-        messageTextArea.setRows(8);
+        //messageTextArea.setCols(45);
+        //messageTextArea.setRows(8);
         form.add(messageTextArea);
 
         form.add(new Submit("send", "  Send "));
