@@ -14,7 +14,6 @@
 package net.sf.clickclick.control.menu;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.apache.click.element.CssImport;
 import org.apache.click.element.Element;
@@ -93,6 +92,7 @@ public class FlexiMenu extends Menu {
      *
      * @return true if the menu contains any child submenus
      */
+    @Override
     public boolean hasChildren() {
         if (getChildren().size() == 0) {
             return false;
@@ -105,6 +105,7 @@ public class FlexiMenu extends Menu {
      *
      * @return the HTML href attribute value
      */
+    @Override
     public String getHref() {
         if (getPath() == null) {
             setPath("#");
@@ -121,8 +122,10 @@ public class FlexiMenu extends Menu {
      *
      * @param menu the submenu to add
      */
-    public void add(Menu menu) {
+    @Override
+    public Menu add(Menu menu) {
         getChildren().add(menu);
+        return menu;
     }
 
     /**
@@ -134,6 +137,7 @@ public class FlexiMenu extends Menu {
      *
      * @return true if the user is in one of the child menu roles, or false otherwise
      */
+    @Override
     public boolean isUserInChildMenuRoles() {
         List roles = getRoles();
         if (roles == null || roles.isEmpty()) {
@@ -150,6 +154,7 @@ public class FlexiMenu extends Menu {
      *
      * @return true if the user is in one of the menu roles, false otherwise
      */
+    @Override
     public boolean isUserInRoles() {
         List roles = getRoles();
         if (roles == null || roles.isEmpty()) {
@@ -216,6 +221,7 @@ public class FlexiMenu extends Menu {
      *
      * @param buffer the specified buffer to render the control's output to
      */
+    @Override
     public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("ul");
         int depth = 0;
@@ -234,6 +240,7 @@ public class FlexiMenu extends Menu {
      *
      * @return the HTML representation of the Menu
      */
+    @Override
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(256);
         render(buffer);
@@ -310,6 +317,7 @@ public class FlexiMenu extends Menu {
      * @param buffer the buffer to render to
      * @param menu the menu to render as a link
      */
+    @Override
     protected void renderMenuLink(HtmlStringBuffer buffer, Menu menu) {
         if (menu.isSeparator()) {
             renderSeparator(buffer, menu);
@@ -336,6 +344,7 @@ public class FlexiMenu extends Menu {
         buffer.append("\n");
     }
 
+    @Override
     protected void renderSeparator(HtmlStringBuffer buffer, Menu menu) {
         buffer.append("<hr/>");
     }
