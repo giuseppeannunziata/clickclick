@@ -50,8 +50,6 @@ public class AdvancedEmailForm extends BorderPage {
         messageTextArea.setStyle("visibility", "hidden");
 
         messageTextArea.setLabel("Message:");
-        //messageTextArea.setCols(45);
-        //messageTextArea.setRows(8);
         form.add(messageTextArea);
 
         form.add(new Submit("send", "  Send "));
