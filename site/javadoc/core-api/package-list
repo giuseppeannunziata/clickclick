@@ -1,0 +1,12 @@
+net.sf.clickclick.control
+net.sf.clickclick.control.breadcrumb
+net.sf.clickclick.control.data
+net.sf.clickclick.control.grid
+net.sf.clickclick.control.html
+net.sf.clickclick.control.html.list
+net.sf.clickclick.control.html.table
+net.sf.clickclick.control.menu
+net.sf.clickclick.control.paginator
+net.sf.clickclick.control.panel
+net.sf.clickclick.control.repeater
+net.sf.clickclick.reload
