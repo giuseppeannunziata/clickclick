@@ -7,7 +7,7 @@ if ( typeof Click.menu == 'undefined' )
 
 // Code adapted from jquery.bgiframe. Add an IFrame to the menu ensuring Select
 // elements does not burn through when menu is open
-Click.menu.fixHiddenMenu = function(menuId){
+Click.menu.fixHiddenMenu = (document.all && /msie 6\.0/i.test(navigator.userAgent) ? function(menuId) {
     var menu = document.getElementById(menuId);
 
     // If menu is not available, exit early
@@ -15,18 +15,16 @@ Click.menu.fixHiddenMenu = function(menuId){
     	return;
     }
 
-    s ={
+    var s = {
         top : 'auto',
         left : 'auto',
         width : 'auto',
         height : 'auto',
         opacity : true,
-        src : "javascript:'<html></html>'"
-    }, s || {};
+        src : 'javascript:false;'
+    };
 
-    var prop = function(n){
-        return n&&n.constructor==Number?n+'px':n;
-    }
+    var prop = function(n){return n&&n.constructor==Number?n+'px':n;}
 
     var html = '<iframe class="bgiframe"frameborder="0"tabindex="-1"src="'+s.src+'"'+
         'style="display:block;position:absolute;z-index:-1;'+
@@ -43,10 +41,10 @@ Click.menu.fixHiddenMenu = function(menuId){
         var el = document.createElement(html);
         ul.insertBefore(el);
     }
-}
+} : function() {});
 
-// Add iehover class when hovering over menu items
-Click.menu.fixHover = function(menuId) {
+// Add 'iehover' class when hovering over menu items
+Click.menu.fixHover = (document.all && /msie 6\.0/i.test(navigator.userAgent) ? function(menuId) {
     var elements = document.getElementById(menuId);
     if (elements != null) {
         var list = elements.getElementsByTagName("LI");
@@ -62,4 +60,4 @@ Click.menu.fixHover = function(menuId) {
             }
         }
     }
-}
+} : function() {});
