@@ -16,7 +16,7 @@ package net.sf.clickclick.control.repeater;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.click.Callback;
-import org.apache.click.CallbackDispatcher;
+import org.apache.click.ControlRegistry;
 import org.apache.click.Control;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.AbstractLink;
@@ -121,6 +121,12 @@ public abstract class Repeater extends AbstractContainer {
     protected List items = null;
 
     protected DataProvider dataProvider = null;
+
+    private boolean registerCallback = true;
+
+    private Callback callback;
+
+    // Constructors -----------------------------------------------------------
 
     /**
      * Create a default Repeater.
@@ -428,6 +434,22 @@ public abstract class Repeater extends AbstractContainer {
         ContainerUtils.copyObjectToContainer(item, container);
     }
 
+    @Override
+    public void onInit() {
+        // TODO check that registerCallback will work with onInit and onDestroy
+        // Write unit tests the test the following scenarios:
+        // stateful+stateless: create repeater in constructor - repeater must buildRows and register with ControlRegistry
+        // stateful+stateless: create repeater in onInit  - repeater must buildRows and register with ControlRegistry
+        // stateful+stateless: create repeater in onRender  - repeater must buildRows and register with ControlRegistry
+
+        registerCallback();
+    }
+
+    @Override
+    public void onDestroy() {
+        registerCallback = true;
+    }
+
     // ------------------------------------------------------ Protected Methods
 
     /**
@@ -446,18 +468,7 @@ public abstract class Repeater extends AbstractContainer {
 
         List repeaterItems = getItems();
 
-        CallbackDispatcher.registerCallback(this, new Callback() {
-
-            public void preDestroy(Control source) {
-            }
-
-            public void preGetHeadElements(Control source) {
-            }
-
-            public void preResponse(Control source) {
-                addIndexToControlNames();
-            }
-        });
+        registerCallback();
 
         for (int i = 0; i < repeaterItems.size(); i++ ) {
             createRow(i);
@@ -622,5 +633,31 @@ public abstract class Repeater extends AbstractContainer {
     private boolean removeRow(int index) {
         RepeaterRow row = (RepeaterRow) getControls().get(index);
         return super.remove(row);
+    }
+
+    private void registerCallback() {
+        if (registerCallback) {
+            ControlRegistry.registerCallback(this, getCallback());
+        }
+        registerCallback = false;
+    }
+
+    private Callback getCallback() {
+        if (callback == null) {
+            callback = new Callback() {
+
+                public void preDestroy(Control source) {
+                }
+
+                public void preGetHeadElements(Control source) {
+                }
+
+                public void preResponse(Control source) {
+                    addIndexToControlNames();
+                }
+            };
+        }
+
+        return callback;
     }
 }
