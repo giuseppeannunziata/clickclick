@@ -122,7 +122,7 @@ public abstract class Repeater extends AbstractContainer {
 
     protected DataProvider dataProvider = null;
 
-    private boolean registerCallback = true;
+    private boolean callbackRegistered = false;
 
     private Callback callback;
 
@@ -437,20 +437,29 @@ public abstract class Repeater extends AbstractContainer {
         ContainerUtils.copyObjectToContainer(item, container);
     }
 
+    /**
+     * Override the default implementation to register an internal Callback. The
+     * callback is used for adding indexes to child controls before the response
+     * is rendered.
+     */
     @Override
     public void onInit() {
-        // TODO check that registerCallback will work with onInit and onDestroy
+        super.onInit();
+
         // Write unit tests the test the following scenarios:
         // stateful+stateless: create repeater in constructor - repeater must buildRows and register with ControlRegistry
         // stateful+stateless: create repeater in onInit  - repeater must buildRows and register with ControlRegistry
         // stateful+stateless: create repeater in onRender  - repeater must buildRows and register with ControlRegistry
 
-        registerCallback();
+        registerInternalCallback();
     }
 
+    /**
+     * @see org.apache.click.Control#onDestroy()
+     */
     @Override
     public void onDestroy() {
-        registerCallback = true;
+        callbackRegistered = false;
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -471,7 +480,7 @@ public abstract class Repeater extends AbstractContainer {
 
         List repeaterItems = getItems();
 
-        registerCallback();
+        registerInternalCallback();
 
         for (int i = 0; i < repeaterItems.size(); i++ ) {
             createRow(i);
@@ -638,29 +647,44 @@ public abstract class Repeater extends AbstractContainer {
         return super.remove(row);
     }
 
-    private void registerCallback() {
-        if (registerCallback) {
-            ControlRegistry.registerCallback(this, getCallback());
+    /**
+     * Register the repeater callback, unless it has been registered already.
+     */
+    private void registerInternalCallback() {
+        if (callbackRegistered) {
+            return;
         }
-        registerCallback = false;
+
+        ControlRegistry.registerCallback(this, getInternalCallback());
+        callbackRegistered = true;
     }
 
-    private Callback getCallback() {
+    /**
+     * Return the repeater internal callback.
+     *
+     * @return the repeater internal callback
+     */
+    private Callback getInternalCallback() {
         if (callback == null) {
-            callback = new Callback() {
-
-                public void preDestroy(Control source) {
-                }
-
-                public void preGetHeadElements(Control source) {
-                }
-
-                public void preResponse(Control source) {
-                    addIndexToControlNames();
-                }
-            };
+            callback = new InternalCallback();
         }
 
         return callback;
+    }
+
+    /**
+     * The repeater callback implementation.
+     */
+    class InternalCallback implements Callback {
+
+        public void preDestroy(Control source) {
+        }
+
+        public void preGetHeadElements(Control source) {
+        }
+
+        public void preResponse(Control source) {
+            addIndexToControlNames();
+        }
     }
 }
