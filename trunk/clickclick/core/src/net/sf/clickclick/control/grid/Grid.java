@@ -127,6 +127,7 @@ public class Grid extends HtmlTable {
      * @throws UnsupportedOperationException use
      * {@link #insert(org.apache.click.Control, int, int)} instead
      */
+    @Override
     public Control add(Control control) {
         throw new UnsupportedOperationException("Method not supported by Grid. Use "
             + "insert(Control, int, int) instead");
@@ -136,6 +137,7 @@ public class Grid extends HtmlTable {
      * @throws UnsupportedOperationException use
      * {@link #insert(org.apache.click.Control, int, int)} instead
      */
+    @Override
     public Control insert(Control control, int index) {
         throw new UnsupportedOperationException("Method not supported by Grid. Use "
             + "insert(Control, int, int) instead");
@@ -296,6 +298,7 @@ public class Grid extends HtmlTable {
          * @return the added control
          * @throws IllegalArgumentException if the control is not a Cell
          */
+        @Override
         public Control insert(Control control, int column) {
             if (!(control instanceof Cell)) {
                 throw new IllegalArgumentException("Only cells can be inserted.");
@@ -314,6 +317,7 @@ public class Grid extends HtmlTable {
          * @return the added cell
          * @throws IndexOutOfBoundsException if the column is <= 0
          */
+        @Override
         public Cell insert(Cell cell, int column) {
             if (column <= 0) {
                 throw new IndexOutOfBoundsException("For Grids the column must be > 0");
@@ -330,6 +334,7 @@ public class Grid extends HtmlTable {
          * @param column the column which cell to retrieve
          * @return the cell at the given column or null if no cell was found
          */
+        @Override
         public Cell getCell(final int column) {
             if (hasControls()) {
                 if (getControls().size() >= column) {
@@ -347,6 +352,7 @@ public class Grid extends HtmlTable {
          * @return the cell that was inserted
          * @throws IndexOutOfBoundsException if the column is <= 0
          */
+        @Override
         public Cell insertCell(int column) {
             if (column <= 0) {
                 throw new IndexOutOfBoundsException("For Grids the column must be > 0");
@@ -419,9 +425,9 @@ public class Grid extends HtmlTable {
     private boolean removeChildControls(Container container) {
         boolean hasChanged = false;
         if (container.hasControls()) {
-            List controls = container.getControls();
-            for (int i = controls.size() - 1; i >= 0; i--) {
-                Control control = (Control) controls.get(i);
+            List localControls = container.getControls();
+            for (int i = localControls.size() - 1; i >= 0; i--) {
+                Control control = (Control) localControls.get(i);
                 if (container.remove(control)) {
                     hasChanged = true;
                 }
