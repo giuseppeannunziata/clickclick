@@ -179,6 +179,7 @@ public abstract class Repeater extends AbstractContainer {
      * through the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
      * method.
      */
+    @Override
     public Control add(Control control) {
         throw new UnsupportedOperationException("Method not supported. Rather"
             + " add controls through the #buildRow method.");
@@ -189,6 +190,7 @@ public abstract class Repeater extends AbstractContainer {
      * through the {@link #buildRow(java.lang.Object, net.sf.clickclick.control.repeater.RepeaterRow, int)}
      * method.
      */
+    @Override
     public Control insert(Control control, int index) {
         throw new UnsupportedOperationException("Method not supported. Rather"
             + " add controls through the #buildRow method.");
@@ -239,15 +241,15 @@ public abstract class Repeater extends AbstractContainer {
      * @param item the item to move up in the list of {@link #items}
      */
     public void moveUp(Object item) {
-        List items = getItems();
-        int index = items.indexOf(item);
+        List localItems = getItems();
+        int index = localItems.indexOf(item);
 
          // If item is already at top, exit early
         if (index == 0) {
             return;
         }
 
-        boolean itemRemoved = items.remove(item);
+        boolean itemRemoved = localItems.remove(item);
         RepeaterRow row = (RepeaterRow) getControls().get(index);
         boolean rowRemoved = super.remove(row);
 
@@ -257,7 +259,7 @@ public abstract class Repeater extends AbstractContainer {
         }
         // Decrement index and add item and row at new index
         --index;
-        items.add(index, item);
+        localItems.add(index, item);
         super.insert(row, index);
     }
 
@@ -270,15 +272,15 @@ public abstract class Repeater extends AbstractContainer {
      * @param item the item to move down in the list of {@link #items}
      */
     public void moveDown(Object item) {
-        List items = getItems();
-        int index = items.indexOf(item);
+        List localItems = getItems();
+        int index = localItems.indexOf(item);
 
         // If item is already at bottom, exit early
-        if (index == items.size() - 1) {
+        if (index == localItems.size() - 1) {
             return;
         }
 
-        boolean itemRemoved = items.remove(item);
+        boolean itemRemoved = localItems.remove(item);
         RepeaterRow row = (RepeaterRow) getControls().get(index);
         boolean rowRemoved = super.remove(row);
 
@@ -289,7 +291,7 @@ public abstract class Repeater extends AbstractContainer {
 
         // Increment index and add item and row at new index
         ++index;
-        items.add(index, item);
+        localItems.add(index, item);
         super.insert(row, index);
     }
 
@@ -346,6 +348,7 @@ public abstract class Repeater extends AbstractContainer {
      *
      * @return true if page processing should continue, false otherwise
      */
+    @Override
     public boolean onProcess() {
         boolean result = super.onProcess();
 
@@ -367,9 +370,9 @@ public abstract class Repeater extends AbstractContainer {
         if (getItems() == null) {
             throw new IllegalStateException("Items have not been set.");
         }
-        List items = getItems();
-        for (int i = 0; i < items.size(); i++) {
-            Object item = items.get(i);
+        List localItems = getItems();
+        for (int i = 0; i < localItems.size(); i++) {
+            Object item = localItems.get(i);
             copyTo(item);
         }
     }
@@ -383,12 +386,12 @@ public abstract class Repeater extends AbstractContainer {
      * item in the {@link #items} list.
      */
     public void copyFromItems() {
-        List items = getItems();
-        if (items == null) {
+        List localItems = getItems();
+        if (localItems == null) {
             throw new IllegalStateException("Items have not been set.");
         }
-        for (int i = 0; i < items.size(); i++) {
-            Object item = items.get(i);
+        for (int i = 0; i < localItems.size(); i++) {
+            Object item = localItems.get(i);
             copyFrom(item);
         }
     }
@@ -404,12 +407,12 @@ public abstract class Repeater extends AbstractContainer {
      * @param item the item to populate with field values
      */
     public void copyTo(Object item) {
-        List items = getItems();
-        if (items == null) {
+        List localItems = getItems();
+        if (localItems == null) {
             throw new IllegalStateException("Items have not been set.");
         }
         //Object object = getItems().get(index);
-        int index = items.indexOf(item);
+        int index = localItems.indexOf(item);
         Container container = (Container) getControls().get(index);
         ContainerUtils.copyContainerToObject(container, item);
     }
@@ -459,8 +462,8 @@ public abstract class Repeater extends AbstractContainer {
      * for every item in the {@link #items} list.
      */
     protected void buildRows() {
-        DataProvider dataProvider = getDataProvider();
-        if (dataProvider == null) {
+        DataProvider localDataProvider = getDataProvider();
+        if (localDataProvider == null) {
             throw new IllegalStateException("No data provider set.");
         }
 
@@ -482,11 +485,11 @@ public abstract class Repeater extends AbstractContainer {
     protected void populateItems() {
         Iterable it = getDataProvider().getData();
         if (it instanceof List) {
-            items = (List) it;
+            setItems((List) it);
         } else {
-            List items = getItems();
+            List localItems = getItems();
             for (Object item : it) {
-                items.add(item);
+                localItems.add(item);
             }
         }
     }
@@ -505,9 +508,9 @@ public abstract class Repeater extends AbstractContainer {
      * <tt>"firstname_1"</tt> etc.
      */
     protected void addIndexToControlNames() {
-        List controls = getControls();
-        for (int count = 0; count < controls.size(); count++ ) {
-            RepeaterRow container = (RepeaterRow) controls.get(count);
+        List localControls = getControls();
+        for (int count = 0; count < localControls.size(); count++ ) {
+            RepeaterRow container = (RepeaterRow) localControls.get(count);
             addIndexToControlNames(container, String.valueOf(count));
         }
     }
@@ -516,9 +519,9 @@ public abstract class Repeater extends AbstractContainer {
      * Removes the index from the name of child controls.
      */
     protected void removeIndexFromControlNames() {
-        List controls = getControls();
-        for (int count = 0; count < controls.size(); count++ ) {
-            RepeaterRow container = (RepeaterRow) controls.get(count);
+        List localControls = getControls();
+        for (int count = 0; count < localControls.size(); count++ ) {
+            RepeaterRow container = (RepeaterRow) localControls.get(count);
             removeIndexFromControlNames(container);
         }
     }
@@ -532,8 +535,8 @@ public abstract class Repeater extends AbstractContainer {
      * @param index the index to apply to child control names
      */
     private void addIndexToControlNames(final Container container, String index) {
-        List<Control> controls = container.getControls();
-        for (Control control : controls) {
+        List<Control> localControls = container.getControls();
+        for (Control control : localControls) {
             if (control instanceof Field) {
                 Field field = (Field) control;
 
@@ -568,9 +571,9 @@ public abstract class Repeater extends AbstractContainer {
      * must be removed from
      */
     private void removeIndexFromControlNames(final Container container) {
-        List controls = container.getControls();
-        for (int i = 0; i < controls.size(); i++) {
-            Control control = (Control) controls.get(i);
+        List localControls = container.getControls();
+        for (int i = 0; i < localControls.size(); i++) {
+            Control control = (Control) localControls.get(i);
             removeIndex(control);
             if (control instanceof Container) {
                Container childContainer = (Container) control;
