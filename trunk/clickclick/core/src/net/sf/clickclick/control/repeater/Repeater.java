@@ -446,7 +446,7 @@ public abstract class Repeater extends AbstractContainer {
     public void onInit() {
         super.onInit();
 
-        // Write unit tests the test the following scenarios:
+        // Write unit tests for the following scenarios:
         // stateful+stateless: create repeater in constructor - repeater must buildRows and register with ControlRegistry
         // stateful+stateless: create repeater in onInit  - repeater must buildRows and register with ControlRegistry
         // stateful+stateless: create repeater in onRender  - repeater must buildRows and register with ControlRegistry
