@@ -15,9 +15,11 @@ package net.sf.clickclick.control.repeater;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.click.Callback;
+import org.apache.click.Behavior;
+import org.apache.click.Context;
 import org.apache.click.ControlRegistry;
 import org.apache.click.Control;
+import org.apache.click.Partial;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.Container;
@@ -122,9 +124,9 @@ public abstract class Repeater extends AbstractContainer {
 
     protected DataProvider dataProvider = null;
 
-    private boolean callbackRegistered = false;
+    private boolean behaviorRegistered = false;
 
-    private Callback callback;
+    private Behavior behavior;
 
     // Constructors -----------------------------------------------------------
 
@@ -353,7 +355,7 @@ public abstract class Repeater extends AbstractContainer {
         boolean result = super.onProcess();
 
         // Unwind control name indexes here so that new RepeaterRows added or
-        // inserted after onProcess (e.g. listener callbacks) won't end up with
+        // inserted after onProcess (e.g. with an action listener) won't end up with
         // indexes which are out of order.
         removeIndexFromControlNames();
         return result;
@@ -438,8 +440,8 @@ public abstract class Repeater extends AbstractContainer {
     }
 
     /**
-     * Override the default implementation to register an internal Callback. The
-     * callback is used for adding indexes to child controls before the response
+     * Override the default implementation to register an internal Behavior. The
+     * behavior is used for adding indexes to child controls before the response
      * is rendered.
      */
     @Override
@@ -451,7 +453,7 @@ public abstract class Repeater extends AbstractContainer {
         // stateful+stateless: create repeater in onInit  - repeater must buildRows and register with ControlRegistry
         // stateful+stateless: create repeater in onRender  - repeater must buildRows and register with ControlRegistry
 
-        registerInternalCallback();
+        registerInternalBehavior();
     }
 
     /**
@@ -459,7 +461,7 @@ public abstract class Repeater extends AbstractContainer {
      */
     @Override
     public void onDestroy() {
-        callbackRegistered = false;
+        behaviorRegistered = false;
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -480,13 +482,13 @@ public abstract class Repeater extends AbstractContainer {
 
         List repeaterItems = getItems();
 
-        registerInternalCallback();
+        registerInternalBehavior();
 
         for (int i = 0; i < repeaterItems.size(); i++ ) {
             createRow(i);
         }
 
-        // TODO should the names be changed here or in a Pre onProcess phase callback???
+        // TODO should the names be changed here or in a preOnProcess event???
         // Update control name indexes to match incoming request parameters
         addIndexToControlNames();
     }
@@ -648,34 +650,42 @@ public abstract class Repeater extends AbstractContainer {
     }
 
     /**
-     * Register the repeater callback, unless it has been registered already.
+     * Register the repeater behavior, unless it has been registered already.
      */
-    private void registerInternalCallback() {
-        if (callbackRegistered) {
+    private void registerInternalBehavior() {
+        if (behaviorRegistered) {
             return;
         }
 
-        ControlRegistry.registerCallback(this, getInternalCallback());
-        callbackRegistered = true;
+        ControlRegistry.registerInterceptor(this, getInternalBehavior());
+        behaviorRegistered = true;
     }
 
     /**
-     * Return the repeater internal callback.
+     * Return the repeater internal behavior.
      *
-     * @return the repeater internal callback
+     * @return the repeater internal behavior
      */
-    private Callback getInternalCallback() {
-        if (callback == null) {
-            callback = new InternalCallback();
+    private Behavior getInternalBehavior() {
+        if (behavior == null) {
+            behavior = new InternalBehavior();
         }
 
-        return callback;
+        return behavior;
     }
 
     /**
-     * The repeater callback implementation.
+     * The repeater behavior implementation.
      */
-    class InternalCallback implements Callback {
+    class InternalBehavior implements Behavior {
+
+        public boolean isRequestTarget(Context context) {
+            return false;
+        }
+
+        public Partial onAction(Control source) {
+            return null;
+        }
 
         public void preDestroy(Control source) {
         }
