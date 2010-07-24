@@ -28,7 +28,7 @@ import org.apache.commons.lang.StringUtils;
  * The DynamicImage control is useful for generating and displaying dynamic
  * images. When specifying a DynamicImage you have to specify a page action
  * method that will be called from the browser. The page action method must
- * return a Partial containing the image data. Below is an example.
+ * return an ActionResult containing the image data. Below is an example.
  * <p/>
  *
  * <tt>DynamicImagePage.java</tt> page class:
@@ -56,17 +56,17 @@ import org.apache.commons.lang.StringUtils;
  *        addControl(image);
  *     }
  *
- *     // The Page Action method that returns a Partial containing the image data
- *     public Partial renderChart() {
- *         Partial partial = new Partial();
+ *     // The Page Action method that returns an ActionResult containing the image data
+ *     public ActionResult renderChart() {
+ *         ActionResult actionResult = new ActionResult();
  *
  *         // Set content type to a "png" image
- *         partial.setContentType(ClickUtils.getMimeType(".png"));
+ *         actionResult.setContentType(ClickUtils.getMimeType(".png"));
  *
- *         // Set the partial bytes to image data
+ *         // Set the actionResult bytes to image data
  *         byte[] imageData = generateChart();
- *         partial.setBytes(imageData);
- *         return partial;
+ *         actionResult.setBytes(imageData);
+ *         return actionResult;
  *     }
  *
  *     private byte[] generateChart() {

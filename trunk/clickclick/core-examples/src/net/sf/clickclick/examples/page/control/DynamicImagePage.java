@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import net.sf.clickclick.control.DynamicImage;
 import net.sf.clickclick.examples.page.BorderPage;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.util.ClickUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -28,12 +28,12 @@ public class DynamicImagePage extends BorderPage {
         addControl(dynamicImage);
     }
 
-    public Partial renderChart() {
-        Partial partial = new Partial();
+    public ActionResult renderChart() {
+        ActionResult actionResult = new ActionResult();
         String contentType = ClickUtils.getMimeType(".png");
         byte[] imageData = generateChart();
-        partial.setBytes(imageData, contentType);
-        return partial;
+        actionResult.setBytes(imageData, contentType);
+        return actionResult;
     }
 
     private byte[] generateChart() {
