@@ -17,20 +17,21 @@ import org.apache.click.ActionListener;
 import org.apache.click.Context;
 import org.apache.click.Control;
 import org.apache.click.Page;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.util.ClickUtils;
 import org.apache.commons.lang.ClassUtils;
 
 /**
- * Provides an action listener that returns a Partial instance instead of a
- * boolean. If the Partial is not null it will be rendered and further Page
- * processing is stopped. If null is returned Page processing continues normally.
+ * Provides an action listener that returns an ActionResult instance instead of a
+ * boolean. If a valid ActionResult is returned it will be rendered and further Page
+ * processing will be stopped. If the listener returns null, Page processing
+ * continues normally.
  * <p/>
  * <b>Please note:</b> if the Page forward or redirect property was set during
- * the action listener, page processing is also stopped whether a Partial was
- * returned nor not.
+ * the action listener, page processing is also stopped whether a valid ActionResult
+ * was returned nor not.
  */
-public abstract class PartialActionListener implements ActionListener {
+public abstract class ResultActionListener implements ActionListener {
 
     public final boolean onAction(Control source) {
         Page page = ClickUtils.getParentPage(source);
@@ -40,9 +41,9 @@ public abstract class PartialActionListener implements ActionListener {
                 + controlClassName + " parent page is not set");
         }
 
-        Partial partial = onPartialAction(source);
-        if (partial != null) {
-            partial.render(Context.getThreadLocalContext());
+        ActionResult actionResult = onResultAction(source);
+        if (actionResult != null) {
+            actionResult.render(Context.getThreadLocalContext());
             return false;
         } else {
             // Check if forward or redirect was set in the action
@@ -55,5 +56,5 @@ public abstract class PartialActionListener implements ActionListener {
         }
     }
 
-    public abstract Partial onPartialAction(Control source);
+    public abstract ActionResult onResultAction(Control source);
 }
