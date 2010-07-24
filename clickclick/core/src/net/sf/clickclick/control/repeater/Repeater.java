@@ -19,7 +19,7 @@ import org.apache.click.Behavior;
 import org.apache.click.Context;
 import org.apache.click.ControlRegistry;
 import org.apache.click.Control;
-import org.apache.click.Partial;
+import org.apache.click.ActionResult;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.Container;
@@ -449,9 +449,9 @@ public abstract class Repeater extends AbstractContainer {
         super.onInit();
 
         // Write unit tests for the following scenarios:
-        // stateful+stateless: create repeater in constructor - repeater must buildRows and register with ControlRegistry
-        // stateful+stateless: create repeater in onInit  - repeater must buildRows and register with ControlRegistry
-        // stateful+stateless: create repeater in onRender  - repeater must buildRows and register with ControlRegistry
+        // create repeater in constructor - repeater must buildRows and register with ControlRegistry
+        // create repeater in onInit  - repeater must buildRows and register with ControlRegistry
+        // create repeater in onRender  - repeater must buildRows and register with ControlRegistry
 
         registerInternalBehavior();
     }
@@ -683,7 +683,7 @@ public abstract class Repeater extends AbstractContainer {
             return false;
         }
 
-        public Partial onAction(Control source) {
+        public ActionResult onAction(Control source) {
             return null;
         }
 
