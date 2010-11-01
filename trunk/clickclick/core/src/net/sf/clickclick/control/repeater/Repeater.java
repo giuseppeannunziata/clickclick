@@ -690,7 +690,7 @@ public abstract class Repeater extends AbstractContainer {
         public void preDestroy(Control source) {
         }
 
-        public void preGetHeadElements(Control source) {
+        public void preRenderHeadElements(Control source) {
         }
 
         public void preResponse(Control source) {
