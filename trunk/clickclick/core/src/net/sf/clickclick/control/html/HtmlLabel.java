@@ -312,6 +312,7 @@ public class HtmlLabel extends Label {
      *
      * @return true to continue Page event processing or false otherwise
      */
+    @Override
     public boolean onProcess() {
         bindRequestValue();
 
