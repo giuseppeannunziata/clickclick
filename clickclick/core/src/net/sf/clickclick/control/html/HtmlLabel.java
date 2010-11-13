@@ -13,6 +13,7 @@
  */
 package net.sf.clickclick.control.html;
 
+import org.apache.click.Context;
 import org.apache.click.control.AbstractControl;
 import org.apache.click.control.Field;
 import org.apache.click.control.Label;
@@ -314,14 +315,17 @@ public class HtmlLabel extends Label {
      */
     @Override
     public boolean onProcess() {
-        bindRequestValue();
+        Context context = getContext();
 
-        if (getValidate()) {
-            validate();
+        if (context.hasRequestParameter(getName())) {
+            bindRequestValue();
+
+            if (getValidate()) {
+                validate();
+            }
+
+            dispatchActionEvent();
         }
-
-        dispatchActionEvent();
-
         return true;
     }
 
