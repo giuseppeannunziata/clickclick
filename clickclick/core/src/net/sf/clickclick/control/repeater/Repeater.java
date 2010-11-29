@@ -15,11 +15,11 @@ package net.sf.clickclick.control.repeater;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.click.Behavior;
 import org.apache.click.Context;
-import org.apache.click.ControlRegistry;
 import org.apache.click.Control;
-import org.apache.click.ActionResult;
+import org.apache.click.ControlRegistry;
 import org.apache.click.control.AbstractContainer;
 import org.apache.click.control.AbstractLink;
 import org.apache.click.control.Container;
@@ -681,10 +681,6 @@ public abstract class Repeater extends AbstractContainer {
 
         public boolean isRequestTarget(Context context) {
             return false;
-        }
-
-        public ActionResult onAction(Control source) {
-            return null;
         }
 
         public void preDestroy(Control source) {
