@@ -2,35 +2,3 @@
 
 == Intro ==
 To get started, first build the latest !ClickClick sources from the trunk. See `trunk/clickclick/readme.html` for details.
-
-== General ==
-Most of the components shipped with !ClickClick are dependent on features provided by the [http://clickclick.googlecode.com/svn/trunk/site/javadoc/core-api/net/sf/clickclick/ClickClickServlet.html ClickClickServlet].
-
-Some features provided by !ClickClickServlet incldues:
-
-  * Ajax Support
-  * Dynamic class reloading (view changes to Pages without restarting your application)
-
-To use !ClickClickServlet simply include clickclick-0.1.jar on your classpath and replace 'net.sf.click.!ClickServlet' with 'net.sf.clickclick.!ClickClickServlet' in your web.xml. See the example below:
-
-{{{
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-    version="2.4">
-
-  <servlet>
-    <servlet-name>ClickServlet</servlet-name>
-    <servlet-class>net.sf.clickclick.ClickClickServlet</servlet-class>
-    <load-on-startup>0</load-on-startup>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>ClickServlet</servlet-name>
-    <url-pattern>*.htm</url-pattern>
-  </servlet-mapping>
-</web-app>
-}}}
-
-Note, you only have to change the value of the _<servlet-class>_ element.
